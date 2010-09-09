@@ -1,0 +1,51 @@
+<!DOCTYPE INTROLAB-NETWORKVIEWER>
+<ModuleConfiguration moduleState="0" deviceID="-1" projectID="1" codeVersion="0" processorID="0" tableVersion="0" >
+	
+	<ModuleVariable offset="0" description="ServoTarget 0" type="uint16" value="" name="ServoTarget 0" /> 
+	<ModuleVariable offset="2" description="ServoTarget 1" type="uint16" value="" name="ServoTarget 1" />
+	<ModuleVariable offset="4" description="ServoTarget 2" type="uint16" value="" name="ServoTarget 2" />
+	<ModuleVariable offset="6" description="ServoTarget 3" type="uint16" value="" name="ServoTarget 3" />
+	<ModuleVariable offset="8" description="ServoTarget 4" type="uint16" value="" name="ServoTarget 4" />
+	<ModuleVariable offset="10" description="ServoTarget 5" type="uint16" value="" name="ServoTarget 5" />
+	<ModuleVariable offset="12" description="ServoTarget 6" type="uint16" value="" name="ServoTarget 6" />
+	<ModuleVariable offset="14" description="ServoTarget 7" type="uint16" value="" name="ServoTarget 7" />
+	<ModuleVariable offset="16" description="ServoTarget 8" type="uint16" value="" name="ServoTarget 8" />
+	<ModuleVariable offset="18" description="ServoTarget 9" type="uint16" value="" name="ServoTarget 9" />
+	
+	<ModuleVariable offset="20" description="ServoPeriod 0" type="uint16" value="" name="ServoPeriod 0" /> 
+	<ModuleVariable offset="22" description="ServoPeriod 1" type="uint16" value="" name="ServoPeriod 1" />
+	<ModuleVariable offset="24" description="ServoPeriod 2" type="uint16" value="" name="ServoPeriod 2" />
+	<ModuleVariable offset="26" description="ServoPeriod 3" type="uint16" value="" name="ServoPeriod 3" />
+	<ModuleVariable offset="28" description="ServoPeriod 4" type="uint16" value="" name="ServoPeriod 4" />
+	<ModuleVariable offset="30" description="ServoPeriod 5" type="uint16" value="" name="ServoPeriod 5" />
+	<ModuleVariable offset="32" description="ServoPeriod 6" type="uint16" value="" name="ServoPeriod 6" />
+	<ModuleVariable offset="34" description="ServoPeriod 7" type="uint16" value="" name="ServoPeriod 7" />
+	<ModuleVariable offset="36" description="ServoPeriod 8" type="uint16" value="" name="ServoPeriod 8" />
+	<ModuleVariable offset="38" description="ServoPeriod 9" type="uint16" value="" name="ServoPeriod 9" />
+	
+	<ModuleVariable offset="40" description="ServoSpeed 0" type="uint8" value="" name="ServoSpeed 0" />
+	<ModuleVariable offset="41" description="ServoSpeed 1" type="uint8" value="" name="ServoSpeed 1" />
+	<ModuleVariable offset="42" description="ServoSpeed 2" type="uint8" value="" name="ServoSpeed 2" />
+	<ModuleVariable offset="43" description="ServoSpeed 3" type="uint8" value="" name="ServoSpeed 3" />
+	<ModuleVariable offset="44" description="ServoSpeed 4" type="uint8" value="" name="ServoSpeed 4" />
+	<ModuleVariable offset="45" description="ServoSpeed 5" type="uint8" value="" name="ServoSpeed 5" />
+	<ModuleVariable offset="46" description="ServoSpeed 6" type="uint8" value="" name="ServoSpeed 6" />
+	<ModuleVariable offset="47" description="ServoSpeed 7" type="uint8" value="" name="ServoSpeed 7" />
+	<ModuleVariable offset="48" description="ServoSpeed 8" type="uint8" value="" name="ServoSpeed 8" />
+	<ModuleVariable offset="49" description="ServoSpeed 9" type="uint8" value="" name="ServoSpeed 9" />
+
+	
+	<ModuleVariable offset="50" description="ServoActivated 0" type="uint8" value="" name="ServoActivated 0" />
+	<ModuleVariable offset="51" description="ServoActivated 1" type="uint8" value="" name="ServoActivated 1" />
+	<ModuleVariable offset="52" description="ServoActivated 2" type="uint8" value="" name="ServoActivated 2" />
+	<ModuleVariable offset="53" description="ServoActivated 3" type="uint8" value="" name="ServoActivated 3" />
+	<ModuleVariable offset="54" description="ServoActivated 4" type="uint8" value="" name="ServoActivated 4" />
+	<ModuleVariable offset="55" description="ServoActivated 5" type="uint8" value="" name="ServoActivated 5" />
+	<ModuleVariable offset="56" description="ServoActivated 6" type="uint8" value="" name="ServoActivated 6" />
+	<ModuleVariable offset="57" description="ServoActivated 7" type="uint8" value="" name="ServoActivated 7" />
+	<ModuleVariable offset="58" description="ServoActivated 8" type="uint8" value="" name="ServoActivated 8" />
+	<ModuleVariable offset="59" description="ServoActivated 9" type="uint8" value="" name="ServoActivated 9" />
+	
+	
+	<ModuleVariable offset="60" description="Turn ON or OFF power on servos" type="uint8" value="" name="AlimEnabled" /> 
+</ModuleConfiguration>

@@ -1,0 +1,68 @@
+<!DOCTYPE INTROLAB-DRIVE10A>
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="145" codeVersion="-1" processorID="-1" tableVersion="-1" >
+
+	<ModuleVariable offset="0" description="Description" type="uint16" value="" name="AnalogData[0]" />
+	<ModuleVariable offset="2" description="Description" type="uint16" value="" name="AnalogData[1]" />
+	<ModuleVariable offset="4" description="Description" type="uint16" value="" name="AnalogData[2]" />
+	<ModuleVariable offset="6" description="Description" type="uint16" value="" name="AnalogData[3]" />
+	<ModuleVariable offset="8" description="Description" type="uint16" value="" name="AnalogData[4]" />
+	<ModuleVariable offset="10" description="Description" type="uint16" value="" name="AnalogData[5]" />
+	<ModuleVariable offset="12" description="Description" type="uint16" value="" name="AnalogData[6]" />
+
+	<ModuleVariable offset="14" description="Description" type="uint16" value="" name="BatteryData[0][0]" />
+	<ModuleVariable offset="16" description="Description" type="uint16" value="" name="BatteryData[0][1]" />
+	<ModuleVariable offset="18" description="Description" type="uint16" value="" name="BatteryData[0][2]" />
+	<ModuleVariable offset="20" description="Description" type="uint16" value="" name="BatteryData[0][3]" />
+	<ModuleVariable offset="22" description="Description" type="uint16" value="" name="BatteryData[1][0]" />
+	<ModuleVariable offset="24" description="Description" type="uint16" value="" name="BatteryData[1][1]" />
+	<ModuleVariable offset="26" description="Description" type="uint16" value="" name="BatteryData[1][2]" />
+	<ModuleVariable offset="28" description="Description" type="uint16" value="" name="BatteryData[1][3]" />
+
+	<ModuleVariable offset="30" description="Description" type="uint8" value="" name="PowerSource" />
+	<ModuleVariable offset="31" description="Description" type="uint8" value="" name="Enable12V" />
+	<ModuleVariable offset="32" description="Description" type="uint16" value="" name="PowerSupplyMinVoltage" />
+	<ModuleVariable offset="34" description="Description" type="uint16" value="" name="BatteryMinVoltage" />
+	<ModuleVariable offset="36" description="Description" type="uint16" value="" name="BatteryMaxVoltageDiff" />
+	<ModuleVariable offset="38" description="Description" type="uint16" value="" name="MaxCurrent" />
+	<ModuleVariable offset="40" description="Description" type="uint16" value="" name="MaxTemp" />
+	<ModuleVariable offset="42" description="Description" type="uint16" value="" name="Temperature" />
+
+	<ModuleVariable offset="44" description="Description" type="uint16" value="" name="Shutdown1" />
+	<ModuleVariable offset="46" description="Description" type="uint16" value="" name="Shutdown2" />
+	<ModuleVariable offset="48" description="Description" type="uint16" value="" name="PCStart" />
+	
+	<ModuleVariable offset="50" description="Description" type="uint32" value="" name="Runtime" />
+
+	<ModuleVariable offset="54" description="Description" type="uint16" value="" name="FUSES" />
+
+	<ModuleVariable offset="56" description="Description" type="sint16" value="" name="VBatt1" />
+	<ModuleVariable offset="58" description="Description" type="sint16" value="" name="CBatt1" />
+	<ModuleVariable offset="60" description="Description" type="sint16" value="" name="PBatt1" />
+	<ModuleVariable offset="62" description="Description" type="sint16" value="" name="Batt1Flags" />
+
+	<ModuleVariable offset="64" description="Description" type="sint16" value="" name="VBatt2" />
+	<ModuleVariable offset="66" description="Description" type="sint16" value="" name="CBatt2" />
+	<ModuleVariable offset="68" description="Description" type="sint16" value="" name="PBatt2" />
+	<ModuleVariable offset="70" description="Description" type="sint16" value="" name="Batt2Flags" />
+
+	<ModuleVariable offset="72" description="Description" type="sint16" value="" name="VPS" />
+	<ModuleVariable offset="74" description="Description" type="sint16" value="" name="CPS" />
+	<ModuleVariable offset="76" description="Description" type="sint16" value="" name="PPS" />
+	<ModuleVariable offset="78" description="Description" type="sint16" value="" name="PSFlags" />
+
+	<ModuleVariable offset="80" description="Description" type="sint16" value="" name="VOut" />
+	<ModuleVariable offset="82" description="Description" type="sint16" value="" name="COut" />
+	<ModuleVariable offset="84" description="Description" type="sint16" value="" name="POut" />
+	<ModuleVariable offset="86" description="Description" type="sint16" value="" name="VOutFlags" />
+
+
+	<ModuleVariable memType="1" offset="8" description="Description" type="uint16" value="" name="startupMinBattery" />
+	<ModuleVariable memType="1" offset="10" description="Description" type="uint16" value="" name="startupMinPS" />
+	<ModuleVariable memType="1" offset="12" description="Description" type="uint16" value="" name="startupMaxBattDiff" />
+	<ModuleVariable memType="1" offset="14" description="Description" type="uint16" value="" name="startupMaxCurrent" />
+	<ModuleVariable memType="1" offset="16" description="Description" type="uint16" value="" name="startupMaxTemp" />
+
+	 
+	 
+
+</ModuleConfiguration>
