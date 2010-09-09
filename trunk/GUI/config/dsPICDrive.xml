@@ -1,0 +1,151 @@
+<!DOCTYPE INTROLAB-NETWORKVIEWER>
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="85" codeVersion="-1" processorID="-1" tableVersion="-1" >
+    <ModuleVariable offset="0" description="Description" type="uint8" value="" name="CtrlMode" />
+	<ModuleVariable offset="1" description="Description" type="uint8" value="" name="CtrlType" />
+	<ModuleVariable offset="2" description="Description" type="uint16" value="" name="CtrlTimeBase" />
+	<ModuleVariable offset="4" description="Description" type="uint16" value="" name="FeedbackScaler" />
+	<ModuleVariable offset="6" description="Description" type="sint16" value="" name="SetPoint" />
+	
+	<ModuleVariable offset="8" description="Description" type="uint8" value="" name="SetPointSource" />
+	<ModuleVariable offset="9" description="Description" type="uint8" value="" name="PosMesSource" />
+	<ModuleVariable offset="10" description="Description" type="uint8" value="" name="VelMesSource" />
+	<ModuleVariable offset="11" description="Description" type="uint8" value="" name="TorqueMesSource" />
+	<ModuleVariable offset="12" description="Description" type="uint16" value="" name="ErrorCode" />
+	<ModuleVariable offset="14" description="Description" type="uint16" value="" name="PIDScale" />	
+	
+	<ModuleVariable offset="16" description="Description" type="sint16" value="" name="QEI_Encoder" />
+	<ModuleVariable offset="18" description="Description" type="sint16" value="" name="Current" />
+	<ModuleVariable offset="20" description="Description" type="sint16" value="" name="Temperature" />
+	<ModuleVariable offset="22" description="Description" type="sint16" value="" name="ADC1Value" />
+	
+	<ModuleVariable offset="24" description="Description" type="sint16" value="" name="ADC2Value" />
+	<ModuleVariable offset="26" description="Description" type="sint16" value="" name="EXT1Value" />
+	<ModuleVariable offset="28" description="Description" type="sint16" value="" name="EXT2Value" />
+	<ModuleVariable offset="30" description="Description" type="uint8" value="" name="EStopEnabled" />
+	<ModuleVariable offset="31" description="Description" type="uint8" value="" name="LimitSwitches" />
+	
+	<ModuleVariable offset="32" description="Description" type="sint16" value="" name="Speed" />
+	<ModuleVariable offset="34" description="Description" type="sint16" value="" name="Torque" />
+	<ModuleVariable offset="36" description="Description" type="sint32" value="" name="Position" />
+	
+	<ModuleVariable offset="40" description="Description" type="uint16" value="" name="CtrlLoopTime" />
+	<ModuleVariable offset="42" description="Description" type="sint16" value="" name="RefPoint" />
+	<ModuleVariable offset="44" description="Description" type="sint16" value="" name="MesPoint" />
+	<ModuleVariable offset="46" description="Description" type="sint16" value="" name="PIDOut" />
+	
+	<ModuleVariable offset="48" description="Description" type="sint16" value="" name="kp" />
+	<ModuleVariable offset="50" description="Description" type="sint16" value="" name="ki" />
+	<ModuleVariable offset="52" description="Description" type="sint16" value="" name="kd" />
+	<ModuleVariable offset="54" description="Description" type="sint16" value="" name="error" />
+	
+	
+	<ModuleVariable offset="56" description="Description" type="sint16" value="" name="ErrorAccumMax" />
+	<ModuleVariable offset="58" description="Description" type="sint16" value="" name="ErrorAccumMin" />
+	<ModuleVariable offset="60" description="Description" type="sint16" value="" name="SpeedMax" />
+	
+	
+	
+	<ModuleVariable offset="64" description="Description" type="sint16" value="" name="InitPoint" />
+	<ModuleVariable offset="66" description="Description" type="sint16" value="" name="DestPoint" />
+	<ModuleVariable offset="68" description="Description" type="sint16" value="" name="NextPoint" />
+	<ModuleVariable offset="70" description="Description" type="sint16" value="" name="accelerationStep" />
+	
+	<ModuleVariable offset="72" description="Description" type="sint16" value="" name="currentLimit" />
+	<ModuleVariable offset="74" description="Description" type="sint16" value="" name="PWM_CurrentLimit" />
+	<ModuleVariable offset="76" description="Description" type="sint16" value="" name="PWM_CurrentStep" />
+	<ModuleVariable offset="78" description="Description" type="uint8" value="" name="CurrentLimitActive" />
+	<ModuleVariable offset="79" description="Description" type="uint8" value="" name="A3935Status" />
+	
+	<ModuleVariable offset="80" description="Description" type="sint16" value="" name="SetPointMax" />
+	<ModuleVariable offset="82" description="Description" type="sint16" value="" name="SetPointMin" />
+	<ModuleVariable offset="84" description="Description" type="uint8" value="" name="WriteEEPROM" />
+	<ModuleVariable offset="85" description="Description" type="uint8" value="" name="EncoderBias" />
+	<ModuleVariable offset="86" description="Description" type="uint8" value="" name="MotorBias" />
+	<ModuleVariable offset="87" description="Description" type="uint8" value="" name="SwitchingMode" />
+	
+	<ModuleVariable offset="88" description="Description" type="sint16" value="" name="CurrentOffset" />
+	<ModuleVariable offset="90" description="Description" type="sint16" value="" name="ADC1Offset" />
+	<ModuleVariable offset="92" description="Description" type="sint16" value="" name="ADC2Offset" />
+	<ModuleVariable offset="94" description="Description" type="sint16" value="" name="MaxTemperature" />
+	
+	<ModuleVariable offset="96" description="Description" type="sint16" value="" name="EXT1Offset" />
+	<ModuleVariable offset="98" description="Description" type="sint16" value="" name="EXT2Offset" />
+	<ModuleVariable offset="100" description="Description" type="sint16" value="" name="ResetState" />
+	<ModuleVariable offset="102" description="Description" type="uint8" value="" name="NormalSwitchesState" />
+	<ModuleVariable offset="103" description="Description" type="uint8" value="" name="ActiveProfile" />
+	
+	<ModuleVariable offset="104" description="Description" type="uint16" value="" name="admit_k" />
+	<ModuleVariable offset="106" description="Description" type="uint16" value="" name="admit_d" />
+	<ModuleVariable offset="108" description="Description" type="uint16" value="" name="admit_i" />
+	<ModuleVariable offset="110" description="Description" type="sint16" value="" name="gain_ff" />
+	
+	<ModuleVariable offset="112" description="Description" type="sint16" value="" name="TorqueLimit" />
+	<ModuleVariable offset="114" description="Description" type="uint16" value="" name="WatchdogTimerValue" />
+	<ModuleVariable offset="116" description="Description" type="uint8" value="" name="WatchdogTimerActive" />
+	<ModuleVariable offset="117" description="Description" type="uint8" value="" name="WatchdogTimerDetected" />
+	<ModuleVariable offset="118" description="Description" type="sint16" value="" name="TorqueCorrection" />
+	
+	<ModuleVariable offset="120" description="Description" type="sint16" value="" name="ADC16BitsValues[0]" />
+	<ModuleVariable offset="122" description="Description" type="sint16" value="" name="ADC16BitsValues[1]" />
+	<ModuleVariable offset="124" description="Description" type="sint16" value="" name="ADC16BitsValues[2]" />
+	<ModuleVariable offset="126" description="Description" type="sint16" value="" name="ADC16BitsValues[3]" />
+	
+	<ModuleVariable offset="128" description="Description" type="sint16" value="" name="ADC16BitsValues[4]" />
+	<ModuleVariable offset="130" description="Description" type="sint16" value="" name="ADC16BitsValues[5]" />
+	<ModuleVariable offset="132" description="Description" type="sint16" value="" name="ADC16BitsValues[6]" />
+	<ModuleVariable offset="134" description="Description" type="sint16" value="" name="ADC16BitsValues[7]" />
+	
+	<ModuleVariable offset="136" description="Description" type="sint16" value="" name="ADC16BitsOffsets[0]" />
+	<ModuleVariable offset="138" description="Description" type="sint16" value="" name="ADC16BitsOffsets[1]" />
+	<ModuleVariable offset="140" description="Description" type="sint16" value="" name="ADC16BitsOffsets[2]" />
+	<ModuleVariable offset="142" description="Description" type="sint16" value="" name="ADC16BitsOffsets[3]" />
+
+	<ModuleVariable offset="144" description="Description" type="sint16" value="" name="ADC16BitsOffsets[4]" />
+	<ModuleVariable offset="146" description="Description" type="sint16" value="" name="ADC16BitsOffsets[5]" />
+	<ModuleVariable offset="148" description="Description" type="sint16" value="" name="ADC16BitsOffsets[6]" />
+	<ModuleVariable offset="150" description="Description" type="sint16" value="" name="ADC16BitsOffsets[7]" />
+	
+	<ModuleVariable offset="152" description="Description" type="sint16" value="" name="InputCaptureH" />
+	<ModuleVariable offset="154" description="Description" type="sint16" value="" name="InputCaptureL" />
+	<ModuleVariable offset="156" description="Description" type="sint16" value="" name="LOC19Unused1" />
+	<ModuleVariable offset="158" description="Description" type="sint16" value="" name="LOC19Unused2" />
+	
+	<ModuleVariable offset="160" description="Description" type="sint16" value="" name="r1" />
+	<ModuleVariable offset="162" description="Description" type="sint16" value="" name="r2" />
+	<ModuleVariable offset="164" description="Description" type="sint16" value="" name="r3" />
+	<ModuleVariable offset="166" description="Description" type="sint16" value="" name="r4" />
+	
+	<ModuleVariable offset="168" description="Description" type="sint16" value="" name="s0" />
+	<ModuleVariable offset="170" description="Description" type="sint16" value="" name="s1" />
+	<ModuleVariable offset="172" description="Description" type="sint16" value="" name="s2" />
+	<ModuleVariable offset="174" description="Description" type="sint16" value="" name="s3" />
+	
+	<ModuleVariable offset="176" description="Description" type="sint16" value="" name="s4" />
+	<ModuleVariable offset="178" description="Description" type="sint16" value="" name="t0" />
+	<ModuleVariable offset="180" description="Description" type="sint16" value="" name="t1" />
+	<ModuleVariable offset="182" description="Description" type="sint16" value="" name="t2" />
+
+	<ModuleVariable offset="184" description="Description" type="sint16" value="" name="t3" />
+	<ModuleVariable offset="186" description="Description" type="sint16" value="" name="t4" />
+	<ModuleVariable offset="188" description="Description" type="sint16" value="" name="rst_shift" />
+	
+	
+	<ModuleVariable offset="192" description="Description" type="float" value="" name="DADE_kp" />
+	<ModuleVariable offset="196" description="Description" type="float" value="" name="DADE_kd" />
+	
+	<ModuleVariable offset="200" description="Description" type="float" value="" name="DADE_TForce" />
+	<ModuleVariable offset="204" description="Description" type="float" value="" name="DADE_TAmortissement" />
+	
+	<ModuleVariable offset="208" description="Description" type="float" value="" name="DADE_TError" />
+	<ModuleVariable offset="212" description="Description" type="float" value="" name="DADE_TRef" />
+	
+	<ModuleVariable offset="216" description="Description" type="float" value="" name="DADE_B" />
+	<ModuleVariable offset="220" description="Description" type="float" value="" name="DADE_Xdot" />
+	
+	<ModuleVariable offset="224" description="Description" type="uint8" value="" name="DADE_mode" />
+	<ModuleVariable offset="226" description="Description" type="sint16" value="" name="DADE_maxDuty" />
+	<ModuleVariable offset="228" description="Description" type="float" value="" name="DADE_TerrorDot" />
+	
+	<ModuleVariable memType="1" offset="8" description="Description" type="uint8" value="" name="startupProfile" />
+	<ModuleVariable memType="1" offset="9" description="Description" type="uint8" value="" name="startupMode" /> 
+</ModuleConfiguration>

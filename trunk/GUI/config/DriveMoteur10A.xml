@@ -1,0 +1,88 @@
+<!DOCTYPE INTROLAB-NETWORKVIEWER>
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="98" codeVersion="-1" processorID="-1" tableVersion="-1" >
+     <ModuleVariable offset="0" description="Description" type="uint8" value="" name="CtrlMode" />
+     <ModuleVariable offset="1" description="Description" type="uint8" value="" name="CtrlType" />
+	 <ModuleVariable offset="2" description="Description" type="uint8" value="" name="PosMesSource" />
+	 <ModuleVariable offset="3" description="Description" type="uint8" value="" name="SpeedMesSource" />
+	 <ModuleVariable offset="4" description="Description" type="uint8" value="" name="TorqueMesSource" />
+	 <ModuleVariable offset="5" description="Description" type="uint8" value="" name="SetPointSource" />
+	 <ModuleVariable offset="6" description="Description" type="uint8" value="" name="SensorBias" />
+	 <ModuleVariable offset="7" description="Description" type="uint8" value="" name="MotorBias" />
+	 <ModuleVariable offset="8" description="Description" type="uint16" value="" name="State" />
+	 
+	 <ModuleVariable offset="10" description="Description" type="sint32" value="" name="SetPoint" />
+	 <ModuleVariable offset="14" description="Description" type="sint32" value="" name="SetPointMax" />
+	 <ModuleVariable offset="18" description="Description" type="sint32" value="" name="SetPointMin" />
+	 
+	 <ModuleVariable offset="22" description="Description" type="sint32" value="" name="Current" />
+	 <ModuleVariable offset="26" description="Description" type="sint32" value="" name="CurrentOffset" />
+	 <ModuleVariable offset="30" description="Description" type="sint32" value="" name="TorqueSensor" />
+	 <ModuleVariable offset="34" description="Description" type="sint32" value="" name="TorqueSensorOffset" />
+	 <ModuleVariable offset="38" description="Description" type="sint32" value="" name="AD0Value" />
+	 <ModuleVariable offset="42" description="Description" type="sint32" value="" name="AD0Offset" />
+	 <ModuleVariable offset="46" description="Description" type="sint32" value="" name="AD1Value" />
+	 <ModuleVariable offset="50" description="Description" type="sint32" value="" name="AD1Offset" />
+	 <ModuleVariable offset="54" description="Description" type="sint32" value="" name="ICValue" />
+	 <ModuleVariable offset="58" description="Description" type="sint32" value="" name="ICOffset" />
+	 <ModuleVariable offset="62" description="Description" type="sint32" value="" name="QEI" />
+	 
+	 <ModuleVariable offset="66" description="Description" type="sint32" value="" name="Speed" />
+	 <ModuleVariable offset="70" description="Description" type="sint32" value="" name="SpeedMax" />
+	 <ModuleVariable offset="74" description="Description" type="sint32" value="" name="Position" />
+	 <ModuleVariable offset="78" description="Description" type="sint32" value="" name="Acceleration" />
+	 <ModuleVariable offset="82" description="Description" type="sint32" value="" name="AccelerationMax" />
+	 <ModuleVariable offset="86" description="Description" type="sint32" value="" name="Torque" />
+	 
+	 <ModuleVariable offset="90" description="Description" type="sint32" value="" name="RefPoint" />
+	 <ModuleVariable offset="94" description="Description" type="sint32" value="" name="MesPoint" />
+	 <ModuleVariable offset="98" description="Description" type="float" value="" name="pid_kp" />
+	 <ModuleVariable offset="102" description="Description" type="float" value="" name="pid_ki" />
+	 <ModuleVariable offset="106" description="Description" type="float" value="" name="pid_kd" />
+	 <ModuleVariable offset="110" description="Description" type="float" value="" name="pid_error" />
+	 <ModuleVariable offset="114" description="Description" type="float" value="" name="pid_error_accum" />
+	 <ModuleVariable offset="118" description="Description" type="float" value="" name="pid_error_derivative" />
+	 <ModuleVariable offset="122" description="Description" type="float" value="" name="pid_error_accum_max" />
+	 <ModuleVariable offset="126" description="Description" type="sint32" value="" name="PIDOut" />
+	 
+	 <ModuleVariable offset="130" description="Description" type="sint32" value="" name="InitPoint" />
+	 <ModuleVariable offset="134" description="Description" type="sint32" value="" name="DestPoint" />
+	 <ModuleVariable offset="138" description="Description" type="sint32" value="" name="NextPoint" />
+	 
+	 <ModuleVariable offset="142" description="Description" type="sint32" value="" name="CurrentLimit" />
+	 <ModuleVariable offset="146" description="Description" type="sint32" value="" name="PWM_CurrentLimit" />
+	 <ModuleVariable offset="150" description="Description" type="sint32" value="" name="PWM_CurrentStep" />
+	 <ModuleVariable offset="154" description="Description" type="sint32" value="" name="Temperature" />
+	 
+	 <ModuleVariable offset="158" description="Inertie" type="float" value="" name="admittanceM" />
+	 <ModuleVariable offset="162" description="Amortissement" type="float" value="" name="admittanceB" />
+	 <ModuleVariable offset="166" description="Elasticité" type="float" value="" name="admittanceK" />
+	 <ModuleVariable offset="170" description="a" type="float" value="" name="admittanceCoeff_0" />
+	 <ModuleVariable offset="174" description="b" type="float" value="" name="admittanceCoeff_1" />
+	 <ModuleVariable offset="178" description="c" type="float" value="" name="admittanceCoeff_2" />
+	 <ModuleVariable offset="182" description="e" type="float" value="" name="admittanceCoeff_3" />
+	 <ModuleVariable offset="186" description="f" type="float" value="" name="admittanceCoeff_4" />
+	 <ModuleVariable offset="190" description="torque0" type="float" value="" name="admittanceState_0" />
+	 <ModuleVariable offset="194" description="torque1" type="float" value="" name="admittanceState_1" />
+	 <ModuleVariable offset="198" description="torque2" type="float" value="" name="admittanceState_2" />
+	 <ModuleVariable offset="202" description="output1" type="float" value="" name="admittanceState_3" />
+	 <ModuleVariable offset="206" description="output2" type="float" value="" name="admittanceState_4" />
+	 <ModuleVariable offset="210" description="Description" type="float" value="" name="TorqueOffset" />
+	 <ModuleVariable offset="214" description="Description" type="sint32" value="" name="PositionOffset" />
+	 <ModuleVariable offset="218" description="Description" type="float" value="" name="DeadZone" />
+	 <ModuleVariable offset="222" description="Description" type="uint16" value="" name="computeCoeffFlag" />
+	 <ModuleVariable offset="224" description="Description" type="uint16" value="" name="dummy" />
+	 
+	 <ModuleVariable offset="226" description="Description" type="float" value="" name="PositionToRad" />
+	 <ModuleVariable offset="230" description="Description" type="float" value="" name="TorqueToNm" />
+	 
+	 <ModuleVariable offset="234" description="Description" type="uint8" value="" name="ESTOPEnabled" />
+	 <ModuleVariable offset="235" description="Description" type="uint8" value="" name="WriteEEPROM" />
+	 <ModuleVariable offset="236" description="Description" type="uint16" value="" name="CtrlTimeBase" />
+	 <ModuleVariable offset="238" description="Description" type="sint16" value="" name="loopTime" />
+	 
+	
+	 <ModuleVariable memType="1" offset="8" description="Description" type="uint8" value="" name="startupProfile" />
+	 <ModuleVariable memType="1" offset="9" description="Description" type="uint8" value="" name="startupMode" />
+	 
+	 
+</ModuleConfiguration>
