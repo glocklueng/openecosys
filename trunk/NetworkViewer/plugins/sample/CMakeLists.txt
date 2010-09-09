@@ -34,7 +34,7 @@ QT4_WRAP_UI(Plugin_UI_SRCS ${Plugin_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(Plugin_MOC_SRCS ${Plugin_HEADERS})
 
-INCLUDE_DIRECTORIES(./ ${PLUGIN_INCLUDES} )
+INCLUDE_DIRECTORIES(./ ${PLUGIN_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(SamplePlugin SHARED ${Plugin_SRCS} ${Plugin_HEADERS} ${Plugin_QRC_SRCS} ${Plugin_MOC_SRCS} ${Plugin_UI_SRCS}  )
 target_link_libraries(SamplePlugin  ${QT_LIBRARIES} ${PLUGIN_LIBRARIES})

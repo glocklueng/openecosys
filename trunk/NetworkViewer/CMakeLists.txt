@@ -1,4 +1,4 @@
-PROJECT (INTROLAB-NetworkViewer)
+PROJECT (OpenEcoSys-NetworkViewer)
 
 cmake_minimum_required(VERSION 2.6)
 
@@ -135,6 +135,7 @@ QT4_WRAP_CPP(NetworkViewer_MOC_SRCS ${NetworkViewer_HEADERS})
 #Include directories
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR}
                 ${PROJECT_SOURCE_DIR}/
+                ${CMAKE_CURRENT_BINARY_DIR}
                 )
 
 
@@ -191,7 +192,7 @@ IF (WIN32)
         ############################
         SET(CPACK_SOURCE_GENERATOR "ZIP")
         SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt")
-        SET(CPACK_PACKAGE_NAME "NetworkViewer")
+        SET(CPACK_PACKAGE_NAME "OpenEcoSys-NetworkViewer")
         SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "NetworkViewer")
         SET(CPACK_PACKAGE_VENDOR "Dominic Letourneau")
         SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
