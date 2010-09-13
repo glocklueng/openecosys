@@ -120,9 +120,10 @@ QT4_ADD_RESOURCES(SRCS_QRC ${qrc})
 SET (QTVERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
 
 SET (XML_FILES
-	config/DriveMoteur10A.xml
-	config/HeadReddy.xml
-	config/dsPICDrive.xml
+    config/INTROLAB_J0Pwr.xml
+	config/INTROLAB_Unidrive_v2.xml
+	config/INTROLAB_ReddyHead.xml
+	config/INTROLAB_dsPICDrive.xml
 )
 
 
