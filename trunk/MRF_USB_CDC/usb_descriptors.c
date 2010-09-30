@@ -154,8 +154,8 @@ state according to the definition in the USB specification.
 #define __USB_DESCRIPTORS_C
  
 /** INCLUDES *******************************************************/
-#include "./USB/usb.h"
-#include "./USB/usb_function_cdc.h"
+#include "usb.h"
+#include "usb_function_cdc.h"
 
 /** CONSTANTS ******************************************************/
 #if defined(__18CXX)
@@ -272,10 +272,9 @@ ROM struct{BYTE bLength;BYTE bDscType;WORD string[1];}sd000={
 sizeof(sd000),USB_DESCRIPTOR_STRING,{0x0409}};
 
 //Manufacturer string descriptor
-ROM struct{BYTE bLength;BYTE bDscType;WORD string[25];}sd001={
+ROM struct{BYTE bLength;BYTE bDscType;WORD string[11];}sd001={
 sizeof(sd001),USB_DESCRIPTOR_STRING,
-{'M','i','c','r','o','c','h','i','p',' ',
-'T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'
+{'O','p','e','n','E','C','o','S','y','s'
 }};
 
 //Product string descriptor

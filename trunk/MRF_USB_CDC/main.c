@@ -41,8 +41,8 @@
 ********************************************************************/
 
 /** INCLUDES *******************************************************/
-#include "./USB/usb.h"
-#include "./USB/usb_function_cdc.h"
+#include "usb.h"
+#include "usb_function_cdc.h"
 
 #include "HardwareProfile.h"
 
@@ -237,8 +237,8 @@
 #include "GenericTypeDefs.h"
 #include "Compiler.h"
 #include "usb_config.h"
-#include "USB\usb_device.h"
-#include "USB\usb.h"
+#include "usb_device.h"
+#include "usb.h"
 
 #include "HardwareProfile.h"
 
