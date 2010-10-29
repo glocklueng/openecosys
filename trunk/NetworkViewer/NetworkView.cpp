@@ -433,9 +433,17 @@ void NetworkView::requestVariable(ModuleVariable *variable)
 {
     Q_ASSERT(variable);
 
-    if (variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0)
+    NetworkModule *module = this->getModule(variable->getDeviceID());
+    Q_ASSERT(module);
+
+
+
+    if (module->active() &&   variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0 )
     {
         //qDebug("NetworkView::requestVariable %s",variable.getName().toStdString().c_str());
+
+
+
 
         //Building CAN request...
         LABORIUS_MESSAGE canMsg;

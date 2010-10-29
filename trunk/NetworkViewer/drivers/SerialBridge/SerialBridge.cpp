@@ -26,6 +26,9 @@ static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("Serial
 SerialBridge::SerialBridge(const char* args)
     : m_serialPort(NULL), m_pollTimer(NULL)
 {
+
+    serialBytesIn = 0;
+    serialBytesOut = 0;
     initialize(args);
 }
 
@@ -63,6 +66,12 @@ CANDevice::State SerialBridge::initialize(const char* args)
 	connect(m_pollTimer,SIGNAL(timeout()),this,SLOT(serialReadyRead()));
 	m_pollTimer->start(1); //1ms timer
 #endif
+
+
+        m_testTimer = new QTimer(this);
+        connect(m_testTimer,SIGNAL(timeout()),this,SLOT(testTimer()));
+        m_testTimer->start(1000);
+
 
         return CANDevice::CANDEVICE_OK;
     }
@@ -156,6 +165,9 @@ void SerialBridge::serialReadyRead()
 #ifdef WIN32
 
         int available = m_serialPort->bytesAvailable() / sizeof(CANRxMessageBuffer);
+
+        serialBytesIn += available * sizeof(CANRxMessageBuffer);
+
         QByteArray array = m_serialPort->read(sizeof(CANRxMessageBuffer) * available);
 
         if (available <= 0)
@@ -216,7 +228,7 @@ bool SerialBridge::event(QEvent *event)
 
     if(event->type() == QEvent::User)
     {
-        //qDebug("bool SerialBridge::event(QEvent *event)");
+
         SerialBridgeSendEvent *msgEvent = dynamic_cast<SerialBridgeSendEvent*>(event);
 
         if (msgEvent && m_serialPort)
@@ -272,6 +284,8 @@ bool SerialBridge::event(QEvent *event)
             }
 
 
+            serialBytesOut += sizeof(CANTxMessageBuffer);
+
             //Write to socket
             m_serialPort->write((char*) &CANBuffer, sizeof(CANTxMessageBuffer));
 
@@ -285,3 +299,10 @@ bool SerialBridge::event(QEvent *event)
     return QObject::event(event);
 }
 
+ void SerialBridge::testTimer()
+ {
+    qDebug("IN: %li OUT: %li",serialBytesIn,serialBytesOut);
+
+    serialBytesIn = 0;
+    serialBytesOut = 0;
+ }
