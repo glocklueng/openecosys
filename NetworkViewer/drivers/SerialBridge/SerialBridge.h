@@ -264,6 +264,7 @@ class SerialBridge : public QObject, public CANDevice
 	
         void serialReadyRead();
         void serialBytesWritten(qint64 nbBytes);
+        void testTimer();
 	
 	
 	protected:
@@ -280,6 +281,10 @@ class SerialBridge : public QObject, public CANDevice
 	QList<CANRxMessageBuffer> m_recvQueue;
 	QMutex m_sendQueueMutex;
 	QMutex m_recvQueueMutex;
+        
+        long serialBytesIn;
+        long serialBytesOut;
+        QTimer *m_testTimer;
 };
 
 

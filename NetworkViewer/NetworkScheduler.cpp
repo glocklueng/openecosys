@@ -130,6 +130,7 @@ void NetworkScheduler::schedulerAliveRequest()
 {
     if (m_view)
     {
+        //for (int i = 0; i < 800; i++)
         m_view->sendAliveRequest();
     }
 }
