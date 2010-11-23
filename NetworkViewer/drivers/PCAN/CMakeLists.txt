@@ -1,7 +1,9 @@
 
-SET(PCAN_SRCS
-        PCANDevice.cpp
-)
+IF (WIN32)
+	SET(PCAN_SRCS PCANDevice.cpp)
+ELSE (WIN32)
+	SET(PCAN_SRCS PCANDeviceLinux.cpp)
+ENDIF(WIN32)
 
 SET(PCAN_HEADERS
         PCANDevice.h
