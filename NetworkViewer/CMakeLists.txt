@@ -15,7 +15,7 @@ SET(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION
 
 
 #OSX Architecture, will build for 32 bits systems
-set(CMAKE_OSX_ARCHITECTURES "i386")
+#set(CMAKE_OSX_ARCHITECTURES "i386")
 
 
 
@@ -208,11 +208,11 @@ IF (WIN32)
 ENDIF (WIN32)
 
 IF (APPLE)
-        INCLUDE_DIRECTORIES({QT_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/qwt/OSX/include)
+        INCLUDE_DIRECTORIES({QT_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/qwt/OSX_x64/include)
 
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-	target_link_libraries(networkViewerBase ${QT_LIBRARIES} -L${PROJECT_SOURCE_DIR}/qwt/OSX/lib -lqwt )
+        target_link_libraries(networkViewerBase ${QT_LIBRARIES} -L${PROJECT_SOURCE_DIR}/qwt/OSX_x64/lib -lqwt )
         INSTALL(TARGETS networkViewerBase DESTINATION lib)
 
 
