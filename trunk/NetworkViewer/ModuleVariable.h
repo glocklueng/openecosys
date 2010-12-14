@@ -200,6 +200,17 @@ public slots:
         void setDeviceID(int id);
 
         /**
+            \param id the interface id
+        */
+        void setInterfaceID(int id);
+
+        /**
+            \return int the interface id
+        */
+        int getInterfaceID() const;
+
+
+        /**
             The only one permitted from a script
             Will set the value with a QVariant
             \param value the new value
@@ -341,6 +352,9 @@ protected:
 
         ///To make sure the variable knows to which device it belongs
 	int m_deviceID;
+
+        ///Interface number
+        int m_interfaceID;
 
         ///True if the variable is activated (will be updated by the scheduler)
         bool m_activated;
