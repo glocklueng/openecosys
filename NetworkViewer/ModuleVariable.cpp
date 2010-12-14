@@ -21,7 +21,8 @@
 
 //This constructor is private
 ModuleVariable::ModuleVariable(QObject *parent)
-    : QObject(parent), m_type(INVALID), m_name("Invalid"), m_memType(RAM_VARIABLE), m_offset(-1), m_description("Invalid variable"), m_version(0), m_deviceID(0), m_activated(true)
+    : QObject(parent), m_type(INVALID), m_name("Invalid"), m_memType(RAM_VARIABLE)
+    , m_offset(-1), m_description("Invalid variable"), m_version(0), m_deviceID(-1), m_interfaceID(-1), m_activated(true)
 {
 
 }
@@ -29,13 +30,17 @@ ModuleVariable::ModuleVariable(QObject *parent)
 
 
 ModuleVariable::ModuleVariable(VARIABLE_TYPE _type, const QString &_name, VARIABLE_MEMORY_TYPE _memType, int _offset, const QString &_description , QObject *parent)
-    : QObject(parent), m_type(_type), m_name(_name), m_memType(_memType), m_offset(_offset), m_description(_description), m_activated(true)
+    : QObject(parent), m_type(_type), m_name(_name), m_memType(_memType)
+    , m_offset(_offset), m_description(_description), m_activated(true)
 {
     //Set version to zero
     m_version = 0;
 
     //Set deviceID to -1
     m_deviceID = -1;
+
+    //Set interfaceID to -1
+    m_interfaceID = -1;
 
     setProperty("name",QString("ModuleVariable:") + QString(m_name));
 }
@@ -58,13 +63,15 @@ ModuleVariable::ModuleVariable(const ModuleVariable &variable)
     m_value = variable.m_value;
     m_version = variable.m_version;
     m_deviceID = variable.m_deviceID;
+    m_interfaceID = variable.m_interfaceID;
     m_activated = variable.m_activated;
 
     setProperty("name",QString("ModuleVariable:") + QString(m_name));
 }
 
 ModuleVariable::ModuleVariable(QDomElement &element)
-    : m_type(INVALID), m_name("Invalid"), m_memType(RAM_VARIABLE), m_offset(-1), m_description("Invalid variable"),  m_version(0), m_deviceID(-1), m_activated(true)
+    : m_type(INVALID), m_name("Invalid"), m_memType(RAM_VARIABLE), m_offset(-1), m_description("Invalid variable")
+    ,  m_version(0), m_deviceID(-1), m_interfaceID(-1), m_activated(true)
 {
 
     loadXML(element);
@@ -116,6 +123,8 @@ bool ModuleVariable::loadXML(QDomElement &element)
         }
 
 
+
+
         return true;
     }
     else
@@ -141,6 +150,7 @@ ModuleVariable& ModuleVariable::operator= (const ModuleVariable &variable)
     m_description = variable.m_description;
     m_value = variable.m_value;
     m_deviceID = variable.m_deviceID;
+    m_interfaceID = variable.m_interfaceID;
     m_version = variable.m_version;
 
     setProperty("name",QString("ModuleVariable:") + QString(m_name));
@@ -155,7 +165,8 @@ bool ModuleVariable::operator== (const ModuleVariable &variable) const
     if (m_name == variable.m_name &&
         m_memType == variable.m_memType &&
         m_version == variable.m_version &&
-        m_deviceID == variable.m_deviceID)
+        m_deviceID == variable.m_deviceID &&
+        m_interfaceID == variable.m_interfaceID)
     {
         return true;
     }
@@ -180,8 +191,13 @@ void ModuleVariable::saveXML(QDomDocument &document, QDomElement &parentElement)
     //deviceID not required...
     //variableElement.setAttribute("deviceID",QString::number(m_deviceID));
 
+    //interfaceID not required...
+    //variableElement.setAttribute("interfaceID",QString::number(m_interfaceID));
+
     //version not required...
     //variableElement.setAttribute("version",QString::number(m_version));
+
+
 
     parentElement.appendChild(variableElement);
 }
@@ -603,6 +619,17 @@ int ModuleVariable::getDeviceID() const
 {
     return m_deviceID;
 }
+
+void ModuleVariable::setInterfaceID(int id)
+{
+    m_interfaceID = id;
+}
+
+int ModuleVariable::getInterfaceID() const
+{
+    return m_interfaceID;
+}
+
 
 int ModuleVariable::getLength() const
 {

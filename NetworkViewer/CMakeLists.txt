@@ -13,10 +13,8 @@ SET(CPACK_PACKAGE_VERSION_PATCH "4")
 SET(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
 
 
-
 #OSX Architecture, will build for 32 bits systems
 #set(CMAKE_OSX_ARCHITECTURES "i386")
-
 
 
 
@@ -24,10 +22,10 @@ SET(CMAKE_BUILD_TYPE Release)
 
 IF(WIN32)
 	MESSAGE( STATUS "Windows version: " ${CMAKE_SYSTEM})
-	SET(CMAKE_INSTALL_PREFIX "$ENV{SYSTEMDRIVE}/NetworkViewer-${CMAKE_BUILD_TYPE}")
+        SET(CMAKE_INSTALL_PREFIX "$ENV{SYSTEMDRIVE}/NetworkViewer-${CPACK_PACKAGE_VERSION}")
 	MESSAGE( STATUS "Install directory is : " ${CMAKE_INSTALL_PREFIX})
 ELSE(WIN32)
-	SET(CMAKE_INSTALL_PREFIX "/usr/local/NetworkViewer")
+        SET(CMAKE_INSTALL_PREFIX "/usr/local/NetworkViewer-${CPACK_PACKAGE_VERSION}")
 ENDIF(WIN32)
 
 
@@ -61,162 +59,144 @@ SET(QT_USE_QTWEBKIT TRUE)
 
 include(${QT_USE_FILE})
 
+#
+#This is a qwt svn external dependency.
+#svn propget svn:externals to view them
+#
 
-#Checkout SVN repository
-find_package(Subversion REQUIRED)
+SET(QWT_SRC_DIR ${PROJECT_SOURCE_DIR}/qwt_svn/src)
 
-IF(SUBVERSION_FOUND)
-    #Stable version of QWT...
-    SET(QWT_SVN_DIRECTORY "https://qwt.svn.sourceforge.net/svnroot/qwt/branches/qwt-5.2")
-    Subversion_WC_INFO(${QWT_SVN_DIRECTORY} QWT_SVN_INFO)
-    MESSAGE("QWT Current revision is ${QWT_SVN_INFO_WC_REVISION}")
+#Create a library with the sources
+SET(QWT_SRCS
+    #Base
+    ${QWT_SRC_DIR}/qwt_abstract_scale_draw.cpp
+    ${QWT_SRC_DIR}/qwt_color_map.cpp
+    ${QWT_SRC_DIR}/qwt_clipper.cpp
+    ${QWT_SRC_DIR}/qwt_double_interval.cpp
+    ${QWT_SRC_DIR}/qwt_double_rect.cpp
+    ${QWT_SRC_DIR}/qwt_dyngrid_layout.cpp
+    ${QWT_SRC_DIR}/qwt_layout_metrics.cpp
+    ${QWT_SRC_DIR}/qwt_math.cpp
+    ${QWT_SRC_DIR}/qwt_magnifier.cpp
+    ${QWT_SRC_DIR}/qwt_paint_buffer.cpp
+    ${QWT_SRC_DIR}/qwt_panner.cpp
+    ${QWT_SRC_DIR}/qwt_painter.cpp
+    ${QWT_SRC_DIR}/qwt_picker.cpp
+    ${QWT_SRC_DIR}/qwt_round_scale_draw.cpp
+    ${QWT_SRC_DIR}/qwt_scale_div.cpp
+    ${QWT_SRC_DIR}/qwt_scale_draw.cpp
+    ${QWT_SRC_DIR}/qwt_scale_map.cpp
+    ${QWT_SRC_DIR}/qwt_spline.cpp
+    ${QWT_SRC_DIR}/qwt_text_engine.cpp
+    ${QWT_SRC_DIR}/qwt_text_label.cpp
+    ${QWT_SRC_DIR}/qwt_text.cpp
+    ${QWT_SRC_DIR}/qwt_event_pattern.cpp
+    ${QWT_SRC_DIR}/qwt_picker_machine.cpp
+    ${QWT_SRC_DIR}/qwt_scale_engine.cpp
+    ${QWT_SRC_DIR}/qwt_symbol.cpp
+    #QWT_PLOT
+    ${QWT_SRC_DIR}/qwt_curve_fitter.cpp
+    ${QWT_SRC_DIR}/qwt_data.cpp
+    ${QWT_SRC_DIR}/qwt_interval_data.cpp
+    ${QWT_SRC_DIR}/qwt_legend.cpp
+    ${QWT_SRC_DIR}/qwt_legend_item.cpp
+    ${QWT_SRC_DIR}/qwt_plot.cpp
+    ${QWT_SRC_DIR}/qwt_plot_print.cpp
+    ${QWT_SRC_DIR}/qwt_plot_xml.cpp
+    ${QWT_SRC_DIR}/qwt_plot_axis.cpp
+    ${QWT_SRC_DIR}/qwt_plot_curve.cpp
+    ${QWT_SRC_DIR}/qwt_plot_dict.cpp
+    ${QWT_SRC_DIR}/qwt_plot_grid.cpp
+    ${QWT_SRC_DIR}/qwt_plot_item.cpp
+    ${QWT_SRC_DIR}/qwt_plot_spectrogram.cpp
+    ${QWT_SRC_DIR}/qwt_plot_scaleitem.cpp
+    ${QWT_SRC_DIR}/qwt_plot_marker.cpp
+    ${QWT_SRC_DIR}/qwt_plot_layout.cpp
+    ${QWT_SRC_DIR}/qwt_plot_printfilter.cpp
+    ${QWT_SRC_DIR}/qwt_plot_rasteritem.cpp
+    ${QWT_SRC_DIR}/qwt_plot_canvas.cpp
+    ${QWT_SRC_DIR}/qwt_plot_rescaler.cpp
+    ${QWT_SRC_DIR}/qwt_plot_panner.cpp
+    ${QWT_SRC_DIR}/qwt_plot_picker.cpp
+    ${QWT_SRC_DIR}/qwt_plot_zoomer.cpp
+    ${QWT_SRC_DIR}/qwt_plot_magnifier.cpp
+    ${QWT_SRC_DIR}/qwt_raster_data.cpp
+    ${QWT_SRC_DIR}/qwt_scale_widget.cpp
+)
 
-    #Test for existing project file
-    find_file(QWT_PROJECT_FILE qwt.pro PATHS ${PROJECT_SOURCE_DIR}/qwt_svn)
+SET(QWT_HEADERS
+    #Base
+    ${QWT_SRC_DIR}/qwt.h
+    ${QWT_SRC_DIR}/qwt_abstract_scale_draw.h
+    ${QWT_SRC_DIR}/qwt_array.h
+    ${QWT_SRC_DIR}/qwt_color_map.h
+    ${QWT_SRC_DIR}/qwt_clipper.h
+    ${QWT_SRC_DIR}/qwt_double_interval.h
+    ${QWT_SRC_DIR}/qwt_double_rect.h
+    ${QWT_SRC_DIR}/qwt_dyngrid_layout.h
+    ${QWT_SRC_DIR}/qwt_global.h
+    ${QWT_SRC_DIR}/qwt_layout_metrics.h
+    ${QWT_SRC_DIR}/qwt_math.h
+    ${QWT_SRC_DIR}/qwt_magnifier.h
+    ${QWT_SRC_DIR}/qwt_paint_buffer.h
+    ${QWT_SRC_DIR}/qwt_painter.h
+    ${QWT_SRC_DIR}/qwt_panner.h
+    ${QWT_SRC_DIR}/qwt_picker.h
+    ${QWT_SRC_DIR}/qwt_picker_machine.h
+    ${QWT_SRC_DIR}/qwt_polygon.h
+    ${QWT_SRC_DIR}/qwt_round_scale_draw.h
+    ${QWT_SRC_DIR}/qwt_scale_div.h
+    ${QWT_SRC_DIR}/qwt_scale_draw.h
+    ${QWT_SRC_DIR}/qwt_scale_engine.h
+    ${QWT_SRC_DIR}/qwt_scale_map.h
+    ${QWT_SRC_DIR}/qwt_spline.h
+    ${QWT_SRC_DIR}/qwt_symbol.h
+    ${QWT_SRC_DIR}/qwt_text_engine.h
+    ${QWT_SRC_DIR}/qwt_text_label.h
+    ${QWT_SRC_DIR}/qwt_text.h
+    ${QWT_SRC_DIR}/qwt_valuelist.h
+    #QWT_PLOT
+    ${QWT_SRC_DIR}/qwt_curve_fitter.h
+    ${QWT_SRC_DIR}/qwt_data.h
+    ${QWT_SRC_DIR}/qwt_event_pattern.h
+    ${QWT_SRC_DIR}/qwt_interval_data.h
+    ${QWT_SRC_DIR}/qwt_legend.h
+    ${QWT_SRC_DIR}/qwt_legend_item.h
+    ${QWT_SRC_DIR}/qwt_legend_itemmanager.h
+    ${QWT_SRC_DIR}/qwt_plot.h
+    ${QWT_SRC_DIR}/qwt_plot_curve.h
+    ${QWT_SRC_DIR}/qwt_plot_dict.h
+    ${QWT_SRC_DIR}/qwt_plot_grid.h
+    ${QWT_SRC_DIR}/qwt_plot_item.h
+    ${QWT_SRC_DIR}/qwt_plot_layout.h
+    ${QWT_SRC_DIR}/qwt_plot_marker.h
+    ${QWT_SRC_DIR}/qwt_plot_printfilter.h
+    ${QWT_SRC_DIR}/qwt_plot_rasteritem.h
+    ${QWT_SRC_DIR}/qwt_plot_spectrogram.h
+    ${QWT_SRC_DIR}/qwt_plot_scaleitem.h
+    ${QWT_SRC_DIR}/qwt_plot_canvas.h
+    ${QWT_SRC_DIR}/qwt_plot_rescaler.h
+    ${QWT_SRC_DIR}/qwt_plot_panner.h
+    ${QWT_SRC_DIR}/qwt_plot_picker.h
+    ${QWT_SRC_DIR}/qwt_plot_zoomer.h
+    ${QWT_SRC_DIR}/qwt_plot_magnifier.h
+    ${QWT_SRC_DIR}/qwt_raster_data.h
+    ${QWT_SRC_DIR}/qwt_scale_widget.h
+)
 
-    IF(QWT_PROJECT_FILE)
-        MESSAGE("Project file already found.")
-    ELSE(QWT_PROJECT_FILE)
-        #Checkout revision
-        execute_process(COMMAND ${Subversion_SVN_EXECUTABLE} co ${QWT_SVN_DIRECTORY} ${PROJECT_SOURCE_DIR}/qwt_svn)
-    ENDIF(QWT_PROJECT_FILE)
+#This will generate moc_* for Qt
+QT4_WRAP_CPP(QWT_MOC_SRCS ${QWT_HEADERS})
 
+#Include directories for QWT
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QWT_SRC_DIR})
 
-    SET(QWT_SRC_DIR ${PROJECT_SOURCE_DIR}/qwt_svn/src)
+#Build library
+add_library(qwt-wrap SHARED ${QWT_SRCS} ${QWT_MOC_SRCS} ${QWT_HEADERS})
+target_link_libraries(qwt-wrap ${QT_LIBRARIES})
+INSTALL(TARGETS qwt-wrap DESTINATION bin)
+INSTALL(TARGETS qwt-wrap DESTINATION lib)
 
-    #Create a library with the sources
-    SET(QWT_SRCS
-        #Base
-        ${QWT_SRC_DIR}/qwt_abstract_scale_draw.cpp
-        ${QWT_SRC_DIR}/qwt_color_map.cpp
-        ${QWT_SRC_DIR}/qwt_clipper.cpp
-        ${QWT_SRC_DIR}/qwt_double_interval.cpp
-        ${QWT_SRC_DIR}/qwt_double_rect.cpp
-        ${QWT_SRC_DIR}/qwt_dyngrid_layout.cpp
-        ${QWT_SRC_DIR}/qwt_layout_metrics.cpp
-        ${QWT_SRC_DIR}/qwt_math.cpp
-        ${QWT_SRC_DIR}/qwt_magnifier.cpp
-        ${QWT_SRC_DIR}/qwt_paint_buffer.cpp
-        ${QWT_SRC_DIR}/qwt_panner.cpp
-        ${QWT_SRC_DIR}/qwt_painter.cpp
-        ${QWT_SRC_DIR}/qwt_picker.cpp
-        ${QWT_SRC_DIR}/qwt_round_scale_draw.cpp
-        ${QWT_SRC_DIR}/qwt_scale_div.cpp
-        ${QWT_SRC_DIR}/qwt_scale_draw.cpp
-        ${QWT_SRC_DIR}/qwt_scale_map.cpp
-        ${QWT_SRC_DIR}/qwt_spline.cpp
-        ${QWT_SRC_DIR}/qwt_text_engine.cpp
-        ${QWT_SRC_DIR}/qwt_text_label.cpp
-        ${QWT_SRC_DIR}/qwt_text.cpp
-        ${QWT_SRC_DIR}/qwt_event_pattern.cpp
-        ${QWT_SRC_DIR}/qwt_picker_machine.cpp
-        ${QWT_SRC_DIR}/qwt_scale_engine.cpp
-        ${QWT_SRC_DIR}/qwt_symbol.cpp
-        #QWT_PLOT
-        ${QWT_SRC_DIR}/qwt_curve_fitter.cpp
-        ${QWT_SRC_DIR}/qwt_data.cpp
-        ${QWT_SRC_DIR}/qwt_interval_data.cpp
-        ${QWT_SRC_DIR}/qwt_legend.cpp
-        ${QWT_SRC_DIR}/qwt_legend_item.cpp
-        ${QWT_SRC_DIR}/qwt_plot.cpp
-        ${QWT_SRC_DIR}/qwt_plot_print.cpp
-        ${QWT_SRC_DIR}/qwt_plot_xml.cpp
-        ${QWT_SRC_DIR}/qwt_plot_axis.cpp
-        ${QWT_SRC_DIR}/qwt_plot_curve.cpp
-        ${QWT_SRC_DIR}/qwt_plot_dict.cpp
-        ${QWT_SRC_DIR}/qwt_plot_grid.cpp
-        ${QWT_SRC_DIR}/qwt_plot_item.cpp
-        ${QWT_SRC_DIR}/qwt_plot_spectrogram.cpp
-        ${QWT_SRC_DIR}/qwt_plot_scaleitem.cpp
-        ${QWT_SRC_DIR}/qwt_plot_marker.cpp
-        ${QWT_SRC_DIR}/qwt_plot_layout.cpp
-        ${QWT_SRC_DIR}/qwt_plot_printfilter.cpp
-        ${QWT_SRC_DIR}/qwt_plot_rasteritem.cpp
-        ${QWT_SRC_DIR}/qwt_plot_canvas.cpp
-        ${QWT_SRC_DIR}/qwt_plot_rescaler.cpp
-        ${QWT_SRC_DIR}/qwt_plot_panner.cpp
-        ${QWT_SRC_DIR}/qwt_plot_picker.cpp
-        ${QWT_SRC_DIR}/qwt_plot_zoomer.cpp
-        ${QWT_SRC_DIR}/qwt_plot_magnifier.cpp
-        ${QWT_SRC_DIR}/qwt_raster_data.cpp
-        ${QWT_SRC_DIR}/qwt_scale_widget.cpp
-    )
-
-    SET(QWT_HEADERS
-        #Base
-        ${QWT_SRC_DIR}/qwt.h
-        ${QWT_SRC_DIR}/qwt_abstract_scale_draw.h
-        ${QWT_SRC_DIR}/qwt_array.h
-        ${QWT_SRC_DIR}/qwt_color_map.h
-        ${QWT_SRC_DIR}/qwt_clipper.h
-        ${QWT_SRC_DIR}/qwt_double_interval.h
-        ${QWT_SRC_DIR}/qwt_double_rect.h
-        ${QWT_SRC_DIR}/qwt_dyngrid_layout.h
-        ${QWT_SRC_DIR}/qwt_global.h
-        ${QWT_SRC_DIR}/qwt_layout_metrics.h
-        ${QWT_SRC_DIR}/qwt_math.h
-        ${QWT_SRC_DIR}/qwt_magnifier.h
-        ${QWT_SRC_DIR}/qwt_paint_buffer.h
-        ${QWT_SRC_DIR}/qwt_painter.h
-        ${QWT_SRC_DIR}/qwt_panner.h
-        ${QWT_SRC_DIR}/qwt_picker.h
-        ${QWT_SRC_DIR}/qwt_picker_machine.h
-        ${QWT_SRC_DIR}/qwt_polygon.h
-        ${QWT_SRC_DIR}/qwt_round_scale_draw.h
-        ${QWT_SRC_DIR}/qwt_scale_div.h
-        ${QWT_SRC_DIR}/qwt_scale_draw.h
-        ${QWT_SRC_DIR}/qwt_scale_engine.h
-        ${QWT_SRC_DIR}/qwt_scale_map.h
-        ${QWT_SRC_DIR}/qwt_spline.h
-        ${QWT_SRC_DIR}/qwt_symbol.h
-        ${QWT_SRC_DIR}/qwt_text_engine.h
-        ${QWT_SRC_DIR}/qwt_text_label.h
-        ${QWT_SRC_DIR}/qwt_text.h
-        ${QWT_SRC_DIR}/qwt_valuelist.h
-        #QWT_PLOT
-        ${QWT_SRC_DIR}/qwt_curve_fitter.h
-        ${QWT_SRC_DIR}/qwt_data.h
-        ${QWT_SRC_DIR}/qwt_event_pattern.h
-        ${QWT_SRC_DIR}/qwt_interval_data.h
-        ${QWT_SRC_DIR}/qwt_legend.h
-        ${QWT_SRC_DIR}/qwt_legend_item.h
-        ${QWT_SRC_DIR}/qwt_legend_itemmanager.h
-        ${QWT_SRC_DIR}/qwt_plot.h
-        ${QWT_SRC_DIR}/qwt_plot_curve.h
-        ${QWT_SRC_DIR}/qwt_plot_dict.h
-        ${QWT_SRC_DIR}/qwt_plot_grid.h
-        ${QWT_SRC_DIR}/qwt_plot_item.h
-        ${QWT_SRC_DIR}/qwt_plot_layout.h
-        ${QWT_SRC_DIR}/qwt_plot_marker.h
-        ${QWT_SRC_DIR}/qwt_plot_printfilter.h
-        ${QWT_SRC_DIR}/qwt_plot_rasteritem.h
-        ${QWT_SRC_DIR}/qwt_plot_spectrogram.h
-        ${QWT_SRC_DIR}/qwt_plot_scaleitem.h
-        ${QWT_SRC_DIR}/qwt_plot_canvas.h
-        ${QWT_SRC_DIR}/qwt_plot_rescaler.h
-        ${QWT_SRC_DIR}/qwt_plot_panner.h
-        ${QWT_SRC_DIR}/qwt_plot_picker.h
-        ${QWT_SRC_DIR}/qwt_plot_zoomer.h
-        ${QWT_SRC_DIR}/qwt_plot_magnifier.h
-        ${QWT_SRC_DIR}/qwt_raster_data.h
-        ${QWT_SRC_DIR}/qwt_scale_widget.h
-    )
-
-    #This will generate moc_* for Qt
-    QT4_WRAP_CPP(QWT_MOC_SRCS ${QWT_HEADERS})
-
-    #Include directories for QWT
-    INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QWT_SRC_DIR})
-
-    #Build library
-    add_library(qwt SHARED ${QWT_SRCS} ${QWT_MOC_SRCS} ${QWT_HEADERS})
-    target_link_libraries(qwt ${QT_LIBRARIES})
-    INSTALL(TARGETS qwt DESTINATION bin)
-    INSTALL(TARGETS qwt DESTINATION lib)
-
-    INSTALL(FILES ${QWT_HEADERS} DESTINATION include/qwt)
-
-ENDIF(SUBVERSION_FOUND)
+INSTALL(FILES ${QWT_HEADERS} DESTINATION include/qwt)
 
 SET(NetworkViewer_SRCS
 	CANInterfaceHandler.cpp
@@ -329,7 +309,7 @@ IF (WIN32)
 
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt)
+        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
         INSTALL(TARGETS networkViewerBase DESTINATION bin)
 
 
@@ -368,7 +348,7 @@ IF (APPLE)
 
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt)
+        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
         INSTALL(TARGETS networkViewerBase DESTINATION lib)
 
 
@@ -383,12 +363,9 @@ ENDIF (APPLE)
 #TODO LINUX SPECIFIC...
 IF (UNIX AND NOT APPLE)
 
-    #Will use installed QWT
-    INCLUDE_DIRECTORIES({QT_INCLUDE_DIR} ./ /usr/include/qwt-qt4 /usr/include)
-
     #NetworkViewer Library
     add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-    target_link_libraries(networkViewerBase ${QT_LIBRARIES} -L/usr/lib -lqwt-qt4 )
+    target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
     INSTALL(TARGETS networkViewerBase DESTINATION lib)
 
 
