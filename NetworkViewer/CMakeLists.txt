@@ -282,6 +282,7 @@ INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR}
 
 #Install headers
 INSTALL( FILES ${NetworkViewer_HEADERS} DESTINATION include)
+INSTALL( FILES ${NetworkViewer_UI_SRCS} DESTINATION include/ui)
 
 
 #include files
