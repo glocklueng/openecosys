@@ -194,7 +194,8 @@ INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QWT_SRC_DIR})
 add_library(qwt-wrap SHARED ${QWT_SRCS} ${QWT_MOC_SRCS} ${QWT_HEADERS})
 target_link_libraries(qwt-wrap ${QT_LIBRARIES})
 INSTALL(TARGETS qwt-wrap DESTINATION bin)
-INSTALL(TARGETS qwt-wrap DESTINATION lib)
+INSTALL(TARGETS qwt-wrap DESTINATION lib EXPORT qwt-wrap-export-targets)
+INSTALL(EXPORT qwt-wrap-export-targets DESTINATION share/cmake)
 
 INSTALL(FILES ${QWT_HEADERS} DESTINATION include/qwt)
 
@@ -311,6 +312,8 @@ IF (WIN32)
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
         target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
         INSTALL(TARGETS networkViewerBase DESTINATION bin)
+	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
+	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
 
         #NetworkViewer Executable
@@ -349,7 +352,8 @@ IF (APPLE)
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
         target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
-        INSTALL(TARGETS networkViewerBase DESTINATION lib)
+	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
+	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
 
         #NetworkViewer Executable
@@ -366,7 +370,8 @@ IF (UNIX AND NOT APPLE)
     #NetworkViewer Library
     add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
     target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
-    INSTALL(TARGETS networkViewerBase DESTINATION lib)
+    INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
+    INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
 
     #NetworkViewer Executable
