@@ -280,6 +280,9 @@ INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR}
                 )
 
 
+#Install headers
+INSTALL( FILES ${NetworkViewer_HEADERS} DESTINATION include)
+
 
 #include files
 IF (WIN32)
