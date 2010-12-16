@@ -24,6 +24,8 @@
 #include "NetworkView.h"
 #include <QDropEvent>
 
+//This will insert the plugin in the dictionary...
+static int scope_view_plugin_init = BasePlugin::registerPlugin("ScopeView",new BasePlugin::PluginFactory<ScopeView>());
 
 bool ScopeView::eventFilter(QObject *obj, QEvent *event)
 {    
@@ -75,7 +77,7 @@ bool ScopeView::eventFilter(QObject *obj, QEvent *event)
 
 
 ScopeView::ScopeView(NetworkView *parent)
-    : QWidget(parent), m_view(parent)
+    : BasePlugin(parent)
 {
 
     setupUi(this);
@@ -102,6 +104,19 @@ ScopeView::ScopeView(NetworkView *parent)
     m_updateTimer = new QTimer(this);
     connect(m_updateTimer,SIGNAL(timeout()),this,SLOT(updateTimer()));
     m_updateTimer->start(10);//10ms timer
+}
+
+
+void ScopeView::init()
+{
+
+}
+
+
+
+void ScopeView::terminate()
+{
+
 }
 
 void ScopeView::addCurve(ModuleVariable *variable)

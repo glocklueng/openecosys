@@ -21,6 +21,7 @@
 
 
 #include "ScopeCurve.h"
+#include "BasePlugin.h"
 
 class NetworkView;
 class ScopeView;
@@ -48,7 +49,7 @@ public:
     Scope main window
     \author Dominic Letourneau
 */
-class ScopeView : public QWidget, public Ui::ScopeView
+class ScopeView : public BasePlugin, public Ui::ScopeView
 {
 
     Q_OBJECT;
@@ -60,6 +61,19 @@ public:
         \param parent Parent widget, default = NULL
     */
     ScopeView(NetworkView *parent= NULL);
+
+    /**
+     * 	NOT YET IMPLEMENTED, BUT PLUGINS NEED TO OVERLOAD THIS FUNCTION
+     *
+     */
+    virtual void init();
+
+
+    /**
+     *  NOT YET IMPLEMENTED, BUT PLUGINS NEED TO OVERLOAD THIS FUNCTION
+     *
+     */
+    virtual void terminate();
 
 public slots:
 
@@ -108,9 +122,6 @@ protected slots:
 protected:
 
     bool eventFilter(QObject *obj, QEvent *event);
-
-    ///The network view
-    NetworkView *m_view;
 
     ///The plot
     QwtPlot *m_plot;
