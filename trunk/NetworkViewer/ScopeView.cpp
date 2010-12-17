@@ -187,13 +187,13 @@ void ScopeView::addCurve(ModuleVariable *variable)
     QTreeWidgetItem *item = new QTreeWidgetItem(m_treeWidget);
 
     QPen pen = curve->pen();
-    item->setBackground(0,pen.color());
+    item->setBackground(COLOR_COLUMN,pen.color());
 
-    item->setIcon(0,QIcon(QPixmap(":images/dsPIC.png")));
-    item->setText(0,variable->getName() + "[module:" + QString::number(variable->getDeviceID()) + "]");
+    item->setIcon(NAME_COLUMN,QIcon(QPixmap(":images/dsPIC.png")));
+    item->setText(NAME_COLUMN,variable->getName() + "[module:" + QString::number(variable->getDeviceID()) + "]");
 
-    item->setText(1,"[Remove]");
-    item->setIcon(1,QIcon(QPixmap(":images/cross.png")));
+    item->setText(ACTION_COLUMN,"[Remove]");
+    item->setIcon(ACTION_COLUMN,QIcon(QPixmap(":images/cross.png")));
 
     m_itemCurveMap.insert(item,curve);
 }
@@ -246,14 +246,14 @@ void ScopeView::moduleItemDoubleClicked ( QTreeWidgetItem * item, int column )
 
     QPen pen = curve->pen();
 
-    item->setBackground(0,pen.color());
+    item->setBackground(COLOR_COLUMN,pen.color());
 
 }
 
 void ScopeView::moduleItemClicked(QTreeWidgetItem * item, int column)
 {
     //Test for remove action
-    if (column == 1)
+    if (column == ACTION_COLUMN)
     {
         QMessageBox msgBox;
         msgBox.setText(QString("Do you want to remove the variable : ") + item->text(0) + " ?");
