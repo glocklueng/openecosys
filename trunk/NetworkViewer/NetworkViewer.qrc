@@ -10,7 +10,9 @@
         <file>images/playRed.png</file>
         <file>images/pauseRed.png</file>
         <file>images/pauseGreen.png</file>
-		<file>images/introlab.png</file>
-        <file>scripts/TestScript.js</file>		
+        <file>images/introlab.png</file>
+        <file>scripts/TestScript.js</file>
+        <file>images/Play-Normal-icon.png</file>
+        <file>images/Stop-Normal-Blue-icon.png</file>
     </qresource>
 </RCC>
