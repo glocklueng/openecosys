@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>931</width>
-    <height>586</height>
+    <width>1141</width>
+    <height>789</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,12 +102,15 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
+         <width>400</width>
          <height>16777215</height>
         </size>
        </property>
-       <property name="autoFillBackground">
+       <property name="mouseTracking">
         <bool>false</bool>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
        </property>
        <property name="textElideMode">
         <enum>Qt::ElideRight</enum>
@@ -115,6 +118,15 @@
        <property name="uniformRowHeights">
         <bool>true</bool>
        </property>
+       <attribute name="headerCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="headerDefaultSectionSize">
+        <number>33</number>
+       </attribute>
+       <attribute name="headerMinimumSectionSize">
+        <number>-18</number>
+       </attribute>
        <column>
         <property name="text">
          <string>Color</string>

@@ -22,8 +22,35 @@
 #include <QMessageBox>
 #include <QWebView>
 
+
 //This will insert the plugin in the dictionary...
 static int sample_plugin_init = BasePlugin::registerPlugin("ScriptEngine",new BasePlugin::PluginFactory<ScriptEngine>());
+
+
+QScriptValue addSliderControlFunction(QScriptContext *context, QScriptEngine  *engine)
+{
+
+    QScriptValue calleeData = context->callee().data();
+    ScriptEngine *myScriptEngine = qobject_cast<ScriptEngine*>(calleeData.toQObject());
+
+    if (context->argumentCount() == 4)
+    {
+        int module_id = context->argument(0).toInt32();
+        int variable_id = context->argument(1).toInt32();
+        double min_value = context->argument(2).toNumber();
+        double max_value = context->argument(3).toNumber();
+
+        qDebug() << "Should add slider variable id " << variable_id << " from module : " << module_id << " min: " << min_value << " max: "<<max_value;
+
+        return engine->newVariant(myScriptEngine->addSliderControl(module_id,variable_id,min_value,max_value));
+    }
+    else
+    {
+        return engine->newVariant(false);
+    }
+
+}
+
 
 
 QScriptValue myPrintFunction(QScriptContext *context, QScriptEngine *engine)
@@ -322,14 +349,22 @@ void ScriptEngine::updateEngineVariables(bool modulesOnly)
         fun2.setData(m_scriptEngine.newQObject(this));
         m_scriptEngine.globalObject().setProperty("addToPlot", fun2);
 
-        //createPseudoModule function
+        //createPseudoModule / addPseudoModule function
         QScriptValue fun3 = m_scriptEngine.newFunction(createPseudoModuleFunction);
         fun3.setData(m_scriptEngine.newQObject(this));
         m_scriptEngine.globalObject().setProperty("createPseudoModule",fun3);
+        m_scriptEngine.globalObject().setProperty("addPseudoModule",fun3);
 
+        //addScriptVariable function
         QScriptValue fun4 = m_scriptEngine.newFunction(addScriptVariableFunction);
         fun4.setData(m_scriptEngine.newQObject(this));
         m_scriptEngine.globalObject().setProperty("addScriptVariable",fun4);
+
+        //addSliderControl function
+        QScriptValue fun5 = m_scriptEngine.newFunction(addSliderControlFunction);
+        fun5.setData(m_scriptEngine.newQObject(this));
+        m_scriptEngine.globalObject().setProperty("addSliderControl",fun5);
+
     }
 
     //Modules & Variables
@@ -478,3 +513,30 @@ bool ScriptEngine::addScriptVariable(int module_id, QString name, QString descri
     return false;
 }
 
+bool ScriptEngine::addSliderControl(int module_id, int variable_id, double min_value, double max_value)
+{
+    NetworkModule* module = m_view->getModule(module_id);
+
+    if (module)
+    {
+        ModuleVariable *var  = module->getVariable(variable_id);
+
+        if (var)
+        {
+            QMdiSubWindow* subwindow = m_view->createSubWindow("Slider Control : " + var->getName() + " [" + QString::number(var->getDeviceID()) + "]");
+            //Create the slider
+            ModuleVariableSlider *slider = new ModuleVariableSlider(subwindow,var,min_value,max_value);
+            //Add it to the window
+            subwindow->setWidget(slider);
+            //close window on slider destoy
+            connect(slider,SIGNAL(terminateSlider()),subwindow,SLOT(close()));
+            //Resize subwindow
+            subwindow->resize(320,240);
+            //Show subwindow
+            subwindow->show();
+            return true;
+        }
+    }
+
+    return false;
+}

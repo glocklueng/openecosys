@@ -166,6 +166,13 @@ public:
         */
         NetworkModule* getModuleAtIndex(int index);
 
+        /**
+            Create a subWindow for the MDI and add it to the Widow menu.
+            \param title the title of the Window, default="Untitiled"
+            \return QMdiSubWindow* The newly created sub window
+        */
+        QMdiSubWindow* createSubWindow(QString title = "Untitled");
+
 public slots:
 
         /**
@@ -308,12 +315,7 @@ protected:
 
 
 
-        /**
-            Create a subWindow for the MDI and add it to the Widow menu.
-            \param title the title of the Window, default="Untitiled"
-            \return QMdiSubWindow* The newly created sub window
-        */
-        QMdiSubWindow* createSubWindow(QString title = "Untitled");
+
 
         ///Mapping between module items (icons) and real modules
 	QMap<NetworkModuleItem*, NetworkModule *> m_modules;

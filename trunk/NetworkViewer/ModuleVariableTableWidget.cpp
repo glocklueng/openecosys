@@ -40,8 +40,6 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent)
     QStringList labels;
     labels << "Activated" << "Name" << "ValueType" << "MemoryType" << "Memory Offset" << "Value" << "Description";
     setHorizontalHeaderLabels(labels);
-
-
 }
 
 
