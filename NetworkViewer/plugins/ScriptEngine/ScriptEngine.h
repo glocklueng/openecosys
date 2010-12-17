@@ -25,7 +25,85 @@
 #include <QScriptEngineAgent>
 #include <QTimer>
 #include <QTime>
+#include <QSlider>
 #include "ui_ScriptEngine.h"
+
+
+
+class ModuleVariableSlider : public QSlider
+{
+    Q_OBJECT;
+
+    public:
+
+    ModuleVariableSlider(QWidget *parent, ModuleVariable *variable = NULL, double min_value = 0, double max_value = 0)
+        : QSlider(Qt::Horizontal, parent), m_variable(variable)
+    {
+
+        if (m_variable)
+        {
+            //Set Range of slider
+            setMinimum(min_value);
+            setMaximum(max_value);
+
+            //Set value of slider
+            setValue(m_variable->getValue().toInt());
+
+            //connect signals
+            connect(this,SIGNAL(valueChanged(int)),this,SLOT(sliderValueChanged(int)));
+
+            //connect variable signals
+            connect(m_variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableValueChanged(ModuleVariable*)));
+            connect(m_variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(variableAboutToDestroy(ModuleVariable*)));
+        }
+
+
+    }
+
+signals:
+    void terminateSlider();
+
+protected slots:
+
+    void variableAboutToDestroy(ModuleVariable* var)
+    {
+        if (m_variable == var)
+        {
+            m_variable =  NULL;
+            emit terminateSlider();
+        }
+    }
+
+    void variableValueChanged(ModuleVariable *var)
+    {
+        if (var)
+        {
+            if (value() != var->getValue().toInt())
+            {
+                setValue(var->getValue().toInt());
+            }
+        }
+    }
+
+    void sliderValueChanged(int value)
+    {
+        if(m_variable)
+        {
+            m_variable->setUserValue(value);
+        }
+    }
+
+
+
+protected:
+
+    ModuleVariable *m_variable;
+
+};
+
+
+
+
 
 /**
 
@@ -45,6 +123,7 @@ public:
         bool scopeRequest(int module_id, int variable_id);
         bool createPseudoModule(int module_id);
         bool addScriptVariable(int module_id, QString name, QString description = "");
+        bool addSliderControl(int module_id, int variable_id, double min, double max);
 
 protected slots:
 
