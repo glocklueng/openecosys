@@ -56,6 +56,8 @@ class ScopeView : public BasePlugin, public Ui::ScopeView
 
 public:
 
+    enum {COLOR_COLUMN, NAME_COLUMN, ACTION_COLUMN};
+
     /**
         Constructor
         \param parent Parent widget, default = NULL

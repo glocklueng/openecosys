@@ -14,5 +14,6 @@
         <file>scripts/TestScript.js</file>
         <file>images/Play-Normal-icon.png</file>
         <file>images/Stop-Normal-Blue-icon.png</file>
+        <file>images/Save-Icon.png</file>
     </qresource>
 </RCC>
