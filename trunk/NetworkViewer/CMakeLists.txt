@@ -306,8 +306,9 @@ IF (WIN32)
 			"${QT_BINARY_DIR}/QtTest4.dll"
 			"${QT_BINARY_DIR}/QtWebKit4.dll"
 			"${QT_BINARY_DIR}/QtXml4.dll"
-                       "${QT_BINARY_DIR}/QtXmlPatterns4.dll"
-                       "${QT_BINARY_DIR}/phonon4.dll"
+                        "${QT_BINARY_DIR}/QtXmlPatterns4.dll"
+                        "${QT_BINARY_DIR}/QtDeclarative4.dll"
+                        "${QT_BINARY_DIR}/phonon4.dll"
 			"${QT_BINARY_DIR}/mingwm10.dll"
 			"${QT_BINARY_DIR}/libgcc_s_dw2-1.dll"
 	    )
