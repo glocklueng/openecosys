@@ -1,14 +1,7 @@
 ########################
 # Configurations
 ########################
-find_package(Qt4 REQUIRED)
 
-SET(QT_USE_QTNETWORK TRUE)
-SET(QT_USE_QTSVG TRUE)
-SET(QT_USE_QTXML TRUE)
-SET(QT_USE_QTWEBKIT TRUE)
-
-include(${QT_USE_FILE})
 
 SET(Plugin_SRCS
 	ScriptEngine.cpp
