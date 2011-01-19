@@ -1,7 +1,6 @@
 PROJECT (OpenEcoSys-NetworkViewer)
 
-cmake_minimum_required(VERSION 2.6)
-
+cmake_minimum_required(VERSION 2.8)
 
 ########################
 # Configurations
@@ -56,6 +55,7 @@ SET(QT_USE_QTSVG TRUE)
 SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QTSCRIPT TRUE)
 SET(QT_USE_QTWEBKIT TRUE)
+SET(QT_USE_QTDECLARATIVE TRUE)
 
 include(${QT_USE_FILE})
 
