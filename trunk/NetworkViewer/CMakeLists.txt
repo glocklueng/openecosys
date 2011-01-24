@@ -17,7 +17,7 @@ SET(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION
 
 
 
-SET(CMAKE_BUILD_TYPE Debug)
+SET(CMAKE_BUILD_TYPE Release)
 
 IF(WIN32)
 	MESSAGE( STATUS "Windows version: " ${CMAKE_SYSTEM})
@@ -292,7 +292,6 @@ IF (WIN32)
 
 	SET (QT_DLL
 			"${QT_BINARY_DIR}/Qt3Support4.dll"
-			"${QT_BINARY_DIR}/QtAssistantClient4.dll"
 			"${QT_BINARY_DIR}/QtCore4.dll"
 			"${QT_BINARY_DIR}/QtDesigner4.dll"
 			"${QT_BINARY_DIR}/QtDesignerComponents4.dll"
