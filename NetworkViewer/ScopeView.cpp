@@ -77,7 +77,7 @@ bool ScopeView::eventFilter(QObject *obj, QEvent *event)
 
 
 ScopeView::ScopeView(NetworkView *parent)
-    : BasePlugin(parent)
+    : BasePlugin(parent), m_zoomer(NULL), m_picker(NULL)
 {
 
     setupUi(this);
@@ -95,8 +95,9 @@ ScopeView::ScopeView(NetworkView *parent)
     m_frame->layout()->addWidget(m_plot);
 
     //Create magnifier for plot
-    m_zoomer = new QwtPlotZoomer(m_plot->canvas());
-
+    //m_zoomer = new QwtPlotZoomer(m_plot->canvas());
+    //m_picker = new QwtPlotPicker(m_plot->canvas());
+    //m_picker->setTrackerMode(QwtPicker::AlwaysOn);
 
 
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
