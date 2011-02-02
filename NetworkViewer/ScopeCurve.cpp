@@ -29,7 +29,7 @@ ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 
         //Set Style
         //setStyle(QwtPlotCurve::Dots);
-        setSymbol(QwtSymbol(QwtSymbol::Diamond,QBrush(),QPen(),QSize(10,10)));
+
 	
 	//Connect signals for change
 	connect(m_variable, SIGNAL(valueChanged(ModuleVariable*)), this, SLOT(updateVariable(ModuleVariable*)));
