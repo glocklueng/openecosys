@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include "NetworkView.h"
 #include <QDropEvent>
+#include "qwt_symbol.h"
+
 
 //This will insert the plugin in the dictionary...
 static int scope_view_plugin_init = BasePlugin::registerPlugin("ScopeView",new BasePlugin::PluginFactory<ScopeView>());
@@ -185,6 +187,10 @@ void ScopeView::addCurve(ModuleVariable *variable)
         break;
 
     }
+
+    //Add curve symbol
+    curve->setSymbol(QwtSymbol(QwtSymbol::Diamond,curve->brush(),curve->pen(),QSize(10,10)));
+
 
     m_curves.push_back(curve);
 
