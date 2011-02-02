@@ -17,6 +17,7 @@
  */
 
 #include "ScopeCurve.h"
+#include "qwt_symbol.h"
 
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 :	QwtPlotCurve("Untitled"),m_variable(var),  m_plot(parentPlot)
@@ -25,6 +26,10 @@ ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 
 	//Attach the curve the the plot
 	attach(parentPlot);
+
+        //Set Style
+        //setStyle(QwtPlotCurve::Dots);
+        setSymbol(QwtSymbol(QwtSymbol::Diamond,QBrush(),QPen(),QSize(10,10)));
 	
 	//Connect signals for change
 	connect(m_variable, SIGNAL(valueChanged(ModuleVariable*)), this, SLOT(updateVariable(ModuleVariable*)));

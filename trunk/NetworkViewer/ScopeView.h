@@ -23,6 +23,7 @@
 #include "ScopeCurve.h"
 #include "BasePlugin.h"
 #include "qwt_plot_zoomer.h"
+#include "qwt_plot_picker.h"
 
 class NetworkView;
 class ScopeView;
@@ -127,7 +128,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
     QwtPlotZoomer *m_zoomer;
-
+    QwtPlotPicker *m_picker;
 
     ///The plot
     QwtPlot *m_plot;
