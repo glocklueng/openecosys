@@ -22,6 +22,7 @@
 
 #include "ScopeCurve.h"
 #include "BasePlugin.h"
+#include "qwt_plot_zoomer.h"
 
 class NetworkView;
 class ScopeView;
@@ -124,6 +125,9 @@ protected slots:
 protected:
 
     bool eventFilter(QObject *obj, QEvent *event);
+
+    QwtPlotZoomer *m_zoomer;
+
 
     ///The plot
     QwtPlot *m_plot;

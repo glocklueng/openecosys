@@ -94,6 +94,11 @@ ScopeView::ScopeView(NetworkView *parent)
     m_frame->setLayout(new QVBoxLayout());
     m_frame->layout()->addWidget(m_plot);
 
+    //Create magnifier for plot
+    m_zoomer = new QwtPlotZoomer(m_plot->canvas());
+
+
+
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
