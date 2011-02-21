@@ -85,13 +85,12 @@ int main(void)
 			bootConfig->project_id = MODULE_PROJECT_ID;
 			bootConfig->code_version = MODULE_CODE_VERSION;
 
-			//CHANGE THE MODULE ID FOR 
-			//THE SECOND CONTROLLER...
+			//Default module id
 			bootConfig->module_id = 1;
 
 			can_write_boot_config(bootConfig);
 
-			//THIS WILL UPDATE DEFAULT EEPROM CONFIGURATION FOR ALL MOTORS
+			//Set shared memory to default value (0)
 			init_default_variables();
 		}
 	}
