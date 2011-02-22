@@ -92,7 +92,7 @@ double ScopeCurve::elapsed()
 		initialized = true;
 	}
 	
-        return (double) creationTime.elapsed();// / 1000.0;
+        return (double) creationTime.elapsed() / 1000.0;
 }
 
 void ScopeCurve::setColor(const QColor &color)

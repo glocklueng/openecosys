@@ -79,7 +79,7 @@ bool ScopeView::eventFilter(QObject *obj, QEvent *event)
 
 
 ScopeView::ScopeView(NetworkView *parent)
-    : BasePlugin(parent), m_zoomer(NULL)
+    : BasePlugin(parent), m_zoomer(NULL), m_picker(NULL)
 {
 
     setupUi(this);
@@ -97,13 +97,14 @@ ScopeView::ScopeView(NetworkView *parent)
     m_frame->layout()->addWidget(m_plot);
 
     //Create magnifier for plot
-    m_zoomer = new QwtPlotZoomer(m_plot->canvas());
-    m_zoomer->setMaxStackDepth(10);
-    m_zoomer->setTrackerMode(QwtPicker::AlwaysOn);
-
-
+    //m_zoomer = new QwtPlotZoomer(m_plot->canvas());
+    //m_zoomer->setMaxStackDepth(10);
+    //m_zoomer->setTrackerMode(QwtPicker::AlwaysOn);
     //m_zoomer->setZoomBase(QwtDoubleRect(0,0,0,0));
-    qDebug("Initial zoom index %i",m_zoomer->zoomRectIndex());
+    //qDebug("Initial zoom index %i",m_zoomer->zoomRectIndex());
+
+    m_picker = new QwtPlotPicker(m_plot->canvas());
+    m_picker->setTrackerMode(QwtPicker::AlwaysOn);
 
 
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -193,7 +194,7 @@ void ScopeView::addCurve(ModuleVariable *variable)
     }
 
     //Add curve symbol
-    curve->setSymbol(QwtSymbol(QwtSymbol::Diamond,curve->brush(),curve->pen(),QSize(10,10)));
+    curve->setSymbol(QwtSymbol(QwtSymbol::Ellipse,curve->brush(),curve->pen(),QSize(3,3)));
 
 
     m_curves.push_back(curve);
