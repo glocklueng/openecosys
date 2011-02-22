@@ -27,6 +27,29 @@
 #include <QTime>
 #include <QSlider>
 #include "ui_ScriptEngine.h"
+#include <QEvent>
+
+
+
+/**
+  This event is required for adequate termination of the script within
+  the script with the stop() function.
+
+  Otherwise, we have a recursive call to runButtonClicked() slot.
+*/
+class StopScriptEvent : public QEvent
+{
+public:
+
+    StopScriptEvent()
+        : QEvent(QEvent::User)
+    {
+
+    }
+
+};
+
+
 
 
 
@@ -124,6 +147,7 @@ public:
         bool createPseudoModule(int module_id);
         bool addScriptVariable(int module_id, QString name, QString description = "");
         bool addSliderControl(int module_id, int variable_id, double min, double max);
+        bool stop();
 
 protected slots:
 
@@ -137,6 +161,9 @@ protected slots:
 
 
 protected:
+
+        virtual bool event ( QEvent * e );
+
 
         void updateEngineVariables(bool modulesOnly = false);
 	QTimer *m_timer;

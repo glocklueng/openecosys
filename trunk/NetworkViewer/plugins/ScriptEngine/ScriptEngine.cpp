@@ -21,7 +21,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QWebView>
-
+#include <QCoreApplication>
 
 //This will insert the plugin in the dictionary...
 static int sample_plugin_init = BasePlugin::registerPlugin("ScriptEngine",new BasePlugin::PluginFactory<ScriptEngine>());
@@ -51,6 +51,19 @@ QScriptValue addSliderControlFunction(QScriptContext *context, QScriptEngine  *e
 
 }
 
+QScriptValue stopFunction(QScriptContext *context, QScriptEngine *engine)
+{
+    bool retval = false;
+    QScriptValue calleeData = context->callee().data();
+    ScriptEngine *myScriptEngine = qobject_cast<ScriptEngine*>(calleeData.toQObject());
+    if (myScriptEngine)
+    {
+        retval = myScriptEngine->stop();
+    }
+
+    return engine->newVariant(retval);
+}
+
 
 
 QScriptValue myPrintFunction(QScriptContext *context, QScriptEngine *engine)
@@ -77,7 +90,7 @@ QScriptValue addToPlotFunction(QScriptContext *context, QScriptEngine *engine)
     QScriptValue calleeData = context->callee().data();
     ScriptEngine *myScriptEngine = qobject_cast<ScriptEngine*>(calleeData.toQObject());
 
-    if (context->argumentCount() == 2)
+    if (myScriptEngine && (context->argumentCount() == 2))
     {
         int module_id = context->argument(0).toInt32();
         int variable_id = context->argument(1).toInt32();
@@ -271,19 +284,19 @@ void ScriptEngine::runButtonClicked()
     //Special Case when timer = 0, running once
     if (m_ui.spinBox->value() == 0)
     {
+        m_timer->stop();
+
         m_ui.m_textEditMessages->append("Starting once...");
-        m_ui.m_runButton->setText("RUN");
-        m_ui.m_textEditScript->setEnabled(true);
 
         m_running = true;
+
         //reset elapsed
         m_startTime.start();
         timerUpdate();
         m_running = false;
 
-        qDebug("Stopping timer");
-        m_timer->stop();
-
+        m_ui.m_runButton->setText("RUN");
+        m_ui.m_textEditScript->setEnabled(true);
     }
     else
     {
@@ -314,6 +327,18 @@ void ScriptEngine::runButtonClicked()
     }
 }
 
+bool ScriptEngine::stop()
+{
+    if (m_running && m_ui.spinBox->value() != 0)
+    {
+        //Need to post an event to avoid recursive call to runButtonClicked()...
+        QCoreApplication::postEvent(this,new StopScriptEvent());
+
+        return true;
+    }
+
+    return false;
+}
 
 void ScriptEngine::updateEngineVariables(bool modulesOnly)
 {
@@ -364,6 +389,11 @@ void ScriptEngine::updateEngineVariables(bool modulesOnly)
         QScriptValue fun5 = m_scriptEngine.newFunction(addSliderControlFunction);
         fun5.setData(m_scriptEngine.newQObject(this));
         m_scriptEngine.globalObject().setProperty("addSliderControl",fun5);
+
+        //stop function
+        QScriptValue fun6 = m_scriptEngine.newFunction(stopFunction);
+        fun6.setData(m_scriptEngine.newQObject(this));
+        m_scriptEngine.globalObject().setProperty("stop",fun6);
 
     }
 
@@ -479,7 +509,7 @@ bool ScriptEngine::scopeRequest(int module_id, int variable_id)
 
 void ScriptEngine::helpButtonClicked()
 {
-    m_view->helpWindowRequest("http://192.168.1.2/wiki/index.php/NetworkViewer#ScriptEngine");
+    m_view->helpWindowRequest("http://sourceforge.net/apps/mediawiki/openecosys/index.php?title=NetworkViewer:ScriptEngine");
 }
 
 bool ScriptEngine::createPseudoModule(int module_id)
@@ -539,4 +569,23 @@ bool ScriptEngine::addSliderControl(int module_id, int variable_id, double min_v
     }
 
     return false;
+}
+
+bool ScriptEngine::event ( QEvent * e )
+{
+    if (e->type() == QEvent::User)
+    {
+        StopScriptEvent *myEvent = dynamic_cast<StopScriptEvent*>(e);
+
+        if (myEvent)
+        {
+            runButtonClicked();
+        }
+
+        //accepting event
+        e->accept();
+        return true;
+    }
+
+    return QObject::event(e);
 }
