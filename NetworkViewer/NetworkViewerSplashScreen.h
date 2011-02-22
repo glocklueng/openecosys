@@ -32,7 +32,8 @@ class NetworkViewerSplashScreen : public QSplashScreen
     NetworkViewerSplashScreen()
     : QSplashScreen(QPixmap(":images/introlab.png"))
     {
-        showMessage("Loading...");
+
+        showMessage("http://www.openecosys.org",Qt::AlignRight);
     }
 
 
