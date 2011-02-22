@@ -188,7 +188,7 @@ SET(QWT_HEADERS
 QT4_WRAP_CPP(QWT_MOC_SRCS ${QWT_HEADERS})
 
 #Include directories for QWT
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QWT_SRC_DIR})
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QWT_SRC_DIR} plugins/ScopeView)
 
 #Build library
 add_library(qwt-wrap SHARED ${QWT_SRCS} ${QWT_MOC_SRCS} ${QWT_HEADERS})
@@ -207,14 +207,14 @@ SET(NetworkViewer_SRCS
 	NetworkView.cpp
 	NetworkModule.cpp
 	NetworkModuleItem.cpp
-	ScopeCurve.cpp
-	ScopeView.cpp
+	plugins/ScopeView/ScopeCurve.cpp
+	plugins/ScopeView/ScopeView.cpp
 	NetworkScheduler.cpp
-	ScopeVariableConfig.cpp
+	plugins/ScopeView/ScopeVariableConfig.cpp
 	BasePlugin.cpp
 	CANDevice.cpp
 	DeviceSelectorDialog.cpp
-        ModuleVariableTableWidget.cpp
+    ModuleVariableTableWidget.cpp
 )
 
 SET(NetworkViewer_HEADERS 
@@ -224,25 +224,25 @@ SET(NetworkViewer_HEADERS
 	NetworkView.h
 	NetworkModule.h
 	NetworkModuleItem.h
-	ScopeCurve.h
-	ScopeView.h
+	plugins/ScopeView/ScopeCurve.h
+	plugins/ScopeView/ScopeView.h
 	CANMessageEvent.h
 	CANInterfaceHandler.h
 	NetworkScheduler.h
-	ScopeVariableConfig.h
+	plugins/ScopeView/ScopeVariableConfig.h
 	BasePlugin.h
 	CAN_define.h
 	CANDevice.h
 	DeviceSelectorDialog.h
-        NetworkViewerSplashScreen.h
-        ModuleVariableTableWidget.h
+    NetworkViewerSplashScreen.h
+    ModuleVariableTableWidget.h
 )
 
 SET(NetworkViewer_UIS
 	ModuleConfigurationView.ui
 	NetworkView.ui
-	ScopeView.ui
-	ScopeVariableConfig.ui
+	plugins/ScopeView/ScopeView.ui
+	plugins/ScopeView/ScopeVariableConfig.ui
 	TestView.ui
 	DeviceSelectorDialog.ui
 )
