@@ -33,7 +33,9 @@ file_005=CANLibrary
 file_006=CANLibrary
 file_007=CANLibrary
 file_008=CANLibrary
-file_009=.
+file_009=CANLibrary
+file_010=CANLibrary
+file_011=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -45,6 +47,8 @@ file_006=no
 file_007=no
 file_008=no
 file_009=no
+file_010=no
+file_011=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -56,17 +60,21 @@ file_006=no
 file_007=no
 file_008=no
 file_009=no
+file_010=no
+file_011=no
 [FILE_INFO]
 file_000=..\CAN18_Shared.c
 file_001=main.c
 file_002=..\CAN18_Serial.c
 file_003=fuses.c
-file_004=..\CAN18_Device.h
-file_005=..\CAN18_Driver.h
-file_006=..\CAN18_Shared.h
-file_007=..\CAN18_Utils.h
-file_008=..\CAN18_Serial.h
-file_009=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\LKR\18f2580_g.lkr
+file_004=..\CAN18_Common.c
+file_005=..\CAN18_Device.h
+file_006=..\CAN18_Driver.h
+file_007=..\CAN18_Shared.h
+file_008=..\CAN18_Utils.h
+file_009=..\CAN18_Serial.h
+file_010=..\CAN18_Common.h
+file_011=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\LKR\18f2580_g.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=
