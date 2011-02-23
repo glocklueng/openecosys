@@ -1,3 +1,4 @@
 //Fuses should be here...
 
-int g_fuses = 0;
+/* Set up the configuration bits */
+unsigned int g_conf = 0;

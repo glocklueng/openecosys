@@ -109,7 +109,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
     //Right now it will be synchronous, need to be event based with interrupts
     for (i = 0; i < sizeof(CANTxMessageBuffer); i++)
     {
-        putcUSART2(buf.messageBytes[i]);
+        putcUSART(buf.messageBytes[i]);
     }
 
     return 1;
@@ -136,7 +136,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
     CANRxMessageBuffer buf;
 
     //Get all data, this needs to be interrupt based...
-    getsUSART2(&buf.messageBytes[0],sizeof(CANRxMessageBuffer));
+    getsUSART((char*)&buf.messageBytes[0],sizeof(CANRxMessageBuffer));
 
     //TODO Convert data structures
     message->msg_priority = 0;
