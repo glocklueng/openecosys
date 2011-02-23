@@ -101,7 +101,7 @@ void main(void)
     //TODO ADJUST BAUD RATE...
     //TODO USE INTERRUPTS
 
-    OpenUSART2( USART_TX_INT_OFF &
+    OpenUSART( USART_TX_INT_OFF &
             USART_RX_INT_OFF &
             USART_ASYNCH_MODE &
             USART_EIGHT_BIT &
