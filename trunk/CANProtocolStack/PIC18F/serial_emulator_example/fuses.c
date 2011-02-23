@@ -1,0 +1,3 @@
+//Fuses should be here...
+
+int g_fuses = 0;
