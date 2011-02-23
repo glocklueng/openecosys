@@ -12,36 +12,8 @@ ISR IMPLEMENTATIONS
 #pragma interrupt highpriority_isr
 void highpriority_isr(void)
 {
-
-#if 0
-
-    unsigned char value = 0;
-
-    //PIR1 =>Serial RX RCIF
-    if(PIR3bits.RC2IF)
-    {
-        //When RCREG is read it will automatically clear the RCIF flag
-        value = RCREG2;
-
-        //Check for overflow errors
-        if((RCSTA2bits.OERR) == 1)
-        {
-                RCSTA2bits.CREN = 0;
-                RCSTA2bits.CREN = 1;
-        }
-        //Check for framing error
-        else if(( RCSTA2bits.FERR) == 1)
-        {
-                value = RCREG2;
-        }
-        //Data ok, parse it...
-        else
-        {
-                //TODO PARSE SERIAL DATA
-        }
-    }
-#endif
-
+	//Handle USART Interrupt
+	serial_usart_interrupt_handler();
 }
 
 /* Low priority interrupt */
@@ -99,10 +71,9 @@ void main(void)
     
     //Open serial port
     //TODO ADJUST BAUD RATE...
-    //TODO USE INTERRUPTS
-
+    //TODO USE RX INTERRUPTS
     OpenUSART( USART_TX_INT_OFF &
-            USART_RX_INT_OFF &
+            USART_RX_INT_ON &
             USART_ASYNCH_MODE &
             USART_EIGHT_BIT &
             USART_CONT_RX &
