@@ -6,11 +6,58 @@
 #include <delays.h>
 
 
+//memory buffer
+unsigned char g_recvDataBytes[RX_BUFFER_SIZE];
+
+unsigned int g_availableBytes = 0;
+unsigned int g_readIndex = 0;
+unsigned int g_writeIndex = 0;
 
 
-//CANRxMessageBuffer g_RxMessageBuffer[RX_BUFFER_SIZE];
-//CANTxMessageBuffer g_TxMessageBuffer[TX_BUFFER_SIZE];
+unsigned char serial_calculate_checksum(const CANSerialMessage *message)
+{
+	unsigned char checksum = 0;
+	int i = 0;
 
+	//simple accumulation of bytes from start until checksum (excluded)
+	for (i = 0; i < (sizeof(CANSerialMessage) - 1); i++)
+	{
+		checksum += message->messageBytes[i];
+	}
+	
+	return checksum;
+	
+}
+
+
+void serial_usart_interrupt_handler(void)
+{
+		//TODO, HANDLE UART1 & UART2
+
+	    //When RCREG is read it will automatically clear the RCIF flag
+        unsigned char value = getcUSART();
+
+		//store the data
+        g_recvDataBytes[g_writeIndex++] = value;
+
+		//circular buffer
+		if (g_writeIndex >= RX_BUFFER_SIZE)
+		{
+			g_writeIndex = 0;
+		}
+        
+		//One more byte available
+		g_availableBytes++;
+}
+
+unsigned int serial_bytes_available(void)
+{
+	unsigned int available = 0;
+	INTCONbits.GIEH = 0; //disable interrupts
+	available = g_availableBytes;
+	INTCONbits.GIEH = 1; //enable interrupts
+	return available;
+}
 
 //////////////////////////////////////////////////////////////////////
 //   can_send_message
@@ -31,18 +78,26 @@ unsigned char can_send_message(CAN_MESSAGE *message)
     unsigned char i=0;
 
     //Need to transform a TxMessageBuffer into a CAN_MESSAGE
-    CANTxMessageBuffer buf;
+    CANSerialMessage buf;
 
-    //TODO Convert data structures...
-    buf.msgEID.bytes[3] = 0;
-    buf.msgEID.bytes[2] = 0;
-    buf.msgEID.bytes[1] = 0;
-    buf.msgEID.bytes[0] = 0;
+/**
+		unsigned char start_byte;
+		unsigned char pri_boot_rtr;
+		unsigned char type;
+		unsigned char cmd;
+		unsigned char dest;
+		unsigned char data_length_iface;
+		unsigned char data[8];
+		unsigned char checksum;
+*/
 
-    buf.msgSID.bytes[3] = 0;
-    buf.msgSID.bytes[2] = 0;
-    buf.msgSID.bytes[1] = 0;
-    buf.msgSID.bytes[0] = 0;
+	//Set fields
+	buf.start_byte = START_BYTE;
+	buf.pri_boot_rtr = (message->msg_priority << 5) | (message->msg_read_write << 4) | (message->msg_eeprom_ram << 3) | (message->msg_remote);
+	buf.type = message->msg_type;
+	buf.cmd = message->msg_cmd;
+	buf.dest = message->msg_dest;
+	buf.data_length_iface = (message->msg_data_length <<4);
 
     //copy data
     for (i = 0 ; i < 8; i++)
@@ -50,10 +105,13 @@ unsigned char can_send_message(CAN_MESSAGE *message)
         buf.data[i] = message->msg_data[i];
     }
 
+	//calculate checksum
+	buf.checksum = serial_calculate_checksum(&buf);
+
 
     //Transmit on serial
     //Right now it will be synchronous, need to be event based with interrupts
-    for (i = 0; i < sizeof(CANTxMessageBuffer); i++)
+    for (i = 0; i < sizeof(CANSerialMessage); i++)
     {
         putcUSART(buf.messageBytes[i]);
     }
@@ -78,31 +136,84 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 unsigned char can_recv_message(CAN_MESSAGE *message)
 {
     unsigned char i = 0;
-    //Need to transform a RxMessageBuffer into a CAN_MESSAGE
-    CANRxMessageBuffer buf;
+    CANSerialMessage buf;
 
-    //Get all data, this needs to be interrupt based...
-    getsUSART((char*)&buf.messageBytes[0],sizeof(CANRxMessageBuffer));
+	if(serial_bytes_available() >= sizeof(CANSerialMessage))
+	{
+		//Fill CANSerialMessage with available bytes
+		//TODO Memory boundaries verification?
+		//Here we assume that we have enough buffer to avoid corruption
+		if (g_recvDataBytes[g_readIndex] == START_BYTE)
+		{
+			for (i = 0; i < sizeof(CANSerialMessage); i++)
+			{
+				//Copy byte
+				buf.messageBytes[i] = g_recvDataBytes[g_readIndex];
 
-    //TODO Convert data structures
-    message->msg_priority = 0;
-    message->msg_type = 0;
-    message->msg_eeprom_ram = 0;
-    message->msg_read_write = 0;
-    message->msg_cmd = 0;
-    message->msg_dest = 0;
+				//Increment read index
+				g_readIndex = (g_readIndex + 1) % RX_BUFFER_SIZE;
+			}
 
 
-    message->msg_remote = 0;
-    message->msg_data_length = 0;
+			//One less message available
+			INTCONbits.GIEH = 0; //disable interrupts
+			g_availableBytes -= sizeof(CANSerialMessage);
+			INTCONbits.GIEH = 1; //enable interrupts
 
-    //copy data
-    for(i = 0; i < 8; i++)
-    {
-        message->msg_data[i] = buf.data[i];
-    }
 
-    return 1;
+			//Verify checksum
+			if (buf.checksum == serial_calculate_checksum(&buf))
+			{
+				/**
+					unsigned char start_byte;
+					unsigned char pri_boot_rtr;
+					unsigned char type;
+					unsigned char cmd;
+					unsigned char dest;
+					unsigned char data_length_iface;
+					unsigned char data[8];
+					unsigned char checksum;
+				*/
+
+				//Convert data structures
+				message->msg_priority = (buf.pri_boot_rtr >> 5) & 0x07;
+				message->msg_type = buf.type;
+				message->msg_eeprom_ram = (buf.pri_boot_rtr >> 4) & 0x01;
+				message->msg_read_write = (buf.pri_boot_rtr >> 3) & 0x01;
+				message->msg_cmd = buf.cmd;
+				message->msg_dest = buf.dest;
+				message->msg_remote = (buf.pri_boot_rtr & 0x01);
+				message->msg_data_length = (buf.data_length_iface) & 0x0F;
+				
+				//copy data
+				for(i = 0; i < 8; i++)
+				{
+				   message->msg_data[i] = buf.data[i];
+				}
+				
+				//message valid
+				return 1;
+			}
+			else //CHECKSUM ERROR
+			{
+				return 0;
+			}
+		}
+		else //not START_BYTE
+		{
+			//Will try next byte next time...
+			g_readIndex = (g_readIndex + 1) % RX_BUFFER_SIZE;
+			
+			//One less byte available
+			INTCONbits.GIEH = 0; //disable interrupts
+			g_availableBytes--;
+			INTCONbits.GIEH = 1; //enable interrupts
+
+			return 0;
+		}
+	}//enough byte available
+	
+	return 0;
 }
 
 
