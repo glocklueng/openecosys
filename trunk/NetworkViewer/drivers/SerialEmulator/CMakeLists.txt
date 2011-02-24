@@ -36,7 +36,7 @@ QT4_WRAP_UI(SerialEmulator_UI_SRCS ${SerialEmulator_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(SerialEmulator_MOC_SRCS ${SerialEmulator_HEADERS})
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/QextSerialPort/src ${PROJECT_SOURCE_DIR}/drivers ${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(./ ${PROJECT_SOURCE_DIR}/QextSerialPort/src ${PROJECT_BINARY_DIR}/drivers/SerialEmulator ${QT_INCLUDES} )
 
 add_library(SerialEmulatorDriver SHARED ${SerialEmulator_SRCS} ${SerialEmulator_HEADERS} ${SerialEmulator_QRC_SRCS} ${SerialEmulator_MOC_SRCS} ${SerialEmulator_UI_SRCS}  )
 target_link_libraries(SerialEmulatorDriver  QextSerialPort networkViewerBase ${QT_LIBRARIES} )
