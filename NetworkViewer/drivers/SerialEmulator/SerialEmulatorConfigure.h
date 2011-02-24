@@ -4,7 +4,9 @@
 #include <QDialog>
 
 
-class SerialEmulatorConfigure : public QDialog
+#include "ui_SerialEmulatorConfigure.h"
+
+class SerialEmulatorConfigure : public QDialog, public Ui::SerialEmulatorConfigure
 {
     Q_OBJECT;
 

@@ -5,5 +5,6 @@ SerialEmulatorConfigure::SerialEmulatorConfigure(QWidget *parent)
 {
 
     resize(640,480);
+    setupUi(this);
 
 }
