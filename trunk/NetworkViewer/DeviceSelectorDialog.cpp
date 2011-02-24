@@ -38,6 +38,7 @@ DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
 
 
     connect(comboBox,SIGNAL(activated(int)),this,SLOT(comboActivated(int)));
+    connect(m_configureButton,SIGNAL(clicked()),this,SLOT(configureButtonClicked()));
 
 
     qDebug("DeviceSelectorDialog done");
@@ -85,5 +86,15 @@ CANDevice::BaseDeviceFactory* DeviceSelectorDialog::getFactory()
     return m_factory;
 }
 
+void DeviceSelectorDialog::configureButtonClicked()
+{
+
+    qDebug("DeviceSelectorDialog::configureButtonClicked()");
+
+    if (m_factory)
+    {
+        m_factory->configure();
+    }
+}
 
 

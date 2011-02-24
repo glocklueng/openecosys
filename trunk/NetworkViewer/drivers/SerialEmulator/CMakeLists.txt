@@ -9,20 +9,23 @@ SET(QT_USE_QTNETWORK TRUE)
 include(${QT_USE_FILE})
 
 SET(SerialEmulator_SRCS
-	SerialEmulator.cpp
+    SerialEmulator.cpp
+    SerialEmulatorConfigure.cpp
 )
 
 SET(SerialEmulator_HEADERS 
-	SerialEmulator.h
+    SerialEmulator.h
+    SerialEmulatorConfigure.h
 )
 
 SET(SerialEmulator_UIS
-	
+    SerialEmulatorConfigure.ui
 )
 
 SET(SerialEmulator_QRC 
 	
 )
+
 
 # generate rules for building source files from the resources
 QT4_ADD_RESOURCES(SerialEmulator_QRC_SRCS ${SerialEmulator_QRC})
