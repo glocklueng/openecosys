@@ -3,7 +3,7 @@
 
 #include "qextserialenumerator.h"
 #include "qextserialport.h"
-#include "QRegExp.h"
+#include <QRegExp>
 #include <QtCore/QTime>
 #include <QtCore/QtConcurrentFilter>
 
