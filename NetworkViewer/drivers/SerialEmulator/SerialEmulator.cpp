@@ -20,7 +20,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QDialog>
-#include <qextserialenumerator.h>
+
 #include <QList>
 #include <QTextStream>
 #include <QTextEdit>
@@ -36,47 +36,8 @@ template<>
 QString CANDevice::DeviceFactory<SerialEmulator>::configure()
 {
     SerialEmulatorConfigure myDialog;
-
-
-
     myDialog.exec();
-
-
-    /*
-    QDialog myDialog;
-
-
-    QTextEdit *myEdit = new QTextEdit(&myDialog);
-
-    QVBoxLayout *layout = new QVBoxLayout();
-    myEdit->setLayout(layout);
-
-    layout->addWidget(myEdit);
-
-
-
-    myDialog.resize(640,480);
-
-    QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
-    myEdit->append("Available ports : " + QString::number(ports.size()));
-
-
-    for (unsigned int i = 0; i < ports.size(); i++)
-    {
-        myEdit->append("port name:" + ports.at(i).portName);
-        myEdit->append("friendly name:" + ports.at(i).friendName);
-        myEdit->append("physical name:" +  ports.at(i).physName);
-        myEdit->append("enumerator name:" + ports.at(i).enumName);
-        myEdit->append("vendor ID:" + QString::number(ports.at(i).vendorID, 16));
-        myEdit->append("product ID:" + QString::number(ports.at(i).productID, 16));
-        myEdit->append("===================================");
-    }
-
-
-    myDialog.exec();
-    */
-
-    return QString();
+    return QString(myDialog.getSerialPortString()+ ";" + myDialog.getBaudRateString());
 }
 
 SerialEmulator::SerialEmulator(const char* args)

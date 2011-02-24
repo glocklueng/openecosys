@@ -13,6 +13,18 @@ class SerialEmulatorConfigure : public QDialog, public Ui::SerialEmulatorConfigu
 public:
 
     SerialEmulatorConfigure(QWidget *parent = NULL);
+    QString getSerialPortString();
+    QString getBaudRateString();
+
+protected slots:
+
+    void portIndexChanged (int index );
+    void baudRateIndexChanged (int index);
+
+protected:
+
+    int m_currentPortIndex;
+    int m_currentBaudRateIndex;
 
 };
 

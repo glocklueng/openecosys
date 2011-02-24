@@ -93,7 +93,9 @@ void DeviceSelectorDialog::configureButtonClicked()
 
     if (m_factory)
     {
-        m_factory->configure();
+        QString result = m_factory->configure();
+
+        lineEditArgs->setText(result);
     }
 }
 
