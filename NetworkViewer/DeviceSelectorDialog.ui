@@ -33,6 +33,13 @@
       <item>
        <widget class="QLineEdit" name="lineEditArgs"/>
       </item>
+      <item>
+       <widget class="QPushButton" name="m_configureButton">
+        <property name="text">
+         <string>Configure</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

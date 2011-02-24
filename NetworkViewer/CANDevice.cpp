@@ -19,8 +19,18 @@
 
 #include "CANDevice.h"
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace std;
+
+
+QString CANDevice::BaseDeviceFactory::configure()
+{
+    QMessageBox msgBox;
+    msgBox.setText("No configuration dialog available.");
+    msgBox.exec();
+    return QString();
+}
 
 void CANDevice::printMessage(const LABORIUS_MESSAGE &message, ostream &out) {
 
@@ -86,7 +96,6 @@ void CANDevice::applyFilters(LABORIUS_MESSAGE &message)
           }
      }
 }
-
 
 
 

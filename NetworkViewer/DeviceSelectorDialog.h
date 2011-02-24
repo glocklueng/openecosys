@@ -76,6 +76,9 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
     ///Device selector slot, called when we change the device
     void comboActivated(int index);
 
+    ///Configuration button clicked
+    void configureButtonClicked();
+
     protected:
 
     ///The NetworkView (Main Window)

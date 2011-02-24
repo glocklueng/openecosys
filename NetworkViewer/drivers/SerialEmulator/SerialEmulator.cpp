@@ -19,9 +19,65 @@
 #include "SerialEmulator.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QDialog>
+#include <qextserialenumerator.h>
+#include <QList>
+#include <QTextStream>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include "SerialEmulatorConfigure.h"
+
 
 static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("SerialEmulator",new CANDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed"));
 
+
+//Template specialization for configure
+template<>
+QString CANDevice::DeviceFactory<SerialEmulator>::configure()
+{
+    SerialEmulatorConfigure myDialog;
+
+
+
+    myDialog.exec();
+
+
+    /*
+    QDialog myDialog;
+
+
+    QTextEdit *myEdit = new QTextEdit(&myDialog);
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    myEdit->setLayout(layout);
+
+    layout->addWidget(myEdit);
+
+
+
+    myDialog.resize(640,480);
+
+    QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
+    myEdit->append("Available ports : " + QString::number(ports.size()));
+
+
+    for (unsigned int i = 0; i < ports.size(); i++)
+    {
+        myEdit->append("port name:" + ports.at(i).portName);
+        myEdit->append("friendly name:" + ports.at(i).friendName);
+        myEdit->append("physical name:" +  ports.at(i).physName);
+        myEdit->append("enumerator name:" + ports.at(i).enumName);
+        myEdit->append("vendor ID:" + QString::number(ports.at(i).vendorID, 16));
+        myEdit->append("product ID:" + QString::number(ports.at(i).productID, 16));
+        myEdit->append("===================================");
+    }
+
+
+    myDialog.exec();
+    */
+
+    return QString();
+}
 
 SerialEmulator::SerialEmulator(const char* args)
     : m_serialPort(NULL), m_pollTimer(NULL)

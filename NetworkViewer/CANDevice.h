@@ -30,6 +30,7 @@
 #include <QDir>
 #include <QLibrary>
 
+
 //TODO Remove this
 using namespace std;
 
@@ -282,6 +283,10 @@ class CANDevice
 
 		    ///The documentation of the driver (online)
 		    QString m_documentation;
+
+
+                    //Configure
+                    virtual QString configure();
         };
 
         /**
@@ -294,16 +299,16 @@ class CANDevice
         {
         public:
 		
-		    /**
-			    Constructor
-			    \param default_args The default arguments of the driver
-			    \param documentation The online documentation of the driver
-		    */
-		    DeviceFactory(const QString &default_args = QString(), const QString &documentation = QString())
-			    : BaseDeviceFactory(default_args, documentation)
-		    {
+            /**
+                    Constructor
+                    \param default_args The default arguments of the driver
+                    \param documentation The online documentation of the driver
+            */
+            DeviceFactory(const QString &default_args = QString(), const QString &documentation = QString())
+                    : BaseDeviceFactory(default_args, documentation)
+            {
 
-		    }
+            }
 
             /**
              * Overloaded from BaseDeviceFactory. This will create a new device
@@ -314,13 +319,17 @@ class CANDevice
                     return new T(args);
             }
 
+            /**
+                Configure can be specialized if you want to display a specialized GUI for your driver
+            */
+            virtual QString configure()
+            {
+                return BaseDeviceFactory::configure();
+            }
+
 		
 
         };
-
-
-
-
 
           ///Device states
           typedef enum {CANDEVICE_OK,
@@ -333,7 +342,6 @@ class CANDevice
 
           //Will initialize with defined arguments
           virtual State initialize(const char* args) = 0;
-
 
           /** send a LABORIUS_MESSAGE
                \param message The message to send
