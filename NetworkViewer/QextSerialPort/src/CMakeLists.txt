@@ -46,7 +46,7 @@ ENDIF(UNIX AND NOT APPLE)
 
 IF (APPLE)
     SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} posix_qextserialport.cpp qextserialenumerator_osx.cpp)
-    SET(QextSerialPort_External_Libraries -framework IOKit -framework CoreFoundation)
+    SET(QextSerialPort_External_Libraries "-framework CoreFoundation -framework IOKit")
 ENDIF(APPLE)
 
 #WINDOWS SPECIFIC FILES	& DEFINES
@@ -73,5 +73,5 @@ INCLUDE_DIRECTORIES(${QT_INCLUDES} )
 
 add_library(QextSerialPort SHARED ${QextSerialPort_SRCS} ${QextSerialPort_HEADERS} ${QextSerialPort_QRC_SRCS} ${QextSerialPort_MOC_SRCS} ${QextSerialPort_UI_SRCS}  )
 target_link_libraries(QextSerialPort ${QT_LIBRARIES} ${QextSerialPort_External_Libraries})
-#set_target_properties(QextSerialPort PROPERTIES LINK_FLAGS "--enable-auto-import")
+set_target_properties(QextSerialPort PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS QextSerialPort DESTINATION bin)
