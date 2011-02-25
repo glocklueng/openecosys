@@ -1,6 +1,6 @@
-#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Serial.h"
-#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Device.h"
-#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Shared.h"
+#include "CAN18_Serial.h"
+#include "CAN18_Device.h"
+#include "CAN18_Shared.h"
 #include <delays.h>
 #include <string.h>
 #include "usart.h"
@@ -136,7 +136,4 @@ void main(void)
     }
 }
 
-//Config
-#pragma config FOSC = INTIO67, PLLCFG = ON, WDTEN = OFF, LVP = OFF, DEBUG = ON
-//#pragma config FCMEN = OFF, BOREN = OFF, PBADEN = OFF, MCLRE = EXTMCLR
-//#pragma config STVREN = OFF, XINST = OFF
+
