@@ -2,7 +2,7 @@
 #include "CAN18_Device.h"
 #include "CAN18_Shared.h"
 #include "CAN18_Utils.h"
-#include <usart.h>
+#include "usart.h"
 #include <delays.h>
 
 
@@ -35,7 +35,7 @@ void serial_usart_interrupt_handler(void)
 		//TODO, HANDLE UART1 & UART2
 
 	    //When RCREG is read it will automatically clear the RCIF flag
-        unsigned char value = getcUSART();
+        unsigned char value = getc_usart1();
 
 		//store the data
         g_recvDataBytes[g_writeIndex++] = value;
@@ -79,7 +79,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 
     //Need to transform a TxMessageBuffer into a CAN_MESSAGE
     CANSerialMessage buf;
-
+    
 /**
 		unsigned char start_byte;
 		unsigned char pri_boot_rtr;
@@ -97,7 +97,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 	buf.type = message->msg_type;
 	buf.cmd = message->msg_cmd;
 	buf.dest = message->msg_dest;
-	buf.data_length_iface = (message->msg_data_length <<4);
+	buf.data_length_iface = (message->msg_data_length);
 
     //copy data
     for (i = 0 ; i < 8; i++)
@@ -113,7 +113,8 @@ unsigned char can_send_message(CAN_MESSAGE *message)
     //Right now it will be synchronous, need to be event based with interrupts
     for (i = 0; i < sizeof(CANSerialMessage); i++)
     {
-        putcUSART(buf.messageBytes[i]);
+	    while(!TXSTA1bits.TRMT);
+        putc_usart1(buf.messageBytes[i]);
     }
 
     return 1;
@@ -143,8 +144,11 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 		//Fill CANSerialMessage with available bytes
 		//TODO Memory boundaries verification?
 		//Here we assume that we have enough buffer to avoid corruption
-		if (g_recvDataBytes[g_readIndex] == START_BYTE)
-		{
+		
+		//DEBUG: 1Hz
+		
+		if (g_recvDataBytes[g_readIndex] == START_BYTE)		{
+	
 			for (i = 0; i < sizeof(CANSerialMessage); i++)
 			{
 				//Copy byte
@@ -183,7 +187,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 				message->msg_cmd = buf.cmd;
 				message->msg_dest = buf.dest;
 				message->msg_remote = (buf.pri_boot_rtr & 0x01);
-				message->msg_data_length = (buf.data_length_iface) & 0x0F;
+				message->msg_data_length = ((buf.data_length_iface >> 4) & 0x0F);
 				
 				//copy data
 				for(i = 0; i < 8; i++)
@@ -215,11 +219,3 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 	
 	return 0;
 }
-
-
-
-
-
-
-
-

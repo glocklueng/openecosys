@@ -97,6 +97,7 @@ void can_transceiver(unsigned char can_addr)
   
 
    while(can_recv_message(&g_rMessage)) {
+
       //Analyse for boot mode and I'm alive signal
       switch(g_rMessage.msg_type){
       case CAN_TYPE_EMERGENCY:
@@ -186,10 +187,10 @@ void can_transceiver(unsigned char can_addr)
 //
 //////////////////////////////////////////////////////////////////////
 void can_send_im_alive(unsigned char can_addr)
-{
+{		
    CAN_MESSAGE msg;
    int i = 0;
-
+   
    msg.msg_priority = 0x00;
    msg.msg_type = CAN_TYPE_EVENTS;
    msg.msg_cmd = CAN_EVENTS_CMD_ALIVE;
