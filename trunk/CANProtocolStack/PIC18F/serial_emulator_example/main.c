@@ -1,9 +1,12 @@
-#include "CAN18_Serial.h"
-#include "CAN18_Device.h"
-#include "CAN18_Shared.h"
-#include <usart.h>
+#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Serial.h"
+#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Device.h"
+#include "C:\Users\Meka-Intern\Dropbox\Prog\svn_openecosys\PIC18F\CAN18_Shared.h"
 #include <delays.h>
 #include <string.h>
+#include "usart.h"
+
+#define TRIS_RX		TRISCbits.TRISC7
+#define TRIS_TX		TRISCbits.TRISC6
 
 /***************************************************************************************
 ISR IMPLEMENTATIONS
@@ -12,8 +15,11 @@ ISR IMPLEMENTATIONS
 #pragma interrupt highpriority_isr
 void highpriority_isr(void)
 {
-	//Handle USART Interrupt
-	serial_usart_interrupt_handler();
+	if(PIR1bits.RC1IF)	//USART1 RX
+	{
+		//Handle USART Interrupt
+		serial_usart_interrupt_handler();
+	}
 }
 
 /* Low priority interrupt */
@@ -49,7 +55,9 @@ void can_proc_message(CAN_MESSAGE *message)
 
 void init_default_variables(void)
 {
-    memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
+    //memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
+    g_globalCANVariables.Var1 = 10;
+    g_globalCANVariables.Var2 = 5;
 }
 
 
@@ -58,29 +66,27 @@ void main(void)
 
    unsigned char canAddr = 0;
    BootConfig *bootConfig = NULL;
-
-#if 0
+   
    //OSC Interne 16MHz
     OSCCONbits.IRCF2 = 1;
     OSCCONbits.IRCF1 = 1;
-    OSCCONbits.IRCF0 = 1;
-    
+    OSCCONbits.IRCF0 = 1;    
     //Wait for stabilization
-    while(!OSCONbits.HFIOFS);
-#endif
+    while(!OSCCONbits.HFIOFS);
     
-    //Open serial port
-    //TODO ADJUST BAUD RATE...
-    //TODO USE RX INTERRUPTS
-    OpenUSART( USART_TX_INT_OFF &
-            USART_RX_INT_ON &
-            USART_ASYNCH_MODE &
-            USART_EIGHT_BIT &
-            USART_CONT_RX &
-            USART_BRGH_HIGH,
-            25 );
-
-
+	//RC6/RC7 as digital:
+	ANSELCbits.ANSC7 = 0;
+	ANSELCbits.ANSC6 = 0;
+	TRIS_RX = 1;
+	TRIS_TX = 1;	
+	
+	//Peripherals
+	setup_usart1();
+	
+	//Interrupts:
+	INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;  
+    
     //reading boot config and device configuration
     //MUST BE DONE BEFORE INITIALIZING CAN MODULE
     bootConfig = can_get_boot_config();
@@ -122,6 +128,10 @@ void main(void)
     {
         //Right now will never come out of this function (blocking on serial port)
         can_transceiver(canAddr);
-
     }
 }
+
+//Config
+#pragma config FOSC = INTIO67, PLLCFG = ON, WDTEN = OFF, LVP = OFF, DEBUG = ON
+//#pragma config FCMEN = OFF, BOREN = OFF, PBADEN = OFF, MCLRE = EXTMCLR
+//#pragma config STVREN = OFF, XINST = OFF
