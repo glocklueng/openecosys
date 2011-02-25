@@ -93,7 +93,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 
 	//Set fields
 	buf.start_byte = START_BYTE;
-	buf.pri_boot_rtr = (message->msg_priority << 5) | (message->msg_read_write << 4) | (message->msg_eeprom_ram << 3) | (message->msg_remote);
+	buf.pri_boot_rtr = (message->msg_priority << 5) | (message->msg_read_write << 3) | (message->msg_eeprom_ram << 4) | (message->msg_remote);
 	buf.type = message->msg_type;
 	buf.cmd = message->msg_cmd;
 	buf.dest = message->msg_dest;
@@ -117,7 +117,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
         putc_usart1(buf.messageBytes[i]);
     }
 
-    return 1;
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////

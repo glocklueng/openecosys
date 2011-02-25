@@ -8,6 +8,8 @@
 #define TRIS_RX		TRISCbits.TRISC7
 #define TRIS_TX		TRISCbits.TRISC6
 
+char buffer = 0;
+
 /***************************************************************************************
 ISR IMPLEMENTATIONS
 ***************************************************************************************/
@@ -56,7 +58,7 @@ void can_proc_message(CAN_MESSAGE *message)
 void init_default_variables(void)
 {
     //memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
-    g_globalCANVariables.Var1 = 10;
+    g_globalCANVariables.Var1 = 0;
     g_globalCANVariables.Var2 = 5;
 }
 
@@ -81,11 +83,9 @@ void main(void)
 	TRIS_TX = 1;	
 	
 	//Peripherals
-	setup_usart1();
-	
-	//Interrupts:
-	INTCONbits.GIE = 1;
-    INTCONbits.PEIE = 1;  
+	setup_usart1();	
+	buffer = getc_usart1();		//S'assure que le buffer est vide
+
     
     //reading boot config and device configuration
     //MUST BE DONE BEFORE INITIALIZING CAN MODULE
@@ -122,12 +122,17 @@ void main(void)
 
     //UPDATE CAN ADDRESS
     canAddr = bootConfig->module_id;
+    
+   	//Interrupts:
+	INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;  
 
     //Infinite loop
     while (1)
     {
         //Right now will never come out of this function (blocking on serial port)
         can_transceiver(canAddr);
+        g_globalCANVariables.Var1++;
     }
 }
 
