@@ -165,6 +165,18 @@ void SerialEmulator::serialReadyRead()
 
     if (m_serialPort)
     {
+
+        //Sync with START_BYTE
+        while (m_serialPort->bytesAvailable() > 0 && m_serialPort->peek(1).at(0) != START_BYTE)
+        {
+            //Flushing byte
+            unsigned char byte = m_serialPort->read(1).at(0);
+
+            qDebug("SerialEmulator::serialReadyRead() - Flushing byte : %2.2x",(int) byte);
+        }
+
+
+
         //Reading N complete messages
         int available = m_serialPort->bytesAvailable() / sizeof(CANSerialMessage);
 
@@ -186,6 +198,28 @@ void SerialEmulator::serialReadyRead()
 
             CANSerialMessage msg;
             memcpy((char*) &msg.messageBytes[0], &array.data()[i],sizeof(CANSerialMessage));
+
+/*
+            qDebug("Recv Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
+
+                    (int) msg.messageBytes[0],
+                    (int) msg.messageBytes[1],
+                    (int) msg.messageBytes[2],
+                    (int) msg.messageBytes[3],
+                    (int) msg.messageBytes[4],
+                    (int) msg.messageBytes[5],
+                    (int) msg.messageBytes[6],
+                    (int) msg.messageBytes[7],
+                    (int) msg.messageBytes[8],
+                    (int) msg.messageBytes[9],
+                    (int) msg.messageBytes[10],
+                    (int) msg.messageBytes[11],
+                    (int) msg.messageBytes[12],
+                    (int) msg.messageBytes[13],
+                    (int) msg.messageBytes[14]
+                   );
+
+*/
 
             //Look for START_BYTE and VALIDATE CHECKSUM
             if ((msg.start_byte == START_BYTE) && (msg.checksum == serial_calculate_checksum(&msg)))
@@ -252,6 +286,27 @@ bool SerialEmulator::event(QEvent *event)
 
             //Make sure the socket is flushed...
             m_serialPort->flush();
+
+/*
+            qDebug("+++Send Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
+
+                    (int) buf.messageBytes[0],
+                    (int) buf.messageBytes[1],
+                    (int) buf.messageBytes[2],
+                    (int) buf.messageBytes[3],
+                    (int) buf.messageBytes[4],
+                    (int) buf.messageBytes[5],
+                    (int) buf.messageBytes[6],
+                    (int) buf.messageBytes[7],
+                    (int) buf.messageBytes[8],
+                    (int) buf.messageBytes[9],
+                    (int) buf.messageBytes[10],
+                    (int) buf.messageBytes[11],
+                    (int) buf.messageBytes[12],
+                    (int) buf.messageBytes[13],
+                    (int) buf.messageBytes[14]
+                   );
+*/
 
             return true;
         }
