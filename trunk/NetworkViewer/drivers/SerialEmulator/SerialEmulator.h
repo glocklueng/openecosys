@@ -131,6 +131,7 @@ class SerialEmulator : public QObject, public CANDevice
         
         long serialBytesIn;
         long serialBytesOut;
+        long serialBytesFlushed;
         QTimer *m_testTimer;
 };
 
