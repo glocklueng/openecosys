@@ -15,7 +15,7 @@
 #include "def.h"
 #include "..\CAN18_Serial.h"
 #include "..\CAN18_Device.h"
-#include "..\CAN18_Shared.h"
+#include "..\CAN18_Shared_ucontrol.h"
 
 //ToDo:
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -29,10 +29,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 volatile unsigned int refresh = 0;
-#define REFRESH_RATE 30
+volatile unsigned int REFRESH_RATE = 30;
 volatile char usart_buf_char = 0, buffer = 0;
 
 void init_default_variables(void);
+void update_variables(void);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +55,9 @@ void main(void)
 	//Peripherals
 	setup_usart1();
 	setup_timer1();
+
+	//Test:
+	adc_set_channel(10);
 
 	buffer = getc_usart1();		//S'assure que le buffer est vide
 
@@ -102,7 +106,7 @@ void main(void)
 	{
         //Right now will never come out of this function (blocking on serial port)
         can_transceiver(canAddr);
-        g_globalCANVariables.Var1++;
+		update_variables();
 	}
 }
 
@@ -155,8 +159,16 @@ void can_proc_message(CAN_MESSAGE *message)
 void init_default_variables(void)
 {
     memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
-    //g_globalCANVariables.Var1 = 0;
+	g_globalCANVariables.FlashRate = REFRESH_RATE;
 }
+
+void update_variables(void)
+{
+	REFRESH_RATE = g_globalCANVariables.FlashRate;
+	g_globalCANVariables.Count = TMR1L;
+	g_globalCANVariables.Temp = adc_get_value();		//ToDo: put in an interrupt!! Only for testing 
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
