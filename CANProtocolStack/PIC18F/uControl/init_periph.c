@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
 //                                     		[uControl!]                             		//
-//                                        USART 1 Driver                               	    //
+//                                       Init Peripherals                                	//
 //                                       	version 1.0                                     //
 //																		                    //
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -11,13 +11,9 @@
 //                                        	30/01/2011         		                        //
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
-//Important: this code is strongly inspired from the C18 uart lib because for the moment
-//the PIC18F44K22 isn't supported.  Limitations: 8-bits only, no error check, usart1 only
 
-
-//#include "def.h"
-#include "usart.h"
-#include "..\CAN18_Device.h"
+#include "def.h"
+#include "init_periph.h"
 
 //ToDo:
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -37,74 +33,86 @@
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+//==========================================================================================//
+// Function name: 		void define_io(void)												//
+// Short description:	Set inputs and outputs												//
+// In: 					Nop																	//
+// Out:					Nop																	//
+//==========================================================================================//
 
-
-void setup_usart1(void)
+void define_io(void)
 {
-	RCSTA1bits.SPEN = 1;	//Disable serial port
+	//Analog (user)
+	TRIS_AN0 = 1;
+	TRIS_AN1 = 1;
+	TRIS_AN2 = 1;
+	TRIS_AN3 = 1;
+	TRIS_AN4 = 1;
+	TRIS_AN5 = 1;
+	TRIS_AN6 = 1;
+	TRIS_AN7 = 1;
 
-	TXSTA1bits.TX9 = 0;		//8bits transmission
-	TXSTA1bits.TXEN = 1;	//Enable transmit
-	TXSTA1bits.SYNC = 0;	//Asynchronous
-	TXSTA1bits.BRGH = 1;		//1 = High speed
+	//Digital (user)
+	DIO_0 = 0;
+	TRIS_DIO_0 = 0;
+	DIO_1 = 0;
+	TRIS_DIO_1 = 0;
+	DIO_2 = 0;
+	TRIS_DIO_2 = 0;
+	DIO_3 = 0;
+	TRIS_DIO_3 = 0;
+	DIO_4 = 0;
+	TRIS_DIO_4 = 0;
+	DIO_5 = 0;
+	TRIS_DIO_5 = 0;
+	DIO_6 = 0;
+	TRIS_DIO_6 = 0;
+	DIO_7 = 0;
+	TRIS_DIO_7 = 0;
 
-	RCSTA1bits.SPEN = 1;	//Enable serial port
-	RCSTA1bits.RX9 = 0;		//8bits reception
-	RCSTA1bits.CREN = 1;	//Continuous reception
+	//Power outputs (user)
+	PWR_0 = 0;
+	TRIS_PWR_0 = 0;
+	DIO_1 = 0;
+	TRIS_PWR_1 = 0;
+	PWR_2 = 0;
+	TRIS_PWR_2 = 0;
+	PWR_3 = 0;
+	TRIS_PWR_3 = 0;
+	PWR_4 = 0;
+	TRIS_PWR_4 = 0;
+	PWR_5 = 0;
+	TRIS_PWR_5 = 0;
 
-	BAUDCON1bits.BRG16 = 0;	//1 = 16bits
-	SPBRG1 = 103;			//8 = 115200, 16 = 57600, 103 = 9600 @ 64MHz
+	//Analog (pre-defined)
+	TRIS_TEMP = 1;
+	TRIS_AMP = 1;
+	TRIS_VOLT1 = 1;
+	TRIS_VOLT2 = 1;
 
-	PIE1bits.RC1IE = 1;		//Enable interrupt on reception
-
-	RCSTA1bits.SPEN = 1;	//Enable serial port
-}
-
-void putc_usart1(char data)
-{	
-  	TXREG1 = data;      	//Write the data byte to the USART1	
-}
-
-char getc_usart1(void)
-{	
-  	return (RCREG1);  		// Return the received data
-}
-
-char busy_usart1(void)
-{
-  if(!TXSTA1bits.TRMT) 	// Is the transmit shift register empty
-    	return 1;      	// No, return FALSE
-  return 0;            	// Return TRUE
-}
-
-char datardy_usart1(void)
-{
-  if(PIR1bits.RC1IF)  	// If RCIF is set
-    	return 1;  		// Data is available, return TRUE
-  return 0;  			// Data not available, return FALSE
-}
-
-void gets_usart1(char *buffer, unsigned char len)
-{
-	char i;    						// Length counter
-	unsigned char data;
+	//RC6/RC7 as digital:
+	ANSELCbits.ANSC7 = 0;
+	ANSELCbits.ANSC6 = 0;
 	
-	for(i=0;i<len;i++)  			// Only retrieve len characters
-	{
-		while(!datardy_usart1());	// Wait for data to be received
-	
-		data = getc_usart1();    	// Get a character from the USART
-	                           		// and save in the string
-		*buffer = data;
-		buffer++;              		// Increment the string pointer
-	}
+	//Misc.
+	ALIVE = 0;
+	TRIS_ALIVE = 0;
+	TRIS_RX = 1;
+	TRIS_TX = 1;	
+
+
 }
 
-void puts_usart1(char *data)
+//Setup Timer1
+void setup_timer1(void)
 {
-	do
-	{  // Transmit a byte
-		while(busy_usart1());
-		putc_usart1(*data);
-	} while( *data++ );
+	TMR1L = 0x00;
+	
+	T1CONbits.TMR1CS = 1;	//Clk = Fosc
+	T1CONbits.T1CKPS = 4;	//PS = 8
+	T1CONbits.T1RD16 = 0;	//8bits
+	T1CONbits.TMR1ON = 1;
+	
+	PIR1bits.TMR1IF = 0;
+	PIE1bits.TMR1IE = 1;
 }

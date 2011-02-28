@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define _CAN18_DEVICE_H_
 
 //Change the device as needed here...
-#include "p18f44k22.h"
+#include <p18f44k22.h>
 //#include <p18f4580.h>
 
 #define DEVID_BASE_ADDRESS 0x3FFFFE
