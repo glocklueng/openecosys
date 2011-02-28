@@ -1,4 +1,3 @@
-
 /*
 The OpenEcoSys project / CANProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
@@ -22,32 +21,6 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CAN18_DRIVER_H_
-#define _CAN18_DRIVER_H_
-
 #include "CAN18_Shared_ucontrol.h"
-#include "CAN18_Device.h"
-#include "CAN18_Common.h"
 
-typedef struct _filter {
-   unsigned char filter_priority;
-   unsigned char filter_type;
-   unsigned char filter_cmd;
-   unsigned char filter_dest;
-} CAN_FILTER;
-
-typedef struct _mask {
-   unsigned char mask_priority;
-   unsigned char mask_type;
-   unsigned char mask_cmd;
-   unsigned char mask_dest;
-} CAN_MASK;
-
-//Hardware specific
-void can_init(CAN_FILTER *filter,CAN_MASK *mask);
-void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id);
-void can_apply_filter(CAN_FILTER *filter, unsigned char filter_id);
-
-
-
-#endif
+GlobalCANVariables g_globalCANVariables;

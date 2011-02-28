@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "init_periph.h"
 #include "usart.h"
+#include "analog.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
