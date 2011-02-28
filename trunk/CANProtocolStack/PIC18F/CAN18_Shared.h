@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef _CAN18_SHARED_H_
 #define _CAN18_SHARED_H_
 
-#include "CAN18_Utils.h"
+#include "..\CAN18_Utils.h"
 
 
 #define MODULE_TABLE_VERSION 0x02

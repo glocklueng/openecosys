@@ -1,6 +1,6 @@
-#include "CAN18_Serial.h"
-#include "CAN18_Device.h"
-#include "CAN18_Shared.h"
+#include "..\CAN18_Serial.h"
+#include "..\CAN18_Device.h"
+#include "..\CAN18_Shared.h"
 #include <delays.h>
 #include <string.h>
 #include "usart.h"
@@ -57,9 +57,9 @@ void can_proc_message(CAN_MESSAGE *message)
 
 void init_default_variables(void)
 {
-    //memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
-    g_globalCANVariables.Var1 = 0;
-    g_globalCANVariables.Var2 = 5;
+    memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
+    //g_globalCANVariables.Var1 = 0;
+    //g_globalCANVariables.Var2 = 5;
 }
 
 
@@ -85,7 +85,6 @@ void main(void)
 	//Peripherals
 	setup_usart1();	
 	buffer = getc_usart1();		//S'assure que le buffer est vide
-
     
     //reading boot config and device configuration
     //MUST BE DONE BEFORE INITIALIZING CAN MODULE
