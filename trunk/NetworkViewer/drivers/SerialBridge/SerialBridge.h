@@ -274,8 +274,6 @@ class SerialBridge : public QObject, public CANDevice
 	
         QextSerialPort *m_serialPort;
 
-	QTimer *m_pollTimer;
-
 
 	QList<CANTxMessageBuffer> m_sendQueue;
 	QList<CANRxMessageBuffer> m_recvQueue;

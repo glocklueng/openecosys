@@ -20,11 +20,11 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("SerialBridge",new CANDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("SerialBridge",new CANDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
 
 
 SerialBridge::SerialBridge(const char* args)
-    : m_serialPort(NULL), m_pollTimer(NULL)
+    : m_serialPort(NULL)
 {
 
     serialBytesIn = 0;
@@ -38,13 +38,14 @@ CANDevice::State SerialBridge::initialize(const char* args)
     QStringList config = QString(args).split(";");
     Q_ASSERT(config.size() == 2);
 
-    PortSettings s;
-    s.BaudRate = (BaudRateType) config[1].toInt();
-    s.DataBits =  DATA_8;
-    s.FlowControl = FLOW_OFF;
-    s.Parity = PAR_NONE;
-    s.StopBits = STOP_1;
-    s.Timeout_Millisec = 0;
+    //Port configuration
+    QextPortSettings s;
+    s.baudRate = (BaudRateType) config[1].toInt();
+    s.dataBits =  DATA_8;
+    s.flowControl = FLOW_OFF;
+    s.parity = PAR_NONE;
+    s.stopBits = STOP_1;
+    s.timeoutMsecs = 0;
     m_serialPort = new QextSerialPort(config[0], s);
 
     if (!m_serialPort->open(QIODevice::ReadWrite))
@@ -57,16 +58,10 @@ CANDevice::State SerialBridge::initialize(const char* args)
     else
     {
         //connect signals
-        qDebug("SerialBridge::initialize() : Opening config : %s, baudrate : %i",args,s.BaudRate);
-#ifdef WIN32
+        qDebug("SerialBridge::initialize() : Opening config : %s, baudrate : %i",args,s.baudRate);
+
         connect(m_serialPort,SIGNAL(readyRead()),this,SLOT(serialReadyRead()));
         connect(m_serialPort,SIGNAL(bytesWritten(qint64)),this,SLOT(serialBytesWritten(qint64)));
-#else
-	m_pollTimer = new QTimer(this);
-	connect(m_pollTimer,SIGNAL(timeout()),this,SLOT(serialReadyRead()));
-	m_pollTimer->start(1); //1ms timer
-#endif
-
 
         m_testTimer = new QTimer(this);
         connect(m_testTimer,SIGNAL(timeout()),this,SLOT(testTimer()));
@@ -162,8 +157,6 @@ void SerialBridge::serialReadyRead()
     if (m_serialPort)
     {
         //Reading N complete messages
-#ifdef WIN32
-
         int available = m_serialPort->bytesAvailable() / sizeof(CANRxMessageBuffer);
 
         serialBytesIn += available * sizeof(CANRxMessageBuffer);
@@ -175,19 +168,7 @@ void SerialBridge::serialReadyRead()
             //qDebug("SerialBridge::serialReadyRead() -> not enough bytes received, returning");
             return;
         }
-#else
 
-	int available = 1;
-        QByteArray array = m_serialPort->read(sizeof(CANRxMessageBuffer) * available);
-
-
-	if (array.size() <= 0)
-	{
-            qDebug("SerialBridge::serialReadyRead() -> not enough bytes received, returning");
-            return;
-	}
-
-#endif
 
         //qDebug("SerialBridge::serialReadyRead() available messages : %i",available);
 	//Let's verify if we have received messages that are well aligned with the size of the
