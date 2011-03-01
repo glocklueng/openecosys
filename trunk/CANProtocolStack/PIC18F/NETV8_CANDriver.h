@@ -22,12 +22,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CAN18_DRIVER_H_
-#define _CAN18_DRIVER_H_
+#ifndef _NETV8_CAN_DRIVER_H_
+#define _NETV8_CAN_DRIVER_H_
 
-#include "CAN18_Shared.h"
-#include "CAN18_Device.h"
-#include "CAN18_Common.h"
+#include "NETV8_Shared.h"
+#include "NETV8_Device.h"
+#include "NETV8_Common.h"
 
 typedef struct _filter {
    unsigned char filter_priority;

@@ -1,7 +1,7 @@
-#include "CAN18_Serial.h"
-#include "CAN18_Device.h"
-#include "CAN18_Shared.h"
-#include "CAN18_Utils.h"
+#include "NETV8_SerialDriver.h"
+#include "NETV8_Device.h"
+#include "NETV8_Shared.h"
+#include "NETV8_Utils.h"
 #include "usart.h"
 #include <delays.h>
 
