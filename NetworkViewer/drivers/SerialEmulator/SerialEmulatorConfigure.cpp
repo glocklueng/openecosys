@@ -33,7 +33,11 @@ SerialEmulatorConfigure::SerialEmulatorConfigure(QWidget *parent)
         }
 
         //Add port to combo list
+#ifdef WIN32
+      m_portComboBox->addItem(ports.at(i).portName);
+#else
         m_portComboBox->addItem(ports.at(i).physName);
+#endif
     }
 
 
