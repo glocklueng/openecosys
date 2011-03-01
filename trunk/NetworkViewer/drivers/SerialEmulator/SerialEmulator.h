@@ -128,6 +128,7 @@ class SerialEmulator : public QObject, public CANDevice
         QList<CANSerialMessage> m_recvQueue;
 	QMutex m_sendQueueMutex;
 	QMutex m_recvQueueMutex;
+        QSemaphore m_recvSemaphore;
         
         long serialBytesIn;
         long serialBytesOut;
