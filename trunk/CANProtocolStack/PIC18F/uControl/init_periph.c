@@ -43,9 +43,21 @@
 void define_io(void)
 {
 	//Digital:
-	ANSELCbits.ANSC7 = 0;
+	ANSELCbits.ANSC2 = 0;
+	ANSELCbits.ANSC3 = 0;
+	ANSELCbits.ANSC4 = 0;
+	ANSELCbits.ANSC5 = 0;
 	ANSELCbits.ANSC6 = 0;
-
+	ANSELCbits.ANSC7 = 0;	
+	ANSELDbits.ANSD0 = 0;
+	ANSELDbits.ANSD1 = 0;
+	ANSELDbits.ANSD2 = 0;
+	ANSELDbits.ANSD3 = 0;
+	ANSELDbits.ANSD4 = 0;
+	ANSELDbits.ANSD5 = 0;
+	ANSELDbits.ANSD6 = 0;
+	ANSELDbits.ANSD7 = 0;
+		
 	//Analog:
 	ANSELAbits.ANSA0 = 1;
 	ANSELAbits.ANSA1 = 1;
@@ -120,13 +132,15 @@ void define_io(void)
 //Setup Timer1
 void setup_timer1(void)
 {
-	TMR1L = 0x00;
-	
-	T1CONbits.TMR1CS = 1;	//Clk = Fosc
-	T1CONbits.T1CKPS = 4;	//PS = 8
+	T1CONbits.TMR1CS = 0;	//Clk = Fosc
+	T1CONbits.T1CKPS = 3;	//PS = 8
 	T1CONbits.T1RD16 = 0;	//8bits
 	T1CONbits.TMR1ON = 1;
 	
 	PIR1bits.TMR1IF = 0;
 	PIE1bits.TMR1IE = 1;
+	
+	//10ms = 20000 counts
+	TMR1H = 0xB1;
+	TMR1L = 0xE0;
 }

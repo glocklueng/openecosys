@@ -55,7 +55,7 @@ void setup_usart1(void)
 	RCSTA1bits.CREN = 1;	//Continuous reception
 
 	BAUDCON1bits.BRG16 = 0;	//1 = 16bits
-	SPBRG1 = 103;			//8 = 115200, 16 = 57600, 103 = 9600 @ 64MHz
+	SPBRG1 = 16;			//8 = 115200, 16 = 57600, 103 = 9600, 51 = 19200 @ 64MHz
 
 	PIE1bits.RC1IE = 1;		//Enable interrupt on reception
 
