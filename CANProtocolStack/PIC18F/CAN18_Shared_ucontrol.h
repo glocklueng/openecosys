@@ -52,6 +52,7 @@ typedef struct
 {
 		uint16 	FlashRate;
 		uint8 	Count;
+		uint8	Free;
 		uint16	Analog0;
 		uint16	Analog1;
 		uint16	Analog2;
@@ -60,8 +61,12 @@ typedef struct
 		uint16	Analog5;
 		uint16	Analog6;
 		uint16	Analog7;
+		uint16	Analog8;
+		uint16	Analog9;
+		uint16	Analog10;
+		uint16	Analog11;
 		uint16 	Temp;
-		uint16	Amp;
+		sint16	Amp;
 		uint16	Volt1;
 		uint16	Volt2;
 

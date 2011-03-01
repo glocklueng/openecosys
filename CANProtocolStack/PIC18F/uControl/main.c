@@ -29,8 +29,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 volatile unsigned int refresh = 0;
-volatile unsigned int REFRESH_RATE = 30;
+volatile unsigned int REFRESH_RATE = 3;
 volatile char usart_buf_char = 0, buffer = 0;
+
+volatile unsigned int adc_buffer[ANALOG_CHANNELS];
 
 void init_default_variables(void);
 void update_variables(void);
@@ -55,6 +57,7 @@ void main(void)
 	//Peripherals
 	setup_usart1();
 	setup_timer1();
+	setup_adc();
 
 	//Test:
 	adc_set_channel(10);
@@ -100,6 +103,9 @@ void main(void)
 	//Interrupts:
 	INTCONbits.GIE = 1;
     INTCONbits.PEIE = 1;  
+    
+    //Launch ADC
+    ADCON0bits.GO = 1;
 
 	//Main loop
 	while(1)
@@ -164,9 +170,27 @@ void init_default_variables(void)
 
 void update_variables(void)
 {
+	//Misc.
 	REFRESH_RATE = g_globalCANVariables.FlashRate;
 	g_globalCANVariables.Count = TMR1L;
-	g_globalCANVariables.Temp = adc_get_value();		//ToDo: put in an interrupt!! Only for testing 
+	
+	//Analog:
+	g_globalCANVariables.Analog0 = adc_buffer[0];
+	g_globalCANVariables.Analog1 = adc_buffer[1];
+	g_globalCANVariables.Analog2 = adc_buffer[2];
+	g_globalCANVariables.Analog3 = adc_buffer[3];
+	g_globalCANVariables.Analog4 = adc_buffer[4];
+	g_globalCANVariables.Analog5 = adc_buffer[5];
+	g_globalCANVariables.Analog6 = adc_buffer[6];
+	g_globalCANVariables.Analog7 = adc_buffer[7];
+	g_globalCANVariables.Analog8 = adc_buffer[8];
+	g_globalCANVariables.Analog9 = adc_buffer[9];
+	g_globalCANVariables.Analog10 = adc_buffer[10];
+	g_globalCANVariables.Analog11 = adc_buffer[11];
+	
+	//Pre-computed analog values:	
+	g_globalCANVariables.Temp = adc_get_temp();
+	g_globalCANVariables.Amp = adc_buffer[8] - 512;
 }
 
 
@@ -193,8 +217,12 @@ void Interrupt_High(void)
     sauv1 = PRODL; // on sauvegarde le contenu des registres de calcul
     sauv2 = PRODH;       
 	
-	if(PIR1bits.TMR1IF) // interruption du timer1 
+	if(PIR1bits.TMR1IF) // Timer1 Interrupt: 10ms
 	{
+		PIR1bits.TMR1IF = 0;
+		TMR1H = 0xB1;
+		TMR1L = 0xE0;
+		
 		//LED
 		if(refresh < REFRESH_RATE)
 		{
@@ -205,8 +233,12 @@ void Interrupt_High(void)
 			refresh = 0;
 			ALIVE ^= 1;
 		}
-
-		PIR1bits.TMR1IF = 0;
+		
+	//ADC:
+		//Select next input
+		ADCON0bits.CHS = ((ADCON0bits.CHS + 1) % ANALOG_CHANNELS);
+		//Launch new conversion
+		ADCON0bits.GO = 1;
 	}
 	if(PIR1bits.RC1IF)	//USART1 RX
 	{
@@ -215,6 +247,14 @@ void Interrupt_High(void)
 		//Echo
 		//usart_buf_char = getc_usart1();
 		//putc_usart1(usart_buf_char);
+	}
+	
+	if(PIR1bits.ADIF)	//ADC
+	{
+		//Clear flag:
+		PIR1bits.ADIF = 0;
+		//Save data
+		adc_buffer[ADCON0bits.CHS] = ADRES;		
 	}
 				
 	PRODL = sauv1;        // on restaure les registres de calcul

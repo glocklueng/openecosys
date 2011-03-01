@@ -28,6 +28,8 @@ void Interrupt_High(void);
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+#define ANALOG_CHANNELS 12
+
 //Inputs and outputs
 
 //Analog (user)
