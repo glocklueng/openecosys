@@ -1,7 +1,7 @@
-#ifndef _CAN18_SERIAL_H_
-#define _CAN18_SERIAL_H_
+#ifndef _NETV8_SERIAL_DRIVER_H_
+#define _NETV8_SERIAL_DRIVER_H_
 
-#include "CAN18_Common.h"
+#include "NETV8_Common.h"
 
 #define START_BYTE 0xF2
 

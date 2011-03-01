@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // Library call
-#include "CAN18_Driver.h"
-#include "CAN18_Device.h"
+#include "NETV8_CANDriver.h"
+#include "NETV8_Device.h"
 #include <delays.h>
 
 
