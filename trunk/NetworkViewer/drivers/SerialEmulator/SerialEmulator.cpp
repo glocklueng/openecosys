@@ -50,6 +50,15 @@ SerialEmulator::SerialEmulator(const char* args)
     initialize(args);
 }
 
+SerialEmulator::~SerialEmulator()
+{
+    qDebug("SerialEmulator::~SerialEmulator()");
+    if (m_serialPort)
+    {
+        delete m_serialPort;
+    }
+}
+
 CANDevice::State SerialEmulator::initialize(const char* args)
 {
 
@@ -106,8 +115,7 @@ CANDevice::State SerialEmulator::sendMessage(LABORIUS_MESSAGE &message)
 CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
 {
 
-    qDebug("CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)");
-
+    //qDebug("CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)");
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     CANDevice::State returnState = CANDevice::CANDEVICE_FAIL;
 
