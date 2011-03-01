@@ -33,7 +33,7 @@ SerialEmulatorConfigure::SerialEmulatorConfigure(QWidget *parent)
         }
 
         //Add port to combo list
-        m_portComboBox->addItem(ports.at(i).portName);
+        m_portComboBox->addItem(ports.at(i).physName);
     }
 
 
