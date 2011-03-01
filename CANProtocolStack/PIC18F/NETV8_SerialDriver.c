@@ -14,13 +14,13 @@ unsigned int g_readIndex = 0;
 unsigned int g_writeIndex = 0;
 
 
-unsigned char serial_calculate_checksum(const CANSerialMessage *message)
+unsigned char serial_calculate_checksum(const NETVSerialMessage *message)
 {
 	unsigned char checksum = 0;
 	int i = 0;
 
 	//simple accumulation of bytes from start until checksum (excluded)
-	for (i = 0; i < (sizeof(CANSerialMessage) - 1); i++)
+	for (i = 0; i < (sizeof(NETVSerialMessage) - 1); i++)
 	{
 		checksum += message->messageBytes[i];
 	}
@@ -60,7 +60,7 @@ unsigned int serial_bytes_available(void)
 }
 
 //////////////////////////////////////////////////////////////////////
-//   can_send_message
+//   netv_send_message
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Fills a TX buffer with a modified message and sends
@@ -73,12 +73,12 @@ unsigned int serial_bytes_available(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-unsigned char can_send_message(CAN_MESSAGE *message)
+unsigned char netv_send_message(NETV_MESSAGE *message)
 {
     unsigned char i=0;
 
-    //Need to transform a TxMessageBuffer into a CAN_MESSAGE
-    CANSerialMessage buf;
+    //Need to transform a TxMessageBuffer into a NETV_MESSAGE
+    NETVSerialMessage buf;
     
 /**
 		unsigned char start_byte;
@@ -111,7 +111,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 
     //Transmit on serial
     //Right now it will be synchronous, need to be event based with interrupts
-    for (i = 0; i < sizeof(CANSerialMessage); i++)
+    for (i = 0; i < sizeof(NETVSerialMessage); i++)
     {
 	    while(!TXSTA1bits.TRMT);
         putc_usart1(buf.messageBytes[i]);
@@ -121,7 +121,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 }
 
 //////////////////////////////////////////////////////////////////////
-//   can_recv_message
+//   netv_recv_message
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Extract RX buffer message and put it in a message
@@ -134,14 +134,14 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 //
 //////////////////////////////////////////////////////////////////////
 
-unsigned char can_recv_message(CAN_MESSAGE *message)
+unsigned char netv_recv_message(NETV_MESSAGE *message)
 {
     unsigned char i = 0;
-    CANSerialMessage buf;
+    NETVSerialMessage buf;
 
-	if(serial_bytes_available() >= sizeof(CANSerialMessage))
+	if(serial_bytes_available() >= sizeof(NETVSerialMessage))
 	{
-		//Fill CANSerialMessage with available bytes
+		//Fill NETVSerialMessage with available bytes
 		//TODO Memory boundaries verification?
 		//Here we assume that we have enough buffer to avoid corruption
 		
@@ -149,7 +149,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 		
 		if (g_recvDataBytes[g_readIndex] == START_BYTE)		{
 	
-			for (i = 0; i < sizeof(CANSerialMessage); i++)
+			for (i = 0; i < sizeof(NETVSerialMessage); i++)
 			{
 				//Copy byte
 				buf.messageBytes[i] = g_recvDataBytes[g_readIndex];
@@ -161,7 +161,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 
 			//One less message available
 			INTCONbits.GIEH = 0; //disable interrupts
-			g_availableBytes -= sizeof(CANSerialMessage);
+			g_availableBytes -= sizeof(NETVSerialMessage);
 			INTCONbits.GIEH = 1; //enable interrupts
 
 

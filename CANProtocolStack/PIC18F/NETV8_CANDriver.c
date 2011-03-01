@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <delays.h>
 
 
-void  can_set_baud(void);
-void  can_set_mode(unsigned char mode);
+void  netv_set_baud(void);
+void  netv_set_mode(unsigned char mode);
 
 // Internal enums
 enum CAN_OP_MODE {CAN_OP_CONFIG=4, CAN_OP_LISTEN=3, CAN_OP_LOOPBACK=2, CAN_OP_DISABLE=1, CAN_OP_NORMAL=0};
@@ -38,7 +38,7 @@ enum CAN_RX_MODE {CAN_RX_ALL=3, CAN_RX_EXT=2, CAN_RX_STD=1, CAN_RX_VALID=0};
 
 
 //////////////////////////////////////////////////////////////////////
-//   can_send_message
+//   netv_send_message
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Fills a TX buffer with a modified message and sends
@@ -50,7 +50,7 @@ enum CAN_RX_MODE {CAN_RX_ALL=3, CAN_RX_EXT=2, CAN_RX_STD=1, CAN_RX_VALID=0};
 //   Returned value: NONE
 //
 //////////////////////////////////////////////////////////////////////
-unsigned char can_send_message(CAN_MESSAGE *message)
+unsigned char netv_send_message(NETV_MESSAGE *message)
 {
    unsigned char TXBxSIDH = 0;
    unsigned char TXBxSIDL = 0;
@@ -184,7 +184,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 }
 
 //////////////////////////////////////////////////////////////////////
-//   can_recv_message
+//   netv_recv_message
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Extract RX buffer message and put it in a message
@@ -196,7 +196,7 @@ unsigned char can_send_message(CAN_MESSAGE *message)
 //   Returned value: NONE
 //
 //////////////////////////////////////////////////////////////////////
-unsigned char can_recv_message(CAN_MESSAGE *message)
+unsigned char netv_recv_message(NETV_MESSAGE *message)
 {
 	unsigned char retval = 0;
 
@@ -310,7 +310,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 }
 
 //////////////////////////////////////////////////////////////////////
-//   can_apply_accept_mask
+//   netv_apply_accept_mask
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Sets the MCP2510 in configuration mode
@@ -323,7 +323,7 @@ unsigned char can_recv_message(CAN_MESSAGE *message)
 //   Returned value: NONE
 //
 //////////////////////////////////////////////////////////////////////
-void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id)
+void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id)
 {   
    unsigned char TXBxSIDH = 0;
    unsigned char TXBxSIDL = 0;
@@ -363,7 +363,7 @@ void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id)
 }
 
 //////////////////////////////////////////////////////////////////////
-//   can_apply_filter
+//   netv_apply_filter
 //////////////////////////////////////////////////////////////////////
 //
 //   Description: Sets the MCP2510 in configuration mode
@@ -376,7 +376,7 @@ void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id)
 //   Returned value: NONE
 //
 //////////////////////////////////////////////////////////////////////
-	void can_apply_filter(CAN_FILTER *filter, unsigned char filter_id)
+	void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id)
 	{   
 	   unsigned char TXBxSIDH = 0;
 	   unsigned char TXBxSIDL = 0;
@@ -456,7 +456,7 @@ void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// can_init()
+// netv_init()
 //
 // Initializes PIC18xxx8 CAN peripheral.  Sets the RX filter and masks so the
 // CAN peripheral will receive all incoming IDs.  Configures both RX buffers
@@ -471,7 +471,7 @@ void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id)
 // applications will be fine with these defaults.
 //
 //////////////////////////////////////////////////////////////////////////////
-void can_init (CAN_FILTER *filter, CAN_MASK *mask) {
+void netv_init (NETV_FILTER *filter, NETV_MASK *mask) {
    unsigned char i = 0;
 
    //PIN B3 (RX) is in, B2 (TX) is out
@@ -479,14 +479,14 @@ void can_init (CAN_FILTER *filter, CAN_MASK *mask) {
    TRISBbits.TRISB2 = 0;
 
    //Get in config mode for now
-   can_set_mode(CAN_OP_CONFIG);
+   netv_set_mode(CAN_OP_CONFIG);
 
    //make sure to possess a filter with dest = 0xFF
    filter[5].filter_dest |= 0xFF;
 
    //Set Filter
    for(i=0;i<6;i++){
-      can_apply_filter(&filter[i],i);
+      netv_apply_filter(&filter[i],i);
    }
 
    //make sure that mask[1].dest = at least 0xFF
@@ -494,11 +494,11 @@ void can_init (CAN_FILTER *filter, CAN_MASK *mask) {
 
    //Set MASK
    for(i=0;i<2;i++){
-      can_apply_accept_mask(&mask[i],i);
+      netv_apply_accept_mask(&mask[i],i);
    }
 
    //Set Bit rate
-   can_set_baud();
+   netv_set_baud();
 
    //Set IO
    RXB0CON=0;
@@ -513,12 +513,12 @@ void can_init (CAN_FILTER *filter, CAN_MASK *mask) {
    CIOCON = 0b00100000; //CAN IO control
 
    //Get to normal again
-   can_set_mode(CAN_OP_NORMAL);  
+   netv_set_mode(CAN_OP_NORMAL);  
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// can_set_baud()
+// netv_set_baud()
 //
 // Configures the baud rate control registers.  All the defines here
 // are defaulted in the can-18xxx8.h file.  These defaults can, and
@@ -528,7 +528,7 @@ void can_init (CAN_FILTER *filter, CAN_MASK *mask) {
 // Developers Kit if this PIC is running at 20Mhz.
 //
 ////////////////////////////////////////////////////////////////////////
-void can_set_baud(void) {
+void netv_set_baud(void) {
 
 	//1MBPS @ 10Mips
 	BRGCON1 = 0b00000000;
@@ -536,7 +536,7 @@ void can_set_baud(void) {
 	BRGCON3 = 0b00000111;
 }
 
-void can_set_mode(unsigned char mode) {
+void netv_set_mode(unsigned char mode) {
 
    CANCONbits.REQOP0 = mode;
    CANCONbits.REQOP1 = mode >> 1;

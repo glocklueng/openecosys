@@ -1,5 +1,5 @@
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)
@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define DEVID_BASE_ADDRESS 0x3FFFFE
 
 /**
-	Define all the variables here to be accessible to the CAN protocol.
+	Define all the variables here to be accessible to the NETV protocol.
 
 	The following data structure will fit with this XML configuration file in the NetworkViewer
 
@@ -67,12 +67,12 @@ typedef struct
 	float	Var7;	
 	double 	Var8;
 
-} GlobalCANVariables;
+} GlobalNETVVariables;
 
 #endif
 
 
 //This external variable will hold the data
-extern GlobalCANVariables g_globalCANVariables;
+extern GlobalNETVVariables g_globalNETVVariables;
 
 #endif
