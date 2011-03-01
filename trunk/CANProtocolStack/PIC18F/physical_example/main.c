@@ -1,5 +1,5 @@
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)
@@ -21,20 +21,20 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "CAN18_Driver.h"
-#include "CAN18_Utils.h"
-#include "CAN18_Device.h"
-#include "CAN18_Shared.h"
+#include "NETV8_CANDriver.h"
+#include "NETV8_Utils.h"
+#include "NETV8_Device.h"
+#include "NETV8_Shared.h"
 #include <string.h>
 
 
 
 void init_default_variables(void)
 {
-	memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
+	memset(&g_globalNETVVariables, 0, sizeof(GlobalNETVVariables));
 }
 
-void can_proc_message(CAN_MESSAGE *message)
+void netv_proc_message(NETV_MESSAGE *message)
 {
 
 }
@@ -42,8 +42,8 @@ void can_proc_message(CAN_MESSAGE *message)
 void main(void)
 {
    int i=0;	
-   CAN_MASK mask_in[2];
-   CAN_FILTER filter_in[6];
+   NETV_MASK mask_in[2];
+   NETV_FILTER filter_in[6];
    unsigned char canAddr = 0;
    BootConfig *bootConfig = NULL;
 
@@ -65,17 +65,17 @@ void main(void)
    }
 
    // init can
-   can_init(filter_in,mask_in);
+   netv_init(filter_in,mask_in);
 
 
 	//reading boot config and device configuration
-	//MUST BE DONE BEFORE INITIALIZING CAN MODULE
-	bootConfig = can_get_boot_config();
+	//MUST BE DONE BEFORE INITIALIZING NETV MODULE
+	bootConfig = netv_get_boot_config();
 
 	if (bootConfig)
 	{
 		//read configuration
-		can_read_boot_config(bootConfig);
+		netv_read_boot_config(bootConfig);
 		
 		//safety
 		bootConfig->module_state = BOOT_NORMAL;
@@ -94,20 +94,20 @@ void main(void)
 			bootConfig->module_id = 1;
 
 			//Writing back the boot config for the next version
-			can_write_boot_config(bootConfig);
+			netv_write_boot_config(bootConfig);
 
 			//set variables to zero
 			init_default_variables();
 		}
 	}
 	
-	//UPDATE CAN ADDRESS
+	//UPDATE NETV ADDRESS
 	canAddr = bootConfig->module_id;
 
 
 	while( 1 )
 	{
-		can_transceiver(canAddr);
+		netv_transceiver(canAddr);
 
 		//Application specific code here
 
