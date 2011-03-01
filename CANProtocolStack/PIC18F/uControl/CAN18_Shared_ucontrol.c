@@ -21,21 +21,5 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CAN18_DEVICE_H_
-#define _CAN18_DEVICE_H_
-
-//Include user board support package from external project
-#include "bsp.h"
-
-#if 0
-//Change the device as needed here...
-#include <p18f44k22.h>
-//#include <p18f4580.h>
-
-#define DEVID_BASE_ADDRESS 0x3FFFFE
-
-#endif
-
-
-#endif
+#include "CAN18_Shared_ucontrol.h"
 

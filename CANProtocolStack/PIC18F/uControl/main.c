@@ -13,9 +13,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "def.h"
-#include "..\CAN18_Serial.h"
-#include "..\CAN18_Device.h"
-#include "..\CAN18_Shared_ucontrol.h"
+#include "CAN18_Serial.h"
+#include "CAN18_Device.h"
+#include "CAN18_Shared.h"
 
 //ToDo:
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

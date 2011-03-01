@@ -1,7 +1,7 @@
 #ifndef _CAN18_SERIAL_H_
 #define _CAN18_SERIAL_H_
 
-#include "..\CAN18_Common.h"
+#include "CAN18_Common.h"
 
 #define START_BYTE 0xF2
 

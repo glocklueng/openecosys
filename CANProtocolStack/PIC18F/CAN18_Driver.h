@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef _CAN18_DRIVER_H_
 #define _CAN18_DRIVER_H_
 
-#include "CAN18_Shared_ucontrol.h"
+#include "CAN18_Shared.h"
 #include "CAN18_Device.h"
 #include "CAN18_Common.h"
 
