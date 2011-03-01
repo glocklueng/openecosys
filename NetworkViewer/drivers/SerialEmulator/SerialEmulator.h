@@ -106,6 +106,9 @@ class SerialEmulator : public QObject, public CANDevice
 		   \return bool true if a message is ready to be received
 	  */
 	  virtual bool newMessageReady();
+
+          /** Destructor */
+          virtual ~SerialEmulator();
 	
         protected slots:
 	
