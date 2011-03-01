@@ -1,5 +1,5 @@
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define MODULE_CODE_VERSION 0x01
 
 /**
-	Define all the variables here to be accessible to the CAN protocol.
+	Define all the variables here to be accessible to the NETV protocol.
 
 	The following data structure will fit with this XML configuration file in the NetworkViewer
 
@@ -70,6 +70,6 @@ typedef struct
 		uint16	Volt1;
 		uint16	Volt2;
 
-} GlobalCANVariables;
+} GlobalNETVVariables;
 
 #endif

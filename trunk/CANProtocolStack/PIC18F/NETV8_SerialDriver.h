@@ -19,13 +19,13 @@ typedef union
 	};
 	
 	unsigned char messageBytes[15];
-} CANSerialMessage;
+} NETVSerialMessage;
 
 
-#define RX_BUFFER_SIZE (10 * sizeof(CANSerialMessage))
+#define RX_BUFFER_SIZE (10 * sizeof(NETVSerialMessage))
 
 void serial_usart_interrupt_handler(void);
-unsigned char serial_calculate_checksum(const CANSerialMessage *message);
+unsigned char serial_calculate_checksum(const NETVSerialMessage *message);
 
 
 #endif

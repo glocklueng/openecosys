@@ -1,6 +1,6 @@
 
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)
@@ -22,8 +22,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _NETV8_CAN_DRIVER_H_
-#define _NETV8_CAN_DRIVER_H_
+#ifndef _NETV8_NETV_DRIVER_H_
+#define _NETV8_NETV_DRIVER_H_
 
 #include "NETV8_Shared.h"
 #include "NETV8_Device.h"
@@ -34,19 +34,19 @@ typedef struct _filter {
    unsigned char filter_type;
    unsigned char filter_cmd;
    unsigned char filter_dest;
-} CAN_FILTER;
+} NETV_FILTER;
 
 typedef struct _mask {
    unsigned char mask_priority;
    unsigned char mask_type;
    unsigned char mask_cmd;
    unsigned char mask_dest;
-} CAN_MASK;
+} NETV_MASK;
 
 //Hardware specific
-void can_init(CAN_FILTER *filter,CAN_MASK *mask);
-void can_apply_accept_mask(CAN_MASK *mask, unsigned char mask_id);
-void can_apply_filter(CAN_FILTER *filter, unsigned char filter_id);
+void netv_init(NETV_FILTER *filter,NETV_MASK *mask);
+void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id);
+void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id);
 
 
 

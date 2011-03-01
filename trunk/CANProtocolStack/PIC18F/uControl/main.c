@@ -46,7 +46,7 @@ void update_variables(void);
 
 void main(void)
 {	
-	//CAN:
+	//NETV:
    	unsigned char canAddr = 0;
    	BootConfig *bootConfig = NULL;
 
@@ -65,13 +65,13 @@ void main(void)
 	buffer = getc_usart1();		//S'assure que le buffer est vide
 
     //reading boot config and device configuration
-    //MUST BE DONE BEFORE INITIALIZING CAN MODULE
-    bootConfig = can_get_boot_config();
+    //MUST BE DONE BEFORE INITIALIZING NETV MODULE
+    bootConfig = netv_get_boot_config();
 
     if (bootConfig)
     {
             //read configuration
-            can_read_boot_config(bootConfig);
+            netv_read_boot_config(bootConfig);
 
             //safety
             bootConfig->module_state = BOOT_NORMAL;
@@ -90,14 +90,14 @@ void main(void)
                     bootConfig->module_id = 1;
 
                     //Writing back the boot config for the next version
-                    can_write_boot_config(bootConfig);
+                    netv_write_boot_config(bootConfig);
 
                     //set variables to zero
                     init_default_variables();
             }
     }
 
-    //UPDATE CAN ADDRESS
+    //UPDATE NETV ADDRESS
     canAddr = bootConfig->module_id;
     
 	//Interrupts:
@@ -111,7 +111,7 @@ void main(void)
 	while(1)
 	{
         //Right now will never come out of this function (blocking on serial port)
-        can_transceiver(canAddr);
+        netv_transceiver(canAddr);
 		update_variables();
 	}
 }
@@ -157,40 +157,40 @@ void config(void)
 
 }
 
-void can_proc_message(CAN_MESSAGE *message)
+void netv_proc_message(NETV_MESSAGE *message)
 {
     //Handle custom messages...
 }
 
 void init_default_variables(void)
 {
-    memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
-	g_globalCANVariables.FlashRate = REFRESH_RATE;
+    memset(&g_globalNETVVariables, 0, sizeof(GlobalNETVVariables));
+	g_globalNETVVariables.FlashRate = REFRESH_RATE;
 }
 
 void update_variables(void)
 {
 	//Misc.
-	REFRESH_RATE = g_globalCANVariables.FlashRate;
-	g_globalCANVariables.Count = TMR1L;
+	REFRESH_RATE = g_globalNETVVariables.FlashRate;
+	g_globalNETVVariables.Count = TMR1L;
 	
 	//Analog:
-	g_globalCANVariables.Analog0 = adc_buffer[0];
-	g_globalCANVariables.Analog1 = adc_buffer[1];
-	g_globalCANVariables.Analog2 = adc_buffer[2];
-	g_globalCANVariables.Analog3 = adc_buffer[3];
-	g_globalCANVariables.Analog4 = adc_buffer[4];
-	g_globalCANVariables.Analog5 = adc_buffer[5];
-	g_globalCANVariables.Analog6 = adc_buffer[6];
-	g_globalCANVariables.Analog7 = adc_buffer[7];
-	g_globalCANVariables.Analog8 = adc_buffer[8];
-	g_globalCANVariables.Analog9 = adc_buffer[9];
-	g_globalCANVariables.Analog10 = adc_buffer[10];
-	g_globalCANVariables.Analog11 = adc_buffer[11];
+	g_globalNETVVariables.Analog0 = adc_buffer[0];
+	g_globalNETVVariables.Analog1 = adc_buffer[1];
+	g_globalNETVVariables.Analog2 = adc_buffer[2];
+	g_globalNETVVariables.Analog3 = adc_buffer[3];
+	g_globalNETVVariables.Analog4 = adc_buffer[4];
+	g_globalNETVVariables.Analog5 = adc_buffer[5];
+	g_globalNETVVariables.Analog6 = adc_buffer[6];
+	g_globalNETVVariables.Analog7 = adc_buffer[7];
+	g_globalNETVVariables.Analog8 = adc_buffer[8];
+	g_globalNETVVariables.Analog9 = adc_buffer[9];
+	g_globalNETVVariables.Analog10 = adc_buffer[10];
+	g_globalNETVVariables.Analog11 = adc_buffer[11];
 	
 	//Pre-computed analog values:	
-	g_globalCANVariables.Temp = adc_get_temp();
-	g_globalCANVariables.Amp = adc_buffer[8] - 512;
+	g_globalNETVVariables.Temp = adc_get_temp();
+	g_globalNETVVariables.Amp = adc_buffer[8] - 512;
 }
 
 
