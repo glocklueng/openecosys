@@ -105,10 +105,16 @@ CANDevice::State SerialEmulator::sendMessage(LABORIUS_MESSAGE &message)
 
 CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
 {
+
+    qDebug("CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)");
+
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     CANDevice::State returnState = CANDevice::CANDEVICE_FAIL;
 
-    if ( m_serialPort)
+    bool acquire = m_recvSemaphore.tryAcquire(1,10); //try acquire for 10ms
+
+
+    if ( m_serialPort && acquire)
     {
         //not yet received messages
         returnState = CANDevice::CANDEVICE_OVERFLOW;
@@ -236,6 +242,10 @@ void SerialEmulator::serialReadyRead()
                 m_recvQueueMutex.lock();
                 m_recvQueue.push_back(msg);
                 m_recvQueueMutex.unlock();
+
+                //release one message
+                m_recvSemaphore.release(1);
+
             }
             else
             {
