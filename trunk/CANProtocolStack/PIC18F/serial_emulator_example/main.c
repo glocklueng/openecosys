@@ -1,6 +1,6 @@
-#include "..\CAN18_Serial.h"
-#include "..\CAN18_Device.h"
-#include "..\CAN18_Shared.h"
+#include "NETV8_SerialDriver.h"
+#include "NETV8_Device.h"
+#include "NETV8_Shared.h"
 #include <delays.h>
 #include <string.h>
 #include "usart.h"
@@ -50,16 +50,16 @@ void low_interrupt (void)
 }
 
 
-void can_proc_message(CAN_MESSAGE *message)
+void netv_proc_message(NETV_MESSAGE *message)
 {
     //Handle custom messages...
 }
 
 void init_default_variables(void)
 {
-    memset(&g_globalCANVariables, 0, sizeof(GlobalCANVariables));
-    //g_globalCANVariables.Var1 = 0;
-    //g_globalCANVariables.Var2 = 5;
+    memset(&g_globalNETVVariables, 0, sizeof(GlobalNETVVariables));
+    //g_globalNETVVariables.Var1 = 0;
+    //g_globalNETVVariables.Var2 = 5;
 }
 
 
@@ -87,13 +87,13 @@ void main(void)
 	buffer = getc_usart1();		//S'assure que le buffer est vide
     
     //reading boot config and device configuration
-    //MUST BE DONE BEFORE INITIALIZING CAN MODULE
-    bootConfig = can_get_boot_config();
+    //MUST BE DONE BEFORE INITIALIZING NETV MODULE
+    bootConfig = netv_get_boot_config();
 
     if (bootConfig)
     {
             //read configuration
-            can_read_boot_config(bootConfig);
+            netv_read_boot_config(bootConfig);
 
             //safety
             bootConfig->module_state = BOOT_NORMAL;
@@ -112,14 +112,14 @@ void main(void)
                     bootConfig->module_id = 1;
 
                     //Writing back the boot config for the next version
-                    can_write_boot_config(bootConfig);
+                    netv_write_boot_config(bootConfig);
 
                     //set variables to zero
                     init_default_variables();
             }
     }
 
-    //UPDATE CAN ADDRESS
+    //UPDATE NETV ADDRESS
     canAddr = bootConfig->module_id;
     
    	//Interrupts:
@@ -130,8 +130,8 @@ void main(void)
     while (1)
     {
         //Right now will never come out of this function (blocking on serial port)
-        can_transceiver(canAddr);
-        g_globalCANVariables.Var1++;
+        netv_transceiver(canAddr);
+        g_globalNETVVariables.Var1++;
     }
 }
 
