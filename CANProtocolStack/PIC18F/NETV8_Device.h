@@ -1,5 +1,5 @@
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)
@@ -26,16 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 //Include user board support package from external project
 #include "bsp.h"
-
-#if 0
-//Change the device as needed here...
-#include <p18f44k22.h>
-//#include <p18f4580.h>
-
-#define DEVID_BASE_ADDRESS 0x3FFFFE
-
-#endif
-
 
 #endif
 

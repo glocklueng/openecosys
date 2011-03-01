@@ -1,5 +1,5 @@
 /*
-The OpenEcoSys project / CANProtocolStack
+The OpenEcoSys project / NETVProtocolStack
 Copyright (C) 2011  IntRoLab - Universite de Sherbrooke
 
 Author(s)

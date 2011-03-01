@@ -1,14 +1,14 @@
 [HEADER]
 magic_cookie={66E99B07-E706-4689-9E80-9B2582898A13}
 file_version=1.0
-device=PIC18F2580
+device=PIC18F4580
 [PATH_INFO]
 BuildDirPolicy=BuildDirIsProjectDir
 dir_src=
 dir_bin=
 dir_tmp=
 dir_sin=
-dir_inc=C:\Program Files\Microchip\mplabc18\v3.37.01\h;..
+dir_inc=..\;C:\Program Files\Microchip\mplabc18\v3.37.01\h
 dir_lib=C:\Program Files\Microchip\mplabc18\v3.37.01\lib
 dir_lkr=
 [CAT_FILTERS]
@@ -18,21 +18,21 @@ filter_obj=*.o
 filter_lib=*.lib
 filter_lkr=*.lkr
 [CAT_SUBFOLDERS]
-subfolder_src=CANLibrary
-subfolder_inc=CANLibrary
+subfolder_src=NETV
+subfolder_inc=NETV
 subfolder_obj=
 subfolder_lib=
 subfolder_lkr=
 [FILE_SUBFOLDERS]
-file_000=CANLibrary
-file_001=CANLibrary
+file_000=NETV
+file_001=NETV
 file_002=.
-file_003=CANLibrary
-file_004=CANLibrary
-file_005=CANLibrary
-file_006=CANLibrary
-file_007=CANLibrary
-file_008=CANLibrary
+file_003=NETV
+file_004=NETV
+file_005=NETV
+file_006=NETV
+file_007=NETV
+file_008=NETV
 file_009=.
 [GENERATED_FILES]
 file_000=no
@@ -57,16 +57,16 @@ file_007=no
 file_008=no
 file_009=no
 [FILE_INFO]
-file_000=..\CAN18_Driver.c
-file_001=..\CAN18_Shared.c
+file_000=..\NETV8_CANDriver.c
+file_001=..\NETV8_Shared.c
 file_002=main.c
-file_003=..\CAN18_Common.c
-file_004=..\CAN18_Device.h
-file_005=..\CAN18_Driver.h
-file_006=..\CAN18_Shared.h
-file_007=..\CAN18_Utils.h
-file_008=C..\CAN18_Common.h
-file_009=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\LKR\18f2580_g.lkr
+file_003=..\NETV8_Common.c
+file_004=..\NETV8_Device.h
+file_005=..\NETV8_CANDriver.h
+file_006=..\NETV8_Shared.h
+file_007=..\NETV8_Utils.h
+file_008=..\NETV8_Common.h
+file_009=bsp.h
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=
@@ -84,9 +84,3 @@ Pre-Build=
 Pre-BuildEnabled=1
 Post-Build=
 Post-BuildEnabled=1
-[TOOL_LOCKING]
-ToolsAreLocked=1
-T{49D3CA3F-D9A3-4518-9943-226A347E8CC7}=C:\Program Files\Microchip\mplabc18\v3.37.01\mpasm\mpasmwin.exe
-T{96C98149-AA1B-4CF9-B967-FAE79CAB663C}=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\mplink.exe
-T{E56A1C86-9D32-4DF6-8C34-FE0388B1B644}=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\mcc18.exe
-T{8DF337E3-D4EF-4566-8F67-3798A3412C47}=C:\Program Files\Microchip\mplabc18\v3.37.01\bin\mplib.exe
