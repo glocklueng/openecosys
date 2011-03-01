@@ -21,23 +21,15 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CAN18_SHARED_H_
-#define _CAN18_SHARED_H_
+#ifndef _CAN18_SHARED_UCONTROL_H_
+#define _CAN18_SHARED_UCONTROL_H_
 
 #include "CAN18_Utils.h"
 
-//Include user board support package from external project
-#include "bsp.h"
 
-#if 0
-
-
-//this is the sample content of bsp.h
 #define MODULE_TABLE_VERSION 0x02
 #define MODULE_PROJECT_ID 0x01
 #define MODULE_CODE_VERSION 0x01
-
-#define DEVID_BASE_ADDRESS 0x3FFFFE
 
 /**
 	Define all the variables here to be accessible to the CAN protocol.
@@ -58,21 +50,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 typedef struct 
 {
-    uint8 	Var1;
-	uint16 	Var2;
-	uint32 	Var3;
-	sint8	Var4;
-	sint16	Var5;
-	sint32	Var6;
-	float	Var7;	
-	double 	Var8;
+		uint16 	FlashRate;
+		uint8 	Count;
+		uint8	Free;
+		uint16	Analog0;
+		uint16	Analog1;
+		uint16	Analog2;
+		uint16	Analog3;
+		uint16	Analog4;
+		uint16	Analog5;
+		uint16	Analog6;
+		uint16	Analog7;
+		uint16	Analog8;
+		uint16	Analog9;
+		uint16	Analog10;
+		uint16	Analog11;
+		uint16 	Temp;
+		sint16	Amp;
+		uint16	Volt1;
+		uint16	Volt2;
 
 } GlobalCANVariables;
-
-#endif
-
-
-//This external variable will hold the data
-extern GlobalCANVariables g_globalCANVariables;
 
 #endif
