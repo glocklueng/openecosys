@@ -17,7 +17,7 @@
 
 //#include "def.h"
 #include "usart.h"
-#include "..\CAN18_Device.h"
+#include "NETV8_Device.h"
 
 //ToDo:
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
