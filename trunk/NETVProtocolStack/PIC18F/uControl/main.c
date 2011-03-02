@@ -200,13 +200,12 @@ void update_variables(void)
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma code highVector=0x08	// on déclare que lors d'une interruption
+#pragma code highVector=0x08
 void atInterrupthigh(void)
 {
-_asm GOTO Interrupt_High _endasm       // on doit éxecuter le code de la fonction MyHighInterrupt
+_asm GOTO Interrupt_High _endasm
 }
-#pragma code // retour à la zone de code
-
+#pragma code 
 
 #pragma interrupt Interrupt_High
 void Interrupt_High(void)
@@ -214,7 +213,7 @@ void Interrupt_High(void)
 	unsigned char sauv1;
     unsigned char sauv2;
 
-    sauv1 = PRODL; // on sauvegarde le contenu des registres de calcul
+    sauv1 = PRODL; // Save context
     sauv2 = PRODH;       
 	
 	if(PIR1bits.TMR1IF) // Timer1 Interrupt: 10ms
@@ -257,7 +256,7 @@ void Interrupt_High(void)
 		adc_buffer[ADCON0bits.CHS] = ADRES;		
 	}
 				
-	PRODL = sauv1;        // on restaure les registres de calcul
+	PRODL = sauv1; 	//Restore context
     PRODH = sauv2;               
 }
 #pragma code

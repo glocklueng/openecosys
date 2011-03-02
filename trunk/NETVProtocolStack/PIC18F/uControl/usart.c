@@ -41,8 +41,6 @@
 
 void setup_usart1(void)
 {
-
-
 	RCSTA1bits.SPEN = 1;	//Disable serial port
 
 	TXSTA1bits.TX9 = 0;		//8bits transmission
@@ -55,28 +53,21 @@ void setup_usart1(void)
 	RCSTA1bits.CREN = 1;	//Continuous reception
 
 	BAUDCON1bits.BRG16 = 0;	//1 = 16bits
-	SPBRG1 = 16;			//8 = 115200, 16 = 57600, 103 = 9600, 51 = 19200 @ 64MHz
+	SPBRG1 = 51;			//8 = 115200, 16 = 57600, 103 = 9600, 51 = 19200 @ 64MHz
 
 	PIE1bits.RC1IE = 1;		//Enable interrupt on reception
 
 	RCSTA1bits.SPEN = 1;	//Enable serial port
-
-
 }
 
 void putc_usart1(char data)
-{
-	
+{	
   	TXREG1 = data;      	//Write the data byte to the USART1
-
-	
 }
 
 char getc_usart1(void)
-{
-	
-  	return (RCREG1);  		// Return the received data
-	
+{	
+  	return (RCREG1);  		// Return the received data	
 }
 
 char busy_usart1(void)
