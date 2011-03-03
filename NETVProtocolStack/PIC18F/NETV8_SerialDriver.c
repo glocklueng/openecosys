@@ -113,7 +113,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
     //Right now it will be synchronous, need to be event based with interrupts
     for (i = 0; i < sizeof(NETVSerialMessage); i++)
     {
-	    while(!TXSTA1bits.TRMT);
+	    while(busy_usart1());
         putc_usart1(buf.messageBytes[i]);
     }
 
