@@ -167,3 +167,43 @@ void NetworkScheduler::variableActivated(bool activated, ModuleVariable *var)
 
 }
 
+int NetworkScheduler::getAliveRequestInterval()
+{
+    Q_ASSERT(m_aliveTimer);
+    return m_aliveTimer->interval();
+}
+
+int NetworkScheduler::getVariableRequestInterval()
+{
+    Q_ASSERT(m_schedulerTimer);
+    return m_schedulerTimer->interval();
+}
+
+
+void NetworkScheduler::setAliveRequestInterval(int value)
+{
+    if (value > 0)
+    {
+        qDebug("void NetworkScheduler::setAliveRequestInterval(int value = %i)",value);
+        m_aliveTimer->setInterval(value);
+    }
+    else
+    {
+        qDebug("NetworkScheduler::setAliveRequestInterval invalid value : %i",value);
+    }
+}
+
+
+void NetworkScheduler::setVariableRequestInterval(int value)
+{
+    if (value > 0)
+    {
+        qDebug("NetworkScheduler::setVariableRequestInterval(int value = %i)",value);
+        m_schedulerTimer->setInterval(value);
+    }
+    else
+    {
+        qDebug("NetworkScheduler::setVariableRequestInterval invalid value : %i",value);
+    }
+}
+

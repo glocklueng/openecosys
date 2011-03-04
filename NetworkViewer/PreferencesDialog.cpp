@@ -1,7 +1,44 @@
-#include "PreferencesDialog.h"
+/**
+     Copyright (C) 2009-2011 IntRoLab
+     http://introlab.gel.usherbrooke.ca
+     Dominic Letourneau, ing. M.Sc.A.
+     Dominic.Letourneau@USherbrooke.ca
 
-PreferencesDialog::PreferencesDialog(QWidget *parent)
-    : QDialog(parent)
+     This file is part of OpenECoSys/NetworkViewer.
+     OpenECoSys/NetworkViewer is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by the Free Software
+     Foundation, either version 3 of the License, or (at your option) any later version.
+     OpenECoSys/NetworkViewer is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+     or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+     You should have received a copy of the GNU General Public License along with
+     OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
+
+ */
+
+#include "PreferencesDialog.h"
+#include "NetworkView.h"
+
+PreferencesDialog::PreferencesDialog(NetworkView *parent)
+    : QDialog(parent),m_view(parent)
 {
+    //Update dialog
     setupUi(this);
+
+    //Update NetworkScheduler values
+    NetworkScheduler *scheduler = m_view->getNetworkScheduler();
+
+    if (scheduler)
+    {
+        int aliveRequestInterval = scheduler->getAliveRequestInterval();
+        int variableRequestInterval = scheduler->getVariableRequestInterval();
+
+        //Update GUI
+        m_aliveRequestSpinBox->setValue(aliveRequestInterval);
+        m_variableRequestSpinBox->setValue(variableRequestInterval);
+
+        //Connect signals
+        connect(m_aliveRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setAliveRequestInterval(int)));
+        connect(m_variableRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setVariableRequestInterval(int)));
+    }
 }

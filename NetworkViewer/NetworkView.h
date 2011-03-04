@@ -173,6 +173,12 @@ public:
         */
         QMdiSubWindow* createSubWindow(QString title = "Untitled");
 
+        /**
+            \return The currently used NetworkScheduler, NULL if none.
+
+        */
+        NetworkScheduler* getNetworkScheduler();
+
 public slots:
 
         /**
