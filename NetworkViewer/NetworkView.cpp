@@ -24,6 +24,7 @@
 #include <iostream>
 #include <QWebView>
 #include <QFileDialog>
+#include "PreferencesDialog.h"
 
 bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 {
@@ -625,7 +626,8 @@ QList<NetworkModule*> NetworkView::getModules()
 
 void NetworkView::preferencesTriggered(bool checked)
 {
-    qDebug("Preferences");
+    PreferencesDialog prefs;
+    prefs.exec();
 
 }
 
