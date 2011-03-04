@@ -626,9 +626,13 @@ QList<NetworkModule*> NetworkView::getModules()
 
 void NetworkView::preferencesTriggered(bool checked)
 {
-    PreferencesDialog prefs;
+    PreferencesDialog prefs(this);
     prefs.exec();
+}
 
+NetworkScheduler* NetworkView::getNetworkScheduler()
+{
+    return m_scheduler;
 }
 
 void NetworkView::deviceSelectorTriggered(bool checked)

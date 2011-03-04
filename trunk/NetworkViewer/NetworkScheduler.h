@@ -56,6 +56,32 @@ public:
     */
     void removeModule(NetworkModule* module);
 
+    /**
+      \return The alive request interval in ms
+    */
+    int getAliveRequestInterval();
+
+    /**
+        \return The variable request interval in ms
+    */
+    int getVariableRequestInterval();
+
+public slots:
+
+    /**
+        Set the alive request interval
+        \param value the interval in ms
+    */
+    void setAliveRequestInterval(int value);
+
+    /**
+        Set the variable request interval
+        \param value the interval in ms
+    */
+    void setVariableRequestInterval(int value);
+
+
+
 protected slots:
 
     /**
