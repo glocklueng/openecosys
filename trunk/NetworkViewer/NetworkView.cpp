@@ -77,6 +77,9 @@ NetworkView::NetworkView(QWidget *parent)
 
     //Menu actions
     connect(actionDevice_Selection,SIGNAL(triggered(bool)),this,SLOT(deviceSelectorTriggered(bool)));
+    connect(actionPreferences,SIGNAL(triggered(bool)),this,SLOT(preferencesTriggered(bool)));
+
+
     connect(actionTile_Windows,SIGNAL(triggered()),this,SLOT(tileMDIWindows()));
     connect(actionClose_All_Windows,SIGNAL(triggered()),this,SLOT(closeAllMDIWindows()));
     connect(actionCascade_Windows,SIGNAL(triggered()),this,SLOT(cascadeMDIWindows()));
@@ -620,6 +623,11 @@ QList<NetworkModule*> NetworkView::getModules()
 
 }
 
+void NetworkView::preferencesTriggered(bool checked)
+{
+    qDebug("Preferences");
+
+}
 
 void NetworkView::deviceSelectorTriggered(bool checked)
 {
