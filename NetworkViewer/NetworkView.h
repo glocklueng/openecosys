@@ -271,6 +271,12 @@ protected slots:
         */
 	void deviceSelectorTriggered(bool checked);
 
+        /**
+            Preferences  in the menu
+            \param checked if the action is checked
+        */
+        void preferencesTriggered(bool checked);
+
 
         /**
             Update connection statistics

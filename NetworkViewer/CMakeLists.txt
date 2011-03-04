@@ -245,6 +245,7 @@ SET(NetworkViewer_UIS
 	plugins/ScopeView/ScopeVariableConfig.ui
 	TestView.ui
 	DeviceSelectorDialog.ui
+        PreferencesDialog.ui
 )
 
 SET(qrc 

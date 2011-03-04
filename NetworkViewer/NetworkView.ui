@@ -39,6 +39,7 @@
     </property>
     <addaction name="actionDevice_Selection"/>
     <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuPlugin">
@@ -185,6 +186,11 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>
