@@ -214,7 +214,8 @@ SET(NetworkViewer_SRCS
 	BasePlugin.cpp
 	CANDevice.cpp
 	DeviceSelectorDialog.cpp
-    ModuleVariableTableWidget.cpp
+        ModuleVariableTableWidget.cpp
+        PreferencesDialog.cpp
 )
 
 SET(NetworkViewer_HEADERS 
@@ -234,8 +235,9 @@ SET(NetworkViewer_HEADERS
 	CAN_define.h
 	CANDevice.h
 	DeviceSelectorDialog.h
-    NetworkViewerSplashScreen.h
-    ModuleVariableTableWidget.h
+        NetworkViewerSplashScreen.h
+        ModuleVariableTableWidget.h
+        PreferencesDialog.h
 )
 
 SET(NetworkViewer_UIS
@@ -261,9 +263,9 @@ SET (QTVERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
 
 SET (XML_FILES
     config/INTROLAB_J0Pwr.xml
-	config/INTROLAB_Unidrive_v2.xml
-	config/INTROLAB_ReddyHead.xml
-	config/INTROLAB_dsPICDrive.xml
+    config/INTROLAB_Unidrive_v2.xml
+    config/INTROLAB_ReddyHead.xml
+    config/INTROLAB_dsPICDrive.xml
 )
 
 
