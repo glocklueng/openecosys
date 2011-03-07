@@ -6,7 +6,7 @@
 
 //ToDo:
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// => Code some delay routines Delay10KTCYx(0) doesn't exist
+// =>
 
 //Config fuses
 //Refer to p24f16ka101.h for the details

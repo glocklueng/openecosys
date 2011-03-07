@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV16_Shared.h"
 #include "NETV16_Device.h"
 #include "NETV16_Common.h"
-//#include <delays.h>
+#include "delay.h"
 
 // Prototypes
 unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char mem_type, unsigned char *buffer, unsigned int size);
@@ -117,10 +117,10 @@ void netv_transceiver(unsigned char netv_addr)
 				//netv_write_eeprom(0xFF,NETV_BOOT_MODE_ID);
 				
 				//wait 10ms
-				Delay10KTCYx(10);
+				delay_ms(10);
 								
 				//reset!
-				Reset();
+				asm("RESET");	//Reset();
                break;
          }//end switch msg_cmd
 
