@@ -75,3 +75,5 @@ add_library(QextSerialPort SHARED ${QextSerialPort_SRCS} ${QextSerialPort_HEADER
 target_link_libraries(QextSerialPort ${QT_LIBRARIES} ${QextSerialPort_External_Libraries})
 set_target_properties(QextSerialPort PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS QextSerialPort DESTINATION bin)
+INSTALL(TARGETS QextSerialPort DESTINATION lib)
+
