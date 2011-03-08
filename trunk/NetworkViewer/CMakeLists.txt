@@ -359,24 +359,25 @@ IF (APPLE)
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
         target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
+	#set_target_properties(networkViewerBase PROPERTIES FRAMEWORK "true")
 	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
 	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
 
         #NetworkViewer Executable
-        add_executable(NetworkViewer MACOSX_BUNDLE main.cpp)
+        add_executable(NetworkViewer main.cpp)
 	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
 	target_link_libraries(NetworkViewer networkViewerBase)
 	INSTALL(TARGETS NetworkViewer DESTINATION bin)
 
 
         SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING.txt")
-        SET(CPACK_GENERATOR DragNDrop)
+        SET(CPACK_GENERATOR Bundle)
 
         #BUNDLE INFO
+	SET(CPACK_BUNDLE_NAME "NetworkViewer")
         SET(MACOSX_BUNDLE_INFO_STRING "NetworkViewer")
 	SET(CPACK_PACKAGE_DEFAULT_LOCATION "/Applications")
-	SET(CPACK_BUNDLE_PLIST "FlowDesigner.plist")
 	SET(CPACK_BUNDLE_ICON "NetworkViewer.icns")
 	SET(CPACK_PACKAGE_ICON "NetworkViewer.icns")
         SET(MACOSX_BUNDLE_GUI_IDENTIFIER "NetworkViewer")
@@ -385,7 +386,7 @@ IF (APPLE)
         SET(MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}")
         SET(MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}")
         SET(MACOSX_BUNDLE_COPYRIGHT "README.txt")
-        SET(MACOSX_BUNDLE_INFO_PLIST "NetworkViewer.plist")
+        SET(CPACK_BUNDLE_PLIST "NetworkViewer.plist")
 	SET(CPACK_BUNDLE_STARTUP_COMMAND "start_osx.sh")
 
 
