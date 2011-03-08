@@ -120,8 +120,8 @@ unsigned char netv_recv_message(NETV_MESSAGE *message);
 
 void netv_send_im_alive(unsigned char netv_addr);
 void netv_transceiver(unsigned char netv_addr);
-void netv_write_eeprom(unsigned char addr, unsigned char data);
-unsigned char netv_read_eeprom(unsigned char addr);
+void netv_write_eeprom(unsigned int addr, unsigned int data);
+unsigned int netv_read_eeprom(unsigned int addr);
 
 //This function needs to be defined in your code to handle custom messages
 extern void netv_proc_message(NETV_MESSAGE *message);

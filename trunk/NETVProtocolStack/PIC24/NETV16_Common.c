@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV16_Shared.h"
 #include "NETV16_Device.h"
 #include "NETV16_Common.h"
+#include "NETV16_Memory.h"
 #include "delay.h"
 
 // Prototypes
@@ -41,12 +42,28 @@ BootConfig g_BootConfig;
 //Const pointer to changeable data
 volatile unsigned char * const DATA_FLOW_TABLE = (unsigned char*) &g_globalNETVVariables;
 
+/*******************************************************************
+READ EEPROM
+ *******************************************************************/
+unsigned int netv_read_eeprom(unsigned int index) 
+{ 
+	return  ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + (index << 1));
+} 
+
+/*******************************************************************
+WRITE EEPROM
+ *******************************************************************/
+void netv_write_eeprom(unsigned int index, unsigned int data) 
+{ 	
+	WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + (index << 1),&data,1);
+} 
+
 
 /*******************************************************************
 READ EEPROM
  *******************************************************************/
-unsigned char netv_read_eeprom(unsigned char addr) 
-{ 
+//unsigned char netv_read_eeprom(unsigned char addr) 
+//{ 
 	//TODO
 	/*
 	volatile unsigned char eepTemp; 	
@@ -57,13 +74,13 @@ unsigned char netv_read_eeprom(unsigned char addr)
 	eepTemp = EEDATA; 
 	return eepTemp; 
 	*/
-} 
+//} 
 
 /*******************************************************************
 WRITE EEPROM
  *******************************************************************/
-void netv_write_eeprom(unsigned char addr, unsigned char data) 
-{ 	
+//void netv_write_eeprom(unsigned char addr, unsigned char data) 
+//{ 	
 	//TODO
 	/*    
     __asm__ volatile ("disi #0x3FFF"); //disable interrupts	
@@ -79,7 +96,7 @@ void netv_write_eeprom(unsigned char addr, unsigned char data)
 	//enable interrupts
 	__asm__ volatile ("disi #0x000"); //Enable interrupts
 	*/
-} 
+//} 
 
 
 //////////////////////////////////////////////////////////////////////
@@ -99,7 +116,7 @@ void netv_write_eeprom(unsigned char addr, unsigned char data)
 void netv_transceiver(unsigned char netv_addr)
 {
    NETV_MESSAGE g_rMessage;
-   unsigned char buffer_size = 0;
+//   unsigned char buffer_size = 0;
    unsigned int offset = 0;
   
 
@@ -358,13 +375,13 @@ unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char me
 }
 
 
-unsigned char table_read(void)
-{
-     _asm
-         TBLRDPOSTINC
-     _endasm
-     return TABLAT;
-}
+//unsigned char table_read(void)
+//{
+//     _asm
+//         TBLRDPOSTINC
+//     _endasm
+//     return TABLAT;
+//}
 
 void netv_read_boot_config(BootConfig *config)
 {
@@ -372,28 +389,34 @@ void netv_read_boot_config(BootConfig *config)
 
 	if (config)
 	{
-		config->module_state  = netv_read_eeprom(0);
-		config->project_id  = netv_read_eeprom(1);
-		config->module_id  = netv_read_eeprom(2);
-		config->code_version  = netv_read_eeprom(3);
-		config->table_version = netv_read_eeprom(4);
-		config->boot_delay  = netv_read_eeprom(5);
+		config->module_state  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW);
+		config->project_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 2);
+		config->module_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 4);
+		config->code_version  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 6);
+		config->table_version = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 8);
+		config->boot_delay  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 10);
 
 		//read devid
-		TBLPTR = DEVID_BASE_ADDRESS;
-		config->devid_low = table_read();
-		config->devid_high = table_read();
+		devid = ReadMem(0xFF,0x0000);
+		config->devid_low = devid & 0x00FF;
+		config->devid_high = devid >> 8;
+
 	}
 }
 
 void netv_write_boot_config(BootConfig *config)
 {
-	unsigned char i = 0;
-
 	if (config)
 	{
 
-		unsigned int data[8]; 
+		unsigned int data[16]; //first page of data
+		unsigned int addrlow = 0;
+
+		//READING MEMORY
+		for (addrlow = 0; addrlow < 32; addrlow += 2)
+		{
+			data[addrlow >> 1] = ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + addrlow);
+		}
 
 		data[0] = config->module_state;
 		data[1] = config->project_id;
@@ -401,21 +424,15 @@ void netv_write_boot_config(BootConfig *config)
 		data[3] = config->code_version;
 		data[4] = config->table_version;
 		data[5] = config->boot_delay;
-	
-		//DEVID DOES NOT NEED TO BE WRITTEN, BUT WE DO IT ANYWAY!
-		TBLPTR = DEVID_BASE_ADDRESS;
-		data[6] = table_read();
-		data[7] = table_read();
+		//DEVID DOES NOT NEED TO BE WRITTEN!
 
-		for (i = 0; i<8; i++)
-		{
-			netv_write_eeprom(i,data[i]);
-		}
+		//WRITING BACK PAGE
+		WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW,data,16);
+
 	}
 }
 
-BootConfig* netv_get_boot_config(void)
+BootConfig* netv_get_boot_config()
 {
 	return &g_BootConfig;
 }
-

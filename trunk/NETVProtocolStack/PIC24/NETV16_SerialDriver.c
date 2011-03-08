@@ -3,7 +3,7 @@
 #include "NETV16_Shared.h"
 #include "NETV16_Utils.h"
 #include "usart.h"
-#include <delays.h>
+#include "delay.h"
 
 
 //memory buffer
@@ -53,9 +53,9 @@ void serial_usart_interrupt_handler(void)
 unsigned int serial_bytes_available(void)
 {
 	unsigned int available = 0;
-	INTCONbits.GIEH = 0; //disable interrupts
+	__asm__ volatile ("disi #0x3FFF"); //disable interrupts
 	available = g_availableBytes;
-	INTCONbits.GIEH = 1; //enable interrupts
+	__asm__ volatile ("disi #0x000"); //Enable interrupts
 	return available;
 }
 
@@ -113,7 +113,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
     //Right now it will be synchronous, need to be event based with interrupts
     for (i = 0; i < sizeof(NETVSerialMessage); i++)
     {
-	    while(!TXSTA1bits.TRMT);
+	    while(busy_usart1());
         putc_usart1(buf.messageBytes[i]);
     }
 
@@ -160,9 +160,9 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 
 
 			//One less message available
-			INTCONbits.GIEH = 0; //disable interrupts
+			__asm__ volatile ("disi #0x3FFF");//Disable interrupts
 			g_availableBytes -= sizeof(NETVSerialMessage);
-			INTCONbits.GIEH = 1; //enable interrupts
+			__asm__ volatile ("disi #0x000"); //Enable interrupts
 
 
 			//Verify checksum
@@ -209,9 +209,9 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			g_readIndex = (g_readIndex + 1) % RX_BUFFER_SIZE;
 			
 			//One less byte available
-			INTCONbits.GIEH = 0; //disable interrupts
+			__asm__ volatile ("disi #0x3FFF"); //Disable interrupts
 			g_availableBytes--;
-			INTCONbits.GIEH = 1; //enable interrupts
+			__asm__ volatile ("disi #0x000"); //Enable interrupts
 
 			return 0;
 		}
