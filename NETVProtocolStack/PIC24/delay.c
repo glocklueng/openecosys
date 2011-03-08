@@ -46,7 +46,6 @@ void delay_s(unsigned int t)
 //==========================================================================================//
 void delay_us(unsigned int t)
 {
-	unsigned int time = 0;
 	unsigned int repeat = 0;
 	
 	for(repeat = 0; repeat < t; repeat++);	//Environ 1.75µs	

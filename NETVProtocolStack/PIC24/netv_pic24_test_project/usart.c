@@ -1,4 +1,4 @@
-#include "suart.h"
+#include "usart.h"
 #include "def.h"
 
 //Important: this code compiles but has never been tested on real hardware!

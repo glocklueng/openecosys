@@ -2,6 +2,7 @@
 #include "NETV16_SerialDriver.h"
 #include "NETV16_Device.h"
 #include "NETV16_Shared.h"
+#include "NETV16_Memory.h"
 
 
 //ToDo:
