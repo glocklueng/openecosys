@@ -1,4 +1,4 @@
-PROJECT (OpenEcoSys-NetworkViewer)
+PROJECT (OpenECoSys-NetworkViewer)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -339,7 +339,7 @@ IF (WIN32)
         ############################
         SET(CPACK_SOURCE_GENERATOR "ZIP")
         SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt")
-        SET(CPACK_PACKAGE_NAME "OpenEcoSys-NetworkViewer")
+        SET(CPACK_PACKAGE_NAME "OpenECoSys-NetworkViewer")
         SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "NetworkViewer")
         SET(CPACK_PACKAGE_VENDOR "Dominic Letourneau")
         SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
@@ -347,7 +347,7 @@ IF (WIN32)
         SET(CPACK_PACKAGE_INSTALL_DIRECTORY "NetworkViewer-${CPACK_PACKAGE_VERSION}")
         SET(CPACK_NSIS_URL_INFO_ABOUT "http://introlab.gel.usherbrooke.ca")
         SET(CPACK_NSIS_CONTACT "dominic.letourneau@usherbrooke.ca")
-        SET(CPACK_NSIS_MODIFY_PATH ON)
+        SET(CPACK_NSIS_MODIFY_PATH OFF)
         SET(CPACK_PACKAGE_EXECUTABLES "NetworkViewer" "NetworkViewer")
 
         INCLUDE(CPack)
