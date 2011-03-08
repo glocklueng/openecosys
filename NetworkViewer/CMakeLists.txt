@@ -364,7 +364,7 @@ IF (APPLE)
 
 
         #NetworkViewer Executable
-        add_executable(NetworkViewer main.cpp)
+        add_executable(NetworkViewer MACOSX_BUNDLE main.cpp)
 	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
 	target_link_libraries(NetworkViewer networkViewerBase)
 	INSTALL(TARGETS NetworkViewer DESTINATION bin)
@@ -375,14 +375,20 @@ IF (APPLE)
 
         #BUNDLE INFO
         SET(MACOSX_BUNDLE_INFO_STRING "NetworkViewer")
-        SET(MACOSX_BUNDLE_ICON_FILE "NetworkViewer.icns")
+	SET(CPACK_PACKAGE_DEFAULT_LOCATION "/Applications")
+	SET(CPACK_BUNDLE_PLIST "FlowDesigner.plist")
+	SET(CPACK_BUNDLE_ICON "NetworkViewer.icns")
+	SET(CPACK_PACKAGE_ICON "NetworkViewer.icns")
         SET(MACOSX_BUNDLE_GUI_IDENTIFIER "NetworkViewer")
         SET(MACOSX_BUNDLE_LONG_VERSION_STRING "NetworkViewer-${CPACK_PACKAGE_VERSION}")
         SET(MACOSX_BUNDLE_BUNDLE_NAME "NetworkViewer.app")
         SET(MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}")
         SET(MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}")
         SET(MACOSX_BUNDLE_COPYRIGHT "README.txt")
-        SET(MACOSX_BUNDLE_INFO_PLIST "Info.plist")
+        SET(MACOSX_BUNDLE_INFO_PLIST "NetworkViewer.plist")
+	SET(CPACK_BUNDLE_STARTUP_COMMAND "start_osx.sh")
+
+
 
         INCLUDE(CPack)
 
