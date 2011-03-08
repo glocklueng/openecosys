@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>NetworkViewerStartup</string>
+	<string>NetworkViewer</string>
 	<key>CFBundleGetInfoString</key>
 	<string>NetworkViewer App</string>
 	<key>CFBundleIconFile</key>
