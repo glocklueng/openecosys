@@ -22,4 +22,52 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "NETV16_Memory.h"
+#include "bsp.h"
 
+int __attribute__ ((space(eedata))) eeData = 0x1234; // Variable located in EEPROM  //Used as the base address
+
+
+unsigned int WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size)
+{
+	Nop(); //ToDo: link this function to ee_write
+	return 0;
+}
+
+unsigned long ReadMem(unsigned int addr_high, unsigned int addr_low)
+{
+	Nop();	//ToDo
+	return 0;
+}
+
+
+//Write a value at adress EepromBase (0x7FFE00) + Offset
+void ee_word_write(unsigned int offset, int data)
+{
+	unsigned int memory_case;
+
+	// Set up NVMCON to erase one word of data EEPROM
+	NVMCON = 0x4004;
+	
+	// Set up a pointer to the EEPROM location to be erased
+	TBLPAG = __builtin_tblpage(&eeData); // Initialize EE Data page pointer
+	memory_case = __builtin_tbloffset(&eeData)+offset; // Initialize lower word of address
+	
+	__builtin_tblwtl(memory_case, data); // Write EEPROM data to write latch
+	
+	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions
+	__builtin_write_NVM(); // Issue Unlock Sequence & Start Write Cycle
+}
+
+//Read a value from adress EepromBase (0x7FFE00) + Offset
+int ee_word_read(unsigned int offset)
+{
+	unsigned int memory_case;
+	int data;
+
+	// Set up a pointer to the EEPROM location to be erased
+	TBLPAG = __builtin_tblpage(&eeData); // Initialize EE Data page pointer
+	memory_case = __builtin_tbloffset(&eeData)+offset; // Initialize lower word of address
+	data = __builtin_tblrdl(memory_case); // Write EEPROM data to write latch
+
+	return data;
+}
