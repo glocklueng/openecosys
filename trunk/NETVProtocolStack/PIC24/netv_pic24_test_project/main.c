@@ -31,6 +31,9 @@ void update_variables(void);
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+//EEPROM Test
+int newData, readData; // New data to write to EEPROM
+unsigned int newOffset;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
@@ -45,6 +48,15 @@ int main(void)
 	//Initial configuration
 	setup_oscillator();
 	config();
+	
+	//EEPROM Test (to remove)
+	while(1)
+	{
+		newData += 1;
+		newOffset+=2;
+		ee_word_write(newOffset, newData);
+		readData = ee_word_read(newOffset);
+	}
 
     //reading boot config and device configuration
     //MUST BE DONE BEFORE INITIALIZING NETV MODULE

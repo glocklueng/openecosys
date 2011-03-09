@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 	If you read flash memory, you will get a 32 bits value with 0x00HHMMLL (24 bits instruction)
 	If you read eeprom/config/devid value, you will get a 16 bit value with 0x0000MMLL (16 bits data)
 */
-extern unsigned long ReadMem(unsigned int addr_high, unsigned int addr_low);
+unsigned long ReadMem(unsigned int addr_high, unsigned int addr_low);
 
 /*
 	THIS FUNCTION IS IN ASSEMBLY IN THE FILE eeprom_flash.s
@@ -66,6 +66,10 @@ extern unsigned long ReadMem(unsigned int addr_high, unsigned int addr_low);
 	--------->Not yet implemented for security reasons
 
 */
-extern unsigned int WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size);
+unsigned int WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size);
+
+//Built-in functions:
+void ee_word_write(unsigned int offset, int data);
+int ee_word_read(unsigned int offset);
 
 #endif
