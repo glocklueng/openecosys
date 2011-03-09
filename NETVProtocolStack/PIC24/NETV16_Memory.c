@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "NETV16_Memory.h"
 #include "bsp.h"
+#include <libpic30.h>
 
 int __attribute__ ((space(eedata))) eeData = 0x1234; // Variable located in EEPROM  //Used as the base address
 
@@ -46,6 +47,8 @@ unsigned long ReadMem(unsigned int offset)
 //Write a value at adress EepromBase (0x7FFE00) + Offset
 void ee_word_write(unsigned int offset, int data)
 {
+
+/**
 	unsigned int memory_case;
 
 	// Set up NVMCON to erase one word of data EEPROM
@@ -59,6 +62,14 @@ void ee_word_write(unsigned int offset, int data)
 	
 	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions
 	__builtin_write_NVM(); // Issue Unlock Sequence & Start Write Cycle
+*/
+	_prog_addressT p;
+	_init_prog_address(p, eeData);
+	p += offset;
+	_erase_eedata(p,_EE_WORD);	
+	_wait_eedata();
+	_write_eedata_word(p,data);	
+	_wait_eedata();
 }
 
 //Read a value from adress EepromBase (0x7FFE00) + Offset
