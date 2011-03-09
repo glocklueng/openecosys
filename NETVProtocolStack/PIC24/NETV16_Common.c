@@ -387,7 +387,6 @@ unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char me
 void netv_read_boot_config(BootConfig *config)
 {
 	unsigned int devid = 0;
-	_prog_addressT prog_addr = 0xFF0000;
 
 	if (config)
 	{
@@ -399,9 +398,9 @@ void netv_read_boot_config(BootConfig *config)
 		config->boot_delay  = (unsigned char) ReadMem(10);
 
 		//read devid
-//		devid = ReadMem(0xFF,0x0000);		//Problem here, to correct!
-		_memcpy_p2d16(&devid, prog_addr, 1);//Fix?
-		config->devid_low = devid & 0x00FF;
+        TBLPAG = 0xFF;
+        devid = __builtin_tblrdl (0x0000);	
+		config->devid_low = devid;
 		config->devid_high = devid >> 8;
 
 	}
