@@ -27,16 +27,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 int __attribute__ ((space(eedata))) eeData = 0x1234; // Variable located in EEPROM  //Used as the base address
 
 
-unsigned int WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size)
+unsigned int WriteMem(unsigned int offset, unsigned int* dataPtr, unsigned int size)
 {
-	Nop(); //ToDo: link this function to ee_write
+	while(size--)
+	{
+		ee_word_write(offset, (*dataPtr++));
+		offset += 2;	//1 word
+	}
 	return 0;
 }
 
-unsigned long ReadMem(unsigned int addr_high, unsigned int addr_low)
+unsigned long ReadMem(unsigned int offset)
 {
-	Nop();	//ToDo
-	return 0;
+	return ee_word_read(offset);
 }
 
 
@@ -50,7 +53,7 @@ void ee_word_write(unsigned int offset, int data)
 	
 	// Set up a pointer to the EEPROM location to be erased
 	TBLPAG = __builtin_tblpage(&eeData); // Initialize EE Data page pointer
-	memory_case = __builtin_tbloffset(&eeData)+offset; // Initialize lower word of address
+	memory_case = __builtin_tbloffset(&eeData) + offset; // Initialize lower word of address
 	
 	__builtin_tblwtl(memory_case, data); // Write EEPROM data to write latch
 	
