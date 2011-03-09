@@ -47,7 +47,7 @@ READ EEPROM
  *******************************************************************/
 unsigned int netv_read_eeprom(unsigned int index) 
 { 
-	return  ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + (index << 1));
+	return  ReadMem(index << 1);
 } 
 
 /*******************************************************************
@@ -55,7 +55,7 @@ WRITE EEPROM
  *******************************************************************/
 void netv_write_eeprom(unsigned int index, unsigned int data) 
 { 	
-	WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + (index << 1),&data,1);
+	WriteMem((index << 1),&data,1);
 } 
 
 
@@ -389,15 +389,15 @@ void netv_read_boot_config(BootConfig *config)
 
 	if (config)
 	{
-		config->module_state  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW);
-		config->project_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 2);
-		config->module_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 4);
-		config->code_version  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 6);
-		config->table_version = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 8);
-		config->boot_delay  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 10);
+		config->module_state  = (unsigned char) ReadMem(0);
+		config->project_id  = (unsigned char) ReadMem(2);
+		config->module_id  = (unsigned char) ReadMem(4);
+		config->code_version  = (unsigned char) ReadMem(6);
+		config->table_version = (unsigned char) ReadMem(8);
+		config->boot_delay  = (unsigned char) ReadMem(10);
 
 		//read devid
-		devid = ReadMem(0xFF,0x0000);
+//		devid = ReadMem(0xFF,0x0000);								//Problem here, to correct!
 		config->devid_low = devid & 0x00FF;
 		config->devid_high = devid >> 8;
 
@@ -415,7 +415,7 @@ void netv_write_boot_config(BootConfig *config)
 		//READING MEMORY
 		for (addrlow = 0; addrlow < 32; addrlow += 2)
 		{
-			data[addrlow >> 1] = ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + addrlow);
+			data[addrlow >> 1] = ReadMem(addrlow);
 		}
 
 		data[0] = config->module_state;
@@ -427,7 +427,7 @@ void netv_write_boot_config(BootConfig *config)
 		//DEVID DOES NOT NEED TO BE WRITTEN!
 
 		//WRITING BACK PAGE
-		WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW,data,16);
+		WriteMem(0,data,16);
 
 	}
 }

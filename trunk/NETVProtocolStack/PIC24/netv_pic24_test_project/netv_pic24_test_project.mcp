@@ -122,7 +122,7 @@ file_019=NETV16_Shared_test.h
 file_020=bsp.h
 file_021=..\NETV16_Memory.h
 file_022=..\delay.h
-file_023=C:\Program Files\Microchip\mplabc30\v3.25\support\PIC24F\gld\p24F16KA101.gld
+file_023=p24F16KA101.gld
 [SUITE_INFO]
 suite_guid={479DDE59-4D56-455E-855E-FFF59A3DB57E}
 suite_state=
