@@ -3,7 +3,7 @@
 #include "NETV16_Shared.h"
 #include "NETV16_Utils.h"
 #include "usart.h"
-#include "delay.h"
+
 
 
 //memory buffer

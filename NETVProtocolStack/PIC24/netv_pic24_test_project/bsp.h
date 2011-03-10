@@ -3,6 +3,7 @@
 
 #include <p24f16ka101.h>
 
+#define FCY 30000000
 #include "NETV16_Shared_test.h"
 
 #define DEVID_BASE_ADDRESS 0x3FFFFE
