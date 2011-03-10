@@ -90,25 +90,13 @@ void NetworkScheduler::addModule(NetworkModule* module)
         for (int i = 0; i < conf->size(); i++)
         {
             //Make sure variable is scheduled only once
-            if (!m_variableScheduleList.contains((*conf)[i]))
-            {
-
-                if ((*conf)[i]->getMemType() < ModuleVariable::SCRIPT_VARIABLE)
-                {
-                    qDebug() << "Adding to scheduler " << (*conf)[i]->getName() << " device id: "<<(*conf)[i]->getDeviceID();
-                    m_variableScheduleList.push_back((*conf)[i]);
-
-                    //Connect variable activation change
-                    connect((*conf)[i],SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableActivated(bool,ModuleVariable*)));
-                }
-            }
+            addScheduledVariable((*conf)[i]);
         }
-
-
     }
 
     //If new variables are available, shedule them
     connect(module->getConfiguration(),SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(addScheduledVariable(ModuleVariable*)));
+
 }
 
 void NetworkScheduler::removeModule(NetworkModule* module)
@@ -145,9 +133,24 @@ void NetworkScheduler::addScheduledVariable(ModuleVariable *var)
         //Connect variable activation change
         connect(var,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableActivated(bool,ModuleVariable*)));
 
+        //Connect variable for auto removal when destroyed
+        connect(var,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeScheduledVariable(ModuleVariable*)));
+
         m_variableScheduleList.push_back(var);
     }
 }
+
+
+void NetworkScheduler::removeScheduledVariable(ModuleVariable *var)
+{
+    qDebug() << "Removing (OLD) variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
+
+    if (m_variableScheduleList.contains(var))
+    {
+        m_variableScheduleList.removeAll(var);
+    }
+}
+
 
 void NetworkScheduler::variableActivated(bool activated, ModuleVariable *var)
 {

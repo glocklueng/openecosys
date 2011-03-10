@@ -90,6 +90,13 @@ protected slots:
     */
     void addScheduledVariable(ModuleVariable *var);
 
+
+    /**
+        Remove a variable from scheduling
+        \param var the variable to remove from schedule
+    */
+    void removeScheduledVariable(ModuleVariable *var);
+
     /**
         Called by the timer m_schedulerTimer (periodic)
         Will schedule variables to be updated

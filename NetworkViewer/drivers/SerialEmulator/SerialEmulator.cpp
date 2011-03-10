@@ -214,7 +214,7 @@ void SerialEmulator::serialReadyRead()
         }
 
 
-        Q_ASSERT(array.size() % sizeof(CANSerialMessager) == 0);
+        Q_ASSERT(array.size() % sizeof(CANSerialMessage) == 0);
 	
         for (int i = 0; i < array.size(); i+= sizeof(CANSerialMessage))
 	{
