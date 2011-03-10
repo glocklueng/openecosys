@@ -411,25 +411,20 @@ void netv_write_boot_config(BootConfig *config)
 	if (config)
 	{
 
-		unsigned int data[16]; //first page of data
-		unsigned int addrlow = 0;
-
-		//READING MEMORY
-		for (addrlow = 0; addrlow < 32; addrlow += 2)
-		{
-			data[addrlow >> 1] = ReadMem(addrlow);
-		}
-
+		unsigned int data[sizeof(BootConfig)]; //first page of data
 		data[0] = config->module_state;
 		data[1] = config->project_id;
 		data[2] = config->module_id;
 		data[3] = config->code_version;
 		data[4] = config->table_version;
 		data[5] = config->boot_delay;
-		//DEVID DOES NOT NEED TO BE WRITTEN!
+
+		//Writing DEVID is not mandatory, it will be read from DEVID registers, not EEPROM
+		data[6] = config->devid_high;
+		data[7] = config->devid_low;
 
 		//WRITING BACK PAGE
-		WriteMem(0,data,16);
+		WriteMem(0,data,sizeof(BootConfig));
 
 	}
 }
