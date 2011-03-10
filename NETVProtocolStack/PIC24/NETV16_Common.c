@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV16_Device.h"
 #include "NETV16_Common.h"
 #include "NETV16_Memory.h"
-#include "delay.h"
 #include <libpic30.h>
 
 // Prototypes
@@ -134,8 +133,9 @@ void netv_transceiver(unsigned char netv_addr)
 				//TODO Update Boot Config
 				//netv_write_eeprom(0xFF,NETV_BOOT_MODE_ID);
 				
-				//wait 10ms
-				delay_ms(10);
+				//wait 10ms 
+				//FCY must be defined
+				__delay_ms(10);
 								
 				//reset!
 				asm("RESET");	//Reset();

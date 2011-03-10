@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV16_CANDriver.h"
 #include "NETV16_Device.h"
 #include <can.h>
+#include <libpic30.h>
 
 //////////////////////////////////////////////////////////////////////
 //   netv_send_message
@@ -162,10 +163,10 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			message->msg_data[7] = CAN1.cxrx0b4 >> 8;
 			
 			//FILTER HIT
-			message->msg_filter_hit = CAN1.cxrx0con & 0x0001;
+			//message->msg_filter_hit = CAN1.cxrx0con & 0x0001;
 			
 			//CLEAR OVERFLOW
-			message->msg_overflow = C1INTFbits.RX0OVR;
+			//message->msg_overflow = C1INTFbits.RX0OVR;
 			C1INTFbits.RX0OVR = 0;
 
 			//DONE WITH THIS FRAME
@@ -208,10 +209,10 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			message->msg_data[7] = CAN1.cxrx1b4 >> 8;
 			
 			//FILTER HIT
-			message->msg_filter_hit = CAN1.cxrx1con & 0x0007;
+			//message->msg_filter_hit = CAN1.cxrx1con & 0x0007;
 
 			//CLEAR OVERFLOW
-			message->msg_overflow = C1INTFbits.RX1OVR;
+			//message->msg_overflow = C1INTFbits.RX1OVR;
 			C1INTFbits.RX1OVR = 0;
 			
 			//DONE WITH THIS FRAME
@@ -354,7 +355,7 @@ void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask)
 
    	//Set MASK
    	for(i=0;i<2;i++){
-      	can_apply_accept_mask(&mask[i],i);
+      	netv_apply_accept_mask(&mask[i],i);
    	}
 
 	//Setup filters
@@ -363,7 +364,7 @@ void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask)
 
    	//Set Filter
    	for(i=0;i<6;i++){
-      	can_apply_filter(&filter[i],i);
+      	netv_apply_filter(&filter[i],i);
    	}
 
 
