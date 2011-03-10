@@ -1,12 +1,12 @@
 #ifndef _BSP_TEST_H_
 #define _BSP_TEST_H_
 
-#include <p24f16ka101.h>
+#include <p33fj32mc304.h>
 
-#define FCY 30000000
+#define FCY 36850000
 #include "NETV16_Shared_test.h"
 
-#define USE_EEPROM	//Comment for dsPIC33F
+//#define USE_EEPROM	//Comment for dsPIC33F
 
 #define DEVID_BASE_ADDRESS 0x3FFFFE
 
