@@ -26,8 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "bsp.h"
 #include <libpic30.h>
 
+#ifdef USE_EEPROM
 int __attribute__ ((space(eedata))) eeData = BOOT_NORMAL; // Variable located in EEPROM  //Used as the base address
-
+#endif
 
 unsigned int WriteMem(unsigned int offset, unsigned int* dataPtr, unsigned int size)
 {
@@ -48,6 +49,7 @@ unsigned long ReadMem(unsigned int offset)
 
 void ee_word_write(unsigned int offset, int data)
 {
+#ifdef USE_EEPROM
 	_prog_addressT p;
 	_init_prog_address(p, eeData);
 	p += offset;
@@ -57,15 +59,18 @@ void ee_word_write(unsigned int offset, int data)
 	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions (TODO, validate the number of cycles)
 	_write_eedata_word(p,data);	
 	_wait_eedata();
+#endif
 }
 
 
 int ee_word_read(unsigned int offset)
 {
+#ifdef USE_EEPROM
 	int data = 0;
 	_prog_addressT p;
 	_init_prog_address(p, eeData);
 	p += offset;
 	_memcpy_p2d16(&data, p, 1);
 	return data;
+#endif
 }
