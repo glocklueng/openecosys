@@ -22,10 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "NETV16_Memory.h"
+#include "NETV16_Common.h"
 #include "bsp.h"
 #include <libpic30.h>
 
-int __attribute__ ((space(eedata))) eeData = 0x1234; // Variable located in EEPROM  //Used as the base address
+int __attribute__ ((space(eedata))) eeData = BOOT_NORMAL; // Variable located in EEPROM  //Used as the base address
 
 
 unsigned int WriteMem(unsigned int offset, unsigned int* dataPtr, unsigned int size)
@@ -44,44 +45,27 @@ unsigned long ReadMem(unsigned int offset)
 }
 
 
-//Write a value at adress EepromBase (0x7FFE00) + Offset
+
 void ee_word_write(unsigned int offset, int data)
 {
-
-/**
-	unsigned int memory_case;
-
-	// Set up NVMCON to erase one word of data EEPROM
-	NVMCON = 0x4004;
-	
-	// Set up a pointer to the EEPROM location to be erased
-	TBLPAG = __builtin_tblpage(&eeData); // Initialize EE Data page pointer
-	memory_case = __builtin_tbloffset(&eeData) + offset; // Initialize lower word of address
-	
-	__builtin_tblwtl(memory_case, data); // Write EEPROM data to write latch
-	
-	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions
-	__builtin_write_NVM(); // Issue Unlock Sequence & Start Write Cycle
-*/
 	_prog_addressT p;
 	_init_prog_address(p, eeData);
 	p += offset;
+	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions (TODO, validate the number of cycles)
 	_erase_eedata(p,_EE_WORD);	
 	_wait_eedata();
+	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions (TODO, validate the number of cycles)
 	_write_eedata_word(p,data);	
 	_wait_eedata();
 }
 
-//Read a value from adress EepromBase (0x7FFE00) + Offset
+
 int ee_word_read(unsigned int offset)
 {
-	unsigned int memory_case;
-	int data;
-
-	// Set up a pointer to the EEPROM location to be erased
-	TBLPAG = __builtin_tblpage(&eeData); // Initialize EE Data page pointer
-	memory_case = __builtin_tbloffset(&eeData)+offset; // Initialize lower word of address
-	data = __builtin_tblrdl(memory_case); // Write EEPROM data to write latch
-
+	int data = 0;
+	_prog_addressT p;
+	_init_prog_address(p, eeData);
+	p += offset;
+	_memcpy_p2d16(&data, p, 1);
 	return data;
 }
