@@ -77,7 +77,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 		else //No transmit buffer available
 		{
 			//RETURN ERROR CODE
-			return -1;
+			return 1;
 		}
 
 		//TRANSMIT DATA
@@ -103,7 +103,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 
 	//SOMETHING IS WRONG
 	//RETURN ERROR CODE
-	return -1;
+	return 1;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 	} //VALID MESSAGE PTR
 	else
 	{
-		retval = -1;
+		retval = 0;
 	} //INVALID MESSAGE PTR
 	
 
