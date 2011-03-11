@@ -98,6 +98,9 @@ double ScopeCurve::elapsed()
 void ScopeCurve::setColor(const QColor &color)
 {
 	setPen(QPen(color));
+
+        setSymbol(QwtSymbol(QwtSymbol::Ellipse,brush(),pen(),QSize(3,3)));
+
 	m_plot->replot();
 }
 
