@@ -193,10 +193,6 @@ void ScopeView::addCurve(ModuleVariable *variable)
 
     }
 
-    //Add curve symbol
-    curve->setSymbol(QwtSymbol(QwtSymbol::Ellipse,curve->brush(),curve->pen(),QSize(3,3)));
-
-
     m_curves.push_back(curve);
 
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeCurve(ModuleVariable*)));
