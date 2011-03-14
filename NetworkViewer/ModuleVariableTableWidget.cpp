@@ -151,9 +151,9 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
         if (item)
         {
             //Make sure we do not emit cell changed when we update the variable, avoiding a write/request write loop.
-            this->blockSignals(true);
+            blockSignals(true);
             item->setText(variable->getValue().toString());
-            this->blockSignals(false);
+            blockSignals(false);
         }
         else
         {
@@ -169,6 +169,8 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     {
         return false;
     }
+
+    blockSignals(true);
 
     //Add one row
     int index = rowCount();
@@ -251,6 +253,8 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     //Make sure everything is visible
     resizeRowsToContents();
     resizeColumnsToContents();
+
+    blockSignals(false);
 
     emit variableAdded(variable);
 

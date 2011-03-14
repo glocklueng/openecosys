@@ -62,7 +62,6 @@ void NetworkScheduler::schedulerUpdate()
                 //qDebug() << "Schedululing : "<<var->getName()<<" device id : "<<var->getDeviceID();
                 m_view->requestVariable(var);
 
-
                 //At the end for rescheduling if activated...
                 m_variableScheduleList.push_back(var);
             }
@@ -96,6 +95,9 @@ void NetworkScheduler::addModule(NetworkModule* module)
 
     //If new variables are available, shedule them
     connect(module->getConfiguration(),SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(addScheduledVariable(ModuleVariable*)));
+
+    //If variables are removed from module, remove from schedule
+    connect(module->getConfiguration(),SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(removeScheduledVariable(ModuleVariable*)));
 
 }
 

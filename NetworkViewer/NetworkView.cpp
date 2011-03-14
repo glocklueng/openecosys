@@ -353,7 +353,7 @@ void NetworkView::moduleDoubleClicked(NetworkModuleItem* module)
 
 void NetworkView::variableWrite(ModuleVariable *variable)
 {
-    //qDebug("NetworkView::variableWrite(const ModuleVariable &variable)");
+    //qDebug("------------------------------------ NetworkView::variableWrite(const ModuleVariable &variable)");
     writeVariable(variable);
 }
 
