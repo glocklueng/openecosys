@@ -181,7 +181,6 @@ signals:
     */
 	void variableWrite(ModuleVariable*  variable);
 
-
     /**
         Emit the signal when a new variable is added
     */

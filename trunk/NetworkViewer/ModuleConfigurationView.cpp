@@ -67,7 +67,7 @@ void ModuleConfigurationView::moduleDestroyed()
 
 void ModuleConfigurationView::cellChanged ( int row, int column )
 {
-    qDebug("ModuleVariableTableWidget::cellChanged row %i col %i",row,column);
+    //qDebug("ModuleVariableTableWidget::cellChanged row %i col %i",row,column);
 
     if (m_module && m_interactive)
     {
@@ -91,7 +91,7 @@ void ModuleConfigurationView::cellChanged ( int row, int column )
 
 void ModuleConfigurationView::cellDoubleClicked(int row, int column)
 {
-    qDebug("ModuleVariableTableWidget::cellDoubleClicked row %i col %i",row,column);
+    //qDebug("ModuleVariableTableWidget::cellDoubleClicked row %i col %i",row,column);
 
     if (column == VARIABLE_NAME && m_module && m_interactive)
     {
