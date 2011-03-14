@@ -34,11 +34,13 @@ class ModuleVariableTableWidget : public QTableWidget
 
 public:
 
+    enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_MEMORY_TYPE, VARIABLE_MEMORY_OFFSET, VARIABLE_VALUE, VARIABLE_DESCRIPTION, VARIABLE_ENUM_SIZE};
+
     /**
         Constructor
         \param parent The parent Widget
     */
-    ModuleVariableTableWidget(QWidget *parent = NULL);
+    ModuleVariableTableWidget(QWidget *parent = NULL, bool interactive = false);
 
 signals:
 
@@ -54,6 +56,12 @@ signals:
         \param variable the variable
     */
     void variableRemoved(ModuleVariable *variable);
+
+    /**
+        This signal will be emitted when the user clicks on a variable
+        \param variable The variable requested
+    */
+    void scopeRequest(ModuleVariable *variable);
 
 protected slots:
 
@@ -76,6 +84,7 @@ protected slots:
     */
     void variableActivated(bool state, ModuleVariable *variable);
 
+
 protected:
     ///Internal add variable
     bool addVariable(ModuleVariable *var);
@@ -87,7 +96,8 @@ protected:
     virtual void keyPressEvent ( QKeyEvent * event );    
     ///Mapping between variable and table index
     QMap<ModuleVariable*,int> m_variableMap;
-
+    ///Interactive flag
+    bool m_interactive;
 };
 
 

@@ -25,14 +25,19 @@
 #include <QDrag>
 #include <QCheckBox>
 
-enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_MEMORY_TYPE, VARIABLE_MEMORY_OFFSET, VARIABLE_VALUE, VARIABLE_DESCRIPTION, VARIABLE_ENUM_SIZE};
 
-ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent)
-    : QTableWidget(parent)
+
+ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool interactive)
+    : QTableWidget(parent), m_interactive(interactive)
 {
 
-    //Will accept drop by default
+    //Will accept drop by default  
     setAcceptDrops(true);
+
+    if (m_interactive)
+    {
+        setDragEnabled(true);
+    }
 
     //Set Columns size & labels
     setColumnCount(VARIABLE_ENUM_SIZE);
@@ -40,6 +45,7 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent)
     QStringList labels;
     labels << "Activated" << "Name" << "ValueType" << "MemoryType" << "Memory Offset" << "Value" << "Description";
     setHorizontalHeaderLabels(labels);
+
 }
 
 
@@ -74,9 +80,6 @@ void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
         }
 
     }
-
-
-
 }
 
 
@@ -147,7 +150,10 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
 
         if (item)
         {
+            //Make sure we do not emit cell changed when we update the variable, avoiding a write/request write loop.
+            this->blockSignals(true);
             item->setText(variable->getValue().toString());
+            this->blockSignals(false);
         }
         else
         {
@@ -220,7 +226,14 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Value
     QTableWidgetItem *valueItem = new QTableWidgetItem(variable->getValue().toString());
-    valueItem->setFlags(Qt::ItemIsEnabled);
+    if (m_interactive)
+    {
+        valueItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+    }
+    else
+    {
+         valueItem->setFlags(Qt::ItemIsEnabled);
+    }
     //TODO SET VALIDATOR FOR TEXT ENTRY ACCORDING TO VARIABLE TYPE...
     setItem (index, VARIABLE_VALUE,valueItem);
 
@@ -229,13 +242,11 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     descriptionItem->setFlags(Qt::ItemIsEnabled);
     setItem (index, VARIABLE_DESCRIPTION,descriptionItem);
 
-
     //Activated
     QCheckBox *activatedCheckBox = new QCheckBox(this);
-    activatedCheckBox->setEnabled(false);
+    activatedCheckBox->setEnabled(m_interactive);
     activatedCheckBox->setChecked(variable->getActivated());
     this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
-
 
     //Make sure everything is visible
     resizeRowsToContents();
