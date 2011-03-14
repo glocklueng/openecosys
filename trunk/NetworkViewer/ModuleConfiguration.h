@@ -187,6 +187,11 @@ signals:
     */
     void variableAdded(ModuleVariable* variable);
 
+    /**
+        Emit the signal when a new variable is added
+    */
+    void variableRemoved(ModuleVariable* variable);
+
 
 protected slots:
 

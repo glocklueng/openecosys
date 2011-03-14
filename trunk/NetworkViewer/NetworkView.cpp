@@ -327,7 +327,7 @@ void NetworkView::moduleDoubleClicked(NetworkModuleItem* module)
     if (netModule)
     {
         qDebug("RECV SLOT  : moduleDoubleClicked netModule %p",netModule);
-        ModuleConfigurationView *view = new ModuleConfigurationView(netModule);
+        ModuleConfigurationView *view = new ModuleConfigurationView(this,netModule);
 
         view->show();
 

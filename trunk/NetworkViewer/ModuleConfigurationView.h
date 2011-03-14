@@ -20,97 +20,57 @@
 #ifndef _MODULE_CONFIGURATION_VIEW_H_
 #define _MODULE_CONFIGURATION_VIEW_H_
 
-#include "ui_ModuleConfigurationView.h"
+
 #include "NetworkModule.h"
 #include <QScriptEngine>
 #include <QScriptEngineAgent>
 #include <QTimer>
 #include <QTime>
+#include "ModuleVariableTableWidget.h"
 
-
-/**
-    The module configuration view is responsible of displaying the \ref ModuleConfiguration information
-    It will be inserted in a MDI window.
-*/
-class ModuleConfigurationView : public QWidget, public Ui::ModuleConfigurationView
+class ModuleConfigurationView : public ModuleVariableTableWidget
 {
-	
-	Q_OBJECT;
-	
-public:
-        /**
-            Constructor
-            \param module The network module containing the module information
-        */
-	ModuleConfigurationView(NetworkModule *module);
-	
-public slots:
+    Q_OBJECT;
 
-        /**
-            Update the view
-        */
-	void updateConfiguration();
+public:
+
+    ModuleConfigurationView(QWidget *parent, NetworkModule *module);
 
 signals:
 
-        /**
-            This signal will be emitted when the user clicks on a variable
-            \param variable The variable requested
-        */
-	void scopeRequest(ModuleVariable *variable);
+    /**
+        This signal will be emitted when the user closes the view
+    */
+    void closeRequest();
 
-
-        /**
-            This signal will be emitted when the user closes the view
-        */
-	void closeRequest();
+    /**
+        This signal will be emitted when the user clicks on a variable
+        \param variable The variable requested
+    */
+    void scopeRequest(ModuleVariable *variable);
 
 protected slots:
 
-        /**
-            Called when the associated NetworkModule is destroyed.
-        */
-	void moduleDestroyed();
+    void ModuleVariableAdded(ModuleVariable *var);
 
-        /**
-            Called when a cell is changed in the table view
-        */
-        void cellChanged ( int row, int column );
+    void ModuleVariableRemoved(ModuleVariable *var);
 
-        /**
-            Called when a variable is to be updated
-            \param variable The updated variable
-        */
-        void variableUpdated(ModuleVariable *variable);
+    /**
+        Called when the associated NetworkModule is destroyed.
+    */
+    void moduleDestroyed();
 
-        /**
-            A new variable has been added
-            \param variable The newly added variable
-        */
-        void variableAdded(ModuleVariable *variable);
+    void cellChanged ( int row, int column );
 
-        /**
-            Called when a cell is double clicked
-            \param row the row
-            \param column the colum
-        */
-        void cellDoubleClicked(int row, int column);
+    void cellDoubleClicked(int row, int column);
 
-        void activateAllClicked();
-        void deactivateAllClicked();
 
-private:
-	
-        /**
-            Called when the view needs to be updated
-        */
-	void updateView();	
+protected:
 
-        ///The associated network module
-	NetworkModule *m_module;
+    NetworkModule *m_module;
+
+
 };
-
-
 
 #endif
 

@@ -19,7 +19,7 @@
 #include "NetworkModule.h"
 
 NetworkModule::NetworkModule(const ModuleConfiguration &config, QObject *parent)
-: QObject(parent), m_configuration(config), m_active(true)
+    : QObject(parent), m_configuration(config), m_active(true)
 {
     setProperty("name",QString("NetworkModule:") + QString::number(m_configuration.getDeviceID()));
     connect(&m_configuration, SIGNAL(variableWrite(ModuleVariable*)),this,SLOT(variableUpdate(ModuleVariable*)));
@@ -27,8 +27,8 @@ NetworkModule::NetworkModule(const ModuleConfiguration &config, QObject *parent)
 
 NetworkModule::~NetworkModule()
 {
-	emit moduleDestroyed();
-	qDebug("NetworkModule::~NetworkModule()");
+    emit moduleDestroyed();
+    qDebug("NetworkModule::~NetworkModule()");
 }
 
 int NetworkModule::getNumVariable()
@@ -38,36 +38,36 @@ int NetworkModule::getNumVariable()
 
 ModuleVariable*  NetworkModule::getVariable(const QString &name)
 {
-	for (int i = 0; i<m_configuration.size(); i++)
-	{
-		if (m_configuration[i]->getName() == name)
-		{
-			return m_configuration[i];
-		}
-	}
-	
-	return NULL;
+    for (int i = 0; i<m_configuration.size(); i++)
+    {
+        if (m_configuration[i]->getName() == name)
+        {
+            return m_configuration[i];
+        }
+    }
+
+    return NULL;
 }
 
 ModuleVariable* NetworkModule::getVariable(int index)
 {
-	if (index < m_configuration.size())
-	{
-		return m_configuration[index];
-	}
-	
-	return NULL;
+    if (index < m_configuration.size())
+    {
+        return m_configuration[index];
+    }
+
+    return NULL;
 }
 
 ModuleConfiguration* NetworkModule::getConfiguration()
 {
-	return &m_configuration;
+    return &m_configuration;
 }
 
 void NetworkModule::variableUpdate(ModuleVariable *variable)
 {
-	//qDebug("NetworkModule::variableUpdate(ModuleVariable *variable)");
-	emit variableWrite(variable);
+    //qDebug("NetworkModule::variableUpdate(ModuleVariable *variable)");
+    emit variableWrite(variable);
 }
 
 bool NetworkModule::active()
