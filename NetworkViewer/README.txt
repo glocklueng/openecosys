@@ -1,8 +1,19 @@
-Copyright (C) IntRoLab 2009-2010 
+Copyright (C) IntRoLab 2009-2011 
 http://introlab.gel.usherbrooke.ca
 Dominic Letourneau, ing. M.Sc.A.
-Dominic.Letourneau@USherbrooke.ca
 
+Web Site
+--------
+http://www.openecosys.org
+
+Mailing Lists
+-------------
+
+openecosys-info@lists.sourceforge.net (Info)
+openecosy-devel@lists.sourceforge.net (Developer Support)
+
+ABOUT
+-----
 OpenECoSys/NetworkViewer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
