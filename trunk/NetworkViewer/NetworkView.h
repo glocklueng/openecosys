@@ -22,7 +22,7 @@
 #include "ui_NetworkView.h"
 #include <QMainWindow>
 #include "NetworkModule.h"
-#include "ScopeView.h"
+
 #include <QGraphicsPixmapItem>
 #include <QBuffer>
 #include <QMap>
@@ -37,6 +37,8 @@
 #include "DeviceSelectorDialog.h"
 #include <QLabel>
 #include <QLCDNumber>
+
+class ScopeView;
 
 /**
     Handler for menu trigger for plugins.
