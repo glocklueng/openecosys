@@ -109,6 +109,11 @@ ScopeView::ScopeView(NetworkView *parent)
 
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
+    {
+        m_treeWidget->resizeColumnToContents(i);
+    }
+
 
     connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemDoubleClicked(QTreeWidgetItem*,int)));
     connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemClicked(QTreeWidgetItem*,int)));
@@ -203,12 +208,19 @@ void ScopeView::addCurve(ModuleVariable *variable)
     item->setBackground(COLOR_COLUMN,pen.color());
 
     item->setIcon(NAME_COLUMN,QIcon(QPixmap(":images/dsPIC.png")));
-    item->setText(NAME_COLUMN,variable->getName() + "[module:" + QString::number(variable->getDeviceID()) + "]");
+    item->setText(NAME_COLUMN,variable->getName() + "[" + QString::number(variable->getDeviceID()) + "]");
 
     item->setText(ACTION_COLUMN,"[Remove]");
     item->setIcon(ACTION_COLUMN,QIcon(QPixmap(":images/cross.png")));
 
     m_itemCurveMap.insert(item,curve);
+
+    //Make sure everything is visible
+
+    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
+    {
+        m_treeWidget->resizeColumnToContents(i);
+    }
 }
 
 
@@ -237,6 +249,11 @@ void ScopeView::removeCurve(ModuleVariable *variable)
                     delete curve;
                     delete item;
 
+                    //Make sure everything is visible
+                    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
+                    {
+                        m_treeWidget->resizeColumnToContents(i);
+                    }
                     break;
 
                 }

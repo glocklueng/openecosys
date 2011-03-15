@@ -56,7 +56,6 @@ void NetworkScheduler::schedulerUpdate()
             ModuleVariable *var = m_variableScheduleList.front();
             m_variableScheduleList.pop_front();
 
-
             if (var->getActivated())
             {
                 //qDebug() << "Schedululing : "<<var->getName()<<" device id : "<<var->getDeviceID();
@@ -65,7 +64,6 @@ void NetworkScheduler::schedulerUpdate()
                 //At the end for rescheduling if activated...
                 m_variableScheduleList.push_back(var);
             }
-
         }
         else
         {
@@ -109,8 +107,8 @@ void NetworkScheduler::removeModule(NetworkModule* module)
     ModuleConfiguration *conf = module->getConfiguration();
 
     for (int i = 0; i < conf->size(); i++)
-    {          
-        m_variableScheduleList.removeAll((*conf)[i]); 
+    {
+        removeScheduledVariable((*conf)[i]);
     }
 
     m_modules.removeAll(module);
@@ -127,7 +125,6 @@ void NetworkScheduler::schedulerAliveRequest()
 
 void NetworkScheduler::addScheduledVariable(ModuleVariable *var)
 {
-
     if (!m_variableScheduleList.contains(var) && var->getMemType() < ModuleVariable::SCRIPT_VARIABLE)
     {
         qDebug() << "Adding (NEW) variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
@@ -145,10 +142,10 @@ void NetworkScheduler::addScheduledVariable(ModuleVariable *var)
 
 void NetworkScheduler::removeScheduledVariable(ModuleVariable *var)
 {
-    qDebug() << "Removing (OLD) variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
-
     if (m_variableScheduleList.contains(var))
     {
+        qDebug() << "Removing (OLD) variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
+
         m_variableScheduleList.removeAll(var);
     }
 }
@@ -158,16 +155,11 @@ void NetworkScheduler::variableActivated(bool activated, ModuleVariable *var)
 {
     if (activated)
     {
-        qDebug() << "Adding variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
-        if (!m_variableScheduleList.contains(var))
-        {
-            m_variableScheduleList.push_back(var);
-        }
+        addScheduledVariable(var);
     }
     else
     {
-        qDebug() << "Removing variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
-        m_variableScheduleList.removeAll(var);
+        removeScheduledVariable(var);
     }
 
 }
