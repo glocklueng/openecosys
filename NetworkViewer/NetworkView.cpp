@@ -25,6 +25,7 @@
 #include <QWebView>
 #include <QFileDialog>
 #include "PreferencesDialog.h"
+#include "ScopeView.h"
 
 bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 {
