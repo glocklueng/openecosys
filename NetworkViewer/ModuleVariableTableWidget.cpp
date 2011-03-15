@@ -83,7 +83,7 @@ void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
 }
 
 
-bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable)
+bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable,  bool emitSignal)
 {
     if(m_variableMap.contains(variable))
     {
@@ -95,8 +95,10 @@ bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable)
         //Remove from map
         m_variableMap.remove(variable);
 
-        emit variableRemoved(variable);
-
+        if (emitSignal)
+        {
+            emit variableRemoved(variable);
+        }
 
         //Re-index map
         for (QMap<ModuleVariable*,int>::iterator iter = m_variableMap.begin(); iter != m_variableMap.end(); iter++)
@@ -115,7 +117,7 @@ bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable)
 
 void ModuleVariableTableWidget::variableDestroyed(ModuleVariable *variable)
 {
-    removeVariable(variable);
+    removeVariable(variable,false);
 }
 
 void ModuleVariableTableWidget::variableActivated(bool state, ModuleVariable *variable)

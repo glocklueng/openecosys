@@ -89,7 +89,7 @@ protected:
     ///Internal add variable
     bool addVariable(ModuleVariable *var);
     ///Internal remove variable
-    bool removeVariable(ModuleVariable *var);
+    bool removeVariable(ModuleVariable *var, bool emitSignal=true);
     ///Internal drop event handler
     virtual void dropEvent(QDropEvent *event);
     ///Handling keyboard interaction
