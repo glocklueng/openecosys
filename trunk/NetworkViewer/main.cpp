@@ -103,8 +103,7 @@ public:
             m_splashScreen->finish(m_view);
         }
 
-        m_view->show();
-        //m_view->raise();
+        m_view->showMaximized();
     }
 
     ~NetworkViewerApp()
