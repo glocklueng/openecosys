@@ -32,25 +32,25 @@
 class ModuleConfiguration : public QObject 
 {
 
-	Q_OBJECT;
-	
-public:
-	
+    Q_OBJECT;
 
-        /**
+public:
+
+
+    /**
             Constructor
             \param parent The ModuleConfiguration parent, defaults to NULL
         */
-        ModuleConfiguration(QObject *parent=NULL);
+    ModuleConfiguration(QObject *parent=NULL);
 
 
-        /**
+    /**
             Copy constructor
             \param cpy the ModuleConfiguration to copy. We will perform a deep copy on variables.
         */
-	ModuleConfiguration(const ModuleConfiguration &cpy);
+    ModuleConfiguration(const ModuleConfiguration &cpy);
 
-        /**
+    /**
             Constructor
             \param projectID, The module project ID
             \param codeVersion, The module code version
@@ -59,119 +59,115 @@ public:
             \param deviceID the address on the bus
             \param parent The parent QObject, defaults to NULL
         */
-	ModuleConfiguration(int projectID, int codeVersion, int processorID, int moduleState, int tableVersion, int deviceID, QObject *parent=NULL);
-	
-        /**
+    ModuleConfiguration(int projectID, int codeVersion, int processorID, int moduleState, int tableVersion, int deviceID, QObject *parent=NULL);
+
+    /**
             Will destroy all internal variables.
         */
-	virtual ~ModuleConfiguration();
+    virtual ~ModuleConfiguration();
 
-        /**
+    /**
             \param cpy The ModuleConfiguration to copy
         */
-	ModuleConfiguration& operator= (const ModuleConfiguration &cpy);
-	
-        /**
+    ModuleConfiguration& operator= (const ModuleConfiguration &cpy);
+
+    /**
             Print the configuration values into a stream. Will use rich text format.
             \param device que QIODevice to print to
         */
-        void prettyPrint(QIODevice &device);
+    void prettyPrint(QIODevice &device);
 
-        /**
+    /**
             Save the configuration in XML format
             \param filename the full path where to save
         */
-        void saveConfiguration(const QString &filename);
+    void saveConfiguration(const QString &filename);
 
-        /**
+    /**
             Load the configuration from XML format
             \param filename the full path
             \param variablesOnly Defaults to false. When true, we will keep internal module configuration and load only variable descriptions.
             This is useful because XML configurations are created with undefined fields and must not overwrite detected values on the bus.
         */
-	bool loadConfiguration(const QString &filename, bool variablesOnly = false);
+    bool loadConfiguration(const QString &filename, bool variablesOnly = false);
 
-        /**
+    /**
             \return int The count of variables
         */
-	int size();
+    int size();
 
-        /**
+    /**
             Enable easy access to variables with the [] operator.
             \param index the variable index. User must make sure the index in correct, otherwise the assertion will fail.
             \return ModuleVariable* The associated variable
         */
-	ModuleVariable* operator[] (int index);
+    ModuleVariable* operator[] (int index);
 
-        /**
+    /**
             Get a variable with its name.
             \param name The variable's name
             \return ModuleVariable* the variable. Returns NULL if the variable was not found.
         */
-	ModuleVariable* getVariableNamed(QString name);
+    ModuleVariable* getVariableNamed(QString name);
 
 
-        /**
+    /**
             Get the index of a variable
             \param var The variable
             \return int the index of it, -1 if not found
         */
-        int indexOf(ModuleVariable *var);
+    int indexOf(ModuleVariable *var);
 
-        /**
-            Add a variable to the ModuleConfiguration
-            \param variable The variable to add. The module configuration will then own the variable and will be responsible to delete it.
-        */
-	void addVariable(ModuleVariable *variable);
-	
-        //GETS
 
-        /**
+
+    //GETS
+
+    /**
             \return m_projectID
         */
-	int getProjectID();
+    int getProjectID();
 
-        /**
+    /**
             \return m_codeVersion
         */
-	int getCodeVersion();
+    int getCodeVersion();
 
-        /**
+    /**
             \return m_processorID
         */
-	int getProcessorID();
+    int getProcessorID();
 
-        /**
+    /**
             \return m_moduleState
         */
-	int getModuleState();
+    int getModuleState();
 
-        /**
+    /**
             \return m_tableVersion
         */
-	int getTableVersion();
+    int getTableVersion();
 
-        /**
+    /**
             \return m_deviceID
         */
-	int getDeviceID();
-	
-	//SETS
+    int getDeviceID();
 
-        /**
+    //SETS
+
+    /**
             Set m_deviceID
             \param id the device ID
         */
-	void setDeviceID(int id);
+    void setDeviceID(int id);
 
-	/**
+    /**
          * Will scan xml configuration files automatically and traverse all sub-directory. Possible configurations will be appended in the QStringList result.
 	 * \param basePath The path where to start the scan.
 	 * \param project_id look for the right project id
          * \param device_id Look for a particular device_id -1 = any module
          * \return QStringList the full path of the XML configuration files matching the project_id and device_id
 	 */
-	static QStringList scanConfigurations(const QString &basePath, int project_id, int device_id = -1);
+    static QStringList scanConfigurations(const QString &basePath, int project_id, int device_id = -1);
 
 signals:
 
@@ -179,7 +175,7 @@ signals:
         This signal is emitted when a variable has been changed from the user. The variable must then be
         written to the \ref CANDevice.
     */
-	void variableWrite(ModuleVariable*  variable);
+    void variableWrite(ModuleVariable*  variable);
 
     /**
         Emit the signal when a new variable is added
@@ -191,48 +187,64 @@ signals:
     */
     void variableRemoved(ModuleVariable* variable);
 
+    /**
+        Emit the signal when the configuration is about to load
+    */
+    void configurationAboutToLoad();
 
-protected slots:
 
-        /**
-            Will receive signal from variables with they are updated. If this happens, will also emit the variableWrite signal
-            so we can write it to the bus.
-        */
-	void variableUpdated(ModuleVariable *var);
+public slots:
 
+    /**
+        Will receive signal from variables with they are updated. If this happens, will also emit the variableWrite signal
+        so we can write it to the bus.
+    */
+    void variableUpdated(ModuleVariable *var);
+
+    /**
+        Add a variable to the ModuleConfiguration
+        \param variable The variable to add. The module configuration will then own the variable and will be responsible to delete it.
+    */
+    void addVariable(ModuleVariable *variable);
+
+    /**
+        Remove a variable from the ModuleConfiguration
+        \param variable The variable to remove. The module configuration will delete the variable.
+     */
+    void removeVariable(ModuleVariable *variable);
 
 protected:
-	
-	/**
-         * Internal function to traverse directory for XML configuration scans.
-         * \param configList The list of configuration, will append configuration if found
-         * \param project_id Look for the specified project_id
-         * \param device_id Look for the specified device_id
-	 * \param directory The current QDir
-	 * \param level the recursion level, 0 = basePath
-	 */
-	static void recursiveScan(QStringList &configList, int project_id, int device_id, QDir directory, int level = 0);
-	
-        ///The project version used to identify which configuration to load
-	int m_projectID;
 
-        ///The code version of the project
-	int m_codeVersion;
+    /**
+        * Internal function to traverse directory for XML configuration scans.
+        * \param configList The list of configuration, will append configuration if found
+        * \param project_id Look for the specified project_id
+        * \param device_id Look for the specified device_id
+        * \param directory The current QDir
+        * \param level the recursion level, 0 = basePat
+    */
+    static void recursiveScan(QStringList &configList, int project_id, int device_id, QDir directory, int level = 0);
 
-        ///The processor ID (each microcontroller type has a different id)
-	int m_processorID;
+    ///The project version used to identify which configuration to load
+    int m_projectID;
 
-        ///The module state
-	int m_moduleState;
+    ///The code version of the project
+    int m_codeVersion;
 
-        ///The internal module table version (protocol version)
-	int m_tableVersion;
+    ///The processor ID (each microcontroller type has a different id)
+    int m_processorID;
 
-        ///The device_id (address) on the bus
-	int m_deviceID;
-	
-	///List of all variables
-	QList<ModuleVariable*> m_variables;
+    ///The module state
+    int m_moduleState;
+
+    ///The internal module table version (protocol version)
+    int m_tableVersion;
+
+    ///The device_id (address) on the bus
+    int m_deviceID;
+
+    ///List of all variables
+    QList<ModuleVariable*> m_variables;
 };
 
 #endif

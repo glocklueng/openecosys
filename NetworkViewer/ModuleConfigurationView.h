@@ -55,6 +55,8 @@ protected slots:
 
     void ModuleVariableRemoved(ModuleVariable *var);
 
+    void ModuleVariableDeleted(ModuleVariable *var);
+
     /**
         Called when the associated NetworkModule is destroyed.
     */
@@ -63,6 +65,8 @@ protected slots:
     void cellChanged ( int row, int column );
 
     void cellDoubleClicked(int row, int column);
+
+    void configurationAboutToLoad();
 
 
 protected:

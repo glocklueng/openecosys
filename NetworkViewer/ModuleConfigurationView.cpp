@@ -35,14 +35,15 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
         addVariable(m_module->getVariable(i));
     }
 
-
+    //ModuleConfiguration Signals
     connect(m_module->getConfiguration(), SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(ModuleVariableAdded(ModuleVariable*)));
     connect(m_module->getConfiguration(), SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(ModuleVariableRemoved(ModuleVariable*)));
-
+    connect(m_module->getConfiguration(),SIGNAL(configurationAboutToLoad()),this,SLOT(configurationAboutToLoad()));
 
     //TableView signals.
     connect(this,SIGNAL(cellChanged(int,int)),this,SLOT(cellChanged(int,int)));
     connect(this,SIGNAL(cellDoubleClicked(int,int)),SLOT(cellDoubleClicked(int,int)));
+    connect(this,SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(ModuleVariableDeleted(ModuleVariable*)));
 
 }
 
@@ -55,6 +56,12 @@ void ModuleConfigurationView::ModuleVariableAdded(ModuleVariable *var)
 void ModuleConfigurationView::ModuleVariableRemoved(ModuleVariable *var)
 {
     removeVariable(var);
+}
+
+void ModuleConfigurationView::ModuleVariableDeleted(ModuleVariable *var)
+{
+    //The user have deleted a variable
+    m_module->getConfiguration()->removeVariable(var);
 }
 
 
@@ -105,4 +112,15 @@ void ModuleConfigurationView::cellDoubleClicked(int row, int column)
     }
 }
 
+void ModuleConfigurationView::configurationAboutToLoad()
+{
+    qDebug("ModuleConfigurationView::configurationAboutToLoad()");
 
+    //Just Have to cleanup rapidly, we will have new variables after.
+    m_variableMap.clear();
+
+    //Clear table
+    clear();
+    setRowCount(0);
+
+}

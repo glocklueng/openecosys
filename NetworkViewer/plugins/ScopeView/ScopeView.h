@@ -58,7 +58,7 @@ class ScopeView : public BasePlugin, public Ui::ScopeView
 
 public:
 
-    enum {COLOR_COLUMN, NAME_COLUMN, ACTION_COLUMN};
+    enum {COLOR_COLUMN, NAME_COLUMN, ACTION_COLUMN, TREE_WIDGET_COLUMN_SIZE};
 
     /**
         Constructor

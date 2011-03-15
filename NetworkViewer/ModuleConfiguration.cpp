@@ -209,16 +209,6 @@ void ModuleConfiguration::setDeviceID(int id)
 bool ModuleConfiguration::loadConfiguration(const QString &filename, bool variablesOnly)
 {
     QDomDocument doc("INTROLAB-NETWORKVIEWER");
-
-    //Clean up memory
-    for (int i = 0; i < m_variables.size(); i++)
-    {
-        emit variableRemoved(m_variables[i]);
-        delete m_variables[i];
-    }
-
-    m_variables.clear();
-
     QFile file(filename);
 
     //Open the file
@@ -226,6 +216,15 @@ bool ModuleConfiguration::loadConfiguration(const QString &filename, bool variab
     {
         QMessageBox::warning(0, "Warning", QString("Unable to open file : ") + filename, QMessageBox::Ok);
         return false;
+    }
+
+    //Proceed to load only if file is ok.
+    emit configurationAboutToLoad();
+
+    //Clean up memory
+    while(m_variables.size() > 0)
+    {
+        removeVariable(m_variables.front());
     }
 
     qDebug() << "Loading : "<<filename;
@@ -331,7 +330,6 @@ void ModuleConfiguration::recursiveScan(QStringList &configList, int project_id,
 
         for (int i = 0; i < myInfoList.size(); i++)
         {
-
             if (!myInfoList[i].fileName().startsWith("."))
             {
                 if (myInfoList[i].isDir())
@@ -390,3 +388,15 @@ int ModuleConfiguration::indexOf(ModuleVariable *var)
 {
     return m_variables.lastIndexOf(var);
 }
+
+void ModuleConfiguration::removeVariable(ModuleVariable *variable)
+{
+    if (variable && m_variables.contains(variable))
+    {
+        //This must occur in this order...
+        m_variables.removeAll(variable);
+        emit variableRemoved(variable);
+        delete variable;
+    }
+}
+

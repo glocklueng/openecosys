@@ -46,6 +46,10 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
     labels << "Activated" << "Name" << "ValueType" << "MemoryType" << "Memory Offset" << "Value" << "Description";
     setHorizontalHeaderLabels(labels);
 
+    //Make sure everything is visible
+    resizeRowsToContents();
+    resizeColumnsToContents();
+
 }
 
 
@@ -109,6 +113,10 @@ bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable,  bool e
             }
         }
 
+        //Make sure everything is visible
+        resizeRowsToContents();
+        resizeColumnsToContents();
+
         return true;
     }
 
@@ -155,6 +163,10 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
             //Make sure we do not emit cell changed when we update the variable, avoiding a write/request write loop.
             blockSignals(true);
             item->setText(variable->getValue().toString());
+            //Make sure everything is visible
+            resizeRowsToContents();
+            resizeColumnsToContents();
+
             blockSignals(false);
         }
         else

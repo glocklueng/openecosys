@@ -47,7 +47,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="NetworkViewer.qrc">
+         <iconset resource="../../NetworkViewer.qrc">
           <normaloff>:/images/playGreen.png</normaloff>:/images/playGreen.png</iconset>
         </property>
        </widget>
@@ -58,7 +58,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="NetworkViewer.qrc">
+         <iconset resource="../../NetworkViewer.qrc">
           <normaloff>:/images/pauseGreen.png</normaloff>:/images/pauseGreen.png</iconset>
         </property>
        </widget>
@@ -69,7 +69,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="NetworkViewer.qrc">
+         <iconset resource="../../NetworkViewer.qrc">
           <normaloff>:/images/Save-Icon.png</normaloff>:/images/Save-Icon.png</iconset>
         </property>
        </widget>
@@ -91,75 +91,74 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QTreeWidget" name="m_treeWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTreeWidget" name="m_treeWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>400</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
+      </property>
+      <attribute name="headerCascadingSectionResizes">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="headerDefaultSectionSize">
+       <number>33</number>
+      </attribute>
+      <attribute name="headerMinimumSectionSize">
+       <number>-18</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Color</string>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>400</width>
-         <height>16777215</height>
-        </size>
+      </column>
+      <column>
+       <property name="text">
+        <string>Variable</string>
        </property>
-       <property name="mouseTracking">
-        <bool>false</bool>
+      </column>
+      <column>
+       <property name="text">
+        <string notr="true">Action</string>
        </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-       <property name="textElideMode">
-        <enum>Qt::ElideRight</enum>
-       </property>
-       <property name="uniformRowHeights">
-        <bool>true</bool>
-       </property>
-       <attribute name="headerCascadingSectionResizes">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="headerDefaultSectionSize">
-        <number>33</number>
-       </attribute>
-       <attribute name="headerMinimumSectionSize">
-        <number>-18</number>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Color</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Variable</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string notr="true">Action</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="m_frame">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
+      </column>
+     </widget>
+     <widget class="QFrame" name="m_frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="NetworkViewer.qrc"/>
+  <include location="../../NetworkViewer.qrc"/>
  </resources>
  <connections/>
 </ui>
