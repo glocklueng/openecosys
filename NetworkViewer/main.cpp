@@ -95,6 +95,9 @@ public:
 
         m_view = new NetworkView(NULL);
 
+        m_view->setWindowTitle(QString("NetworkViewer-") + NETWORKVIEWER_VERSION);
+
+
         if (m_splashScreen)
         {
             m_splashScreen->finish(m_view);
