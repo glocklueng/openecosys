@@ -599,11 +599,14 @@ void NetworkView::pluginActivated(const QString& name)
 
     if (factory)
     {
-        QWidget *widget = factory->create(this);
+        BasePlugin *plugin = factory->create(this);
+
+        //initialize plugin
+        plugin->init();
 
         //Create MDI window
         QMdiSubWindow *subWindow = createSubWindow("Plugin : " + name);
-        subWindow->setWidget(widget);
+        subWindow->setWidget(plugin);
         m_mdiArea->addSubWindow(subWindow);
         subWindow->show();
     }
