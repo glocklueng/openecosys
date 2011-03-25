@@ -279,7 +279,9 @@ class SerialBridge : public QObject, public CANDevice
 	QList<CANRxMessageBuffer> m_recvQueue;
 	QMutex m_sendQueueMutex;
 	QMutex m_recvQueueMutex;
-        
+        QSemaphore m_recvSemaphore;
+
+
         long serialBytesIn;
         long serialBytesOut;
         QTimer *m_testTimer;
