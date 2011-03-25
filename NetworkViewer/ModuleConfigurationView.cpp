@@ -35,6 +35,10 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
         addVariable(m_module->getVariable(i));
     }
 
+    //Make sure everything fits
+    resizeColumnsToContents();
+    resizeRowsToContents();
+
     //ModuleConfiguration Signals
     connect(m_module->getConfiguration(), SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(ModuleVariableAdded(ModuleVariable*)));
     connect(m_module->getConfiguration(), SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(ModuleVariableRemoved(ModuleVariable*)));
@@ -49,7 +53,7 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
 
 
 void ModuleConfigurationView::ModuleVariableAdded(ModuleVariable *var)
-{
+{    
     addVariable(var);
 }
 
