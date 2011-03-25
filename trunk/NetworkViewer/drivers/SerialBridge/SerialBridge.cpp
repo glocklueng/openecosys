@@ -93,7 +93,9 @@ CANDevice::State SerialBridge::recvMessage(LABORIUS_MESSAGE &message)
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     CANDevice::State returnState = CANDevice::CANDEVICE_FAIL;
 
-    if ( m_serialPort)
+    bool acquire = m_recvSemaphore.tryAcquire(1,10); //try acquire for 10ms
+
+    if ( m_serialPort && acquire)
     {
         //not yet received messages
         returnState = CANDevice::CANDEVICE_OVERFLOW;
@@ -186,6 +188,8 @@ void SerialBridge::serialReadyRead()
             m_recvQueueMutex.lock();
             m_recvQueue.push_back(msg);
             m_recvQueueMutex.unlock();
+
+            m_recvSemaphore.release(1);
 
             //debugging
             //qDebug("CANRxMessageBuffer word 0 : 0x%8x",msg.messageWord[0]);
