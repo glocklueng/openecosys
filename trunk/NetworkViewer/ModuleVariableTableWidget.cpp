@@ -46,12 +46,15 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
     labels << "Activated" << "Name" << "ValueType" << "MemoryType" << "Memory Offset" << "Value" << "Description";
     setHorizontalHeaderLabels(labels);
 
+
+    //Make sure everything fits
+    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
     //Make sure everything is visible
     resizeRowsToContents();
     resizeColumnsToContents();
 
 }
-
 
 void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
 {
@@ -114,8 +117,9 @@ bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable,  bool e
         }
 
         //Make sure everything is visible
-        resizeRowsToContents();
-        resizeColumnsToContents();
+        //resizeRowsToContents();
+        //resizeColumnToContents();
+
 
         return true;
     }
@@ -164,8 +168,8 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
             blockSignals(true);
             item->setText(variable->getValue().toString());
             //Make sure everything is visible
-            resizeRowsToContents();
-            resizeColumnsToContents();
+            //resizeRowsToContents();
+            //resizeColumnsToContents();
 
             blockSignals(false);
         }
@@ -265,8 +269,8 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
 
     //Make sure everything is visible
-    resizeRowsToContents();
-    resizeColumnsToContents();
+    //resizeRowsToContents();
+    //resizeColumnsToContents();
 
     blockSignals(false);
 
