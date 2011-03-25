@@ -75,10 +75,9 @@ ModuleConfiguration::~ModuleConfiguration()
     qDebug("ModuleConfiguration::~ModuleConfiguration()");
 
     //Destroy variables
-    for (int i = 0; i < m_variables.size(); i++)
+    while (m_variables.size() > 0)
     {
-        emit variableRemoved(m_variables[i]);
-        delete m_variables[i];
+	removeVariable(m_variables.front());
     }
 
 
