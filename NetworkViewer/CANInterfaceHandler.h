@@ -127,7 +127,7 @@ class CANInterfaceHandler : public QObject
     CANInterfaceHandler(CANDevice *device, const char* args, QObject *parent = NULL);
 	
     ///Destructor, will terminate threads and close the CAN device
-    ~CANInterfaceHandler();
+    virtual ~CANInterfaceHandler();
 
     /**
         Get the running flags for threads

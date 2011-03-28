@@ -239,6 +239,7 @@ class SerialBridge : public QObject, public CANDevice
 
         SerialBridge(const char* params);
 
+        virtual ~SerialBridge();
 	
 	virtual CANDevice::State initialize(const char* args);
 

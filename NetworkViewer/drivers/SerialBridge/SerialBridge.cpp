@@ -32,6 +32,15 @@ SerialBridge::SerialBridge(const char* args)
     initialize(args);
 }
 
+SerialBridge::~SerialBridge()
+{
+    if (m_serialPort)
+    {
+        delete m_serialPort;
+        m_serialPort = NULL;
+    }
+}
+
 CANDevice::State SerialBridge::initialize(const char* args)
 {
 
@@ -98,7 +107,7 @@ CANDevice::State SerialBridge::recvMessage(LABORIUS_MESSAGE &message)
     if ( m_serialPort && acquire)
     {
         //not yet received messages
-        returnState = CANDevice::CANDEVICE_OVERFLOW;
+        returnState = CANDevice::CANDEVICE_UNDERFLOW;
 
 	m_recvQueueMutex.lock();
 
