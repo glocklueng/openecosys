@@ -72,6 +72,13 @@ protected slots:
         */
         void variableValueChanged(ModuleVariable* variable);
 
+        /**
+            User changed the file name manually
+            \param the file name
+        */
+        void lineEditTextChanged(QString value);
+
+
         ///Start button clicked
         void startButtonClicked();
         ///Stop button clicked
