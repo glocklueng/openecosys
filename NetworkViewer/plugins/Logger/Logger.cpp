@@ -49,6 +49,9 @@ Logger::Logger(NetworkView *view)
         connect(m_ui.pushButton_Stop,SIGNAL(clicked()),this,SLOT(stopButtonClicked()));
         connect(m_ui.pushButton_File,SIGNAL(clicked()),this,SLOT(fileButtonClicked()));
 
+        //Line edit
+        connect(m_ui.lineEdit,SIGNAL(textChanged(QString)),this,SLOT(lineEditTextChanged(QString)));
+
         setLogging(false);
 }
 
@@ -105,6 +108,7 @@ void Logger::startButtonClicked()
     m_startTime = QTime::currentTime();
 
 
+
     m_startTime.start();
 
     //Test if we have selected the file name
@@ -137,23 +141,15 @@ void Logger::fileButtonClicked()
 
     m_file.setFileName(fileName);
 
-    //Open file for writing
-    m_file.open(QIODevice::WriteOnly);
+
 
     //Change Line Edit
+    m_ui.lineEdit->blockSignals(true);
     m_ui.lineEdit->setText(fileName);
+    m_ui.lineEdit->blockSignals(false);
 
 
-    //Write file header
-    QTextStream stream(&m_file);
 
-    stream << "ELAPSED" << "\t"
-           << "DATE" << "\t"
-           << "TIME" << "\t"
-           << "DEVICE" << "\t"
-           << "VARIABLE" << "\t"
-           << "VALUE" <<"\t"
-           << "\n";
 }
 
 void Logger::setLogging(bool state)
@@ -165,12 +161,35 @@ void Logger::setLogging(bool state)
 
     //label
     if (state)
-    {        
+    {
+        //Open file for writing
+        if (m_file.fileName().size() > 0)
+        {
+            m_file.open(QIODevice::WriteOnly);
+
+            //Write file header
+            QTextStream stream(&m_file);
+
+            stream << "ELAPSED" << "\t"
+                   << "DATE" << "\t"
+                   << "TIME" << "\t"
+                   << "DEVICE" << "\t"
+                   << "VARIABLE" << "\t"
+                   << "VALUE" <<"\t"
+                   << "\n";
+        }
+
+        m_ui.lineEdit->setEnabled(false);
         m_ui.label->setText("<b>Logging</b>");
         palette.setColor(m_ui.label->backgroundRole(),QColor(Qt::green));
     }
     else
     {       
+
+        //Open file for writing
+        m_file.close();
+
+        m_ui.lineEdit->setEnabled(true);
         m_ui.label->setText("<b>NOT Logging</b>");
         palette.setColor(m_ui.label->backgroundRole(),QColor(Qt::red));
     }
@@ -178,4 +197,11 @@ void Logger::setLogging(bool state)
     m_ui.label->setPalette(palette);
     m_ui.label->setAutoFillBackground(true);
     m_ui.label->update();
+}
+
+void Logger::lineEditTextChanged(QString value)
+{
+    //This will happen only when not logging
+    //make sure we close the previously opened file
+    m_file.setFileName(value);
 }
