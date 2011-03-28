@@ -339,6 +339,16 @@ class CANDevice
                         CANDEVICE_BUS,
                         CANDEVICE_NOT_INITIALIZED} State;
 
+	  CANDevice() 
+	  {
+		qDebug("CANDevice Constructor");
+	  }
+
+          virtual ~CANDevice()
+          {
+		qDebug("CANDevice Destructor");
+          }
+	 
 
           //Will initialize with defined arguments
           virtual State initialize(const char* args) = 0;

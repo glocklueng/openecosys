@@ -91,6 +91,8 @@ CANInterfaceHandler::CANInterfaceHandler(CANDevice *device, const char* args, QO
 
 	if (m_device)
 	{
+		qDebug("CANInterfaceHandler::CANInterfaceHandler with device : %p",m_device);
+
 		//Change the state to running
 		m_running = true;
 
@@ -135,7 +137,7 @@ CANInterfaceHandler::~CANInterfaceHandler()
 	}
 
 
-	qDebug("~CANInterfaceHandler() Threads all terminated.");
+	qDebug("~CANInterfaceHandler() Threads all terminated. Destroying device : %p",m_device);
 
         if (m_device)
         {
