@@ -137,6 +137,11 @@ CANInterfaceHandler::~CANInterfaceHandler()
 
 	qDebug("~CANInterfaceHandler() Threads all terminated.");
 
+        if (m_device)
+        {
+            delete m_device;
+        }
+
 	///This will close the CAN device
 	//m_device->close();
 }
@@ -219,8 +224,18 @@ void CANInterfaceHandler::sendThreadFunction()
 		}
 		else if (result == CANDevice::CANDEVICE_OVERFLOW)
 		{
+                        //Do we need to unlock the list here?
+
 			qDebug("CANInterfaceHandler::sendThreadFunction() result == CANDEVICE_OVERFLOW");
+                        m_canSendThread->thread_usleep(1000);
+
+                        //signal semaphore for retry
+                        m_listSemaphore.release(1);
 		}
+                else
+                {
+                    qDebug("CANInterfaceHandler::sendThreadFunction() Unhandled state result = %i",result);
+                }
 	}
 
 	//UNPROTECT THE QUEUE
@@ -265,6 +280,11 @@ void CANInterfaceHandler::recvThreadFunction()
                         m_canRecvThread->thread_usleep(1000);//will sleep 1000us
 			//m_running = false;
 		}
+                else
+                {
+                    qDebug("CANInterfaceHandler::recvThreadFunction() : Unhandled state result = %i",result);
+                    m_canRecvThread->thread_usleep(1000);//will sleep 1000us
+                }
 	}
 }
 
