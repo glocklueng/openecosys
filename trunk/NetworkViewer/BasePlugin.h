@@ -96,6 +96,9 @@ public:
 	 */
 	virtual void terminate() = 0;
 
+
+        virtual void closeRequest();
+
 	/**
 	 *
 	 * This will register a plugin with a name and a factory for plugin creation.
@@ -120,6 +123,8 @@ public:
 	 *
 	 */
  	static QMap<QString, BasePlugin::BasePluginFactory*> & loadedPlugins();
+
+
 
 protected:
 

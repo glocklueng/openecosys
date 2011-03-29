@@ -127,3 +127,8 @@ int BasePlugin::registerPlugin(const QString& name, BasePluginFactory *factory)
 	return BasePlugin::loadedPlugins().size();
 }
 
+
+void BasePlugin::closeRequest()
+{
+    emit closeRequest();
+}
