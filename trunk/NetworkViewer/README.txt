@@ -3,17 +3,17 @@ http://introlab.gel.usherbrooke.ca
 Dominic Letourneau, ing. M.Sc.A.
 
 Web Site
---------
+________
 http://www.openecosys.org
 
 Mailing Lists
--------------
+_____________
 
 openecosys-info@lists.sourceforge.net (Info)
 openecosy-devel@lists.sourceforge.net (Developer Support)
 
 ABOUT
------
+_____
 OpenECoSys/NetworkViewer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
@@ -25,6 +25,16 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 
 RELEASE NOTES
 _____________ 
+
+
+1.1.10
+______
+
+* Fixed interface handler reloading crash
+* Performance enhancement for variable view
+* Fixed SerialBridge implementation
+* Fixed filename when editing filename manually with the Logger plugin
+* (Internal) Now using the NETV convention for names like the NETVProtocolStack.
 
 1.1.9
 _____
