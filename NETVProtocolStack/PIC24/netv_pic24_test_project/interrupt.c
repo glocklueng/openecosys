@@ -10,7 +10,7 @@
 //Uart1 Receive
 void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 {
-	char rx = U1RXREG;	
+//	char rx = U1RXREG;	
 	
 	//Handle USART Interrupt
 	serial_usart_interrupt_handler();

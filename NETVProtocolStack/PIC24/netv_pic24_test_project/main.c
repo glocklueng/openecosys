@@ -131,6 +131,10 @@ void setup_oscillator(void)
 
 void config(void)
 {
+	//Disable ADC (see Errata, bug between RA2 and RB2...)
+	AD1CON1bits.ADON = 0;
+	AD1PCFG = 0xFFFF;		//All digital IO
+	
 	//Define inputs/outputs
 	define_io();		
 	
@@ -150,5 +154,5 @@ void init_default_variables(void)
 
 void update_variables(void)
 {
-
+	g_globalNETVVariables.Count++;
 }
