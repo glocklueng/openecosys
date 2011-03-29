@@ -612,6 +612,32 @@ void NetworkView::pluginActivated(const QString& name)
     }
 }
 
+BasePlugin* NetworkView::createCustomPluginWindow(const QString &pluginName, const QString &windowTitle)
+{
+    QMap<QString, BasePlugin::BasePluginFactory*> & plugins = BasePlugin::loadedPlugins();
+
+    BasePlugin::BasePluginFactory* factory = plugins[pluginName];
+
+    BasePlugin *plugin = NULL;
+
+    if (factory)
+    {
+        plugin = factory->create(this);
+
+        //initialize plugin
+        plugin->init();
+
+        //Create MDI window
+        QMdiSubWindow *subWindow = createSubWindow(windowTitle);
+        subWindow->setWidget(plugin);
+        m_mdiArea->addSubWindow(subWindow);
+        subWindow->show();
+    }
+
+    return plugin;
+}
+
+
 QList<NetworkModule*> NetworkView::getModules()
 {
     QList<NetworkModule*> allModules;
