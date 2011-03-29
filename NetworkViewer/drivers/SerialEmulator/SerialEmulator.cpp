@@ -28,12 +28,12 @@
 #include "SerialEmulatorConfigure.h"
 
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("SerialEmulator",new CANDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed"));
 
 
 //Template specialization for configure
 template<>
-QString CANDevice::DeviceFactory<SerialEmulator>::configure()
+QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 {
     SerialEmulatorConfigure myDialog;
     myDialog.exec();
@@ -59,7 +59,7 @@ SerialEmulator::~SerialEmulator()
     }
 }
 
-CANDevice::State SerialEmulator::initialize(const char* args)
+NETVDevice::State SerialEmulator::initialize(const char* args)
 {
 
     QStringList config = QString(args).split(";");
@@ -81,7 +81,7 @@ CANDevice::State SerialEmulator::initialize(const char* args)
         qDebug("SerialEmulator::initialize() : Cannot open serial port : %s",args);
         delete m_serialPort;
         m_serialPort = NULL;
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
     else
     {
@@ -92,11 +92,11 @@ CANDevice::State SerialEmulator::initialize(const char* args)
         m_testTimer = new QTimer(this);
         connect(m_testTimer,SIGNAL(timeout()),this,SLOT(testTimer()));
         m_testTimer->start(1000);
-        return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
     }
 }
 
-CANDevice::State SerialEmulator::sendMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State SerialEmulator::sendMessage(NETV_MESSAGE &message)
 {
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     if (m_serialPort)
@@ -104,20 +104,20 @@ CANDevice::State SerialEmulator::sendMessage(LABORIUS_MESSAGE &message)
 	//We need to post the event so the message is processed in the right thread
         QCoreApplication::postEvent(this,new SerialEmulatorSendEvent(message));
 	
-	return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
     }
     else
     {
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
 }
 
-CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State SerialEmulator::recvMessage(NETV_MESSAGE &message)
 {
 
-    //qDebug("CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)");
+    //qDebug("NETVDevice::State SerialEmulator::recvMessage(NETV_MESSAGE &message)");
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
-    CANDevice::State returnState = CANDevice::CANDEVICE_FAIL;
+    NETVDevice::State returnState = NETVDevice::NETVDEVICE_FAIL;
 
     bool acquire = m_recvSemaphore.tryAcquire(1,10); //try acquire for 10ms
 
@@ -125,7 +125,7 @@ CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
     if ( m_serialPort && acquire)
     {
         //not yet received messages
-        returnState = CANDevice::CANDEVICE_OVERFLOW;
+        returnState = NETVDevice::NETVDEVICE_OVERFLOW;
 
 	m_recvQueueMutex.lock();
 
@@ -138,7 +138,7 @@ CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
             m_recvQueue.pop_front();
 
             //Change the return state
-            returnState = CANDevice::CANDEVICE_OK;
+            returnState = NETVDevice::NETVDEVICE_OK;
 
             //Convert data structures
             message.msg_priority = (buf.pri_boot_rtr >> 5) & 0x07;
@@ -155,7 +155,7 @@ CANDevice::State SerialEmulator::recvMessage(LABORIUS_MESSAGE &message)
                message.msg_data[i] = buf.data[i];
             }
 
-            //CANDevice::printMessage(message);
+            //NETVDevice::printMessage(message);
 	}
 	
 	m_recvQueueMutex.unlock();

@@ -77,8 +77,8 @@ public:
 
         //Scan for all drivers
         //When we are in a test environment
-        CANDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/drivers");
-        CANDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/../drivers");
+        NETVDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/drivers");
+        NETVDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/../drivers");
 
        
 

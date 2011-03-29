@@ -20,7 +20,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("SerialBridge",new CANDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialBridge",new NETVDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
 
 
 SerialBridge::SerialBridge(const char* args)
@@ -41,7 +41,7 @@ SerialBridge::~SerialBridge()
     }
 }
 
-CANDevice::State SerialBridge::initialize(const char* args)
+NETVDevice::State SerialBridge::initialize(const char* args)
 {
 
     QStringList config = QString(args).split(";");
@@ -62,7 +62,7 @@ CANDevice::State SerialBridge::initialize(const char* args)
         qDebug("SerialBridge::initialize() : Cannot open serial port : %s",args);
         delete m_serialPort;
         m_serialPort = NULL;
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
     else
     {
@@ -77,11 +77,11 @@ CANDevice::State SerialBridge::initialize(const char* args)
         m_testTimer->start(1000);
 
 
-        return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
     }
 }
 
-CANDevice::State SerialBridge::sendMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State SerialBridge::sendMessage(NETV_MESSAGE &message)
 {
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     if (m_serialPort)
@@ -89,25 +89,25 @@ CANDevice::State SerialBridge::sendMessage(LABORIUS_MESSAGE &message)
 	//We need to post the event so the message is processed in the right thread
         QCoreApplication::postEvent(this,new SerialBridgeSendEvent(message));
 	
-	return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
     }
     else
     {
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
 }
 
-CANDevice::State SerialBridge::recvMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State SerialBridge::recvMessage(NETV_MESSAGE &message)
 {
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
-    CANDevice::State returnState = CANDevice::CANDEVICE_FAIL;
+    NETVDevice::State returnState = NETVDevice::NETVDEVICE_FAIL;
 
     bool acquire = m_recvSemaphore.tryAcquire(1,10); //try acquire for 10ms
 
     if ( m_serialPort && acquire)
     {
         //not yet received messages
-        returnState = CANDevice::CANDEVICE_UNDERFLOW;
+        returnState = NETVDevice::NETVDEVICE_UNDERFLOW;
 
 	m_recvQueueMutex.lock();
 
@@ -120,13 +120,13 @@ CANDevice::State SerialBridge::recvMessage(LABORIUS_MESSAGE &message)
             m_recvQueue.pop_front();
 
             //Change the return state
-            returnState = CANDevice::CANDEVICE_OK;
+            returnState = NETVDevice::NETVDEVICE_OK;
 
             unsigned int SID = (msg.messageWord[0]) & 0x000007FF;
             unsigned int EID = (msg.messageWord[1] >> 10)  & 0x0003FFFF;
 
 
-            //Here convert the message buffer to a LABORIUS_CAN message
+            //Here convert the message buffer to a NETV_CAN message
             message.msg_priority = (SID >> 8) & 0x07;
             message.msg_type = (SID) & 0xFF;
             message.msg_boot = (EID >> 16) & 0x03 ;
@@ -144,7 +144,7 @@ CANDevice::State SerialBridge::recvMessage(LABORIUS_MESSAGE &message)
             message.msg_filter_hit = msg.msgSID.IFACE;
             message.msg_dwTime = msg.msgSID.CMSGTS;
 
-            //CANDevice::printMessage(message);
+            //NETVDevice::printMessage(message);
 	}
 	
 	m_recvQueueMutex.unlock();

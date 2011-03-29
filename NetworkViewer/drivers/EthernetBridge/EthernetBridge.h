@@ -20,15 +20,15 @@
 #define _ETHERNET_BRIDGE_H_
 
 #include <QTcpSocket>
-#include "CANDevice.h"
+#include "NETVDevice.h"
 #include <QSemaphore>
 #include <QMutex>
 #include <QList>
 #include <QEvent>
 
 typedef enum {
-	ETHERNET_BRIDGE_CAN1,
-	ETHERNET_BRIDGE_CAN2
+        ETHERNET_BRIDGE_CAN1,
+        ETHERNET_BRIDGE_CAN2
 } CAN_IFACE;
 
 typedef unsigned char  BYTE;	/* 8-bit unsigned  */
@@ -49,12 +49,12 @@ typedef	struct
 {
     // CAN TX Message Standard ID. This value should
     // be between 0x0 - 0x7FF.
-	unsigned SID:11;
-	
-	//CAN interface number
-	unsigned IFACE:5;
-	
-	unsigned :16;
+        unsigned SID:11;
+
+        //CAN interface number
+        unsigned IFACE:5;
+
+        unsigned :16;
 }CAN_TX_MSG_SID;
 
 
@@ -72,14 +72,14 @@ typedef	struct
 typedef	struct 
 {
     // SID of the Received CAN Message. 
-	unsigned SID:11;
+        unsigned SID:11;
 
-	//CAN interface number
-	unsigned IFACE:5;
-	
+        //CAN interface number
+        unsigned IFACE:5;
+
     // Time stamp of the received message. This is
     // valid only if the Timestamping is enabled.
-	unsigned CMSGTS:16;
+        unsigned CMSGTS:16;
 
 }CAN_RX_MSG_SID;
 
@@ -100,32 +100,32 @@ typedef struct
     // Data Length Control. Specifies the size of the
     // data payload section of the CAN packet. Valid 
     // values are 0x0 - 0x8.
-	unsigned DLC:4;
+        unsigned DLC:4;
 
     // Reserved bit. Should be always 0.
-	unsigned RB0:1;
-	unsigned :3;
+        unsigned RB0:1;
+        unsigned :3;
 
     // Reserved bit. Should be always 0.
-	unsigned RB1:1;
+        unsigned RB1:1;
 
     // Remote Transmit Request bit. Should be set for
     // RTR messages, clear otherwise.
-	unsigned RTR:1;
+        unsigned RTR:1;
 
     // CAN TX and RX Extended ID field. Valid values
     // are in range 0x0 - 0x3FFFF. 
-	unsigned EID:18;
+        unsigned EID:18;
 
     // Identifier bit. If 0 means that message is SID.
     // If 1 means that message is EID type.
-	unsigned IDE:1;
+        unsigned IDE:1;
 
     // Susbtitute Remote request bit. This bit should
     // always be clear for an EID message. It is ignored
     // for an SID message.
-	unsigned SRR:1;
-	unsigned :2;
+        unsigned SRR:1;
+        unsigned :2;
 
 }CAN_MSG_EID;
 
@@ -144,23 +144,23 @@ typedef struct
     CAN RX channel, the caller should use the dataOnlyMsgData member of the structure and
     should read only 8 bytes of data.
 
-     
+
 */
 
 typedef union {
 
-	struct
-	{
+        struct
+        {
         // This is SID portion of the CAN RX message.
-		CAN_RX_MSG_SID msgSID;
+                CAN_RX_MSG_SID msgSID;
 
         // This is EID portion of the CAN RX message
-		CAN_MSG_EID msgEID;
+                CAN_MSG_EID msgEID;
 
         // This is the data payload section of the 
         // received message.
-		BYTE data[7];
-	};
+                BYTE data[7];
+        };
 
     // This can be used if the message buffer is to 
     // be read from a Data-Only type of CAN RX Channel.
@@ -168,7 +168,7 @@ typedef union {
 
     // This is CAN RX message organized as a set of 32 bit 
     // words.
-	UINT32 messageWord[4];
+        UINT32 messageWord[4];
 
 }CANRxMessageBuffer;
 
@@ -193,87 +193,87 @@ typedef union {
 
 typedef union {
 
-	struct
-	{
+        struct
+        {
         // This is SID portion of the CAN TX message.
-		CAN_TX_MSG_SID msgSID;
+                CAN_TX_MSG_SID msgSID;
 
         // This is EID portion of the CAN TX message.
-		CAN_MSG_EID msgEID;
+                CAN_MSG_EID msgEID;
 
         // This is the data portion of the CAN TX message.
-		BYTE data[7];
-	};
+                BYTE data[7];
+        };
 
     // This is CAN TX message organized as a set of 32 bit 
     // words.
-	UINT32 messageWord[4];
+        UINT32 messageWord[4];
 
 }CANTxMessageBuffer;
 
 
-class EthernetBridge : public QTcpSocket, public CANDevice
+class EthernetBridge : public QTcpSocket, public NETVDevice
 {
-	Q_OBJECT;
+        Q_OBJECT;
 
-	public:
+        public:
 
 
-	class EthernetBridgeSendEvent : public QEvent
-	{
-		public:
-		
-		EthernetBridgeSendEvent(const LABORIUS_MESSAGE &message)
-			:	QEvent(QEvent::User)
-		{
-			m_message = message;
-		}
-		
-		LABORIUS_MESSAGE m_message;
+        class EthernetBridgeSendEvent : public QEvent
+        {
+                public:
+
+                EthernetBridgeSendEvent(const NETV_MESSAGE &message)
+                        :	QEvent(QEvent::User)
+                {
+                        m_message = message;
+                }
+
+                NETV_MESSAGE m_message;
 	
-	};
+        };
 
         EthernetBridge(const char* params);
 
-	
-	EthernetBridge(QString host, int port = 6653);
-	
-	
-	virtual CANDevice::State initialize(const char* args);
+
+        EthernetBridge(QString host, int port = 6653);
 
 
-	  /** send a LABORIUS_MESSAGE
+        virtual NETVDevice::State initialize(const char* args);
+
+
+          /** send a NETV_MESSAGE
 		   \param message The message to send
 		   \return int The status after the message has been sent
 	  */
-	  virtual CANDevice::State sendMessage(LABORIUS_MESSAGE &message);
+          virtual NETVDevice::State sendMessage(NETV_MESSAGE &message);
 
-	  /** receive a LABORIUS_MESSAGE
+          /** receive a NETV_MESSAGE
 		   \param message The message to receive (will be filled)
 		   \return int The status after the message has been received
 	  */
-	  virtual CANDevice::State recvMessage(LABORIUS_MESSAGE &message);
+          virtual NETVDevice::State recvMessage(NETV_MESSAGE &message);
 
-	  /** Verify if a message is ready to receive
+          /** Verify if a message is ready to receive
 		   \return bool true if a message is ready to be received
 	  */
-	  virtual bool newMessageReady();
-	
+          virtual bool newMessageReady();
+
 	public slots:
-	
-	void socketConnected();
-	void socketReadyRead();
-	
-	
-	protected:
-	
-	//Internal event processing...
-	bool event(QEvent *event);
-	
-	QList<CANTxMessageBuffer> m_sendQueue;
-	QList<CANRxMessageBuffer> m_recvQueue;
-	QMutex m_sendQueueMutex;
-	QMutex m_recvQueueMutex;
+
+        void socketConnected();
+        void socketReadyRead();
+
+
+        protected:
+
+        //Internal event processing...
+        bool event(QEvent *event);
+
+        QList<CANTxMessageBuffer> m_sendQueue;
+        QList<CANRxMessageBuffer> m_recvQueue;
+        QMutex m_sendQueueMutex;
+        QMutex m_recvQueueMutex;
 };
 
 

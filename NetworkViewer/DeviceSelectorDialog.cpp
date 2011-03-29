@@ -18,7 +18,7 @@
 
 #include "DeviceSelectorDialog.h"
 #include "NetworkView.h"
-#include "CANDevice.h"
+#include "NETVDevice.h"
 
 DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
     : m_view(view), m_factory(NULL)
@@ -28,7 +28,7 @@ DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
     setupUi(this);
 
     //Look for devices and add them to the combo box
-    QStringList devList = CANDevice::deviceList();
+    QStringList devList = NETVDevice::deviceList();
 
     for (int i = 0; i < devList.size(); i++)
     {
@@ -53,7 +53,7 @@ QString DeviceSelectorDialog::selectedDevice()
 void DeviceSelectorDialog::comboActivated(int index)
 {
     //update args and documentation
-    m_factory= CANDevice::getFactoryNamed(comboBox->currentText());
+    m_factory= NETVDevice::getFactoryNamed(comboBox->currentText());
 
     if (m_factory)
     {
@@ -81,7 +81,7 @@ QString DeviceSelectorDialog::documentation()
     return textEditDoc->toPlainText();
 }
 
-CANDevice::BaseDeviceFactory* DeviceSelectorDialog::getFactory()
+NETVDevice::BaseDeviceFactory* DeviceSelectorDialog::getFactory()
 {
     return m_factory;
 }

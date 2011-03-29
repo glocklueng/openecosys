@@ -19,12 +19,12 @@
 #include <errno.h>
 #include <iostream>
 #include <math.h>
-#include "CAN_define.h"
+#include "NETV_define.h"
 #include <QtDebug>
 
 using namespace std;
 
-static bool PCAN_DEVICE_INIT = CANDevice::registerDeviceFactory("PCANDevice",new CANDevice::DeviceFactory<PCANDevice>("/dev/pcan32","Arguments for Linux only."));
+static bool PCAN_DEVICE_INIT = NETVDevice::registerDeviceFactory("PCANDevice",new NETVDevice::DeviceFactory<PCANDevice>("/dev/pcan32","Arguments for Linux only."));
 
 
 PCANDevice::PCANDevice(const char* device)
@@ -52,7 +52,7 @@ PCANDevice::~PCANDevice()
 #endif
 }
 
-CANDevice::State PCANDevice::initialize(const char* device)
+NETVDevice::State PCANDevice::initialize(const char* device)
 {
 
 #ifdef WIN32
@@ -75,7 +75,7 @@ CANDevice::State PCANDevice::initialize(const char* device)
         char message[1024];
         sprintf(message,"PCANDevice::initialize unable to open device  : %s",device);
         perror(message);
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
 
     //Setup device, 1 Mbps, extended frames
@@ -87,11 +87,11 @@ CANDevice::State PCANDevice::initialize(const char* device)
 
     if (init_value == 0)
     {
-        return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
     }
     else
     {
-        return CANDevice::CANDEVICE_FAIL;
+        return NETVDevice::NETVDEVICE_FAIL;
     }
 }
 
@@ -211,13 +211,13 @@ DWORD PCANDevice::checkStatus(bool debug){
 }
 
 
-CANDevice::State PCANDevice::sendMessage(LABORIUS_MESSAGE &message) {
+NETVDevice::State PCANDevice::sendMessage(NETV_MESSAGE &message) {
 
     //fill data structure to send
     TPCANMsg msg;
 
     DWORD result = 0;
-    CANDevice::State retval = CANDevice::CANDEVICE_FAIL;
+    NETVDevice::State retval = NETVDevice::NETVDEVICE_FAIL;
 
     //ID
     msg.ID = 0;
@@ -263,7 +263,7 @@ CANDevice::State PCANDevice::sendMessage(LABORIUS_MESSAGE &message) {
     }
 #endif
 
-    retval = CANDevice::CANDEVICE_OK;
+    retval = NETVDevice::NETVDEVICE_OK;
     
 
 
@@ -272,9 +272,9 @@ CANDevice::State PCANDevice::sendMessage(LABORIUS_MESSAGE &message) {
 
 
 
-CANDevice::State PCANDevice::recvMessage(LABORIUS_MESSAGE &message) {
+NETVDevice::State PCANDevice::recvMessage(NETV_MESSAGE &message) {
 
-    CANDevice::State retval = CANDevice::CANDEVICE_FAIL;
+    NETVDevice::State retval = NETVDevice::NETVDEVICE_FAIL;
     DWORD result = 0;
 
 #ifdef WIN32
@@ -342,15 +342,15 @@ CANDevice::State PCANDevice::recvMessage(LABORIUS_MESSAGE &message) {
             break;
         }//switch message type
 
-        retval = CANDevice::CANDEVICE_OK;
+        retval = NETVDevice::NETVDEVICE_OK;
     }//result == ok
     else if (result == PCAN_ERROR_QRCVEMPTY)
     {
-        retval = CANDevice::CANDEVICE_UNDERFLOW;
+        retval = NETVDevice::NETVDEVICE_UNDERFLOW;
     }
     else if (result == PCAN_ERROR_BUSLIGHT || result == PCAN_ERROR_BUSHEAVY || result == PCAN_ERROR_BUSOFF)
     {
-        retval = CANDevice::CANDEVICE_BUS;
+        retval = NETVDevice::NETVDEVICE_BUS;
     }
 
 #else //LINUX...
@@ -405,7 +405,7 @@ CANDevice::State PCANDevice::recvMessage(LABORIUS_MESSAGE &message) {
             applyFilters(message);
 
 
-            retval = CANDevice::CANDEVICE_OK;
+            retval = NETVDevice::NETVDEVICE_OK;
 
         }//CAN_ERR_OK
     }//if m_handle

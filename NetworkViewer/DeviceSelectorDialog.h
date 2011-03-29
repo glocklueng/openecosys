@@ -22,7 +22,7 @@
 #include "ui_DeviceSelectorDialog.h"
 #include <QDialog>
 #include <QString>
-#include "CANDevice.h"
+#include "NETVDevice.h"
 
 ///Forward declaration of NetworkView
 class NetworkView;
@@ -66,9 +66,9 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
 
 
     /**
-        \return CANDevice::BaseDeviceFactory* The current factory associated with the selection
+        \return NETVDevice::BaseDeviceFactory* The current factory associated with the selection
     */
-    CANDevice::BaseDeviceFactory* getFactory();
+    NETVDevice::BaseDeviceFactory* getFactory();
 
 
     protected slots:
@@ -85,7 +85,7 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
     NetworkView *m_view;
 
     ///The current factory
-    CANDevice::BaseDeviceFactory* m_factory;
+    NETVDevice::BaseDeviceFactory* m_factory;
 	
 };
 

@@ -24,7 +24,7 @@
 /**
     An user event that is used for signaling a new message from a thread to another thread with the Qt event system.
 */
-class CANMessageEvent : public QEvent
+class NETVMessageEvent : public QEvent
 {
     public:
 
@@ -32,21 +32,21 @@ class CANMessageEvent : public QEvent
         Constructor
         \param msg the message to put in the event
      */
-    CANMessageEvent(const LABORIUS_MESSAGE &msg)
+    NETVMessageEvent(const NETV_MESSAGE &msg)
     : QEvent(QEvent::User), m_message(msg)
     {
 
     }
 
     /**
-        \return LABORIUS_MESSAGE the contained message
+        \return NETV_MESSAGE the contained message
     */
-    LABORIUS_MESSAGE getMessage() {return m_message;}
+    NETV_MESSAGE getMessage() {return m_message;}
    
     protected:
 
     ///The message
-    LABORIUS_MESSAGE m_message;
+    NETV_MESSAGE m_message;
 };
 
 

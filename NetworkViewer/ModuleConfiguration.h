@@ -173,7 +173,7 @@ signals:
 
     /**
         This signal is emitted when a variable has been changed from the user. The variable must then be
-        written to the \ref CANDevice.
+        written to the \ref NETVDevice.
     */
     void variableWrite(ModuleVariable*  variable);
 

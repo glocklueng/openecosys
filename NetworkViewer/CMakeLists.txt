@@ -200,7 +200,7 @@ INSTALL(EXPORT qwt-wrap-export-targets DESTINATION share/cmake)
 INSTALL(FILES ${QWT_HEADERS} DESTINATION include/qwt)
 
 SET(NetworkViewer_SRCS
-	CANInterfaceHandler.cpp
+        NETVInterfaceHandler.cpp
 	ModuleVariable.cpp
 	ModuleConfiguration.cpp
 	ModuleConfigurationView.cpp
@@ -212,11 +212,12 @@ SET(NetworkViewer_SRCS
 	NetworkScheduler.cpp
 	plugins/ScopeView/ScopeVariableConfig.cpp
 	BasePlugin.cpp
-	CANDevice.cpp
+	NETVDevice.cpp
 	DeviceSelectorDialog.cpp
         ModuleVariableTableWidget.cpp
         PreferencesDialog.cpp
 )
+
 
 SET(NetworkViewer_HEADERS 
 	ModuleVariable.h
@@ -227,13 +228,13 @@ SET(NetworkViewer_HEADERS
 	NetworkModuleItem.h
 	plugins/ScopeView/ScopeCurve.h
 	plugins/ScopeView/ScopeView.h
-	CANMessageEvent.h
-	CANInterfaceHandler.h
+        NETVMessageEvent.h
+        NETVInterfaceHandler.h
 	NetworkScheduler.h
 	plugins/ScopeView/ScopeVariableConfig.h
 	BasePlugin.h
-	CAN_define.h
-	CANDevice.h
+        NETV_define.h
+	NETVDevice.h
 	DeviceSelectorDialog.h
         NetworkViewerSplashScreen.h
         ModuleVariableTableWidget.h
