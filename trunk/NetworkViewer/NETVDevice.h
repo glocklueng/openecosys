@@ -37,9 +37,9 @@ using namespace std;
 /**
      \brief NETV_MESSAGE
      
-     This data structure holds CAN message informations
-     to be written to the CAN bus or read from the
-     CAN bus. The 29 bit extended frames are separated into
+     This data structure holds NETV message informations
+     to be written to the NETV bus or read from the
+     NETV bus. The 29 bit extended frames are separated into
      LABORIUS home made protocol and fields.
      
      \author Dominic Letourneau

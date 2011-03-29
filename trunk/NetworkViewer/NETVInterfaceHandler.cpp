@@ -30,19 +30,19 @@ NETVInterfaceHandler::NETVRecvThread::NETVRecvThread(NETVInterfaceHandler *handl
 
 void NETVInterfaceHandler::NETVRecvThread::run ()
 {
-	qDebug("Starting CAN recv thread");
+        qDebug("Starting NETV recv thread");
 
 	while(m_handler->isRunning())
 	{
 		m_handler->recvThreadFunction();
 	}
 
-	qDebug("Stopping CAN recv thread");
+        qDebug("Stopping NETV recv thread");
 
 	//Event loop (will handle thread termination)
 	//exec();
 
-	qDebug("Done CAN recv thread");
+        qDebug("Done NETV recv thread");
 }
 
 
@@ -59,19 +59,19 @@ NETVInterfaceHandler::NETVSendThread::NETVSendThread(NETVInterfaceHandler *handl
 
 void NETVInterfaceHandler::NETVSendThread::run ()
 {
-	qDebug("Starting CAN send thread");
+        qDebug("Starting NETV send thread");
 
 	while(m_handler->isRunning())
 	{
 		m_handler->sendThreadFunction();
 	}
 
-	qDebug("Stopping CAN send thread");
+        qDebug("Stopping NETV send thread");
 
 	//event loop (will handle thread termination)
 	//exec();
 
-	qDebug("Done CAN send thread");
+        qDebug("Done NETV send thread");
 }
 
 void NETVInterfaceHandler::NETVSendThread::thread_usleep(unsigned long microseconds)
@@ -109,11 +109,11 @@ NETVInterfaceHandler::NETVInterfaceHandler(NETVDevice *device, const char* args,
 	}
 	else
 	{
-                qDebug("NETVInterfaceHandler() Cannot open CAN device");
+                qDebug("NETVInterfaceHandler() Cannot open NETV device");
 	}
 }
 
-///Destructor, will terminate threads and close the CAN device
+///Destructor, will terminate threads and close the NETV device
 NETVInterfaceHandler::~NETVInterfaceHandler()
 {
 
@@ -144,7 +144,7 @@ NETVInterfaceHandler::~NETVInterfaceHandler()
             delete m_device;
         }
 
-	///This will close the CAN device
+        ///This will close the NETV device
 	//m_device->close();
 }
 

@@ -30,9 +30,9 @@
 
 
 /**
-   This interface will allow us to receive CAN messages if we subscribe to 
+   This interface will allow us to receive NETV messages if we subscribe to
    the service. Right now messages are not filtered, and we will receive
-   all the CAN messages on the bus if we subscribe to the service. You must derive
+   all the NETV messages on the bus if we subscribe to the service. You must derive
    from this class to be able to receive messages.
 
     \author Dominic Letourneau
@@ -47,7 +47,7 @@ class NETVMessageObserverIF
 
 
 /**
-    NETVInterfaceHandler will handle CAN communication. This class is thread safe.
+    NETVInterfaceHandler will handle NETV communication. This class is thread safe.
     A receive and a send thread will be created for communication.
     \author Dominic Letourneau
     \date 22/05/2008
@@ -64,7 +64,7 @@ class NETVInterfaceHandler : public QObject
     friend class NETVRecvThread;
 
     /**
-        This working thread is responsible of reading CAN messages from the device
+        This working thread is responsible of reading NETV messages from the device
     */
     class NETVRecvThread : public QThread
     {
@@ -74,7 +74,7 @@ class NETVInterfaceHandler : public QObject
         NETVRecvThread(NETVInterfaceHandler *handler);
         
         /** 
-            Run will start receving from the CAN device.
+            Run will start receving from the NETV device.
             recvThreadFunction() is blocking (1 sec timeout)
         */
         virtual void run ();
@@ -92,7 +92,7 @@ class NETVInterfaceHandler : public QObject
     };
 
     /**
-        This working thread is responsible of writing CAN messages to the device
+        This working thread is responsible of writing NETV messages to the device
     */
     class NETVSendThread : public QThread
     {
@@ -101,7 +101,7 @@ class NETVInterfaceHandler : public QObject
         NETVSendThread(NETVInterfaceHandler *handler);
 
         /** 
-            Run will start sending to the CAN device.
+            Run will start sending to the NETV device.
             sendThreadFunction() is blocking (1 sec timeout)
         */
         virtual void run ();
@@ -126,7 +126,7 @@ class NETVInterfaceHandler : public QObject
     */
     NETVInterfaceHandler(NETVDevice *device, const char* args, QObject *parent = NULL);
 	
-    ///Destructor, will terminate threads and close the CAN device
+    ///Destructor, will terminate threads and close the NETV device
     virtual ~NETVInterfaceHandler();
 
     /**
@@ -136,13 +136,13 @@ class NETVInterfaceHandler : public QObject
     bool isRunning();
 
     /**
-        Register an observer. The observer will receive (ALL) incoming CAN messages.
+        Register an observer. The observer will receive (ALL) incoming NETV messages.
         \param observer The observer will be added to the observers list.
     */
     void registerObserver(NETVMessageObserverIF *observer);
 
     /**
-        Unregister an observer. The observer will stop receiving incoming CAN messages
+        Unregister an observer. The observer will stop receiving incoming NETV messages
         \param observer The observer will be removed from the observers list.
     */
     void unregisterObserver(NETVMessageObserverIF *observer);
@@ -188,14 +188,14 @@ class NETVInterfaceHandler : public QObject
     void sendThreadFunction();
 
     /**
-        This function will receive CAN messages from the device.
+        This function will receive NETV messages from the device.
         The function will make a blocking read.
         This function is called from the recv worker thread.
     */
     void recvThreadFunction();
 
     /**
-        Notify observers that a new CAN message is available
+        Notify observers that a new NETV message is available
     */
     void notifyCANObservers(const NETV_MESSAGE &msg);
 
