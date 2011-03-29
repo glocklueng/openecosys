@@ -400,3 +400,33 @@ void ScopeView::dropEvent(QDropEvent *event)
 }
 
 
+bool ScopeView::event ( QEvent * e )
+{
+    if(e->type() == BasePluginEvent::eventType())
+    {
+
+        BasePluginEvent *event = dynamic_cast<BasePluginEvent*>(e);
+
+        if(event)
+        {
+            //Get the message...
+            for(QMap<QString,QVariant>::iterator iter = event->m_map.begin(); iter != event->m_map.end(); iter++)
+            {
+                if (iter.key() == "addCurve")
+                {
+                    bool ok;
+                    ModuleVariable *var = (ModuleVariable*) iter.value().toLongLong(&ok);
+                    if (ok && var)
+                    {
+                        addCurve(var);
+                    }
+                }
+            }
+        }
+
+        e->accept();
+        return true;
+    }
+
+    return BasePlugin::event(e);
+}

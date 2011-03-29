@@ -205,3 +205,54 @@ void Logger::lineEditTextChanged(QString value)
     //make sure we close the previously opened file
     m_file.setFileName(value);
 }
+
+void Logger::addVariable(ModuleVariable *variable)
+{
+    m_table->addVariable(variable);
+}
+
+
+void Logger::removeVariable(ModuleVariable *variable)
+{
+    m_table->removeVariable(variable);
+}
+
+bool Logger::event ( QEvent * e )
+{
+    if(e->type() == BasePluginEvent::eventType())
+    {
+
+        BasePluginEvent *event = dynamic_cast<BasePluginEvent*>(e);
+
+        if(event)
+        {
+            //Get the message...
+            for(QMap<QString,QVariant>::iterator iter = event->m_map.begin(); iter != event->m_map.end(); iter++)
+            {
+                if (iter.key() == "addVariable")
+                {
+                    bool ok;
+                    ModuleVariable *var = (ModuleVariable*) iter.value().toLongLong(&ok);
+                    if (ok && var)
+                    {
+                        addVariable(var);
+                    }
+                }
+                else if (iter.key() == "removeVariable")
+                {
+                    bool ok;
+                    ModuleVariable *var = (ModuleVariable*) iter.value().toLongLong(&ok);
+                    if (ok && var)
+                    {
+                        removeVariable(var);
+                    }
+                }
+            }
+        }
+
+        e->accept();
+        return true;
+    }
+
+    return BasePlugin::event(e);
+}

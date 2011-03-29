@@ -212,6 +212,7 @@ SET(NetworkViewer_SRCS
 	NetworkScheduler.cpp
 	plugins/ScopeView/ScopeVariableConfig.cpp
 	BasePlugin.cpp
+        BasePluginEvent.cpp
 	NETVDevice.cpp
 	DeviceSelectorDialog.cpp
         ModuleVariableTableWidget.cpp
@@ -233,6 +234,7 @@ SET(NetworkViewer_HEADERS
 	NetworkScheduler.h
 	plugins/ScopeView/ScopeVariableConfig.h
 	BasePlugin.h
+        BasePluginEvent.h
         NETV_define.h
 	NETVDevice.h
 	DeviceSelectorDialog.h

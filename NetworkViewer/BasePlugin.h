@@ -22,11 +22,11 @@
 #include <QMap>
 #include <QLibrary>
 #include <QDir>
-
+#include <QEvent>
+#include "BasePluginEvent.h"
 
 //Forward Declaration of NetworkView
 class NetworkView;
-;
 
 /**
  * Every plugin must inherit from this class. Basically, a plugin is a QWidget
