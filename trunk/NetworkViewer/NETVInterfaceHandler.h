@@ -16,14 +16,14 @@
 
  */
 
-#ifndef _CAN_INTERFACE_HANDLER_H_
-#define _CAN_INTERFACE_HANDLER_H_
+#ifndef _NETV_INTERFACE_HANDLER_H_
+#define _NETV_INTERFACE_HANDLER_H_
 
 #include <QObject>
 #include <QThread>
 #include <QMutex>
 #include <QSemaphore>
-#include "CANDevice.h"
+#include "NETVDevice.h"
 #include <QCoreApplication>
 #include <QTimer>
 
@@ -38,21 +38,21 @@
     \author Dominic Letourneau
     \date 22/05/2008
 */
-class CANMessageObserverIF
+class NETVMessageObserverIF
 {
     public:
     ///notify function for new messages
-    virtual void notifyCANMessage(const LABORIUS_MESSAGE &msg) = 0;
+    virtual void notifyNETVMessage(const NETV_MESSAGE &msg) = 0;
 };
 
 
 /**
-    CANInterfaceHandler will handle CAN communication. This class is thread safe.
+    NETVInterfaceHandler will handle CAN communication. This class is thread safe.
     A receive and a send thread will be created for communication.
     \author Dominic Letourneau
     \date 22/05/2008
 */
-class CANInterfaceHandler : public QObject
+class NETVInterfaceHandler : public QObject
 {
     Q_OBJECT;
 
@@ -60,18 +60,18 @@ class CANInterfaceHandler : public QObject
 
 
     ///WORKER THREADS ARE FRIENDS TO ALLOW CALLING PROTECTED & PRIVATE FUNCTIONS
-    friend class CANSendThread;
-    friend class CANRecvThread;
+    friend class NETVSendThread;
+    friend class NETVRecvThread;
 
     /**
         This working thread is responsible of reading CAN messages from the device
     */
-    class CANRecvThread : public QThread
+    class NETVRecvThread : public QThread
     {
         public:
 
-        ///Constructor taking the CANInterfaceHandler pointer
-        CANRecvThread(CANInterfaceHandler *handler);
+        ///Constructor taking the NETVInterfaceHandler pointer
+        NETVRecvThread(NETVInterfaceHandler *handler);
         
         /** 
             Run will start receving from the CAN device.
@@ -87,18 +87,18 @@ class CANInterfaceHandler : public QObject
         
         private:
 
-        ///CANInterfaceHandler (parent)
-        CANInterfaceHandler *m_handler;
+        ///NETVInterfaceHandler (parent)
+        NETVInterfaceHandler *m_handler;
     };
 
     /**
         This working thread is responsible of writing CAN messages to the device
     */
-    class CANSendThread : public QThread
+    class NETVSendThread : public QThread
     {
         public:
-        ///Constructor taking the CANInterfaceHandler pointer
-        CANSendThread(CANInterfaceHandler *handler);
+        ///Constructor taking the NETVInterfaceHandler pointer
+        NETVSendThread(NETVInterfaceHandler *handler);
 
         /** 
             Run will start sending to the CAN device.
@@ -114,20 +114,20 @@ class CANInterfaceHandler : public QObject
         
         private:
 
-        ///CANInterfaceHandler (parent)
-        CANInterfaceHandler *m_handler;
+        ///NETVInterfaceHandler (parent)
+        NETVInterfaceHandler *m_handler;
     };
 
     /**
         Constructor
-        \param device The \ref CANDevice to use
+        \param device The \ref NETVDevice to use
         \param args The arguments to send to the device
         \param parent Any QObject as parent. NULL if no parent.
     */
-    CANInterfaceHandler(CANDevice *device, const char* args, QObject *parent = NULL);
+    NETVInterfaceHandler(NETVDevice *device, const char* args, QObject *parent = NULL);
 	
     ///Destructor, will terminate threads and close the CAN device
-    virtual ~CANInterfaceHandler();
+    virtual ~NETVInterfaceHandler();
 
     /**
         Get the running flags for threads
@@ -139,25 +139,25 @@ class CANInterfaceHandler : public QObject
         Register an observer. The observer will receive (ALL) incoming CAN messages.
         \param observer The observer will be added to the observers list.
     */
-    void registerObserver(CANMessageObserverIF *observer);
+    void registerObserver(NETVMessageObserverIF *observer);
 
     /**
         Unregister an observer. The observer will stop receiving incoming CAN messages
         \param observer The observer will be removed from the observers list.
     */
-    void unregisterObserver(CANMessageObserverIF *observer);
+    void unregisterObserver(NETVMessageObserverIF *observer);
 
     /**
-        Push a LABORIUS_MESSAGE in the message queue.
+        Push a NETV_MESSAGE in the message queue.
         \param msg The message to send
     */
-    void pushCANMessage(const LABORIUS_MESSAGE &msg);
+    void pushNETVMessage(const NETV_MESSAGE &msg);
 
     /**
-        Push a list of LABORIUS_MESSAGE in the message queue.
+        Push a list of NETV_MESSAGE in the message queue.
         \param msgList The list containing the messages to send
     */
-    void pushCANMessages(const std::list<LABORIUS_MESSAGE> &msgList);
+    void pushNETVMessages(const std::list<NETV_MESSAGE> &msgList);
 
     /**
         \return int The count of message received
@@ -197,15 +197,15 @@ class CANInterfaceHandler : public QObject
     /**
         Notify observers that a new CAN message is available
     */
-    void notifyCANObservers(const LABORIUS_MESSAGE &msg);
+    void notifyCANObservers(const NETV_MESSAGE &msg);
 
     
     ///The abstract can device
-    CANDevice *m_device;
+    NETVDevice *m_device;
     ///The running flag is used for worker threads, they will iterate while it is true
     bool m_running;
     ///Message queue (for sending)
-    std::list<LABORIUS_MESSAGE> m_msgQueue;
+    std::list<NETV_MESSAGE> m_msgQueue;
     ///Mutex to protect the message queue
     QMutex m_listMutex;
     ///Mutex to protect the observer list
@@ -213,11 +213,11 @@ class CANInterfaceHandler : public QObject
     ///Semaphore used for synchronizing the send thread with the send queue
     QSemaphore m_listSemaphore;
     ///List of message observers
-    std::list<CANMessageObserverIF*> m_observers;
+    std::list<NETVMessageObserverIF*> m_observers;
     ///The send working thread
-    CANSendThread *m_canSendThread;
+    NETVSendThread *m_NETVSendThread;
     ///The recv working thread
-    CANRecvThread *m_canRecvThread;
+    NETVRecvThread *m_NETVRecvThread;
     ///Counter of message sent
     int m_messageSent;    
     ///Counter of message received

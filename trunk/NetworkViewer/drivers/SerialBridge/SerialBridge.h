@@ -20,7 +20,7 @@
 #define _SERIAL_BRIDGE_H_
 
 #include <QTcpSocket>
-#include "CANDevice.h"
+#include "NETVDevice.h"
 #include <QSemaphore>
 #include <QMutex>
 #include <QList>
@@ -216,7 +216,7 @@ typedef union {
 }CANTxMessageBuffer;
 
 
-class SerialBridge : public QObject, public CANDevice
+class SerialBridge : public QObject, public NETVDevice
 {
 	Q_OBJECT;
 
@@ -227,13 +227,13 @@ class SerialBridge : public QObject, public CANDevice
 	{
 		public:
 		
-                SerialBridgeSendEvent(const LABORIUS_MESSAGE &message)
+                SerialBridgeSendEvent(const NETV_MESSAGE &message)
 			:	QEvent(QEvent::User)
 		{
 			m_message = message;
 		}
 		
-		LABORIUS_MESSAGE m_message;
+		NETV_MESSAGE m_message;
 	
 	};
 
@@ -241,20 +241,20 @@ class SerialBridge : public QObject, public CANDevice
 
         virtual ~SerialBridge();
 	
-	virtual CANDevice::State initialize(const char* args);
+	virtual NETVDevice::State initialize(const char* args);
 
 
-	  /** send a LABORIUS_MESSAGE
+	  /** send a NETV_MESSAGE
 		   \param message The message to send
 		   \return int The status after the message has been sent
 	  */
-	  virtual CANDevice::State sendMessage(LABORIUS_MESSAGE &message);
+	  virtual NETVDevice::State sendMessage(NETV_MESSAGE &message);
 
-	  /** receive a LABORIUS_MESSAGE
+	  /** receive a NETV_MESSAGE
 		   \param message The message to receive (will be filled)
 		   \return int The status after the message has been received
 	  */
-	  virtual CANDevice::State recvMessage(LABORIUS_MESSAGE &message);
+	  virtual NETVDevice::State recvMessage(NETV_MESSAGE &message);
 
 	  /** Verify if a message is ready to receive
 		   \return bool true if a message is ready to be received

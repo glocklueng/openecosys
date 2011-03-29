@@ -30,8 +30,8 @@
 #include <QMdiSubWindow>
 #include <QPushButton>
 #include "NetworkModuleItem.h"
-#include "CANInterfaceHandler.h"
-#include "CANMessageEvent.h"
+#include "NETVInterfaceHandler.h"
+#include "NETVMessageEvent.h"
 #include "NetworkScheduler.h"
 #include "BasePlugin.h"
 #include "DeviceSelectorDialog.h"
@@ -94,7 +94,7 @@ protected:
     The main window
     \author Dominic Letourneau
 */
-class NetworkView : public QMainWindow, public Ui::NetworkView, public CANMessageObserverIF
+class NetworkView : public QMainWindow, public Ui::NetworkView, public NETVMessageObserverIF
 {
         //The NetworkScheduler can access internal members
         friend class NetworkScheduler;
@@ -131,10 +131,10 @@ public:
 	ScopeView* getScopeView();
 
         /**
-            Message notification, will be called from recvThread of \ref CANInterfaceHandler
+            Message notification, will be called from recvThread of \ref NETVInterfaceHandler
             \param msg the CAN message
         */
-	virtual void notifyCANMessage(const LABORIUS_MESSAGE &msg);
+	virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
 
         /**
             Get all network modules
@@ -305,7 +305,7 @@ protected:
 	void selectModule(NetworkModuleItem *module);
 
         /**
-            Event Handler, will process \ref CANMessageEvent
+            Event Handler, will process \ref NETVMessageEvent
             \param e The event to handle.
         */
 	bool event ( QEvent * e );
@@ -314,7 +314,7 @@ protected:
             Process a CAN message
             \param msg The message to process
         */
-        void processCANMessage(const LABORIUS_MESSAGE &msg);
+        void processCANMessage(const NETV_MESSAGE &msg);
 
         /**
             Write a variable to the CAN bus
@@ -341,7 +341,7 @@ protected:
 	ScopeView *m_scopeView;
 
         ///The CAN interface handler
-	CANInterfaceHandler *m_canHandler;
+	NETVInterfaceHandler *m_canHandler;
 
         ///The variable scheduling algorithm
 	NetworkScheduler* m_scheduler;

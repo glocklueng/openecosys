@@ -21,7 +21,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QFileDialog>
 #include <QBrush>
-#include "CAN_define.h"
+#include "NETV_define.h"
 
 
 CrossModuleItem::CrossModuleItem(NetworkModuleItem *parent)

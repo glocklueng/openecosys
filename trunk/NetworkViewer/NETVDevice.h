@@ -15,8 +15,8 @@
      OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 
  */
-#ifndef _CAN_DEVICE_H_
-#define _CAN_DEVICE_H_
+#ifndef _NETV_DEVICE_H_
+#define _NETV_DEVICE_H_
 
 #include <list>
 #include <string>
@@ -35,7 +35,7 @@
 using namespace std;
 
 /**
-     \brief LABORIUS_MESSAGE
+     \brief NETV_MESSAGE
      
      This data structure holds CAN message informations
      to be written to the CAN bus or read from the
@@ -99,16 +99,16 @@ typedef struct _message
      unsigned int msg_dwTime;
      
      
-} LABORIUS_MESSAGE;
+} NETV_MESSAGE;
 
 /**
 
-     \brief LABORIUS_FILTER
+     \brief NETV_FILTER
      
      A combination of mask and filter is done to determine if
      we have a filter hit. This can be used to detect particular
      types of messages. We have a hit if :
-     (LABORIUS_FILTER & LABORIUS_MASK) ^ (LABORIUS_MESSAGE & LABORIUS_MASK)  == 0
+     (NETV_FILTER & NETV_MASK) ^ (NETV_MESSAGE & NETV_MASK)  == 0
      This means that we do not have any difference between
      the masked message and the masked filter (binary operators).
      \author Dominic Letourneau
@@ -157,15 +157,15 @@ typedef struct _filter
      unsigned char filter_cmd;
      ///message destination filter
      unsigned char filter_dest;
-} LABORIUS_FILTER;
+} NETV_FILTER;
 
 /**
-     \brief LABORIUS_MASK
+     \brief NETV_MASK
      
      A combination of mask and filter is done to determine if
      we have a filter hit. This can be used to detect particular
      types of messages. We have a hit if :
-     (LABORIUS_FILTER & LABORIUS_MASK) ^ (LABORIUS_MESSAGE & LABORIUS_MASK)  == 0
+     (NETV_FILTER & NETV_MASK) ^ (NETV_MESSAGE & NETV_MASK)  == 0
      This means that we do not have any difference between
      the masked message and the masked filter (binary operators).
      \author Dominic Letourneau
@@ -213,21 +213,17 @@ typedef struct _mask
      unsigned char mask_cmd;
      ///mask destination
      unsigned char mask_dest;
-} LABORIUS_MASK;
+} NETV_MASK;
 
 
-///DATA TABLES MEM TYPES
-enum
-{
-     CAN_MEM_TYPE_RAM=0, CAN_MEM_TYPE_EEPROM=1
-};
+
 
 
 /**
 
 
 */
-class CANDevice 
+class NETVDevice
 {
 
     
@@ -260,7 +256,7 @@ class CANDevice
              * A new device related to the NetworkView.
              * \param args Driver arguments
              */
-            virtual CANDevice* create(const char* args) = 0;
+            virtual NETVDevice* create(const char* args) = 0;
 
             /**
                 \return The default arguments of the driver
@@ -314,7 +310,7 @@ class CANDevice
              * Overloaded from BaseDeviceFactory. This will create a new device
              * \param args Driver arguments
              */
-            virtual CANDevice* create(const char* args)
+            virtual NETVDevice* create(const char* args)
             {
                     return new T(args);
             }
@@ -332,38 +328,38 @@ class CANDevice
         };
 
           ///Device states
-          typedef enum {CANDEVICE_OK,
-                        CANDEVICE_FAIL,
-                        CANDEVICE_OVERFLOW,
-                        CANDEVICE_UNDERFLOW,
-                        CANDEVICE_BUS,
-                        CANDEVICE_NOT_INITIALIZED} State;
+          typedef enum {NETVDEVICE_OK,
+                        NETVDEVICE_FAIL,
+                        NETVDEVICE_OVERFLOW,
+                        NETVDEVICE_UNDERFLOW,
+                        NETVDEVICE_BUS,
+                        NETVDEVICE_NOT_INITIALIZED} State;
 
-	  CANDevice() 
+          NETVDevice()
 	  {
-		qDebug("CANDevice Constructor");
+                qDebug("NETVDevice Constructor");
 	  }
 
-          virtual ~CANDevice()
+          virtual ~NETVDevice()
           {
-		qDebug("CANDevice Destructor");
+                qDebug("NETVDevice Destructor");
           }
 	 
 
           //Will initialize with defined arguments
           virtual State initialize(const char* args) = 0;
 
-          /** send a LABORIUS_MESSAGE
+          /** send a NETV_MESSAGE
                \param message The message to send
                \return State The status after the message has been sent
           */
-          virtual State sendMessage(LABORIUS_MESSAGE &message) = 0;
+          virtual State sendMessage(NETV_MESSAGE &message) = 0;
 
-          /** receive a LABORIUS_MESSAGE
+          /** receive a NETV_MESSAGE
                \param message The message to receive (will be filled)
                \return int The status after the message has been received
           */
-          virtual State recvMessage(LABORIUS_MESSAGE &message) = 0;
+          virtual State recvMessage(NETV_MESSAGE &message) = 0;
 
           /** Verify if a message is ready to receive
                \return bool true if a message is ready to be received
@@ -373,28 +369,28 @@ class CANDevice
           /** Add a filter to verify incoming messages
                \param filter the filter to be added               
           */
-          void addFilter(LABORIUS_FILTER &filter);
+          void addFilter(NETV_FILTER &filter);
 
           /** Add a mask to very incoming messages
                \param mask the mask to be added
           */
-          void addMask(LABORIUS_MASK &mask);
+          void addMask(NETV_MASK &mask);
 
           /** Get the masks used for filtering
-              \return vector<LABORIUS_MASK> All the masks used for filtering
+              \return vector<NETV_MASK> All the masks used for filtering
           */
-          vector<LABORIUS_MASK> & getMasks() {return m_masks;}
+          vector<NETV_MASK> & getMasks() {return m_masks;}
 
           /** Get the filters used for filtering (hits)
-               \return vector<LABORIUS_FILTER> All the filters used for filtering
+               \return vector<NETV_FILTER> All the filters used for filtering
           */
-          vector<LABORIUS_FILTER> & getFilters() {return m_filters;}
+          vector<NETV_FILTER> & getFilters() {return m_filters;}
 
-          /** Print a LABORIUS_MESSAGE
+          /** Print a NETV_MESSAGE
                \param message The message to print
                \param out The stream to use for printing (default = stdout)
           */                             
-          static void printMessage(const LABORIUS_MESSAGE &message, ostream &out = cout);
+          static void printMessage(const NETV_MESSAGE &message, ostream &out = cout);
 
           /** Clear all the masks */
           void clearMasks(){m_masks.resize(0);}
@@ -416,7 +412,7 @@ class CANDevice
                 \param name the name of the factory
                 \param args the arguments for the device cration in a string
           */
-          static CANDevice* createDevice(const QString& name, const char* args);
+          static NETVDevice* createDevice(const QString& name, const char* args);
 
           /**
                 Will return all the factory names in a list
@@ -450,15 +446,15 @@ class CANDevice
           static void recursiveScan(QDir directory, int level = 0);
 
           /// Software masks
-          vector<LABORIUS_MASK> m_masks;
+          vector<NETV_MASK> m_masks;
 
           /// Software filters
-          vector<LABORIUS_FILTER> m_filters;
+          vector<NETV_FILTER> m_filters;
 
           /** Scan for filter hits
                \param message the message to verify
           */
-          void applyFilters(LABORIUS_MESSAGE &message);
+          void applyFilters(NETV_MESSAGE &message);
 
 };
 

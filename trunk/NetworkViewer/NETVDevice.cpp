@@ -17,14 +17,14 @@
  */
 
 
-#include "CANDevice.h"
+#include "NETVDevice.h"
 #include <QDebug>
 #include <QMessageBox>
 
 using namespace std;
 
 
-QString CANDevice::BaseDeviceFactory::configure()
+QString NETVDevice::BaseDeviceFactory::configure()
 {
     QMessageBox msgBox;
     msgBox.setText("No configuration dialog available.");
@@ -32,7 +32,7 @@ QString CANDevice::BaseDeviceFactory::configure()
     return QString();
 }
 
-void CANDevice::printMessage(const LABORIUS_MESSAGE &message, ostream &out) {
+void NETVDevice::printMessage(const NETV_MESSAGE &message, ostream &out) {
 
      out<<"msg_priority    : "<<(unsigned int)message.msg_priority<<endl;
      out<<"msg_type        : "<<(unsigned int)message.msg_type<<endl;
@@ -52,18 +52,18 @@ void CANDevice::printMessage(const LABORIUS_MESSAGE &message, ostream &out) {
 
 }
 
-void CANDevice::addFilter(LABORIUS_FILTER &filter)
+void NETVDevice::addFilter(NETV_FILTER &filter)
 {
      m_filters.push_back(filter);
 }
 
-void CANDevice::addMask(LABORIUS_MASK &mask)
+void NETVDevice::addMask(NETV_MASK &mask)
 {
 
      m_masks.push_back(mask);
 }
 
-void CANDevice::applyFilters(LABORIUS_MESSAGE &message)
+void NETVDevice::applyFilters(NETV_MESSAGE &message)
 {
 
      //default : message did not match any filter
@@ -99,18 +99,18 @@ void CANDevice::applyFilters(LABORIUS_MESSAGE &message)
 
 
 
-QMap<QString,CANDevice::BaseDeviceFactory*>& CANDevice::getFactoryMap()
+QMap<QString,NETVDevice::BaseDeviceFactory*>& NETVDevice::getFactoryMap()
  {
     static QMap<QString,BaseDeviceFactory*> myMap;
     return myMap;
  }
 
 
-CANDevice::BaseDeviceFactory* CANDevice::getFactoryNamed(const QString &name)
+NETVDevice::BaseDeviceFactory* NETVDevice::getFactoryNamed(const QString &name)
 {
-    if(CANDevice::getFactoryMap().contains(name))
+    if(NETVDevice::getFactoryMap().contains(name))
     {
-        return CANDevice::getFactoryMap()[name];
+        return NETVDevice::getFactoryMap()[name];
     }
     else
     {
@@ -119,11 +119,11 @@ CANDevice::BaseDeviceFactory* CANDevice::getFactoryNamed(const QString &name)
 }
 
 
-bool CANDevice::registerDeviceFactory(const QString& name, CANDevice::BaseDeviceFactory* factory)
+bool NETVDevice::registerDeviceFactory(const QString& name, NETVDevice::BaseDeviceFactory* factory)
 {
-    if (CANDevice::getFactoryMap().find(name) == CANDevice::getFactoryMap().end())
+    if (NETVDevice::getFactoryMap().find(name) == NETVDevice::getFactoryMap().end())
     {
-        CANDevice::getFactoryMap().insert(name,factory);
+        NETVDevice::getFactoryMap().insert(name,factory);
         qDebug() << "Registering device :" << name;
         return true;
     }
@@ -134,43 +134,43 @@ bool CANDevice::registerDeviceFactory(const QString& name, CANDevice::BaseDevice
     }
 }
 
- CANDevice* CANDevice::createDevice(const QString& name, const char* args)
+ NETVDevice* NETVDevice::createDevice(const QString& name, const char* args)
  {
-     CANDevice *dev = NULL;
+     NETVDevice *dev = NULL;
 
-     if (CANDevice::getFactoryMap().find(name) != CANDevice::getFactoryMap().end())
+     if (NETVDevice::getFactoryMap().find(name) != NETVDevice::getFactoryMap().end())
      {
-         dev = CANDevice::getFactoryMap()[name]->create(args);
+         dev = NETVDevice::getFactoryMap()[name]->create(args);
      }
 
      return dev;
  }
 
-QStringList CANDevice::deviceList()
+QStringList NETVDevice::deviceList()
  {
     QStringList output;
-    for(QMap<QString,BaseDeviceFactory*>::iterator iter = CANDevice::getFactoryMap().begin(); iter != CANDevice::getFactoryMap().end(); iter++)
+    for(QMap<QString,BaseDeviceFactory*>::iterator iter = NETVDevice::getFactoryMap().begin(); iter != NETVDevice::getFactoryMap().end(); iter++)
     {
         output.push_back(iter.key());
     }
     return output;
  }
 
-void CANDevice::scanDrivers(const QString &basePath)
+void NETVDevice::scanDrivers(const QString &basePath)
 {
-    qDebug("CANDevice::scanDrivers()");
+    qDebug("NETVDevice::scanDrivers()");
 
     //Plugins directory
     QDir dir(basePath);
 
     if (!dir.exists())
     {
-            qWarning("CANDevice::scanDrivers() : drivers directory not found");
-            qWarning() << "CANDevice::scanDrivers() : Current path : " << dir.absolutePath();
+            qWarning("NETVDevice::scanDrivers() : drivers directory not found");
+            qWarning() << "NETVDevice::scanDrivers() : Current path : " << dir.absolutePath();
     }
     else
     {
-            qDebug() << "CANDevice::scanDrivers() : Scanning : " << dir.absolutePath();
+            qDebug() << "NETVDevice::scanDrivers() : Scanning : " << dir.absolutePath();
             recursiveScan(dir);
     }
 
@@ -178,9 +178,9 @@ void CANDevice::scanDrivers(const QString &basePath)
 }
 
 
-void CANDevice::recursiveScan(QDir directory, int level)
+void NETVDevice::recursiveScan(QDir directory, int level)
 {
-        qDebug() << "CANDevice::recursiveScan :  Path :" << directory.path();
+        qDebug() << "NETVDevice::recursiveScan :  Path :" << directory.path();
 
         if (level < 10 && directory.exists())
         {
@@ -205,7 +205,7 @@ void CANDevice::recursiveScan(QDir directory, int level)
 #else
 					if (myInfoList[i].fileName().contains(".so") || myInfoList[i].fileName().contains(".dylib")) {
 #endif
-                                                qDebug() << "CANDevice::recursiveScan : Loading library : " << directory.path() + QDir::separator() + myInfoList[i].fileName();
+                                                qDebug() << "NETVDevice::recursiveScan : Loading library : " << directory.path() + QDir::separator() + myInfoList[i].fileName();
 
                                                 QLibrary *library = new QLibrary(directory.path() + QDir::separator() + myInfoList[i].fileName());
 
@@ -219,7 +219,7 @@ void CANDevice::recursiveScan(QDir directory, int level)
                                                 }
                                                 else
                                                 {
-                                                        qDebug() << "CANDevice::recursiveScan : Error : " << library->errorString();
+                                                        qDebug() << "NETVDevice::recursiveScan : Error : " << library->errorString();
                                                 }
                                         }
                                 }

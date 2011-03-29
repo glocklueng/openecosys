@@ -18,7 +18,7 @@
 
 #include "NetworkView.h"
 #include <QCoreApplication>
-#include "CAN_define.h"
+#include "NETV_define.h"
 #include <QTime>
 #include "BasePlugin.h"
 #include <iostream>
@@ -118,12 +118,12 @@ NetworkView::~NetworkView()
 }
 
 
-void NetworkView::notifyCANMessage(const LABORIUS_MESSAGE &msg)
+void NetworkView::notifyNETVMessage(const NETV_MESSAGE &msg)
 {
-    //qDebug("NetworkView::notifyCANMessage(const LABORIUS_MESSAGE &msg)");
+    //qDebug("NetworkView::notifyNETVMessage(const NETV_MESSAGE &msg)");
     
     //Posting message to self (in the GUI thread)
-    CANMessageEvent *event = new CANMessageEvent(msg);
+    NETVMessageEvent *event = new NETVMessageEvent(msg);
     QCoreApplication::postEvent (this, event, Qt::HighEventPriority);
 }
 
@@ -132,7 +132,7 @@ bool NetworkView::event ( QEvent * e )
     if (e->type() == QEvent::User)
     {
         //qDebug("NetworkView::event %p QEvent::User",e);
-        if (CANMessageEvent *event = dynamic_cast<CANMessageEvent*>(e))
+        if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
         {
 
 
@@ -144,16 +144,16 @@ bool NetworkView::event ( QEvent * e )
     return QMainWindow::event(e);
 }
 
-void NetworkView::processCANMessage(const LABORIUS_MESSAGE &msg)
+void NetworkView::processCANMessage(const NETV_MESSAGE &msg)
 {
-    //qDebug("NetworkView::processCANMessage(const LABORIUS_MESSAGE &msg)");
-    //CANDevice::printMessage(msg,std::cout);
+    //qDebug("NetworkView::processCANMessage(const NETV_MESSAGE &msg)");
+    //NETVDevice::printMessage(msg,std::cout);
 
     //WILL HANDLE ONLY REQUEST TYPE
-    if (msg.msg_type == CAN_TYPE_REQUEST_DATA)
+    if (msg.msg_type == NETV_TYPE_REQUEST_DATA)
     {
     	
-        //CANDevice::printMessage(msg,std::cout);
+        //NETVDevice::printMessage(msg,std::cout);
 
         //Let's see to which module it belongs...
         //Update the variable if it fits...
@@ -181,10 +181,10 @@ void NetworkView::processCANMessage(const LABORIUS_MESSAGE &msg)
             }
         } 
     }//type == REQUEST_DATA
-    else if (msg.msg_type == CAN_TYPE_EVENTS)
+    else if (msg.msg_type == NETV_TYPE_EVENTS)
     {
 
-        if (msg.msg_cmd == CAN_EVENTS_CMD_ALIVE && msg.msg_data_length == 8)
+        if (msg.msg_cmd == NETV_EVENTS_CMD_ALIVE && msg.msg_data_length == 8)
         {
             //qDebug("ALIVE REQUEST ANSWERED...");
 
@@ -391,20 +391,20 @@ void NetworkView::writeVariable(ModuleVariable *variable)
 	//qDebug("NetworkView::writeVariable %s",variable->getName().toStdString().c_str());
 
 	//Building CAN request...
-	LABORIUS_MESSAGE canMsg;
+	NETV_MESSAGE canMsg;
 
-	canMsg.msg_priority = CAN_PRIORITY_HIGHEST;
-	canMsg.msg_type = CAN_TYPE_REQUEST_DATA;
+        canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
+        canMsg.msg_type = NETV_TYPE_REQUEST_DATA;
 	
 	//Requesting the right type of memory
 	switch(variable->getMemType())
 	{
         case ModuleVariable::RAM_VARIABLE:
-            canMsg.msg_boot = (CAN_REQUEST_RAM << 1) | (CAN_REQUEST_WRITE);
+            canMsg.msg_boot = (NETV_REQUEST_RAM << 1) | (NETV_REQUEST_WRITE);
             break;
 
         case ModuleVariable::EEPROM_VARIABLE:
-            canMsg.msg_boot = (CAN_REQUEST_EEPROM << 1) | (CAN_REQUEST_WRITE);
+            canMsg.msg_boot = (NETV_REQUEST_EEPROM << 1) | (NETV_REQUEST_WRITE);
             break;
 	}
 	
@@ -429,7 +429,7 @@ void NetworkView::writeVariable(ModuleVariable *variable)
 	//Sending to CAN bus...
 	if (m_canHandler)
 	{				
-            m_canHandler->pushCANMessage(canMsg);
+            m_canHandler->pushNETVMessage(canMsg);
 	}
     }
 }
@@ -451,20 +451,20 @@ void NetworkView::requestVariable(ModuleVariable *variable)
 
 
         //Building CAN request...
-        LABORIUS_MESSAGE canMsg;
+        NETV_MESSAGE canMsg;
 
-        canMsg.msg_priority = CAN_PRIORITY_HIGHEST;
-        canMsg.msg_type = CAN_TYPE_REQUEST_DATA;
+        canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
+        canMsg.msg_type = NETV_TYPE_REQUEST_DATA;
 
         //Requesting the right type of memory
         switch(variable->getMemType())
         {
         case ModuleVariable::RAM_VARIABLE:
-            canMsg.msg_boot = (CAN_REQUEST_RAM << 1) | (CAN_REQUEST_READ);
+            canMsg.msg_boot = (NETV_REQUEST_RAM << 1) | (NETV_REQUEST_READ);
             break;
 
         case ModuleVariable::EEPROM_VARIABLE:
-            canMsg.msg_boot = (CAN_REQUEST_EEPROM << 1) | (CAN_REQUEST_READ);
+            canMsg.msg_boot = (NETV_REQUEST_EEPROM << 1) | (NETV_REQUEST_READ);
             break;
 
         }
@@ -481,7 +481,7 @@ void NetworkView::requestVariable(ModuleVariable *variable)
         //Sending to CAN bus...
         if (m_canHandler)
         {
-            m_canHandler->pushCANMessage(canMsg);
+            m_canHandler->pushNETVMessage(canMsg);
         }
     }
 }
@@ -518,12 +518,12 @@ void NetworkView::sendAliveRequest()
     }
 
     //Building CAN request...
-    LABORIUS_MESSAGE canMsg;
+    NETV_MESSAGE canMsg;
 
-    canMsg.msg_priority = CAN_PRIORITY_HIGHEST;
-    canMsg.msg_type = CAN_TYPE_EVENTS;
+    canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
+    canMsg.msg_type = NETV_TYPE_EVENTS;
     canMsg.msg_boot = 0;
-    canMsg.msg_cmd = CAN_EVENTS_CMD_ALIVE;
+    canMsg.msg_cmd = NETV_EVENTS_CMD_ALIVE;
 
     //broadcast
     canMsg.msg_dest = 0xFF;
@@ -537,7 +537,7 @@ void NetworkView::sendAliveRequest()
     //Sending to CAN bus...
     if (m_canHandler)
     {
-        m_canHandler->pushCANMessage(canMsg);
+        m_canHandler->pushNETVMessage(canMsg);
     }
 }
 
@@ -652,7 +652,7 @@ void NetworkView::deviceSelectorTriggered(bool checked)
 
     qDebug("done exec");
 
-    QStringList deviceList = CANDevice::deviceList();
+    QStringList deviceList = NETVDevice::deviceList();
 
     qDebug("Device list:");
 
@@ -679,21 +679,21 @@ void NetworkView::deviceSelectorTriggered(bool checked)
         if (dialog.getFactory())
         {
 
-            CANDevice *dev = NULL;
+            NETVDevice *dev = NULL;
 
             qDebug("Found factory");
 	    if(dialog.args().size())
 	    {
-            	dev = CANDevice::createDevice(dialog.selectedDevice(), dialog.args().toStdString().c_str());
+            	dev = NETVDevice::createDevice(dialog.selectedDevice(), dialog.args().toStdString().c_str());
 	    }
 	    else
             {
-		dev = CANDevice::createDevice(dialog.selectedDevice(),NULL);
+		dev = NETVDevice::createDevice(dialog.selectedDevice(),NULL);
 	    }
 
             if (dev)
             {
-                m_canHandler = new CANInterfaceHandler(dev,NULL,this);
+                m_canHandler = new NETVInterfaceHandler(dev,NULL,this);
                 m_canHandler->registerObserver(this);
 
             }

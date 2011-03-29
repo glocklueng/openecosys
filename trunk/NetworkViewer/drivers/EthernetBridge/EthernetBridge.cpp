@@ -20,7 +20,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-static bool ETHERNET_BRIDGE_DEVICE_INIT = CANDevice::registerDeviceFactory("EthernetBridge",new CANDevice::DeviceFactory<EthernetBridge>("192.168.1.95;6653","Host;port"));
+static bool ETHERNET_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("EthernetBridge",new NETVDevice::DeviceFactory<EthernetBridge>("192.168.1.95;6653","Host;port"));
 
 
 EthernetBridge::EthernetBridge(const char* args)
@@ -29,7 +29,7 @@ EthernetBridge::EthernetBridge(const char* args)
     initialize(args);
 }
 
-CANDevice::State EthernetBridge::initialize(const char* args)
+NETVDevice::State EthernetBridge::initialize(const char* args)
 {
         QStringList config = QString(args).split(";");
         Q_ASSERT(config.size() == 2);
@@ -45,20 +45,20 @@ EthernetBridge::EthernetBridge(QString host, int port)
 }
 
 
-CANDevice::State EthernetBridge::sendMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State EthernetBridge::sendMessage(NETV_MESSAGE &message)
 {
 	//BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
 	
 	//We need to post the event so the message is processed in the right thread
 	QCoreApplication::postEvent(this,new EthernetBridgeSendEvent(message));
 	
-	return CANDevice::CANDEVICE_OK;
+        return NETVDevice::NETVDEVICE_OK;
 }
 
-CANDevice::State EthernetBridge::recvMessage(LABORIUS_MESSAGE &message)
+NETVDevice::State EthernetBridge::recvMessage(NETV_MESSAGE &message)
 {
 	//BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
-	CANDevice::State returnState = CANDevice::CANDEVICE_UNDERFLOW;
+        NETVDevice::State returnState = NETVDevice::NETVDEVICE_UNDERFLOW;
 	
 	m_recvQueueMutex.lock();
 
@@ -71,13 +71,13 @@ CANDevice::State EthernetBridge::recvMessage(LABORIUS_MESSAGE &message)
 		m_recvQueue.pop_front();
 		
 		//Change the return state
-		returnState = CANDevice::CANDEVICE_OK;
+                returnState = NETVDevice::NETVDEVICE_OK;
 		
 		unsigned int SID = (msg.messageWord[0]) & 0x000007FF;
 		unsigned int EID = (msg.messageWord[1] >> 10)  & 0x0003FFFF;
 		
 		
-		//Here convert the message buffer to a LABORIUS_CAN message
+		//Here convert the message buffer to a NETV_CAN message
 		message.msg_priority = (SID >> 8) & 0x07;
 		message.msg_type = (SID) & 0xFF;
 		message.msg_boot = (EID >> 16) & 0x03 ;
@@ -95,7 +95,7 @@ CANDevice::State EthernetBridge::recvMessage(LABORIUS_MESSAGE &message)
 		message.msg_filter_hit = msg.msgSID.IFACE;
 		message.msg_dwTime = msg.msgSID.CMSGTS;
 		
-		//CANDevice::printMessage(message);
+		//NETVDevice::printMessage(message);
 		
 		
 	}

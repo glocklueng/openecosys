@@ -19,7 +19,7 @@
 #ifndef _PCAN_DEVICE_H_
 #define _PCAN_DEVICE_H_
 
-#include "CANDevice.h"
+#include "NETVDevice.h"
 
 
 #ifdef WIN32
@@ -32,7 +32,7 @@
 /**
      \brief PCANDevice is the front-end to the PCAN driver from PEAK.
      This front-end is useful to send & receive extended CAN messages
-     from the bus. Extended IDs are used to fill LABORIUS_MESSAGE
+     from the bus. Extended IDs are used to fill NETV_MESSAGE
      data structures, according to the LABORIUS protocol. Filters and
      masks can also be used to identify special user-defined messages.
      This front-end works with any PCAN device supported by the PEAK driver
@@ -48,7 +48,7 @@
      \version $Revision: 1.1 $
      \date $Date: 2007-01-11 19:21:20 $
 */
-class PCANDevice : public CANDevice
+class PCANDevice : public NETVDevice
 {
      public:
 
@@ -65,24 +65,24 @@ class PCANDevice : public CANDevice
 
 
 
-      /** send a LABORIUS_MESSAGE
+      /** send a NETV_MESSAGE
            \param message The message to send
            \return int The status after the message has been sent
       */
-      virtual CANDevice::State sendMessage(LABORIUS_MESSAGE &message);
+      virtual NETVDevice::State sendMessage(NETV_MESSAGE &message);
 
-      /** receive a LABORIUS_MESSAGE
+      /** receive a NETV_MESSAGE
            \param message The message to receive (will be filled)
            \return int The status after the message has been received
       */
-      virtual CANDevice::State recvMessage(LABORIUS_MESSAGE &message);
+      virtual NETVDevice::State recvMessage(NETV_MESSAGE &message);
 
     
 
         /** initialize the PCAN device
              \param device the device path
         */
-        virtual CANDevice::State initialize(const char* device);
+        virtual NETVDevice::State initialize(const char* device);
 
         /** Verify if a message is ready to receive
              \return bool true if a message is ready to be received
