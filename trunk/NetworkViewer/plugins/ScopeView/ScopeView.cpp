@@ -24,6 +24,7 @@
 #include "NetworkView.h"
 #include <QDropEvent>
 #include "qwt_symbol.h"
+#include "qwt_plot_grid.h"
 
 
 //This will insert the plugin in the dictionary...
@@ -93,6 +94,14 @@ ScopeView::ScopeView(NetworkView *parent)
 
     //Create (empty) Plot
     m_plot = new QwtPlot(m_frame);
+
+    //Plot background color & grid
+    QwtPlotGrid *grid = new QwtPlotGrid;
+    grid->setMajPen(QPen(Qt::gray, 0, Qt::DotLine));
+    grid->attach(m_plot);
+    m_plot->setCanvasBackground(QColor(29, 100, 141)); // nice blue
+
+
     m_frame->setLayout(new QVBoxLayout());
     m_frame->layout()->addWidget(m_plot);
 
