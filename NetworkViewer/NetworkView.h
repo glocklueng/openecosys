@@ -132,7 +132,7 @@ public:
 
         /**
             Message notification, will be called from recvThread of \ref NETVInterfaceHandler
-            \param msg the CAN message
+            \param msg the NETV message
         */
 	virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
 
@@ -216,7 +216,7 @@ public slots:
         void scopeRequest(ModuleVariable *variable);
 
         /**
-            Write a variable to the CAN bus
+            Write a variable to the NETV bus
             \param variable The variable to write
         */
         void variableWrite(ModuleVariable *variable);
@@ -311,13 +311,13 @@ protected:
 	bool event ( QEvent * e );
 
         /**
-            Process a CAN message
+            Process a NETV message
             \param msg The message to process
         */
         void processCANMessage(const NETV_MESSAGE &msg);
 
         /**
-            Write a variable to the CAN bus
+            Write a variable to the NETV bus
             \param variable The variable to write
         */
 	void writeVariable(ModuleVariable *variable);
@@ -340,7 +340,7 @@ protected:
         ///The scope view
 	ScopeView *m_scopeView;
 
-        ///The CAN interface handler
+        ///The NETV interface handler
 	NETVInterfaceHandler *m_canHandler;
 
         ///The variable scheduling algorithm

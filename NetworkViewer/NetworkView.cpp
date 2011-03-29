@@ -390,7 +390,7 @@ void NetworkView::writeVariable(ModuleVariable *variable)
 
 	//qDebug("NetworkView::writeVariable %s",variable->getName().toStdString().c_str());
 
-	//Building CAN request...
+        //Building NETV request...
 	NETV_MESSAGE canMsg;
 
         canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
@@ -426,7 +426,7 @@ void NetworkView::writeVariable(ModuleVariable *variable)
             canMsg.msg_data[i] = array[i];
 	}
 
-	//Sending to CAN bus...
+        //Sending to NETV bus...
 	if (m_canHandler)
 	{				
             m_canHandler->pushNETVMessage(canMsg);
@@ -450,7 +450,7 @@ void NetworkView::requestVariable(ModuleVariable *variable)
 
 
 
-        //Building CAN request...
+        //Building NETV request...
         NETV_MESSAGE canMsg;
 
         canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
@@ -478,7 +478,7 @@ void NetworkView::requestVariable(ModuleVariable *variable)
         //Of the size of the variable...
         canMsg.msg_data_length = variable->getLength();
 
-        //Sending to CAN bus...
+        //Sending to NETV bus...
         if (m_canHandler)
         {
             m_canHandler->pushNETVMessage(canMsg);
@@ -517,7 +517,7 @@ void NetworkView::sendAliveRequest()
         }
     }
 
-    //Building CAN request...
+    //Building NETV request...
     NETV_MESSAGE canMsg;
 
     canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
@@ -534,7 +534,7 @@ void NetworkView::sendAliveRequest()
     //Of zero size...
     canMsg.msg_data_length = 8;
 
-    //Sending to CAN bus...
+    //Sending to NETV bus...
     if (m_canHandler)
     {
         m_canHandler->pushNETVMessage(canMsg);
