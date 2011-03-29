@@ -606,7 +606,7 @@ void NetworkView::pluginActivated(const QString& name)
 
         //Create MDI window
         QMdiSubWindow *subWindow = createSubWindow("Plugin : " + name);
-        subWindow->setWidget(plugin);
+        subWindow->setWidget(plugin);    
         m_mdiArea->addSubWindow(subWindow);
         subWindow->show();
     }

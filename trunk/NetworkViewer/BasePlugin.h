@@ -23,6 +23,7 @@
 #include <QLibrary>
 #include <QDir>
 
+
 //Forward Declaration of NetworkView
 class NetworkView;
 ;
@@ -38,6 +39,7 @@ class NetworkView;
  */
 class BasePlugin : public QWidget
 {
+
 
 public:
 
@@ -81,7 +83,7 @@ public:
          *  BasePlugin constructor
 	 *  \param view the NetworkView
 	 */
-	BasePlugin(NetworkView *view);
+        BasePlugin(NetworkView *view);
 
 	/**
 	 * 	NOT YET IMPLEMENTED, BUT PLUGINS NEED TO OVERLOAD THIS FUNCTION
@@ -97,6 +99,9 @@ public:
 	virtual void terminate() = 0;
 
 
+        /**
+            This will close the MDI window.
+        */
         virtual void closeRequest();
 
 	/**
