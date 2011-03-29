@@ -51,6 +51,12 @@ public:
         ///terminate not used right now
 	virtual void terminate();
 
+
+        void addVariable(ModuleVariable *variable);
+
+
+        void removeVariable(ModuleVariable *variable);
+
 protected slots:
 
         /**
@@ -93,6 +99,12 @@ protected slots:
         void setLogging(bool state);
 
 protected:
+
+        /**
+            Event Handler, will process \ref BasePluginEvent
+            \param e The event to handle.
+        */
+        bool event ( QEvent * e );
 
         ///UI
         Ui::Logger m_ui;

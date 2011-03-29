@@ -125,6 +125,12 @@ protected slots:
 
 protected:
 
+    /**
+        Event Handler, will process \ref BasePluginEvent
+        \param e The event to handle.
+    */
+    bool event ( QEvent * e );
+
     bool eventFilter(QObject *obj, QEvent *event);
 
     QwtPlotZoomer *m_zoomer;
