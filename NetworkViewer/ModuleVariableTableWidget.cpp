@@ -48,12 +48,15 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
 
 
     //Make sure everything fits
-    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+    setWordWrap(true);
 
     //Make sure everything is visible
-    resizeRowsToContents();
     resizeColumnsToContents();
 
+    //Set maximum width of column
+    resizeRowsToContents();
 }
 
 void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
