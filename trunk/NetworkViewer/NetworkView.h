@@ -181,6 +181,8 @@ public:
         */
         NetworkScheduler* getNetworkScheduler();
 
+        BasePlugin* createCustomPluginWindow(const QString &pluginName, const QString &windowTitle="");
+
 public slots:
 
         /**
