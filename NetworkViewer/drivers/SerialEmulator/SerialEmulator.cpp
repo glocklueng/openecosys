@@ -147,7 +147,7 @@ NETVDevice::State SerialEmulator::recvMessage(NETV_MESSAGE &message)
             message.msg_cmd = buf.cmd;
             message.msg_dest = buf.dest;
             message.msg_remote = (buf.pri_boot_rtr & 0x01);
-            message.msg_data_length = (buf.data_length_iface) & 0x0F;
+            message.msg_data_length = (buf.data_length_iface >> 4) & 0x0F;
 
             //copy data
             for(unsigned i = 0; i < 8; i++)
