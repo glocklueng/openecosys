@@ -85,7 +85,15 @@ void ModuleConfigurationView::cellChanged ( int row, int column )
         ModuleConfiguration *config = m_module->getConfiguration();
         Q_ASSERT(config);
 
-        if (column == VARIABLE_VALUE) //Value modification from user...
+        if (column == VARIABLE_ACTIVATED)
+        {
+            QCheckBox *checkbox = dynamic_cast<QCheckBox*>(this->cellWidget(row,VARIABLE_ACTIVATED));
+            if (checkbox && (row < config->size()))
+            {
+                (*config)[row]->setActivated(checkbox->isChecked());
+            }
+        }
+        else if (column == VARIABLE_VALUE) //Value modification from user...
         {
             QTableWidgetItem * myItem= item(row,column);
             QString text = myItem->text();
