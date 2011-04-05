@@ -4,13 +4,16 @@
 #include "Loopback.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QTime>
+#include <math.h>
 
 static bool LOOPBACK_DEVICE_INIT = NETVDevice::registerDeviceFactory("Loopback",new NETVDevice::DeviceFactory<Loopback>("5","The number of virtual modules."));
 
 
 Loopback::Loopback(const char* args)
 {
-
+    m_time = QTime::currentTime();
+    m_time.start();
     initialize(args);
 }
 
@@ -28,6 +31,13 @@ NETVDevice::State Loopback::initialize(const char* args)
     for (unsigned int i= 0; i < count; i++)
     {
         m_moduleList.push_back(VirtualModule(i));
+    }
+
+    if (count > 0)
+    {
+        m_updateTimer = new QTimer(this);
+        connect(m_updateTimer,SIGNAL(timeout()),this,SLOT(timeout()));
+        m_updateTimer->start(50);
     }
 
     return NETVDevice::NETVDEVICE_OK;
@@ -129,3 +139,22 @@ bool Loopback::newMessageReady()
     return (m_semaphore.available() > 0);
 }
 
+void Loopback::timeout()
+{
+
+    //Generate sinus
+    m_mutex.lock();
+
+    double elapsed = m_time.elapsed() / 1000.0;
+
+    for (unsigned int i = 0; i < m_moduleList.size(); i++)
+    {
+        for(unsigned int j = 0; j < VirtualModule::NB_VARIABLES; j++)
+        {
+            m_moduleList[i].variable[j] = 100 * sin(2 * M_PI * (j / 10.0 + 0.01) * elapsed);
+        }
+    }
+
+    m_mutex.unlock();
+
+}

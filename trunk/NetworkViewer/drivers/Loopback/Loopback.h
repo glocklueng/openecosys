@@ -24,6 +24,7 @@
 #include <QList>
 #include <QEvent>
 #include <QTimer>
+#include <QTime>
 #include "NETV_define.h"
 
 
@@ -39,7 +40,7 @@ class Loopback : public QObject, public NETVDevice
         public:
 
 
-            static const int NB_MODULES=4;
+            static const int NB_VARIABLES=4;
 
             VirtualModule(int id)
                 : module_id(id)
@@ -49,7 +50,7 @@ class Loopback : public QObject, public NETVDevice
                 table_version = 2;
                 device_id = 0;
                 state = NETV_NORMAL_MODE_ID;
-                for (unsigned int i = 0 ; i < NB_MODULES; i++)
+                for (unsigned int i = 0 ; i < NB_VARIABLES; i++)
                 {
                     variable[i] = 0;
                 }
@@ -65,10 +66,10 @@ class Loopback : public QObject, public NETVDevice
             union {
 
                 struct {
-                    double variable[NB_MODULES];
+                    double variable[NB_VARIABLES];
                 };
 
-                unsigned char data[NB_MODULES *sizeof(double)];
+                unsigned char data[NB_VARIABLES *sizeof(double)];
 
             };
 
@@ -101,13 +102,16 @@ class Loopback : public QObject, public NETVDevice
 
 	protected slots:
 	
-	
+        void timeout();
+
 	protected:
 	
         QSemaphore m_semaphore;
         QMutex m_mutex;
         QList<NETV_MESSAGE> m_messageList;
         QList<VirtualModule> m_moduleList;
+        QTimer *m_updateTimer;
+        QTime m_time;
 
 };
 
