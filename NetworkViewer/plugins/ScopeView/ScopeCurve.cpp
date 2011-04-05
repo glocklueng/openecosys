@@ -75,8 +75,13 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
 			}
 			
 			setData(&m_time[0], &m_values[0], m_time.size());
+
+                        //draw curve (all)
+                        draw(0,m_values.size() -1);
 			
-                        //m_plot->replot();
+
+
+                           //m_plot->replot();
 		}
 	}
 }

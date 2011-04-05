@@ -128,9 +128,11 @@ ScopeView::ScopeView(NetworkView *parent)
     connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemClicked(QTreeWidgetItem*,int)));
     //m_treeWidget->grabKeyboard();
 
+    m_plot->setAutoReplot(true);
+
     m_updateTimer = new QTimer(this);
     connect(m_updateTimer,SIGNAL(timeout()),this,SLOT(updateTimer()));
-    m_updateTimer->start(10);//10ms timer
+    //m_updateTimer->start(100);//10ms timer
 }
 
 
@@ -344,7 +346,10 @@ void ScopeView::customContextMenuRequested ( const QPoint & pos )
 
 void ScopeView::updateTimer()
 {
-  m_plot->replot();
+
+    //m_plot->replot();
+
+  //m_plot->replot();
 /*
     for(int i =0; i < m_curves.size(); i++)
     {
