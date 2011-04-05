@@ -36,10 +36,30 @@ NETVDevice::State Loopback::initialize(const char* args)
 NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
 {
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
-
-
     if (message.msg_type == NETV_TYPE_REQUEST_DATA)
     {
+        int device_id = message.msg_dest;
+
+        m_mutex.lock();
+
+        if (device_id < m_moduleList.size())
+        {
+            //Reading
+            if (message.msg_remote)
+            {
+                NETV_MESSAGE answer = message;
+                memcpy(answer.msg_data,&m_moduleList[device_id].data[message.msg_cmd],message.msg_data_length);
+                answer.msg_remote = 0;
+                //Writing answer
+                m_messageList.push_back(answer);
+                m_semaphore.release(1);
+            }
+            else //Writing
+            {
+                memcpy(&m_moduleList[device_id].data[message.msg_cmd],message.msg_data,message.msg_data_length);
+            }
+        }
+        m_mutex.unlock();
 
     }
     else if (message.msg_type == NETV_TYPE_EVENTS)
@@ -103,24 +123,6 @@ NETVDevice::State Loopback::recvMessage(NETV_MESSAGE &message)
 
     return returnState;
 }
-
-
-bool Loopback::event(QEvent *event)
-{
-
-    if(event->type() == QEvent::User)
-    {
-
-
-
-        return true;
-        
-    }
-
-    return QObject::event(event);
-}
-
-
 
 bool Loopback::newMessageReady()
 {

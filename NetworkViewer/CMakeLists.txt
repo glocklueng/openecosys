@@ -269,6 +269,7 @@ SET (XML_FILES
     config/INTROLAB_Unidrive_v2.xml
     config/INTROLAB_ReddyHead.xml
     config/INTROLAB_dsPICDrive.xml
+    config/LoopbackTest.xml
 )
 
 
