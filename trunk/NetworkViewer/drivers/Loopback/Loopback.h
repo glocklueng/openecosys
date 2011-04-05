@@ -38,14 +38,15 @@ class Loopback : public QObject, public NETVDevice
 
         public:
 
+
             static const int NB_MODULES=4;
 
             VirtualModule(int id)
                 : module_id(id)
             {
-                project_id = 0xF0;
+                project_id = 0;
                 code_version = 1;
-                table_version = 0x02;
+                table_version = 2;
                 device_id = 0;
                 state = NETV_NORMAL_MODE_ID;
                 for (unsigned int i = 0 ; i < NB_MODULES; i++)
@@ -103,13 +104,8 @@ class Loopback : public QObject, public NETVDevice
 	
 	protected:
 	
-	//Internal event processing...
-	bool event(QEvent *event);
-
         QSemaphore m_semaphore;
-
         QMutex m_mutex;
-
         QList<NETV_MESSAGE> m_messageList;
         QList<VirtualModule> m_moduleList;
 
