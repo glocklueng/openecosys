@@ -1,5 +1,5 @@
 /**
-     Copyright (C) Dominic Letourneau, ing. M.Sc.A.
+     Copyright 2011 (C) Dominic Letourneau, ing. M.Sc.A.
      Dominic.Letourneau@USherbrooke.ca
 
      This file is part of OpenECoSys/NetworkViewer.
@@ -24,7 +24,7 @@
 #include <QList>
 #include <QEvent>
 #include <QTimer>
-
+#include "NETV_define.h"
 
 
 class Loopback : public QObject, public NETVDevice
@@ -32,6 +32,47 @@ class Loopback : public QObject, public NETVDevice
 	Q_OBJECT;
 
 	public:
+
+        class VirtualModule
+        {
+
+        public:
+
+            static const int NB_MODULES=4;
+
+            VirtualModule(int id)
+                : module_id(id)
+            {
+                project_id = 0xF0;
+                code_version = 1;
+                table_version = 0x02;
+                device_id = 0;
+                state = NETV_NORMAL_MODE_ID;
+                for (unsigned int i = 0 ; i < NB_MODULES; i++)
+                {
+                    variable[i] = 0;
+                }
+            }
+
+            int module_id;
+            int project_id;
+            int code_version;
+            int table_version;
+            int device_id;
+            int state;
+
+            union {
+
+                struct {
+                    double variable[NB_MODULES];
+                };
+
+                unsigned char data[NB_MODULES *sizeof(double)];
+
+            };
+
+        };
+
 
 	Loopback(const char* params);
 
@@ -64,6 +105,13 @@ class Loopback : public QObject, public NETVDevice
 	
 	//Internal event processing...
 	bool event(QEvent *event);
+
+        QSemaphore m_semaphore;
+
+        QMutex m_mutex;
+
+        QList<NETV_MESSAGE> m_messageList;
+        QList<VirtualModule> m_moduleList;
 
 };
 
