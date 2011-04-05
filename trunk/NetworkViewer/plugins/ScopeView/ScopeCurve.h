@@ -28,11 +28,11 @@
 #include <QTimer>
 
 ///Maximum of points on the curve for each variable
-#define SCOPE_CURVE_MAX_SIZE 2000
+#define SCOPE_CURVE_MAX_SIZE 500
 
 
 /**
-    A scope curve based on the QwtPlotCorve from Qwt toolkit
+    A scope curve based on the QwtPlotCurve from Qwt toolkit
     \author Dominic Letourneau
 */
 class ScopeCurve : public QObject, public QwtPlotCurve
