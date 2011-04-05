@@ -1,24 +1,11 @@
 /**
-     Copyright (C) 2011 Dominic Letourneau, ing. M.Sc.A.
-     Dominic.Letourneau@USherbrooke.ca
-
-     This file is part of OpenECoSys/NetworkViewer.
-     OpenECoSys/NetworkViewer is free software: you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by the Free Software
-     Foundation, either version 3 of the License, or (at your option) any later version.
-     OpenECoSys/NetworkViewer is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-     or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-     You should have received a copy of the GNU General Public License along with
-     OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
-
  */
 
 #include "Loopback.h"
 #include <QDebug>
 #include <QCoreApplication>
 
-static bool LOOPBACK_DEVICE_INIT = NETVDevice::registerDeviceFactory("Loopback",new NETVDevice::DeviceFactory<Loopback>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
+static bool LOOPBACK_DEVICE_INIT = NETVDevice::registerDeviceFactory("Loopback",new NETVDevice::DeviceFactory<Loopback>("5","The number of virtual modules."));
 
 
 Loopback::Loopback(const char* args)
@@ -34,13 +21,63 @@ Loopback::~Loopback()
 
 NETVDevice::State Loopback::initialize(const char* args)
 {
-	return NETVDevice::NETVDEVICE_OK;
+
+    int count = QString(args).toInt();
+
+    //create virtual modules
+    for (unsigned int i= 0; i < count; i++)
+    {
+        m_moduleList.push_back(VirtualModule(i));
+    }
+
+    return NETVDevice::NETVDEVICE_OK;
 }
 
 NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
 {
-	//BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
-	return NETVDevice::NETVDEVICE_FAIL;
+    //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
+
+
+    if (message.msg_type == NETV_TYPE_REQUEST_DATA)
+    {
+
+    }
+    else if (message.msg_type == NETV_TYPE_EVENTS)
+    {
+        if (message.msg_cmd == NETV_EVENTS_CMD_ALIVE)
+        {
+            m_mutex.lock();
+
+            //process virtual modules alive request
+            for(unsigned int i = 0; i < m_moduleList.size(); i++)
+            {
+                NETV_MESSAGE answer = message;
+
+                answer.msg_remote = 0;
+
+                //Fill data bytes
+                answer.msg_data[0] = m_moduleList[i].state;
+                answer.msg_data[1] = m_moduleList[i].project_id;
+                answer.msg_data[2] = m_moduleList[i].module_id;
+                answer.msg_data[3] = m_moduleList[i].code_version;
+                answer.msg_data[4] = m_moduleList[i].table_version;
+                answer.msg_data[5] = 0; //boot delay
+                answer.msg_data[6] = m_moduleList[i].device_id >> 8; //device id
+                answer.msg_data[7] = m_moduleList[i].device_id; //devicd id
+
+                //Push back answer
+                m_messageList.push_back(answer);
+            }
+
+            m_mutex.unlock();
+
+            //Signal semaphore
+            m_semaphore.release(m_moduleList.size());
+        }
+    }
+
+    //We have processed the message
+    return NETVDevice::NETVDEVICE_OK;
 }
 
 NETVDevice::State Loopback::recvMessage(NETV_MESSAGE &message)
@@ -48,7 +85,21 @@ NETVDevice::State Loopback::recvMessage(NETV_MESSAGE &message)
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     NETVDevice::State returnState = NETVDevice::NETVDEVICE_FAIL;
 
-   
+    bool acquire = m_semaphore.tryAcquire(1,10);
+
+    if (acquire)
+    {
+        m_mutex.lock();
+        message = m_messageList.front();
+        m_messageList.pop_front();
+        m_mutex.unlock();
+        returnState = NETVDevice::NETVDEVICE_OK;
+    }
+    else
+    {
+        returnState = NETVDevice::NETVDEVICE_UNDERFLOW;
+    }
+
 
     return returnState;
 }
@@ -60,9 +111,9 @@ bool Loopback::event(QEvent *event)
     if(event->type() == QEvent::User)
     {
 
-       
 
-            return true;
+
+        return true;
         
     }
 
@@ -73,6 +124,6 @@ bool Loopback::event(QEvent *event)
 
 bool Loopback::newMessageReady()
 {
-	return false;
+    return (m_semaphore.available() > 0);
 }
 
