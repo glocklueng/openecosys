@@ -344,6 +344,8 @@ void ScopeView::customContextMenuRequested ( const QPoint & pos )
 
 void ScopeView::updateTimer()
 {
+  m_plot->replot();
+/*
     for(int i =0; i < m_curves.size(); i++)
     {
         ModuleVariable *variable = m_curves[i]->getVariable();
@@ -352,6 +354,7 @@ void ScopeView::updateTimer()
             m_view->requestVariable(variable);
         }
     }
+*/
 
 /*
     if (m_zoomer)
