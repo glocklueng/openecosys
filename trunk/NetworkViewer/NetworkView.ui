@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1160</width>
-    <height>804</height>
+    <width>1143</width>
+    <height>854</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1160</width>
+     <width>1143</width>
      <height>20</height>
     </rect>
    </property>
@@ -78,6 +78,12 @@
     <size>
      <width>338</width>
      <height>231</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>524287</height>
     </size>
    </property>
    <property name="floating">
@@ -167,8 +173,14 @@
   <widget class="QDockWidget" name="m_moduleDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>274</width>
+     <height>231</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>524287</height>
     </size>
    </property>
    <property name="floating">

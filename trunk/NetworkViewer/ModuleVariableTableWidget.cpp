@@ -145,7 +145,9 @@ void ModuleVariableTableWidget::variableActivated(bool state, ModuleVariable *va
 
         if(checkbox)
         {
+            blockSignals(true);
             checkbox->setChecked(state);
+            blockSignals(false);
         }
         else
         {
@@ -270,6 +272,11 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     activatedCheckBox->setEnabled(m_interactive);
     activatedCheckBox->setChecked(variable->getActivated());
     this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
+    //Activation
+    if(m_interactive)
+    {
+        connect(activatedCheckBox,SIGNAL(clicked(bool)),variable,SLOT(setActivated(bool)));
+    }
 
     //Make sure everything is visible
     //resizeRowsToContents();
