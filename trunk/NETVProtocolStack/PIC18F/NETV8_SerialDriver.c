@@ -97,7 +97,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 	buf.type = message->msg_type;
 	buf.cmd = message->msg_cmd;
 	buf.dest = message->msg_dest;
-	buf.data_length_iface = (message->msg_data_length);
+	buf.data_length_iface = (message->msg_data_length << 4);
 
     //copy data
     for (i = 0 ; i < 8; i++)
