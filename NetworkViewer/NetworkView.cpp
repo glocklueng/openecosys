@@ -41,7 +41,7 @@ bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 
 
 NetworkView::NetworkView(QWidget *parent)
-    :	QMainWindow(parent), m_scopeView(NULL), m_canHandler(NULL), m_scheduler(NULL)
+    :	QMainWindow(parent), m_scopeView(NULL), m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
 {
     setupUi(this);
 
@@ -99,6 +99,10 @@ NetworkView::NetworkView(QWidget *parent)
     //Debug area
     connect(clearToolButton,SIGNAL(clicked()),this,SLOT(clearTextEdit()));
     connect(saveToolButton,SIGNAL(clicked()),this,SLOT(saveTextEdit()));
+
+
+    //Dock widget change
+    connect(m_moduleDockWidget,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),this,SLOT(moduleDockWidgetLocationChanged(Qt::DockWidgetArea)));
 }
 
 
@@ -311,11 +315,26 @@ void NetworkView::sortModuleItems()
                 //Found it, placing it at the right index
                 NetworkModuleItem *item = iter.key();
                 QRectF rect = item->boundingRect();
-                item->setPos(index * (rect.width() * 0.25), 0);
+
+
+
+                if (m_moduleDockWidgetArea == Qt::LeftDockWidgetArea || m_moduleDockWidgetArea == Qt::RightDockWidgetArea)
+                {
+                    item->setPos(0,index * (rect.height() * item->scale() / 3));
+                }
+                else
+                {
+                    item->setPos(index * (rect.width() * item->scale() / 3), 0);
+                }
                 break;
             }
         }
     }
+
+
+
+    m_scene->setSceneRect(m_scene->itemsBoundingRect());
+
 }
 
 void NetworkView::moduleDoubleClicked(NetworkModuleItem* module)
@@ -837,4 +856,14 @@ NetworkModule* NetworkView::getModuleAtIndex(int index)
         return getModules()[index];
     }
     return NULL;
+}
+
+
+void NetworkView::moduleDockWidgetLocationChanged(Qt::DockWidgetArea area )
+{
+    qDebug("NetworkView::moduleDockWidgetLocationChanged(Qt::DockWidgetArea area = %i)",area);
+    m_moduleDockWidgetArea = area;
+
+    //Will display modules according to dock position
+    sortModuleItems();
 }

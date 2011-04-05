@@ -250,6 +250,7 @@ signals:
 
 protected slots:
 	
+        void moduleDockWidgetLocationChanged(Qt::DockWidgetArea area );
 
 
         /**
@@ -359,6 +360,9 @@ protected:
 
         ///Conn stats timer
         QTimer *m_connStatsTimer;
+
+        ///Where is docked the modules
+        Qt::DockWidgetArea m_moduleDockWidgetArea;
 
 };
 
