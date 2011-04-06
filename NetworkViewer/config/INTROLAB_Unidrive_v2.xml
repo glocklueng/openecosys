@@ -76,8 +76,8 @@
 	 <ModuleVariable offset="230" description="Torque (ADC Units) to Nm conversion" type="float" value="" name="TorqueToNm" />
 	 <ModuleVariable offset="234" description="Ext SSI sensor, number of bits" type="uint8" value="" name="SSINumBits" />
 	 
-	 <ModuleVariable offset="236" description="0=Normal 1=EESTOP Enabled" type="uint8" value="" name="ESTOPEnabled" />
-	 <ModuleVariable offset="237" description="0=Normal 1=Write configuration to EEPROM" type="uint8" value="" name="WriteEEPROM" />
+	 <ModuleVariable offset="235" description="0=Normal 1=EESTOP Enabled" type="uint8" value="" name="ESTOPEnabled" />
+	 <ModuleVariable offset="236" description="0=Normal 1=Write configuration to EEPROM" type="uint8" value="" name="WriteEEPROM" />
 	 <ModuleVariable offset="238" description="Time base x 1.28E-5 (second)" type="uint16" value="" name="CtrlTimeBase" />
 	 <ModuleVariable offset="240" description="Loop time x 1.28E-5 (second)" type="sint16" value="" name="loopTime" />
 	 
