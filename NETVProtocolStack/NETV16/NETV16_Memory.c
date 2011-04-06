@@ -59,6 +59,8 @@ void ee_word_write(unsigned int offset, int data)
 	asm volatile ("disi #5"); // Disable Interrupts For 5 Instructions (TODO, validate the number of cycles)
 	_write_eedata_word(p,data);	
 	_wait_eedata();
+#else
+#warning "ee_word_write NOT using EEPROM, Flash implementation not available"
 #endif
 }
 
@@ -72,5 +74,8 @@ int ee_word_read(unsigned int offset)
 	p += offset;
 	_memcpy_p2d16(&data, p, 1);
 	return data;
+#else
+	#warning "ee_word_read NOT using EEPROM, Flash implementation not available"
+	return 0;
 #endif
 }
