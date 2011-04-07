@@ -49,7 +49,7 @@ public:
     ///Internal remove variable
     bool removeVariable(ModuleVariable *var, bool emitSignal=true);
 
-    void reset();
+    void clearContents();
 
 signals:
 
