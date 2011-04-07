@@ -68,6 +68,7 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 					  );
 	QRectF textBounds = m_textItem->boundingRect();	
 	
+        //Center-align Text
 	m_textItem->setPos(bounds.width() /2 - textBounds.width() / 2,bounds.height() + 10);
 	
 
@@ -80,24 +81,25 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 
 	
 	//Add status rectangle
-	/*
 	m_rectItem = new QGraphicsRectItem(0,0,bounds.width(),textBounds.height(), this);
 	m_rectItem->setPos(0,bounds.height() + 10);
 	
 	
-	QBrush myBrush(Qt::Dense4Pattern);
+        QBrush myBrush(Qt::SolidPattern);
      
+        myBrush.setColor(Qt::blue);
+
 	switch(conf->getModuleState())
 	{
-		case CAN_BOOT_MODE_ID :
+                case NETV_IDLE_MODE_ID :
 			myBrush.setColor(Qt::yellow);
 		break;
 		
-		case CAN_IDLE_MODE_ID:
+                case NETV_BOOT_MODE_ID:
 			myBrush.setColor(Qt::red);
 		break;
 		
-		case CAN_NORMAL_MODE_ID:
+                case NETV_NORMAL_MODE_ID:
 			myBrush.setColor(Qt::green);
 		break;    
 
@@ -106,7 +108,9 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 		break;
 	}   
 	m_rectItem->setBrush(myBrush);
-	*/
+        m_rectItem->setZValue(0);
+        m_textItem->setZValue(1);
+
 	
 	//Add tooltip
 	setToolTip(QString(buffer.data()));
