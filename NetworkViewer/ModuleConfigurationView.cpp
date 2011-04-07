@@ -23,21 +23,31 @@
 
 
 ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule *module)
-    : ModuleVariableTableWidget(parent, true), m_module(module)
+    : QWidget(parent), m_module(module)
 {
     Q_ASSERT(m_module);
 
+    //Setup UI
+    m_ui.setupUi(this);
+
+    //Create table widget, interactive, into UI frame
+    m_table = new ModuleVariableTableWidget(this,true);
+
+    //Add the table to the layout
+    m_ui.verticalLayout->addWidget(m_table);
+
+    //Make sure we know when the module is destroyed
     connect(m_module,SIGNAL(destroyed()),this,SLOT(moduleDestroyed()));
 
-
+    //Add module variables
     for (unsigned int i = 0; i < m_module->getNumVariable(); i++)
     {
-        addVariable(m_module->getVariable(i));
+        m_table->addVariable(m_module->getVariable(i));
     }
 
     //Make sure everything fits
-    resizeColumnsToContents();
-    resizeRowsToContents();
+    m_table->resizeColumnsToContents();
+    m_table->resizeRowsToContents();
 
     //ModuleConfiguration Signals
     connect(m_module->getConfiguration(), SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(ModuleVariableAdded(ModuleVariable*)));
@@ -45,21 +55,26 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     connect(m_module->getConfiguration(),SIGNAL(configurationAboutToLoad()),this,SLOT(configurationAboutToLoad()));
 
     //TableView signals.
-    connect(this,SIGNAL(cellChanged(int,int)),this,SLOT(cellChanged(int,int)));
-    connect(this,SIGNAL(cellDoubleClicked(int,int)),SLOT(cellDoubleClicked(int,int)));
-    connect(this,SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(ModuleVariableDeleted(ModuleVariable*)));
+    connect(m_table,SIGNAL(cellChanged(int,int)),this,SLOT(cellChanged(int,int)));
+    connect(m_table,SIGNAL(cellDoubleClicked(int,int)),SLOT(cellDoubleClicked(int,int)));
+    connect(m_table,SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(ModuleVariableDeleted(ModuleVariable*)));
+
+
+    //Buttons
+    connect(m_ui.toolButton_Activate,SIGNAL(clicked()),this,SLOT(activateAllVariables()));
+    connect(m_ui.toolButton_Deactivate,SIGNAL(clicked()),this,SLOT(disableAllVariables()));
 
 }
 
 
 void ModuleConfigurationView::ModuleVariableAdded(ModuleVariable *var)
 {    
-    addVariable(var);
+    m_table->addVariable(var);
 }
 
 void ModuleConfigurationView::ModuleVariableRemoved(ModuleVariable *var)
 {
-    removeVariable(var);
+    m_table->removeVariable(var);
 }
 
 void ModuleConfigurationView::ModuleVariableDeleted(ModuleVariable *var)
@@ -80,22 +95,22 @@ void ModuleConfigurationView::cellChanged ( int row, int column )
 {
     //qDebug("ModuleVariableTableWidget::cellChanged row %i col %i",row,column);
 
-    if (m_module && m_interactive)
+    if (m_module)
     {
         ModuleConfiguration *config = m_module->getConfiguration();
         Q_ASSERT(config);
 
-        if (column == VARIABLE_ACTIVATED)
+        if (column == ModuleVariableTableWidget::VARIABLE_ACTIVATED)
         {
-            QCheckBox *checkbox = dynamic_cast<QCheckBox*>(this->cellWidget(row,VARIABLE_ACTIVATED));
+            QCheckBox *checkbox = dynamic_cast<QCheckBox*>(m_table->cellWidget(row,ModuleVariableTableWidget::VARIABLE_ACTIVATED));
             if (checkbox && (row < config->size()))
             {
                 (*config)[row]->setActivated(checkbox->isChecked());
             }
         }
-        else if (column == VARIABLE_VALUE) //Value modification from user...
+        else if (column == ModuleVariableTableWidget::VARIABLE_VALUE) //Value modification from user...
         {
-            QTableWidgetItem * myItem= item(row,column);
+            QTableWidgetItem * myItem= m_table->item(row,column);
             QString text = myItem->text();
 
             //Important to call setUserValue so the system can know
@@ -112,7 +127,7 @@ void ModuleConfigurationView::cellDoubleClicked(int row, int column)
 {
     //qDebug("ModuleVariableTableWidget::cellDoubleClicked row %i col %i",row,column);
 
-    if (column == VARIABLE_NAME && m_module && m_interactive)
+    if (column == ModuleVariableTableWidget::VARIABLE_NAME && m_module)
     {
         ModuleConfiguration *config = m_module->getConfiguration();
         Q_ASSERT(config);
@@ -129,10 +144,30 @@ void ModuleConfigurationView::configurationAboutToLoad()
     qDebug("ModuleConfigurationView::configurationAboutToLoad()");
 
     //Just Have to cleanup rapidly, we will have new variables after.
-    m_variableMap.clear();
+    m_table->reset();
 
-    //Clear table
-    clear();
-    setRowCount(0);
+}
 
+void ModuleConfigurationView::activateAllVariables()
+{
+    if(m_module)
+    {
+        ModuleConfiguration *config = m_module->getConfiguration();
+        for (unsigned int i = 0; i < config->size(); i++)
+        {
+            (*config)[i]->setActivated(true);
+        }
+    }
+}
+
+void ModuleConfigurationView::disableAllVariables()
+{
+    if (m_module)
+    {
+        ModuleConfiguration *config = m_module->getConfiguration();
+        for (unsigned int i = 0; i < config->size(); i++)
+        {
+            (*config)[i]->setActivated(false);
+        }
+    }
 }
