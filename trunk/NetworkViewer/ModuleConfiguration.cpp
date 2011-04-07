@@ -116,7 +116,7 @@ void ModuleConfiguration::prettyPrint(QIODevice &device)
 }
 
 
-void ModuleConfiguration::saveConfiguration(const QString &filename)
+bool ModuleConfiguration::saveConfiguration(const QString &filename)
 {
     QDomDocument document("INTROLAB-NETWORKVIEWER");
 
@@ -137,11 +137,17 @@ void ModuleConfiguration::saveConfiguration(const QString &filename)
     document.appendChild(element);
 
     QFile file(filename);
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file);
+    if (file.open(QIODevice::WriteOnly))
+    {
+
+        m_filename = filename;
+        QTextStream stream(&file);
+        document.save(stream, 5);
+        return true;
+    }
 
 
-    document.save(stream, 5);
+    return false;
 }
 
 int ModuleConfiguration::size()
@@ -216,6 +222,8 @@ bool ModuleConfiguration::loadConfiguration(const QString &filename, bool variab
         QMessageBox::warning(0, "Warning", QString("Unable to open file : ") + filename, QMessageBox::Ok);
         return false;
     }
+
+    m_filename = filename;
 
     //Proceed to load only if file is ok.
     emit configurationAboutToLoad();
@@ -399,3 +407,7 @@ void ModuleConfiguration::removeVariable(ModuleVariable *variable)
     }
 }
 
+QString ModuleConfiguration::getFilename()
+{
+        return m_filename;
+}

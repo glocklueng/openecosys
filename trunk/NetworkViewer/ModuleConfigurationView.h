@@ -73,6 +73,10 @@ protected slots:
 
     void disableAllVariables();
 
+    void loadConfiguration();
+
+    void saveConfiguration();
+
 protected:
 
     NetworkModule *m_module;
