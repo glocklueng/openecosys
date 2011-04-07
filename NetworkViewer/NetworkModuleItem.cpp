@@ -134,16 +134,8 @@ void NetworkModuleItem::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 
         if (event->button() & Qt::RightButton)
 	{
-		qDebug("Right button");
-		QString fileName = QFileDialog::getOpenFileName(NULL, "Open Configuration File",
-		                                                 ".",
-		                                                 "XML (*.xml)");
-		if (fileName.size() > 0)
-		{
-			qDebug() << "Loading configuration :" << fileName;
-			//Loading config, variables only
-			m_module->getConfiguration()->loadConfiguration(fileName,true);
-		}
+
+            //Menu deroulant.
 
 	}
 

@@ -146,7 +146,7 @@ void ModuleConfigurationView::configurationAboutToLoad()
     qDebug("ModuleConfigurationView::configurationAboutToLoad()");
 
     //Just Have to cleanup rapidly, we will have new variables after.
-    m_table->reset();
+    m_table->clearContents();
 
 }
 
