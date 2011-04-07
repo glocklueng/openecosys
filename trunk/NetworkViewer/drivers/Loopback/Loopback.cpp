@@ -58,15 +58,21 @@ NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
             if (message.msg_remote)
             {
                 NETV_MESSAGE answer = message;
-                memcpy(answer.msg_data,&m_moduleList[device_id].data[message.msg_cmd],message.msg_data_length);
-                answer.msg_remote = 0;
-                //Writing answer
-                m_messageList.push_back(answer);
-                m_semaphore.release(1);
+                if (message.msg_cmd + message.msg_data_length <= (VirtualModule::NB_VARIABLES * sizeof(double)))
+                {
+                    memcpy(answer.msg_data,&m_moduleList[device_id].data[message.msg_cmd],message.msg_data_length);
+                    answer.msg_remote = 0;
+                    //Writing answer
+                    m_messageList.push_back(answer);
+                    m_semaphore.release(1);
+                }
             }
             else //Writing
             {
-                memcpy(&m_moduleList[device_id].data[message.msg_cmd],message.msg_data,message.msg_data_length);
+                if (message.msg_cmd + message.msg_data_length <= (VirtualModule::NB_VARIABLES * sizeof(double)))
+                {
+                    memcpy(&m_moduleList[device_id].data[message.msg_cmd],message.msg_data,message.msg_data_length);
+                }
             }
         }
         m_mutex.unlock();

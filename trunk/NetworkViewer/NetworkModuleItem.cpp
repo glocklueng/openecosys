@@ -43,13 +43,13 @@ void CrossModuleItem::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *parent)
 : QGraphicsPixmapItem(QPixmap(":images/dsPIC.png"), parent), m_module(module), m_textItem(NULL), m_rectItem(NULL), m_crossItem(NULL)
 {
-	QBuffer buffer;
-	buffer.open(QIODevice::ReadWrite);
+        QBuffer myBuffer;
+        myBuffer.open(QIODevice::ReadWrite);
 	
 	ModuleConfiguration *conf = module->getConfiguration();
 	Q_ASSERT(conf);
 	
-	conf->prettyPrint(buffer);
+        conf->prettyPrint(myBuffer);
 	
 	int device_id = conf->getDeviceID();
 	
@@ -81,13 +81,10 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 
 	
 	//Add status rectangle
-	m_rectItem = new QGraphicsRectItem(0,0,bounds.width(),textBounds.height(), this);
-	m_rectItem->setPos(0,bounds.height() + 10);
-	
-	
+        m_rectItem = new QGraphicsRectItem(0,0,bounds.width(),textBounds.height(), this);
+        m_rectItem->setPos(0,bounds.height() + 10);
+		
         QBrush myBrush(Qt::SolidPattern);
-     
-        myBrush.setColor(Qt::blue);
 
 	switch(conf->getModuleState())
 	{
@@ -106,14 +103,14 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 		default:
 			myBrush.setColor(Qt::yellow);
 		break;
-	}   
-	m_rectItem->setBrush(myBrush);
+        }
+        m_rectItem->setBrush(myBrush);
         m_rectItem->setZValue(0);
         m_textItem->setZValue(1);
 
 	
 	//Add tooltip
-	setToolTip(QString(buffer.data()));
+        setToolTip(QString(myBuffer.data()));
 	
 	
 	scale(0.25,0.25);
