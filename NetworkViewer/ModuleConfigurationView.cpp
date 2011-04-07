@@ -18,7 +18,7 @@
 
 #include "ModuleConfigurationView.h"
 #include <QCheckBox>
-
+#include <QFileDialog>
 
 
 
@@ -63,6 +63,8 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     //Buttons
     connect(m_ui.toolButton_Activate,SIGNAL(clicked()),this,SLOT(activateAllVariables()));
     connect(m_ui.toolButton_Deactivate,SIGNAL(clicked()),this,SLOT(disableAllVariables()));
+    connect(m_ui.toolButton_SaveConf,SIGNAL(clicked()),this,SLOT(saveConfiguration()));
+    connect(m_ui.toolButton_LoadConf,SIGNAL(clicked()),this,SLOT(loadConfiguration()));
 
 }
 
@@ -169,5 +171,31 @@ void ModuleConfigurationView::disableAllVariables()
         {
             (*config)[i]->setActivated(false);
         }
+    }
+}
+
+void ModuleConfigurationView::loadConfiguration()
+{
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Configuration File"),
+                                                     m_module->getConfiguration()->getFilename(),
+                                                     "XML (*.xml)");
+    if (fileName.size() > 0)
+    {
+            qDebug() << "Loading configuration :" << fileName;
+            //Loading config, variables only
+            m_module->getConfiguration()->loadConfiguration(fileName,true);
+    }
+}
+
+void ModuleConfigurationView::saveConfiguration()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Configuration File"),
+                                                    m_module->getConfiguration()->getFilename(),
+                                                    "XML (*.xml)");
+    if (fileName.size() > 0)
+    {
+            qDebug() << "Saving configuration :" << fileName;
+            m_module->getConfiguration()->saveConfiguration(fileName);
     }
 }

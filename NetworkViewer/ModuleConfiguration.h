@@ -74,26 +74,28 @@ public:
     /**
             Print the configuration values into a stream. Will use rich text format.
             \param device que QIODevice to print to
-        */
+    */
     void prettyPrint(QIODevice &device);
 
     /**
             Save the configuration in XML format
             \param filename the full path where to save
-        */
-    void saveConfiguration(const QString &filename);
+            \return bool TRUE if the configuration was saved
+    */
+    bool saveConfiguration(const QString &filename);
 
     /**
             Load the configuration from XML format
             \param filename the full path
             \param variablesOnly Defaults to false. When true, we will keep internal module configuration and load only variable descriptions.
             This is useful because XML configurations are created with undefined fields and must not overwrite detected values on the bus.
-        */
+            \return bool TRUE if the configuration was loaded
+    */
     bool loadConfiguration(const QString &filename, bool variablesOnly = false);
 
     /**
             \return int The count of variables
-        */
+    */
     int size();
 
     /**
@@ -151,6 +153,12 @@ public:
             \return m_deviceID
         */
     int getDeviceID();
+
+    /**
+        \return QString the configuration file name actually used
+    */
+    QString getFilename();
+
 
     //SETS
 
@@ -245,6 +253,9 @@ protected:
 
     ///List of all variables
     QList<ModuleVariable*> m_variables;
+
+    ///Filename used for configuration
+    QString m_filename;
 };
 
 #endif
