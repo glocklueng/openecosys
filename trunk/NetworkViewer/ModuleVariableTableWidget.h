@@ -49,6 +49,8 @@ public:
     ///Internal remove variable
     bool removeVariable(ModuleVariable *var, bool emitSignal=true);
 
+    void reset();
+
 signals:
 
     /**
@@ -90,6 +92,7 @@ protected slots:
         \param variable the variable
     */
     void variableActivated(bool state, ModuleVariable *variable);
+
 
 
 protected:

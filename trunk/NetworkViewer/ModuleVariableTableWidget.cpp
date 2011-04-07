@@ -317,4 +317,12 @@ void ModuleVariableTableWidget::keyPressEvent ( QKeyEvent * event )
     }
 }
 
+void ModuleVariableTableWidget::reset()
+{
+    m_variableMap.clear();
+
+    //Clear table
+    clear();
+    setRowCount(0);
+}
 

@@ -27,8 +27,9 @@
 #include <QTimer>
 #include <QTime>
 #include "ModuleVariableTableWidget.h"
+#include "ui_ModuleConfigurationView.h"
 
-class ModuleConfigurationView : public ModuleVariableTableWidget
+class ModuleConfigurationView : public QWidget
 {
     Q_OBJECT;
 
@@ -68,10 +69,15 @@ protected slots:
 
     void configurationAboutToLoad();
 
+    void activateAllVariables();
+
+    void disableAllVariables();
 
 protected:
 
     NetworkModule *m_module;
+    ModuleVariableTableWidget *m_table;
+    Ui::ModuleConfigurationView m_ui;
 
 
 };
