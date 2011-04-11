@@ -26,6 +26,13 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.11
+______
+
+* Fixed enable / disable variables
+* Added enable / disable all
+* (re)Load / Save XML configuration working 
+* Layout improvements
 
 1.1.10
 ______
