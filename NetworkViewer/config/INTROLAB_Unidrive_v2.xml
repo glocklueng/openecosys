@@ -80,7 +80,9 @@
 	 <ModuleVariable offset="236" description="0=Normal 1=Write configuration to EEPROM" type="uint8" value="" name="WriteEEPROM" />
 	 <ModuleVariable offset="238" description="Time base x 1.28E-5 (second)" type="uint16" value="" name="CtrlTimeBase" />
 	 <ModuleVariable offset="240" description="Loop time x 1.28E-5 (second)" type="sint16" value="" name="loopTime" />
-	 
+	 <ModuleVariable offset="242" description="Init value when in position mode and InitType != 0" type="sint32" value="" name="InitValue" />
+	 <ModuleVariable offset="246" description="Init Type 0=NONE, 1=QEI" type="uint8" value="" name="InitType" />
+	 <ModuleVariable offset="247" description="Initialized 0=FALSE 1=TRUE" type="uint8" value="" name="Initialized" />
 
 	 <ModuleVariable memType="1" offset="8" description="Should  be always 0" type="uint8" value="" name="startupProfile" />
 	 <ModuleVariable memType="1" offset="9" description="0=Start in Config Mode, 1=Start in Normal Mode" type="uint8" value="" name="startupMode" />
