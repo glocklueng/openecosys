@@ -24,7 +24,7 @@
 #include <QMimeData>
 #include <QDrag>
 #include <QCheckBox>
-
+#include <QHeaderView>
 
 
 ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool interactive)
@@ -57,6 +57,10 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
 
     //Set maximum width of column
     resizeRowsToContents();
+
+    //Streching
+    horizontalHeader()->setStretchLastSection(true);
+    verticalHeader()->setStretchLastSection(false);
 }
 
 void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
