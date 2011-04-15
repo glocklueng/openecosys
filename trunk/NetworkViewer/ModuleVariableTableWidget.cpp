@@ -283,7 +283,7 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     }
 
     //Make sure everything is visible
-    //resizeRowsToContents();
+    resizeRowToContents(index);
     //resizeColumnsToContents();
 
     blockSignals(false);

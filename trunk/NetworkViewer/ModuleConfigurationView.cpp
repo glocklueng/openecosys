@@ -66,8 +66,18 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     connect(m_ui.toolButton_SaveConf,SIGNAL(clicked()),this,SLOT(saveConfiguration()));
     connect(m_ui.toolButton_LoadConf,SIGNAL(clicked()),this,SLOT(loadConfiguration()));
 
+    //Timer
+    m_timer = new QTimer(this);
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeout()));
+    m_timer->start(1000);
+
 }
 
+void ModuleConfigurationView::timeout()
+{
+	qDebug("Resize rows to contents");
+	m_table->resizeRowsToContents();
+}
 
 void ModuleConfigurationView::ModuleVariableAdded(ModuleVariable *var)
 {    
@@ -146,7 +156,7 @@ void ModuleConfigurationView::configurationAboutToLoad()
     qDebug("ModuleConfigurationView::configurationAboutToLoad()");
 
     //Just Have to cleanup rapidly, we will have new variables after.
-    m_table->clearContents();
+    //m_table->reset();
 
 }
 

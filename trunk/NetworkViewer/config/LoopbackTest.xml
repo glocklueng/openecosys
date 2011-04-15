@@ -3,5 +3,5 @@
      <ModuleVariable offset="0" description="Variable1" type="double" value="" name="Variable1" />
      <ModuleVariable offset="8" description="Variable2" type="double" value="" name="Variable2" />
 	 <ModuleVariable offset="16" description="Variable3" type="double" value="" name="Variable3" />
-	 <ModuleVariable offset="24" description="Variable4" type="double" value="" name="Variable4" />	 	 
+	 <ModuleVariable offset="24" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Variable4" />	 	 
 </ModuleConfiguration>
