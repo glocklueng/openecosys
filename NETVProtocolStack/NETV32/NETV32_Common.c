@@ -417,6 +417,15 @@ void netv_read_boot_config(BootConfig *config)
 	}
 
 #endif
+     		config->module_state  = 0;
+		config->project_id  = 0;
+		config->module_id  = 0;
+		config->code_version  = 0;
+		config->table_version = 0;
+		config->boot_delay  = 0;
+                config->devid_low = 0;
+		config->devid_high = 0;
+
 }
 
 void netv_write_boot_config(BootConfig *config)
@@ -443,6 +452,9 @@ void netv_write_boot_config(BootConfig *config)
 
 	}
 #endif
+
+
+
 }
 
 BootConfig* netv_get_boot_config()
