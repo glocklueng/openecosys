@@ -53,9 +53,9 @@ void serial_usart_interrupt_handler(void)
 unsigned int serial_bytes_available(void)
 {
 	unsigned int available = 0;
-	__asm__ volatile ("disi #0x3FFF"); //disable interrupts
+	asm volatile("di"); //disable interrupts
 	available = g_availableBytes;
-	__asm__ volatile ("disi #0x000"); //Enable interrupts
+	asm volatile("ei"); //Enable interrupts
 	return available;
 }
 
@@ -160,9 +160,9 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 
 
 			//One less message available
-			__asm__ volatile ("disi #0x3FFF");//Disable interrupts
+			asm volatile("di"); //disable interrupts
 			g_availableBytes -= sizeof(NETVSerialMessage);
-			__asm__ volatile ("disi #0x000"); //Enable interrupts
+			asm volatile("ei"); //Enable interrupts
 
 
 			//Verify checksum
@@ -209,9 +209,9 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			g_readIndex = (g_readIndex + 1) % RX_BUFFER_SIZE;
 			
 			//One less byte available
-			__asm__ volatile ("disi #0x3FFF"); //Disable interrupts
+			asm volatile("di"); //disable interrupts
 			g_availableBytes--;
-			__asm__ volatile ("disi #0x000"); //Enable interrupts
+			asm volatile("ei"); //Enable interrupts
 
 			return 0;
 		}

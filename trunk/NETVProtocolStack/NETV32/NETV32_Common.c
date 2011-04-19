@@ -137,8 +137,19 @@ void netv_transceiver(unsigned char netv_addr)
 				//FCY must be defined
 				__delay_ms(10);
 								
-				//reset!
-				asm("RESET");	//Reset();
+				//software reset, from reset documentation!
+                                SYSTEMUnlock();
+
+                                //Set arm reset
+                                RSWRSTSET = 1;
+
+                                //Read register to trigger reset
+                                volatile int *p = &RSWRST;
+
+                                //Wait until the reset happens
+                                while(1);
+
+                                Reset();
                break;
          }//end switch msg_cmd
 
@@ -261,12 +272,12 @@ unsigned char netv_read_data_flow_table_v2(unsigned int offset, unsigned char me
 		case NETV_REQUEST_RAM:
 			if (offset + size <= DATA_FLOW_TABLE_SIZE)
 			{
-				__asm__ volatile ("disi #0x3FFF"); //disable interrupts
+				asm volatile("di"); //disable interrupts
 				for (i = offset; i < (offset + size); i++)
 				{
 					buffer[i - offset] = DATA_FLOW_TABLE[i];
 				}
-				__asm__ volatile ("disi #0x000"); //enable interrupts
+				asm volatile("ei"); //Enable interrupts
 	
 				success = 1;
 			}
@@ -280,12 +291,12 @@ unsigned char netv_read_data_flow_table_v2(unsigned int offset, unsigned char me
 	    case NETV_REQUEST_EEPROM:
 			if (offset + size <= DATA_FLOW_TABLE_SIZE)
 			{
-				__asm__ volatile ("disi #0x3FFF"); //disable interrupts
+				asm volatile("di"); //disable interrupts
 				for (i = offset; i < (offset + size); i++)
 				{
 					buffer[i - offset] = netv_read_eeprom(i);
 				}
-				__asm__ volatile ("disi #0x000"); //enable interrupts
+				asm volatile("ei"); //Enable interrupts
 	
 				success = 1;
 			}
@@ -330,12 +341,12 @@ unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char me
 		case NETV_REQUEST_RAM:
 			if (offset + size <= DATA_FLOW_TABLE_SIZE)
 			{
-				__asm__ volatile ("disi #0x3FFF"); //disable interrupts
+				asm volatile("di"); //disable interrupts
 				for (i = offset; i < (offset + size); i++)
 				{
 					DATA_FLOW_TABLE[i] = buffer[i - offset];
 				}
-				__asm__ volatile ("disi #0x000"); //enable interrupts
+				asm volatile("ei"); //Enable interrupts
 	
 				success = 1;
 			}
@@ -351,12 +362,12 @@ unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char me
 			//must protect firt 8 bytes.
 			if ((offset + size <= DATA_FLOW_TABLE_SIZE) && (offset >= 8))
 			{
-				__asm__ volatile ("disi #0x3FFF"); //disable interrupts
+				asm volatile("di"); //disable interrupts
 				for (i = offset; i < (offset + size); i++)
 				{
 					netv_write_eeprom(i,buffer[i - offset]);
 				}
-				__asm__ volatile ("disi #0x000"); //enable interrupts
+				asm volatile("ei"); //Enable interrupts
 	
 				success = 1;
 			}
