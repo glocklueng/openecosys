@@ -22,12 +22,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _NETV16_NETV_DRIVER_H_
-#define _NETV16_NETV_DRIVER_H_
+#ifndef _NETV32_NETV_DRIVER_H_
+#define _NETV32_NETV_DRIVER_H_
 
-#include "NETV16_Shared.h"
-#include "NETV16_Device.h"
-#include "NETV16_Common.h"
+#include "NETV32_Shared.h"
+#include "NETV32_Device.h"
+#include "NETV32_Common.h"
 
 typedef struct _filter {
    unsigned char filter_priority;

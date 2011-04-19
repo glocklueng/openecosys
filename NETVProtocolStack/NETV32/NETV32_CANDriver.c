@@ -22,10 +22,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // Library call
-#include "NETV16_CANDriver.h"
-#include "NETV16_Device.h"
-#include <can.h>
-#include <libpic30.h>
+#include "NETV32_CANDriver.h"
+#include "NETV32_Device.h"
+
+#include "GenericTypeDefs.h"
+#include <p32xxxx.h>
+#include <sys/kmem.h>
+#include "plib.h"
+
+
+#define CAN_BUS_SPEED 1000000
+
+//This is the timestamp timer...
+#define CAN_TIMER_PRESCALER (SYS_XTAL_FREQ / 1000)
+
+
+#define CAN_FIFO_SIZE 32
+#define CAN_NB_CHANNELS 2
 
 //////////////////////////////////////////////////////////////////////
 //   netv_send_message
@@ -42,6 +55,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //////////////////////////////////////////////////////////////////////
 unsigned char netv_send_message(NETV_MESSAGE *message)
 {
+
+#if 0
 	unsigned long caneid = 0;	
 	unsigned char bufnum = 0;
 
@@ -100,7 +115,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 
 
 	} //IF MESSAGE
-
+#endif
 	//SOMETHING IS WRONG
 	//RETURN ERROR CODE
 	return 1;
@@ -122,7 +137,7 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 unsigned char netv_recv_message(NETV_MESSAGE *message)
 {
 	unsigned char retval = 0;
-
+#if 0
 	if (message)
 	{
 		//Provided dsPIC library does not offer enough functionalities
@@ -226,7 +241,7 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 		retval = 0;
 	} //INVALID MESSAGE PTR
 	
-
+#endif
 	return retval;
 }
 
@@ -245,7 +260,8 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 //
 //////////////////////////////////////////////////////////////////////
 void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id)
-{   
+{
+#if 0
   	unsigned long caneid = 0;
 
 	if (mask && C1CTRLbits.REQOP == 0x04) //mask valid and configuration mode
@@ -265,6 +281,7 @@ void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id)
 			CAN1SetMask(mask_id, CAN_MASK_SID(caneid >> 18) & CAN_MATCH_FILTER_TYPE, CAN_MASK_EID(caneid));
 		}
 	}
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -282,7 +299,8 @@ void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id)
 //
 //////////////////////////////////////////////////////////////////////
 void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id)
-{   
+{
+#if 0
 	unsigned long caneid = 0;
 
 	//Filter must be valid and we need to be in configuration mode
@@ -303,6 +321,7 @@ void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id)
 			CAN1SetFilter(filter_id, CAN_FILTER_SID(caneid >> 18) & CAN_RX_EID_EN, CAN_FILTER_EID(caneid));
 		}
 	}
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -324,6 +343,8 @@ void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id)
 //////////////////////////////////////////////////////////////////////////////
 void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask) 
 {
+
+#if 0
 	unsigned char i = 0;
 
 	// Setup input and output pins
@@ -391,8 +412,8 @@ void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask)
 
 	//WAIT until we are in normal mode
 	while(C1CTRLbits.OPMODE != C1CTRLbits.REQOP);
-
-	return;
+#endif
+	
  
 }
 
