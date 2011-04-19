@@ -12,6 +12,10 @@
 
 //System clock = 80MHz
 #define  SYS_XTAL_FREQ     (80000000L)     // external Xtal, Hz
+#define  PB_DIV 1
+#define  PRESCALE 256
+#define  TOGGLES_PER_SEC 10
+
 
 //UART BAUD RATE
 #define DESIRED_BAUDRATE 1000000L
@@ -21,6 +25,9 @@
 #define MODULE_CODE_VERSION 0x01
 
 #define DEVID_BASE_ADDRESS 0x3FFFFE
+
+#define T1_TICK (SYS_XTAL_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
+
 
 /**
     Define all the variables here to be accessible to the NETV protocol.
