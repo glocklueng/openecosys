@@ -3,6 +3,9 @@
 
 #include "NETV32_Utils.h"
 
+//Device include
+#include <p32xxxx.h>
+
 //System clock = 80MHz
 #define  SYS_XTAL_FREQ     (80000000L)     // external Xtal, Hz
 
