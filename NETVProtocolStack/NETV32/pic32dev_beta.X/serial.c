@@ -1,27 +1,33 @@
 #include "serial.h"
 #include <plib.h>
+#include "bsp.h"
 
-#if 0
-void WriteString(const char *string)
+
+// UART 1 interrupt handler
+// it is set at priority level 2
+void __ISR(_UART1_VECTOR, ipl2) IntUART1Handler(void)
 {
-    while(*string != '\0')
-    {
-        while(!UARTTransmitterIsReady(UART1));
-        UARTSendDataByte(UART1, *string);
-        string++;
-        while(!UARTTransmissionHasCompleted(UART1));
-    }
+        // Is this an RX interrupt?
+        if(INTGetFlag(INT_SOURCE_UART_RX(UART1)))
+        {
+
+            //Process data
+
+
+            // Clear the RX interrupt Flag
+            INTClearFlag(INT_SOURCE_UART_RX(UART1));
+
+
+        }
+
+        // We don't care about TX interrupt right now...
+        /*
+        if ( INTGetFlag(INT_SOURCE_UART_TX(UART1)) )
+        {
+                INTClearFlag(INT_SOURCE_UART_TX(UART1));
+        }
+        */
 }
-
-void PutCharacter(char character)
-{
-        while(!UARTTransmitterIsReady(UART1));
-        UARTSendDataByte(UART1, character);
-        while(!UARTTransmissionHasCompleted(UART1));
-}
-
-#endif
-
 
 
 
@@ -38,87 +44,45 @@ void PutCharacter(char character)
 
 void setup_usart1(void)
 {
-    #if 0
-        //UART1 config: Fcy = 36.85MHz, 57600 8N1
 
-        // configure U1MODE
-        U1MODEbits.UARTEN = 0;  // TX, RX DISABLED, ENABLE at end of func
-        U1MODEbits.USIDL = 0;   // Continue in Idle
-        U1MODEbits.IREN = 0;    // No IR translation
-        U1MODEbits.RTSMD = 0;   // Simplex Mode
-        U1MODEbits.UEN = 0;             // TX,RX enabled, CTS,RTS not
-        U1MODEbits.WAKE = 0;    // No Wake up (since we don't sleep here)
-        U1MODEbits.LPBACK = 0;  // No Loop Back
-        U1MODEbits.ABAUD = 0;   // No Autobaud
-        U1MODEbits.URXINV = 0;  // IdleState = 1
-        U1MODEbits.BRGH = 0;    // 16 clocks per bit period
-        U1MODEbits.PDSEL = 0;   // 8bit, No Parity
-        U1MODEbits.STSEL = 0;   // One Stop Bit
+    //Configure UART
+    UARTConfigure(UART1, UART_ENABLE_PINS_TX_RX_ONLY);
+    UARTSetFifoMode(UART1, UART_INTERRUPT_ON_TX_NOT_FULL | UART_INTERRUPT_ON_RX_NOT_EMPTY);
+    UARTSetLineControl(UART1, UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1);
+    UARTEnable(UART1, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_RX | UART_TX));
 
-        //  U1BRG = (Fcy/(16*BaudRate))-1               (36.85MHz / (16 * 57600) - 1) = 39
-        U1BRG = 39;
+    //Set Baud Rate
+    UARTSetDataRate(UART1, SYS_XTAL_FREQ, DESIRED_BAUDRATE);
 
-        U1STAbits.UTXISEL1 = 0; //Int when Char is transferred (1/2 config!)
-        U1STAbits.UTXINV = 0;   //N/A, IRDA config
-        U1STAbits.UTXISEL0 = 0; //Other half of Bit15
-        U1STAbits.UTXBRK = 0;   //Disabled
-        U1STAbits.UTXEN = 0;    //TX pins controlled by periph
-        U1STAbits.UTXBF = 0;    //*Read Only Bit*
-        U1STAbits.TRMT = 0;             //*Read Only bit*
-        U1STAbits.URXISEL = 0;  //Int. on character recieved
-        U1STAbits.ADDEN = 0;    //Address Detect Disabled
-        U1STAbits.RIDLE = 0;    //*Read Only Bit*
-        U1STAbits.PERR = 0;             //*Read Only Bit*
-        U1STAbits.FERR = 0;             //*Read Only Bit*
-        U1STAbits.OERR = 0;             //*Read Only Bit*
-        U1STAbits.URXDA = 0;    //*Read Only Bit*
-
-        IPC2bits.U1RXIP = 0b100;        // Mid Range Interrupt Priority level
-        IPC3bits.U1TXIP = 0b100;        // Mid Range Interrupt Priority level
-
-        IFS0bits.U1TXIF = 0;    // Clear the Transmit Interrupt Flag
-        IEC0bits.U1TXIE = 1;    // Enable Transmit Interrupts
-        IFS0bits.U1RXIF = 0;    // Clear the Recieve Interrupt Flag
-        IEC0bits.U1RXIE = 1;    // Enable Recieve Interrupts
-
-        U1MODEbits.UARTEN = 1;  // And turn the peripheral on
-        U1STAbits.UTXEN = 1;
-     #endif
+    //Configure UART1 RX Interrupt
+    INTEnable(INT_SOURCE_UART_RX(UART1), INT_ENABLED);
+    INTSetVectorPriority(INT_VECTOR_UART(UART1), INT_PRIORITY_LEVEL_2);
+    INTSetVectorSubPriority(INT_VECTOR_UART(UART1), INT_SUB_PRIORITY_LEVEL_0);
 }
 
 void putc_usart1(char data)
 {
-#if 0
-        U1TXREG = data & 0xFF;  //Write the data byte to the USART1
-#endif
+    //Send data to UART
+    UARTSendDataByte(UART1, data);
+
+    //wait for transmission complete
+    while(!UARTTransmissionHasCompleted(UART1));
+
 }
 
 char getc_usart1(void)
 {
-#if 0
-        return (char)(U1RXREG & 0xFF);  // Return the received data
-#endif
-        return 0;
+    return UARTGetDataByte(UART1);
 }
 
 char busy_usart1(void)
 {
-#if 0
-  if(!U1STAbits.TRMT)   // Is the transmit shift register empty
-        return 1;       // No, return FALSE
-#endif
-
-  return 0;             // Return TRUE
+    return UARTTransmitterIsReady(UART1);
 }
 
 char datardy_usart1(void)
 {
-#if 0
-        return(U1STAbits.URXDA);
-#endif
-
-        return 0;
-
+    return UARTReceivedDataIsAvailable(UART1);
 }
 
 void gets_usart1(char *buffer, unsigned char len)

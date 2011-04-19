@@ -1,17 +1,9 @@
 #ifndef _SERIAL_H_
 #define _SERIAL_H_
 
-#include "GenericTypeDefs.h"
-#include <p32xxxx.h>
-#include <sys/kmem.h>
-#include <plib.h>
+#include "bsp.h"
 
 //Prototypes
-
-//void WriteString(const char *string);
-//void PutCharacter(char character);
-
-
 void setup_usart1(void);
 void putc_usart1(char data);
 char getc_usart1(void);
