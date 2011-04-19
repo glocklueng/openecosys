@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV32_Memory.h"
 
 
+
 // Prototypes
 unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char mem_type, unsigned char *buffer, unsigned int size);
 unsigned char netv_read_data_flow_table_v2(unsigned int offset, unsigned char mem_type, unsigned char *buffer, unsigned int size);
@@ -133,12 +134,10 @@ void netv_transceiver(unsigned char netv_addr)
 				//TODO Update Boot Config
 				//netv_write_eeprom(0xFF,NETV_BOOT_MODE_ID);
 				
-				//wait 10ms 
-				//FCY must be defined
-				__delay_ms(10);
-								
+				
+				//TODO FIX THIS
 				//software reset, from reset documentation!
-                                SYSTEMUnlock();
+                                //mSYSTEMUnlock();
 
                                 //Set arm reset
                                 RSWRSTSET = 1;

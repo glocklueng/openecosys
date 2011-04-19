@@ -69,6 +69,8 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../NETV32_CANDriver.c" ex="true" overriding="false">
+      </item>
       <C32>
         <property key="additional-warnings" value="false"/>
         <property key="extra-include-directories" value="../;./"/>
