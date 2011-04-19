@@ -1,7 +1,7 @@
 #include "serial.h"
 #include <plib.h>
 #include "bsp.h"
-
+#include "NETV32_SerialDriver.h"
 
 // UART 1 interrupt handler
 // it is set at priority level 2
@@ -10,14 +10,11 @@ void __ISR(_UART1_VECTOR, ipl2) IntUART1Handler(void)
         // Is this an RX interrupt?
         if(INTGetFlag(INT_SOURCE_UART_RX(UART1)))
         {
-
             //Process data
-
+            serial_usart_interrupt_handler();
 
             // Clear the RX interrupt Flag
             INTClearFlag(INT_SOURCE_UART_RX(UART1));
-
-
         }
 
         // We don't care about TX interrupt right now...
@@ -28,13 +25,6 @@ void __ISR(_UART1_VECTOR, ipl2) IntUART1Handler(void)
         }
         */
 }
-
-
-
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
