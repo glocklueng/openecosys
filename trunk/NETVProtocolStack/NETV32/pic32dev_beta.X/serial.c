@@ -55,6 +55,8 @@ void setup_usart1(void)
 
 void putc_usart1(char data)
 {
+    mPORTDToggleBits(BIT_7);
+
     //Send data to UART
     UARTSendDataByte(UART1, data);
 
@@ -70,7 +72,7 @@ char getc_usart1(void)
 
 char busy_usart1(void)
 {
-    return UARTTransmitterIsReady(UART1);
+    return (!UARTTransmitterIsReady(UART1));
 }
 
 char datardy_usart1(void)
