@@ -23,6 +23,19 @@ void update_variables(void)
 }
 
 
+//Interruption du Timer1, on flash la LED2
+void __ISR(_TIMER_1_VECTOR, ipl2) Timer1Handler(void)
+{
+    // clear the interrupt flag
+    mT1ClearIntFlag();
+
+    // .. things to do
+    // .. in this case, toggle the LED
+    mPORTDToggleBits(BIT_4);
+}
+
+
+
 int main()
 {
 
@@ -34,10 +47,26 @@ int main()
     // Given the options, this function will change the flash wait states, RAM
     // wait state and enable prefetch cache but will not change the PBDIV.
     // The PBDIV value is already set via the pragma FPBDIV option above..
+    
     SYSTEMConfig(SYS_XTAL_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
 
     //Disable JTAG
     mJTAGPortEnable(DEBUG_JTAGPORT_OFF);
+
+    //Digital out
+
+    mPORTDClearBits(BIT_7 | BIT_5 | BIT_4);
+    mPORTDSetPinsDigitalOut( BIT_7 | BIT_5 | BIT_4);
+
+
+    //Configure Timer 1 using internal clock, 1:256 prescale
+    OpenTimer1(T1_ON | T1_SOURCE_INT | T1_PS_1_256, T1_TICK);
+
+    // set up the timer interrupt with a priority of 2
+    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_2);
+
+
+
 
     bootConfig = netv_get_boot_config();
 
@@ -78,6 +107,14 @@ int main()
 
     //Open serial port
     setup_usart1();
+
+    // Turn on the interrupts
+    INTEnableSystemMultiVectoredInt();
+
+
+    // enable interrupts
+    INTEnableInterrupts();
+
 
     while (1)
     {
