@@ -94,6 +94,36 @@
       <C32-LD>
       </C32-LD>
       <ICD3PlatformTool>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
+        <property key="programoptions.preserveprogramrange.end" value="0x1d0001ff"/>
+        <property key="memories.id" value="false"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="INPUT CAPTURE @" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="INTERRUPT CONTROL" value="true"/>
+        <property key="COMPARATOR" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="TIMER@" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="CHANGE NOTICE" value="true"/>
+        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="memories.eeprom" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="UART@" value="true"/>
+        <property key="TIMER1" value="true"/>
+        <property key="voltagevalue" value="3.25"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="ADC @" value="true"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="memories.programmemory.start" value="0x1d000000"/>
+        <property key="memories.programmemory.end" value="0x1d07ffff"/>
+        <property key="OUTPUT COMPARE @" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="I2C@" value="true"/>
       </ICD3PlatformTool>
     </conf>
   </confs>
