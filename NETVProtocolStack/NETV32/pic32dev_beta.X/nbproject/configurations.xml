@@ -4,6 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="NETV32" projectFiles="true">
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_CANDriver.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Common.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Device.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Memory.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_SerialDriver.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Shared.h</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Utils.h</itemPath>
+      </logicalFolder>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/bsp.h</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/serial.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -20,6 +31,16 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="NETV32" projectFiles="true">
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_CANDriver.c</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Common.c</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Memory.c</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_SerialDriver.c</itemPath>
+        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Shared.c</itemPath>
+      </logicalFolder>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/main.c</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/pic32mx_cfg.c</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/serial.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -45,6 +66,30 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <C32>
+        <property key="additional-warnings" value="false"/>
+        <property key="extra-include-directories" value="../"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="use-indirect-calls" value="false"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="support-ansi" value="false"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="isolate-each-function" value="false"/>
+      </C32>
+      <C32-AS>
+      </C32-AS>
+      <C32-LD>
+      </C32-LD>
+      <ICD3PlatformTool>
+      </ICD3PlatformTool>
     </conf>
   </confs>
 </configurationDescriptor>

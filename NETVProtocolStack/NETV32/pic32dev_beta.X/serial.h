@@ -4,7 +4,7 @@
 #include "GenericTypeDefs.h"
 #include <p32xxxx.h>
 #include <sys/kmem.h>
-#include "plib.h"
+#include <plib.h>
 
 //Prototypes
 void WriteString(const char *string);
