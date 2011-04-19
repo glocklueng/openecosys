@@ -22,11 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // Library call
-#include "NETV16_Shared.h"
-#include "NETV16_Device.h"
-#include "NETV16_Common.h"
-#include "NETV16_Memory.h"
-#include <libpic30.h>
+#include "NETV32_Shared.h"
+#include "NETV32_Device.h"
+#include "NETV32_Common.h"
+#include "NETV32_Memory.h"
+
 
 // Prototypes
 unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char mem_type, unsigned char *buffer, unsigned int size);
@@ -386,6 +386,7 @@ unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char me
 
 void netv_read_boot_config(BootConfig *config)
 {
+#if 0
 	unsigned int devid = 0;
 
 	if (config)
@@ -404,10 +405,14 @@ void netv_read_boot_config(BootConfig *config)
 		config->devid_high = devid >> 8;
 
 	}
+
+#endif
 }
 
 void netv_write_boot_config(BootConfig *config)
 {
+
+#if 0
 	if (config)
 	{
 
@@ -427,6 +432,7 @@ void netv_write_boot_config(BootConfig *config)
 		WriteMem(0,data,sizeof(BootConfig));
 
 	}
+#endif
 }
 
 BootConfig* netv_get_boot_config()

@@ -21,8 +21,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CAN_MEMORY_H_
-#define _CAN_MEMORY_H_
+#ifndef _NETV32_MEMORY_H_
+#define _NETV32_MEMORY_H_
 
 unsigned long ReadMem(unsigned int offset);
 unsigned int WriteMem(unsigned int offset, unsigned int* dataPtr, unsigned int size);

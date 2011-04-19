@@ -1,7 +1,7 @@
-#ifndef _NETV16_SERIAL_DRIVER_H_
-#define _NETV16_SERIAL_DRIVER_H_
+#ifndef _NETV32_SERIAL_DRIVER_H_
+#define _NETV32_SERIAL_DRIVER_H_
 
-#include "NETV16_Common.h"
+#include "NETV32_Common.h"
 
 #define START_BYTE 0xF2
 
