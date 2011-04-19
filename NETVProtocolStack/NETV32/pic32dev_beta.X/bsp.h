@@ -1,6 +1,8 @@
 #ifndef _BSP_H_
 #define _BSP_H_
 
+#include "NETV32_Utils.h"
+
 //System clock = 80MHz
 #define  SYS_XTAL_FREQ     (80000000L)     // external Xtal, Hz
 

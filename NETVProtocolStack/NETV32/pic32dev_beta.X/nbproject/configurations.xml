@@ -5,16 +5,16 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="NETV32" projectFiles="true">
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_CANDriver.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Common.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Device.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Memory.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_SerialDriver.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Shared.h</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Utils.h</itemPath>
+        <itemPath>../NETV32_CANDriver.h</itemPath>
+        <itemPath>../NETV32_Common.h</itemPath>
+        <itemPath>../NETV32_Device.h</itemPath>
+        <itemPath>../NETV32_Memory.h</itemPath>
+        <itemPath>../NETV32_SerialDriver.h</itemPath>
+        <itemPath>../NETV32_Shared.h</itemPath>
+        <itemPath>../NETV32_Utils.h</itemPath>
       </logicalFolder>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/bsp.h</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/serial.h</itemPath>
+      <itemPath>bsp.h</itemPath>
+      <itemPath>serial.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -32,20 +32,23 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="NETV32" projectFiles="true">
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_CANDriver.c</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Common.c</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Memory.c</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_SerialDriver.c</itemPath>
-        <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/NETV32_Shared.c</itemPath>
+        <itemPath>../NETV32_CANDriver.c</itemPath>
+        <itemPath>../NETV32_Common.c</itemPath>
+        <itemPath>../NETV32_Memory.c</itemPath>
+        <itemPath>../NETV32_SerialDriver.c</itemPath>
+        <itemPath>../NETV32_Shared.c</itemPath>
       </logicalFolder>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/main.c</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/pic32mx_cfg.c</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/serial.c</itemPath>
+      <itemPath>main.c</itemPath>
+      <itemPath>pic32mx_cfg.c</itemPath>
+      <itemPath>serial.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/Makefile-impl.mk</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/Makefile-variables.mk</itemPath>
+      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/project.properties</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -68,7 +71,7 @@
       </compileType>
       <C32>
         <property key="additional-warnings" value="false"/>
-        <property key="extra-include-directories" value="../"/>
+        <property key="extra-include-directories" value="../;./"/>
         <property key="preprocessor-macros" value=""/>
         <property key="exclude-floating-point" value="false"/>
         <property key="make-warnings-into-errors" value="false"/>
