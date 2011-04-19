@@ -30,7 +30,7 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/main.o
+OBJECTFILES=${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/main.o
 
 
 CFLAGS=
@@ -81,16 +81,6 @@ ifneq (,$(findstring MINGW32,$(OS_CURRENT)))
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.d 
 	${CP} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.d 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.tmp}
-endif
-${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o: ../NETV32_CANDriver.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR}/_ext/1472 
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"../" -I"./" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o ../NETV32_CANDriver.c 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d > ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${CP} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp}
 endif
 ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
@@ -162,16 +152,6 @@ ifneq (,$(findstring MINGW32,$(OS_CURRENT)))
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.d 
 	${CP} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.d 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_SerialDriver.o.tmp}
-endif
-${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o: ../NETV32_CANDriver.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR}/_ext/1472 
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"../" -I"./" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o ../NETV32_CANDriver.c 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d > ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${CP} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.d 
-	${RM} ${OBJECTDIR}/_ext/1472/NETV32_CANDriver.o.tmp}
 endif
 ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
