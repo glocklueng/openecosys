@@ -19,7 +19,7 @@
 #include "ModuleConfigurationView.h"
 #include <QCheckBox>
 #include <QFileDialog>
-
+#include "AddVariableDialog.h"
 
 
 ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule *module)
@@ -65,7 +65,7 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     connect(m_ui.toolButton_Deactivate,SIGNAL(clicked()),this,SLOT(disableAllVariables()));
     connect(m_ui.toolButton_SaveConf,SIGNAL(clicked()),this,SLOT(saveConfiguration()));
     connect(m_ui.toolButton_LoadConf,SIGNAL(clicked()),this,SLOT(loadConfiguration()));
-
+    connect(m_ui.toolButton_NewVariable,SIGNAL(clicked()),this,SLOT(newVariableClicked()));
 }
 
 
@@ -198,5 +198,26 @@ void ModuleConfigurationView::saveConfiguration()
     {
             qDebug() << "Saving configuration :" << fileName;
             m_module->getConfiguration()->saveConfiguration(fileName);
+    }
+}
+
+void ModuleConfigurationView::newVariableClicked()
+{
+    AddVariableDialog dialog;
+    dialog.exec();
+
+    if (dialog.result() == QDialog::Accepted)
+    {
+        //Create new variable
+        ModuleVariable *var = new ModuleVariable(dialog.getVariableType(),
+                                                 dialog.getVariableName(),
+                                                 dialog.getVariableMemoryType(),
+                                                 dialog.getVariableMemoryOffset(),
+                                                 dialog.getVariableDescription());
+
+        //Variable will be owned by the configuration
+        m_module->getConfiguration()->addVariable(var);
+
+
     }
 }
