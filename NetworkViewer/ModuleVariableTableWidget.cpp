@@ -60,7 +60,7 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
 
     //Streching
     horizontalHeader()->setStretchLastSection(true);
-    verticalHeader()->setStretchLastSection(false);
+    //verticalHeader()->setStretchLastSection(true);
 }
 
 void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
@@ -283,10 +283,12 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     }
 
     //Make sure everything is visible
-    resizeRowToContents(index);
-    //resizeColumnsToContents();
 
+    //resizeColumnsToContents();
     blockSignals(false);
+
+
+    resizeRowsToContents();
 
     emit variableAdded(variable);
 
@@ -330,5 +332,12 @@ void ModuleVariableTableWidget::clearContents()
     clear();
     setRowCount(0);
     blockSignals(false);
+}
+
+void ModuleVariableTableWidget::showEvent (QShowEvent * event)
+{
+    //qDebug("ModuleVariableTableWidget::showEvent (QShowEvent * event)");
+    resizeRowsToContents();
+    QTableWidget::showEvent(event);
 }
 

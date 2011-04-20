@@ -100,7 +100,9 @@ protected:
     ///Internal drop event handler
     virtual void dropEvent(QDropEvent *event);
     ///Handling keyboard interaction
-    virtual void keyPressEvent ( QKeyEvent * event );    
+    virtual void keyPressEvent ( QKeyEvent * event );
+    //about to show event
+    virtual void showEvent (QShowEvent * event);
     ///Mapping between variable and table index
     QMap<ModuleVariable*,int> m_variableMap;
     ///Interactive flag

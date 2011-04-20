@@ -77,14 +77,14 @@ protected slots:
 
     void saveConfiguration();
 
-    void timeout();
+
 	
 protected:
 
     NetworkModule *m_module;
     ModuleVariableTableWidget *m_table;
     Ui::ModuleConfigurationView m_ui;
-    QTimer *m_timer;
+
 
 };
 
