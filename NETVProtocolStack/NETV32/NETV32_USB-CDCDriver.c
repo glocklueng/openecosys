@@ -29,14 +29,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV32_Utils.h"
 
 
-
-
 //memory buffer
 unsigned char g_recvDataBytes[RX_BUFFER_SIZE];
 
 unsigned int g_availableBytes = 0;
 unsigned int g_readIndex = 0;
 unsigned int g_writeIndex = 0;
+
+void netv32_init_usb_cdc()
+{
+    //USB INIT CODE HERE
+}
+
+
+void netv32_usb_task()
+{
+    //USB TASK HERE
+
+
+    //UPDATE g_recvDataBytes of data available
+
+}
+
+
 
 //TODO This should be moved somewhere else.
 unsigned char serial_calculate_checksum(const NETVSerialMessage *message)
@@ -54,7 +69,7 @@ unsigned char serial_calculate_checksum(const NETVSerialMessage *message)
 
 }
 
-
+/**
 void serial_usart_interrupt_handler(void)
 {
 		//TODO, HANDLE UART1 & UART2
@@ -74,6 +89,7 @@ void serial_usart_interrupt_handler(void)
 		//One more byte available
 		g_availableBytes++;
 }
+*/
 
 unsigned int serial_bytes_available(void)
 {
@@ -134,13 +150,8 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 	buf.checksum = serial_calculate_checksum(&buf);
 
 
-    //Transmit on serial
-    //Right now it will be synchronous, need to be event based with interrupts
-    for (i = 0; i < sizeof(NETVSerialMessage); i++)
-    {
-	    while(busy_usart1());
-        putc_usart1(buf.messageBytes[i]);
-    }
+    //TODO Transmit on USB
+ 
 
     return 0;
 }
