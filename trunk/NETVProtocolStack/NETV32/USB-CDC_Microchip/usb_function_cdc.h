@@ -90,7 +90,7 @@
 
 /** I N C L U D E S **********************************************************/
 #include "GenericTypeDefs.h"
-#include "USB\usb.h"
+#include "usb.h"
 #include "usb_config.h"
 
 /** D E F I N I T I O N S ****************************************************/

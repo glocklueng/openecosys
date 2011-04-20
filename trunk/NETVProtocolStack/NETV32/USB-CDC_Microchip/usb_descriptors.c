@@ -144,8 +144,8 @@ state according to the definition in the USB specification.
  ********************************************************************/
  
 /** INCLUDES *******************************************************/
-#include "USB/usb.h"
-#include "USB/usb_function_cdc.h"
+#include "usb.h"
+#include "usb_function_cdc.h"
 
 /** CONSTANTS ******************************************************/
 
