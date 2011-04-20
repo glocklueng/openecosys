@@ -3,10 +3,7 @@
 #include "NETV32_Shared.h"
 #include "NETV32_SerialDriver.h"
 
-//USB STUFF
-#include "usb.h"
-#include "usb_function_cdc.h"
-#include "HardwareProfile.h"
+
 
 
 void netv_proc_message(NETV_MESSAGE *message)
@@ -133,58 +130,3 @@ int main()
     return 0;
 }
 
-/*******************************************************************
- * Function:        BOOL USER_USB_CALLBACK_EVENT_HANDLER(
- *                        USB_EVENT event, void *pdata, WORD size)
- *
- * PreCondition:    None
- *
- * Input:           USB_EVENT event - the type of event
- *                  void *pdata - pointer to the event data
- *                  WORD size - size of the event data
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is called from the USB stack to
- *                  notify a user application that a USB event
- *                  occured.  This callback is in interrupt context
- *                  when the USB_INTERRUPT option is selected.
- *
- * Note:            None
- *******************************************************************/
-BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
-{
-    switch(event)
-    {
-        case EVENT_TRANSFER:
-            //Add application specific callback task or callback function here if desired.
-            break;
-        case EVENT_SOF:
-            //USBCB_SOF_Handler();
-            break;
-        case EVENT_SUSPEND:
-            //USBCBSuspend();
-            break;
-        case EVENT_RESUME:
-            //USBCBWakeFromSuspend();
-            break;
-        case EVENT_CONFIGURED:
-            //USBCBInitEP();
-            break;
-        case EVENT_SET_DESCRIPTOR:
-            //USBCBStdSetDscHandler();
-            break;
-        case EVENT_EP0_REQUEST:
-            //USBCBCheckOtherReq();
-            break;
-        case EVENT_BUS_ERROR:
-            //USBCBErrorHandler();
-            break;
-
-        default:
-            break;
-    }
-    return TRUE;
-}
