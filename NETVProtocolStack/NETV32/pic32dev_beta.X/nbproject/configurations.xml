@@ -13,6 +13,25 @@
         <itemPath>../NETV32_Shared.h</itemPath>
         <itemPath>../NETV32_Utils.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2" displayName="USB_CDC" projectFiles="true">
+        <itemPath>../USB-CDC_Microchip/Compiler.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/HardwareProfile.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_ch9.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_common.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_config.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_device.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_function_cdc.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_function_generic.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_function_hid.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_function_msd.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_hal.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_hal_pic32.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_host.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_host_generic.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_host_msd.h</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_host_msd_scsi.h</itemPath>
+      </logicalFolder>
       <itemPath>bsp.h</itemPath>
       <itemPath>serial.h</itemPath>
     </logicalFolder>
@@ -38,6 +57,11 @@
         <itemPath>../NETV32_SerialDriver.c</itemPath>
         <itemPath>../NETV32_Shared.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2" displayName="USB_CDC" projectFiles="true">
+        <itemPath>../USB-CDC_Microchip/usb_descriptors.c</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_device.c</itemPath>
+        <itemPath>../USB-CDC_Microchip/usb_function_cdc.c</itemPath>
+      </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>pic32mx_cfg.c</itemPath>
       <itemPath>serial.c</itemPath>
@@ -46,9 +70,6 @@
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/Makefile-impl.mk</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/Makefile-variables.mk</itemPath>
-      <itemPath>../../../../../../Documents/working_area/openecosys/trunk/NETVProtocolStack/NETV32/pic32dev_beta.X/nbproject/project.properties</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -70,10 +91,32 @@
         </linkerTool>
       </compileType>
       <item path="../NETV32_CANDriver.c" ex="true" overriding="false">
+        <C32>
+          <property key="extra-include-directories" value="../;./"/>
+          <property key="additional-warnings" value="false"/>
+          <property key="preprocessor-macros" value=""/>
+          <property key="exclude-floating-point" value="false"/>
+          <property key="make-warnings-into-errors" value="false"/>
+          <property key="pre-instruction-scheduling" value="default"/>
+          <property key="use-indirect-calls" value="false"/>
+          <property key="strict-ansi" value="false"/>
+          <property key="support-ansi" value="false"/>
+          <property key="optimization-level" value=""/>
+          <property key="place-data-into-section" value="false"/>
+          <property key="post-instruction-scheduling" value="default"/>
+          <property key="enable-omit-frame-pointer" value="false"/>
+          <property key="enable-unroll-loops" value="false"/>
+          <property key="generate-16-bit-code" value="false"/>
+          <property key="isolate-each-function" value="false"/>
+        </C32>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
       </item>
       <C32>
         <property key="additional-warnings" value="false"/>
-        <property key="extra-include-directories" value="../;./"/>
+        <property key="extra-include-directories" value="./;../;../USB-CDC_Microchip"/>
         <property key="preprocessor-macros" value=""/>
         <property key="exclude-floating-point" value="false"/>
         <property key="make-warnings-into-errors" value="false"/>
@@ -94,8 +137,8 @@
       <C32-LD>
       </C32-LD>
       <ICD3PlatformTool>
-        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
         <property key="programoptions.preserveprogramrange.end" value="0x1d0001ff"/>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
         <property key="memories.id" value="false"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="Freeze All Other Peripherals" value="true"/>

@@ -76,7 +76,7 @@
 /** INCLUDES *******************************************************/
 #include "GenericTypeDefs.h"
 #include "Compiler.h"
-#include "./USB/USB.h"
+#include "USB.h"
 #include "HardwareProfile.h"
 
 
