@@ -30,7 +30,7 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ${OBJECTDIR}/_ext/65181253/usb_device.o
+OBJECTFILES=${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ${OBJECTDIR}/_ext/65181253/usb_device.o
 
 
 CFLAGS=
@@ -91,16 +91,6 @@ ifneq (,$(findstring MINGW32,$(OS_CURRENT)))
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
 	${CP} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp}
-endif
-${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR} 
-	${RM} ${OBJECTDIR}/serial.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/serial.o.d > ${OBJECTDIR}/serial.o.tmp
-	${RM} ${OBJECTDIR}/serial.o.d 
-	${CP} ${OBJECTDIR}/serial.o.tmp ${OBJECTDIR}/serial.o.d 
-	${RM} ${OBJECTDIR}/serial.o.tmp}
 endif
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
@@ -192,16 +182,6 @@ ifneq (,$(findstring MINGW32,$(OS_CURRENT)))
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
 	${CP} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp}
-endif
-${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR} 
-	${RM} ${OBJECTDIR}/serial.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/serial.o.d > ${OBJECTDIR}/serial.o.tmp
-	${RM} ${OBJECTDIR}/serial.o.d 
-	${CP} ${OBJECTDIR}/serial.o.tmp ${OBJECTDIR}/serial.o.d 
-	${RM} ${OBJECTDIR}/serial.o.tmp}
 endif
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 

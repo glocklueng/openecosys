@@ -178,6 +178,8 @@
         <property key="poweroptions.powerenable" value="false"/>
         <property key="I2C@" value="true"/>
       </ICD3PlatformTool>
+      <item path="serial.c" ex="true" overriding="false">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
