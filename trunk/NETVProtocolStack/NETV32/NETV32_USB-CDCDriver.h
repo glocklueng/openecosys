@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "usb_function_cdc.h"
 #include "HardwareProfile.h"
 
-
+void netv32_init_usb_cdc();
+void netv32_usb_task();
 
 #endif

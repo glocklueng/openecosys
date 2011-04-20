@@ -107,8 +107,8 @@ int main()
     //UPDATE NETV ADDRESS
     canAddr = bootConfig->module_id;
 
-    //Open serial port
-    setup_usart1();
+    //Open USB
+    netv32_init_usb_cdc();
 
     // Turn on the interrupts
     INTEnableSystemMultiVectoredInt();
@@ -120,6 +120,8 @@ int main()
 
     while (1)
     {
+        netv32_usb_task();
+
         //Right now will never come out of this function (blocking on serial port)
         netv_transceiver(canAddr);
         update_variables();
