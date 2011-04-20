@@ -217,6 +217,7 @@ SET(NetworkViewer_SRCS
 	DeviceSelectorDialog.cpp
         ModuleVariableTableWidget.cpp
         PreferencesDialog.cpp
+        AddVariableDialog.cpp
 )
 
 
@@ -241,6 +242,7 @@ SET(NetworkViewer_HEADERS
         NetworkViewerSplashScreen.h
         ModuleVariableTableWidget.h
         PreferencesDialog.h
+        AddVariableDialog.h
 )
 
 SET(NetworkViewer_UIS
@@ -251,6 +253,7 @@ SET(NetworkViewer_UIS
 	TestView.ui
 	DeviceSelectorDialog.ui
         PreferencesDialog.ui
+        AddVariableDialog.ui
 )
 
 SET(qrc 

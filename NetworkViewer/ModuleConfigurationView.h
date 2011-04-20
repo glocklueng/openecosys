@@ -77,7 +77,7 @@ protected slots:
 
     void saveConfiguration();
 
-
+    void newVariableClicked();
 	
 protected:
 

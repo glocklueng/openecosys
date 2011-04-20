@@ -168,6 +168,8 @@ void ModuleConfiguration::addVariable(ModuleVariable *variable)
     //Make sure the variable knows to which device ID it belongs
     variable->setDeviceID(m_deviceID);
 
+    //TODO make sure the variable know on wich interface it is mapped
+
     //Connect signals for user modification
     connect(variable, SIGNAL(userChanged(ModuleVariable*)), this, SLOT(variableUpdated(ModuleVariable*)));
 
