@@ -23,10 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-#include "NETV32_SerialDriver.h"
+#include "NETV32_USB-CDCDriver.h"
 #include "NETV32_Device.h"
 #include "NETV32_Shared.h"
 #include "NETV32_Utils.h"
+
 
 
 //memory buffer
