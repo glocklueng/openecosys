@@ -101,8 +101,8 @@
           <property key="make-warnings-into-errors" value="false"/>
           <property key="pre-instruction-scheduling" value="default"/>
           <property key="use-indirect-calls" value="false"/>
-          <property key="support-ansi" value="false"/>
           <property key="strict-ansi" value="false"/>
+          <property key="support-ansi" value="false"/>
           <property key="optimization-level" value=""/>
           <property key="place-data-into-section" value="false"/>
           <property key="post-instruction-scheduling" value="default"/>
@@ -117,8 +117,30 @@
         </C32-LD>
       </item>
       <item path="../NETV32_SerialDriver.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
       </item>
       <C32>
+        <property key="additional-warnings" value="false"/>
+        <property key="extra-include-directories" value="./;../;../USB-CDC_Microchip"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="use-indirect-calls" value="false"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="support-ansi" value="false"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="isolate-each-function" value="false"/>
       </C32>
       <C32-AS>
       </C32-AS>
@@ -143,18 +165,18 @@
         <property key="REAL TIME CLOCK" value="true"/>
         <property key="memories.eeprom" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="TIMER1" value="true"/>
         <property key="UART@" value="true"/>
-        <property key="programoptions.preserveprogramrange" value="false"/>
-        <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
+        <property key="TIMER1" value="true"/>
         <property key="voltagevalue" value="3.25"/>
-        <property key="memories.programmemory.start" value="0x1d000000"/>
-        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="ADC @" value="true"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="memories.programmemory.start" value="0x1d000000"/>
         <property key="memories.programmemory.end" value="0x1d07ffff"/>
         <property key="OUTPUT COMPARE @" value="true"/>
-        <property key="I2C@" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="I2C@" value="true"/>
       </ICD3PlatformTool>
     </conf>
   </confs>

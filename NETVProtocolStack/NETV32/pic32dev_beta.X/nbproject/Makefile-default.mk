@@ -75,7 +75,7 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o: ../USB-CDC_Microchip/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d > ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
@@ -85,7 +85,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Memory.o: ../NETV32_Memory.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
@@ -95,7 +95,7 @@ endif
 ${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/serial.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/serial.o.d > ${OBJECTDIR}/serial.o.tmp
 	${RM} ${OBJECTDIR}/serial.o.d 
@@ -105,7 +105,7 @@ endif
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/main.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	${RM} ${OBJECTDIR}/main.o.d 
@@ -115,7 +115,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o: ../NETV32_USB-CDCDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d > ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
@@ -125,7 +125,7 @@ endif
 ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/pic32mx_cfg.o.d -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/pic32mx_cfg.o.d -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/pic32mx_cfg.o.d > ${OBJECTDIR}/pic32mx_cfg.o.tmp
 	${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
@@ -135,7 +135,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Common.o: ../NETV32_Common.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Common.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
@@ -145,7 +145,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Shared.o: ../NETV32_Shared.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
@@ -155,7 +155,7 @@ endif
 ${OBJECTDIR}/_ext/65181253/usb_descriptors.o: ../USB-CDC_Microchip/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d > ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
@@ -165,7 +165,7 @@ endif
 ${OBJECTDIR}/_ext/65181253/usb_device.o: ../USB-CDC_Microchip/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
-	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_device.o.d -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c 
+	${MP_CC} -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_device.o.d -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_device.o.d > ${OBJECTDIR}/_ext/65181253/usb_device.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
@@ -176,7 +176,7 @@ else
 ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o: ../USB-CDC_Microchip/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d > ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
@@ -186,7 +186,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Memory.o: ../NETV32_Memory.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
@@ -196,7 +196,7 @@ endif
 ${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/serial.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/serial.o.d -o ${OBJECTDIR}/serial.o serial.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/serial.o.d > ${OBJECTDIR}/serial.o.tmp
 	${RM} ${OBJECTDIR}/serial.o.d 
@@ -206,7 +206,7 @@ endif
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/main.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	${RM} ${OBJECTDIR}/main.o.d 
@@ -216,7 +216,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o: ../NETV32_USB-CDCDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d > ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
@@ -226,7 +226,7 @@ endif
 ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR} 
 	${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/pic32mx_cfg.o.d -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/pic32mx_cfg.o.d -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/pic32mx_cfg.o.d > ${OBJECTDIR}/pic32mx_cfg.o.tmp
 	${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
@@ -236,7 +236,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Common.o: ../NETV32_Common.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Common.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
@@ -246,7 +246,7 @@ endif
 ${OBJECTDIR}/_ext/1472/NETV32_Shared.o: ../NETV32_Shared.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1472 
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d > ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.tmp
 	${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
@@ -256,7 +256,7 @@ endif
 ${OBJECTDIR}/_ext/65181253/usb_descriptors.o: ../USB-CDC_Microchip/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d > ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
@@ -266,7 +266,7 @@ endif
 ${OBJECTDIR}/_ext/65181253/usb_device.o: ../USB-CDC_Microchip/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
-	${MP_CC}  -x c -c -mprocessor=32MX795F512H  -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_device.o.d -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c 
+	${MP_CC}  -x c -c -mprocessor=32MX795F512H -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF ${OBJECTDIR}/_ext/65181253/usb_device.o.d -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	 sed -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/65181253/usb_device.o.d > ${OBJECTDIR}/_ext/65181253/usb_device.o.tmp
 	${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
