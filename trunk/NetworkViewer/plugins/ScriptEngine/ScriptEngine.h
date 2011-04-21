@@ -156,6 +156,7 @@ protected slots:
 	void timerUpdate();
         void loadButtonClicked();
         void runButtonClicked();
+	void saveButtonClicked();
         void updatePeriod(int period);
         void helpButtonClicked();
 
