@@ -286,16 +286,11 @@ void ScriptEngine::saveButtonClicked()
         {
 			qDebug() << "Saving script :" << fileName;
 			m_lastPath = fileName;
-			
 			QFile file(fileName);
 			file.open(QIODevice::WriteOnly);
-			
 			QByteArray array = m_ui.m_textEditScript->toPlainText().toUtf8();
-			
 			file.write(array.data(),array.size());
-			
 			file.close();
-			
         }
     }
     else
