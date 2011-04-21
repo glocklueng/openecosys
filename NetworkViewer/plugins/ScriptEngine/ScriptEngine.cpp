@@ -161,6 +161,7 @@ ScriptEngine::ScriptEngine(NetworkView *view)
         //Connect buttons
         connect(m_ui.m_runButton,SIGNAL(clicked()),this,SLOT(runButtonClicked()));
         connect(m_ui.m_loadButton,SIGNAL(clicked()),this,SLOT(loadButtonClicked()));
+	connect(m_ui.m_saveButton,SIGNAL(clicked()),this,SLOT(saveButtonClicked()));
         connect(m_ui.helpButton,SIGNAL(clicked()),this,SLOT(helpButtonClicked()));
 
 
@@ -272,6 +273,40 @@ void ScriptEngine::loadButtonClicked()
         msgBox.exec();
 
     }
+}
+
+void ScriptEngine::saveButtonClicked()
+{
+	if (!m_running)
+    {
+        QString fileName = QFileDialog::getSaveFileName(NULL, "Save Script File",
+														m_lastPath,
+														"JavaScript (*.js)");
+        if (fileName.size() > 0)
+        {
+			qDebug() << "Saving script :" << fileName;
+			m_lastPath = fileName;
+			
+			QFile file(fileName);
+			file.open(QIODevice::WriteOnly);
+			
+			QByteArray array = m_ui.m_textEditScript->toPlainText().toUtf8();
+			
+			file.write(array.data(),array.size());
+			
+			file.close();
+			
+        }
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Stop the script before saving.");
+        msgBox.exec();
+		
+    }
+	
+	
 }
 
 void ScriptEngine::runButtonClicked()
