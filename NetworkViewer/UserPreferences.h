@@ -40,7 +40,7 @@ public:
 
     bool save(const QString &filename)
     {
-
+        return false;
     }
 
     bool setKey(const QString &key, QVariant value)
