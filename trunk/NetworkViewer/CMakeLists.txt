@@ -218,6 +218,7 @@ SET(NetworkViewer_SRCS
         ModuleVariableTableWidget.cpp
         PreferencesDialog.cpp
         AddVariableDialog.cpp
+        UserPreferences.cpp
 )
 
 
@@ -243,6 +244,7 @@ SET(NetworkViewer_HEADERS
         ModuleVariableTableWidget.h
         PreferencesDialog.h
         AddVariableDialog.h
+        UserPreferences.h
 )
 
 SET(NetworkViewer_UIS
