@@ -27,7 +27,7 @@ class UserPreferences : public QObject
     Q_OBJECT;
 public:
 
-    UserPreferences(QObject *parent)
+    UserPreferences(QObject *parent = NULL)
         : QObject(parent)
     {
 
@@ -58,6 +58,12 @@ public:
         {
             return QVariant::Invalid;
         }
+    }
+
+    static UserPreferences& getGlobalPreferences()
+    {
+        static UserPreferences prefs;
+        return prefs;
     }
 
 protected:
