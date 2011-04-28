@@ -79,6 +79,9 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
     ///Configuration button clicked
     void configureButtonClicked();
 
+    ///Device arguments changed
+    void deviceArgsChanged(const QString &text);
+
     protected:
 
     ///The NetworkView (Main Window)

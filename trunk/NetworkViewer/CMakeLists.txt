@@ -334,7 +334,7 @@ IF (WIN32)
 
 
         #NetworkViewer Executable
-        add_executable(NetworkViewer main.cpp)
+        add_executable(NetworkViewer WIN32 main.cpp)
 	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
 	target_link_libraries(NetworkViewer networkViewerBase)
         INSTALL(TARGETS NetworkViewer DESTINATION bin)
@@ -400,7 +400,6 @@ IF (APPLE)
 	SET(CPACK_BUNDLE_STARTUP_COMMAND "start_osx.sh")
 
 
-
         INCLUDE(CPack)
 
 ENDIF (APPLE)
@@ -416,7 +415,7 @@ IF (UNIX AND NOT APPLE)
 
 
     #NetworkViewer Executable
-    add_executable(NetworkViewer main.cpp)
+    add_executable(NetworkViewer WIN32 main.cpp)
     set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
     target_link_libraries(NetworkViewer networkViewerBase)
     INSTALL(TARGETS NetworkViewer DESTINATION bin)
