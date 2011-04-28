@@ -19,6 +19,7 @@
 #include "DeviceSelectorDialog.h"
 #include "NetworkView.h"
 #include "NETVDevice.h"
+#include "UserPreferences.h"
 
 DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
     : m_view(view), m_factory(NULL)
@@ -30,16 +31,50 @@ DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
     //Look for devices and add them to the combo box
     QStringList devList = NETVDevice::deviceList();
 
+    //Will try tu use user prefs if possible
+    UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+
     for (int i = 0; i < devList.size(); i++)
     {
-        comboBox->addItem(devList[i]);
-	comboActivated(i);
+        comboBox->addItem(devList[i]);            	
     }
-
 
     connect(comboBox,SIGNAL(activated(int)),this,SLOT(comboActivated(int)));
     connect(m_configureButton,SIGNAL(clicked()),this,SLOT(configureButtonClicked()));
 
+    qDebug("Prefs size : %i",prefs.size());
+
+    //Set combo to preferences
+    if (prefs.contains("DeviceSelectorDialog::device_name"))
+    {
+        qDebug("Preference found : DeviceSelectorDialog::device_name");
+
+        //Update current device
+        QString name = prefs.getKey("DeviceSelectorDialog::device_name").toString();
+        comboBox->setCurrentIndex(comboBox->findText(name));
+
+        //Update device arguments
+        if (prefs.contains("DeviceSelectorDialog::device_args"))
+        {
+            qDebug("Preference found : DeviceSelectorDialog::device_args");
+            lineEditArgs->setText(prefs.getKey("DeviceSelectorDialog::device_args").toString());
+        }
+
+        //Update Factory
+        m_factory= NETVDevice::getFactoryNamed(comboBox->currentText());
+
+        //Update documentation
+        if (m_factory)
+        {
+            textEditDoc->setText(m_factory->getDocumentation());
+        }
+    }
+    else
+    {
+        qDebug("Preference not found");
+        comboBox->setCurrentIndex(0);
+        comboActivated(0);
+    }
 
     qDebug("DeviceSelectorDialog done");
 }
@@ -57,8 +92,14 @@ void DeviceSelectorDialog::comboActivated(int index)
 
     if (m_factory)
     {
+
         //update default args
         lineEditArgs->setText(m_factory->getDefaultArgs());
+
+        //Set preferences
+        UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText());
+        prefs.setKey("DeviceSelectorDialog::device_args",m_factory->getDefaultArgs());
 
         //update documentation
         textEditDoc->setText(m_factory->getDocumentation());
@@ -96,6 +137,11 @@ void DeviceSelectorDialog::configureButtonClicked()
         QString result = m_factory->configure();
 
         lineEditArgs->setText(result);
+
+        //Set preferences
+        UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText());
+        prefs.setKey("DeviceSelectorDialog::device_args",result);
     }
 }
 

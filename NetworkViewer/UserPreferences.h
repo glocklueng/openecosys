@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QBuffer>
 #include <QTextStream>
+#include <QtDebug>
 
 class UserPreferences : public QObject
 {
@@ -40,12 +41,58 @@ public:
     bool load()
     {
         //Read prefs document
-        QFile file(getPrefsDirectory());
+        QFile file(getPrefsPath());
         if (file.open(QIODevice::ReadOnly))
         {
 
+            QDomDocument doc("INTROLAB-NETWORKVIEWER-PREFS");
+
+            //Set document contents
+            if (!doc.setContent(&file)) {
+                file.close();
+                return false;
+            }
+
+            // <UserPreferences> element
+            QDomElement e = doc.documentElement();
+            if(e.tagName() != "UserPreferences")
+            {
+                qDebug() <<"No UserPreferences found. Element is " +  e.tagName();
+                return false;
+            }
+
+            //Iterate through all child (this would be config_item)
+            QDomNode n = e.firstChild();
+            while(!n.isNull())
+            {
+                e = n.toElement(); // try to convert the node to an element.
 
 
+                if(!e.isNull())
+                {
+                    if(e.tagName() == "config_item")
+                    {
+                        //Get Key
+                        QString key = e.attribute("key");
+
+                        qDebug() << "Loading : " << key;
+
+                        //Get Value
+                        QVariant value = e.attribute("value");
+
+                        //Set Key/value
+                        setKey(key,value);
+
+                    }
+                }//if e.isNull
+                else
+                {
+                    qDebug("NULL element");
+                }
+
+                //Next item
+                n = n.nextSibling();
+            }//while n.isNull
 
             return true;
         }
@@ -72,7 +119,7 @@ public:
         document.appendChild(element);
 
         //Write document
-        QFile file(getPrefsDirectory());
+        QFile file(getPrefsPath());
         if (file.open(QIODevice::WriteOnly))
         {
             QTextStream stream(&file);
@@ -109,20 +156,22 @@ public:
         }
     }
 
+    int size()
+    {
+        return m_map.size();
+    }
+
     static UserPreferences& getGlobalPreferences()
     {
         static UserPreferences prefs;
         return prefs;
     }
 
-    static QString getPrefsDirectory()
+    static QString getPrefsPath()
     {
         return QDir::homePath() + "/NetworkViewerPrefs.xml";
     }
 protected:
-
-
-
 
     QMap<QString, QVariant> m_map;
 

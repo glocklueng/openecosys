@@ -61,15 +61,13 @@ public:
 
         if(prefs.load())
         {
-            qDebug() << "User Preferences Loaded : " + UserPreferences::getPrefsDirectory();
+            qDebug() << "User Preferences Loaded : " + UserPreferences::getPrefsPath();
         }
         else
         {
-            qDebug() << "User Preferences not found, creating file : " + UserPreferences::getPrefsDirectory();
-
+            qDebug() << "User Preferences not found, creating file : " + UserPreferences::getPrefsPath();
             prefs.save();
         }
-
     }
 
     void init()
@@ -101,7 +99,7 @@ public:
         //m_debugWindow->raise();
 
         //Install handlers
-        qInstallMsgHandler(NetworkViewerMsgHandler);
+        //qInstallMsgHandler(NetworkViewerMsgHandler);
 
 
         m_view = new NetworkView(NULL);

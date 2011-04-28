@@ -334,7 +334,7 @@ IF (WIN32)
 
 
         #NetworkViewer Executable
-        add_executable(NetworkViewer WIN32 main.cpp)
+        add_executable(NetworkViewer main.cpp)
 	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
 	target_link_libraries(NetworkViewer networkViewerBase)
         INSTALL(TARGETS NetworkViewer DESTINATION bin)
