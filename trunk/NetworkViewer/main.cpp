@@ -26,6 +26,7 @@
 #include "ModuleConfigurationView.h"
 #include "NetworkView.h"
 #include "NetworkViewerSplashScreen.h"
+#include "UserPreferences.h"
 
 void NetworkViewerMsgHandler(QtMsgType type, const char *msg);
 
@@ -56,7 +57,18 @@ public:
         : QApplication(argc, argv), m_view(NULL), m_splashScreen(NULL)
     {
 
-       
+        UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+
+        if(prefs.load())
+        {
+            qDebug() << "User Preferences Loaded : " + UserPreferences::getPrefsDirectory();
+        }
+        else
+        {
+            qDebug() << "User Preferences not found, creating file : " + UserPreferences::getPrefsDirectory();
+
+            prefs.save();
+        }
 
     }
 
@@ -68,8 +80,7 @@ public:
 
         qDebug() << "Running application from" << QCoreApplication::applicationDirPath ();
 
-
-	    //Scan for all plugins
+        //Scan for all plugins
         //When we are in a test environment
         BasePlugin::scanPlugins(QCoreApplication::applicationDirPath() + "/plugins");
         BasePlugin::scanPlugins(QCoreApplication::applicationDirPath() + "/../plugins");
