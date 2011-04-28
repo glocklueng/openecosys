@@ -41,6 +41,7 @@ DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
 
     connect(comboBox,SIGNAL(activated(int)),this,SLOT(comboActivated(int)));
     connect(m_configureButton,SIGNAL(clicked()),this,SLOT(configureButtonClicked()));
+    connect(lineEditArgs,SIGNAL(textChanged(QString)),this,SLOT(deviceArgsChanged(QString)));
 
     qDebug("Prefs size : %i",prefs.size());
 
@@ -98,7 +99,7 @@ void DeviceSelectorDialog::comboActivated(int index)
 
         //Set preferences
         UserPreferences &prefs = UserPreferences::getGlobalPreferences();
-        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText());
+        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText(),false);
         prefs.setKey("DeviceSelectorDialog::device_args",m_factory->getDefaultArgs());
 
         //update documentation
@@ -140,9 +141,16 @@ void DeviceSelectorDialog::configureButtonClicked()
 
         //Set preferences
         UserPreferences &prefs = UserPreferences::getGlobalPreferences();
-        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText());
+        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText(),false);
         prefs.setKey("DeviceSelectorDialog::device_args",result);
     }
 }
 
+void DeviceSelectorDialog::deviceArgsChanged(const QString &text)
+{
+    //Set preferences
+    UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+    prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText(),false);
+    prefs.setKey("DeviceSelectorDialog::device_args",text);
+}
 

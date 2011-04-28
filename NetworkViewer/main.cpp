@@ -68,6 +68,8 @@ public:
             qDebug() << "User Preferences not found, creating file : " + UserPreferences::getPrefsPath();
             prefs.save();
         }
+
+        qDebug("Loaded prefs size %i",prefs.size());
     }
 
     void init()
@@ -98,11 +100,11 @@ public:
         //m_debugWindow->show();
         //m_debugWindow->raise();
 
-        //Install handlers
-        //qInstallMsgHandler(NetworkViewerMsgHandler);
-
 
         m_view = new NetworkView(NULL);
+
+        //Install handlers
+        qInstallMsgHandler(NetworkViewerMsgHandler);
 
         m_view->setWindowTitle(QString("NetworkViewer-") + NETWORKVIEWER_VERSION);
 
