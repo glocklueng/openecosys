@@ -67,9 +67,8 @@
 #include <windows.h>
 #include <QThread>
 #include <QReadWriteLock>
-#include <QtCore/private/qwineventnotifier_p.h>
+#include "qwineventnotifier_p.h"
 #endif
-
 /*!
 Encapsulates a serial port on both POSIX and Windows systems.
 
