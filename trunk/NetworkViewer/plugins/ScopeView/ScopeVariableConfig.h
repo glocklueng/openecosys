@@ -23,6 +23,7 @@
 #include "ui_ScopeVariableConfig.h"
 #include <QColorDialog>
 #include "ScopeCurve.h"
+#include "ScopeView.h"
 
 /**
     Simple configuration dialog to select color of the curve.
@@ -38,7 +39,7 @@ public:
             \param curve The curve to configure
             \param parent The parent Widget
         */
-	ScopeVariableConfig(ScopeCurve *curve, QWidget *parent = NULL);
+        ScopeVariableConfig(ScopeCurve *curve, ScopeView *parent = NULL);
 
 protected slots:
 
@@ -53,6 +54,11 @@ protected slots:
         */
 	void colorSelected ( const QColor & color);
 
+
+        /**
+        */
+        void removeVariableClicked();
+
 protected:
 
         ///Color selection dialog
@@ -60,6 +66,9 @@ protected:
 
         ///Related curve
 	ScopeCurve *m_curve;
+
+        ///Related view
+        ScopeView *m_view;
 };
 
 

@@ -95,56 +95,6 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeWidget" name="m_treeWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>400</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="mouseTracking">
-       <bool>false</bool>
-      </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <property name="textElideMode">
-       <enum>Qt::ElideRight</enum>
-      </property>
-      <property name="uniformRowHeights">
-       <bool>true</bool>
-      </property>
-      <attribute name="headerCascadingSectionResizes">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="headerDefaultSectionSize">
-       <number>33</number>
-      </attribute>
-      <attribute name="headerMinimumSectionSize">
-       <number>-18</number>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>Color</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Variable</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string notr="true">Action</string>
-       </property>
-      </column>
-     </widget>
      <widget class="QFrame" name="m_frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>

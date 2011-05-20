@@ -25,6 +25,7 @@
 #include <QDropEvent>
 #include "qwt_symbol.h"
 #include "qwt_plot_grid.h"
+#include "qwt_legend.h"
 
 
 //This will insert the plugin in the dictionary...
@@ -86,14 +87,30 @@ ScopeView::ScopeView(NetworkView *parent)
     setupUi(this);
     setAcceptDrops(true);
 
+
+
+    /*
+
     //Filter events on the tree widget
     m_treeWidget->setAcceptDrops(true);
     m_treeWidget->setDragDropMode(QAbstractItemView::DropOnly);
     m_treeWidget->installEventFilter(this);
     m_treeWidget->viewport()->installEventFilter(this);
 
+    */
+
     //Create (empty) Plot
     m_plot = new QwtPlot(m_frame);
+
+
+    m_plot->setAcceptDrops(true);
+    m_plot->installEventFilter(this);
+    m_plot->canvas()->setAcceptDrops(true);
+    m_plot->canvas()->installEventFilter(this);
+    m_frame->setAcceptDrops(true);
+    m_frame->installEventFilter(this);
+
+
 
     //Plot background color & grid
     QwtPlotGrid *grid = new QwtPlotGrid;
@@ -115,7 +132,7 @@ ScopeView::ScopeView(NetworkView *parent)
     m_picker = new QwtPlotPicker(m_plot->canvas());
     m_picker->setTrackerMode(QwtPicker::AlwaysOn);
 
-
+/*
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
     for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
@@ -124,15 +141,44 @@ ScopeView::ScopeView(NetworkView *parent)
     }
 
 
+
     connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemDoubleClicked(QTreeWidgetItem*,int)));
     connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemClicked(QTreeWidgetItem*,int)));
     //m_treeWidget->grabKeyboard();
+*/
+
 
     m_plot->setAutoReplot(true);
 
     m_updateTimer = new QTimer(this);
     connect(m_updateTimer,SIGNAL(timeout()),this,SLOT(updateTimer()));
     //m_updateTimer->start(100);//10ms timer
+
+
+    //Create Legend at bottom
+    QwtLegend *legend = new QwtLegend(this);
+    m_plot->insertLegend(legend,QwtPlot::BottomLegend);
+    legend->setItemMode(QwtLegend::ClickableItem);
+    connect(m_plot,SIGNAL(legendClicked(QwtPlotItem*)),this,SLOT(legendItemClicked(QwtPlotItem*)));
+
+
+
+}
+
+void ScopeView::legendItemClicked(QwtPlotItem *plotItem)
+{
+    qDebug("ScopeView::legendItemClicked(QwtPlotItem *plotItem = %p) rtti: %i",plotItem,plotItem->rtti());
+
+    if (plotItem->rtti() == QwtPlotItem::Rtti_PlotCurve)
+    {
+        ScopeCurve *curve = dynamic_cast<ScopeCurve*>(plotItem);
+        if (curve)
+        {
+             ScopeVariableConfig config(curve,this);
+             config.exec();
+        }
+    }
+
 }
 
 
@@ -160,6 +206,9 @@ void ScopeView::addCurve(ModuleVariable *variable)
     }
 
     ScopeCurve *curve = new ScopeCurve(variable,m_plot);
+
+    connect(curve,SIGNAL(aboutToDestroy(ScopeCurve*)),this,SLOT(destroyCurve(ScopeCurve*)));
+
 
     switch (m_curves.size() % 10)
     {
@@ -213,25 +262,22 @@ void ScopeView::addCurve(ModuleVariable *variable)
 
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeCurve(ModuleVariable*)));
 
+    /*
     QTreeWidgetItem *item = new QTreeWidgetItem(m_treeWidget);
-
     QPen pen = curve->pen();
     item->setBackground(COLOR_COLUMN,pen.color());
-
     item->setIcon(NAME_COLUMN,QIcon(QPixmap(":images/dsPIC.png")));
     item->setText(NAME_COLUMN,variable->getName() + "[" + QString::number(variable->getDeviceID()) + "]");
-
     item->setText(ACTION_COLUMN,"[Remove]");
     item->setIcon(ACTION_COLUMN,QIcon(QPixmap(":images/cross.png")));
-
     m_itemCurveMap.insert(item,curve);
 
     //Make sure everything is visible
-
     for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
     {
         m_treeWidget->resizeColumnToContents(i);
     }
+    */
 }
 
 
@@ -245,7 +291,11 @@ void ScopeView::removeCurve(ModuleVariable *variable)
         if (m_curves[i]->getVariable() == variable)
         {
             ScopeCurve *curve = m_curves[i];
+            //Remove Curve from the list
+            m_curves.removeAll(curve);
+            curve->deleteLater();
 
+            /*
             for (QMap<QTreeWidgetItem *, ScopeCurve*>::iterator iter = m_itemCurveMap.begin();
             iter != m_itemCurveMap.end(); iter++)
             {
@@ -254,7 +304,7 @@ void ScopeView::removeCurve(ModuleVariable *variable)
                     QTreeWidgetItem * item = iter.key();
 
                     //Let's delete the item and the curve
-                    m_itemCurveMap.remove(item);
+                    //m_itemCurveMap.remove(item);
                     m_curves.removeAll(curve);
 
                     delete curve;
@@ -269,12 +319,16 @@ void ScopeView::removeCurve(ModuleVariable *variable)
 
                 }
             }
+            */
+
+
             break;
         }
     }
 }
 
 
+/*
 void ScopeView::moduleItemDoubleClicked ( QTreeWidgetItem * item, int column )
 {
     qDebug("ScopeView::moduleItemClicked ( QTreeWidgetItem * item %p, int column %i)",item,column);
@@ -322,6 +376,7 @@ void ScopeView::moduleItemClicked(QTreeWidgetItem * item, int column)
     }
 
 }
+*/
 
 void ScopeView::customContextMenuRequested ( const QPoint & pos )
 {
@@ -437,4 +492,10 @@ bool ScopeView::event ( QEvent * e )
     }
 
     return BasePlugin::event(e);
+}
+
+void ScopeView::destroyCurve(ScopeCurve *curve)
+{
+   qDebug("ScopeView::destroyCurve(ScopeCurve *curve = %p)",curve);
+   m_curves.removeAll(curve);
 }
