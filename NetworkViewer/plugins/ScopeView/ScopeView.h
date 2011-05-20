@@ -95,6 +95,9 @@ public slots:
     */
     void removeCurve(ModuleVariable *variable);
 
+
+
+
 protected slots:
 
     /**
@@ -102,6 +105,7 @@ protected slots:
     */
     void customContextMenuRequested ( const QPoint & pos );
 
+#if 0
     /**
         Module double clicked
         \param item The item clicked
@@ -116,12 +120,20 @@ protected slots:
     */
     void moduleItemClicked(QTreeWidgetItem * item, int column);
 
+#endif
 
     ///Internal drop event handler
     virtual void dropEvent(QDropEvent *event);
 
+    void legendItemClicked(QwtPlotItem *plotItem);
+
     void updateTimer();
 
+    /**
+        Remove a curve from the scope view
+        \param  curve to remove
+    */
+    void destroyCurve(ScopeCurve *curve);
 
 protected:
 
@@ -143,7 +155,7 @@ protected:
     QList<ScopeCurve*> m_curves;
 
     ///Mapping of tree view items and scope curves
-    QMap<QTreeWidgetItem *, ScopeCurve*> m_itemCurveMap;
+    //QMap<QTreeWidgetItem *, ScopeCurve*> m_itemCurveMap;
 
     QTimer *m_updateTimer;
 

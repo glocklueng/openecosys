@@ -18,11 +18,16 @@
 
 #include "ScopeCurve.h"
 #include "qwt_symbol.h"
+#include "qwt_legend.h"
+#include "qwt_legend_item.h"
 
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
-:	QwtPlotCurve("Untitled"),m_variable(var),  m_plot(parentPlot)
+:	m_variable(var),  m_plot(parentPlot)
 {
 	Q_ASSERT(m_variable);
+
+        setTitle(m_variable->getName() + " [" + QString::number(m_variable->getDeviceID()) + "]");
+
 
 	//Attach the curve the the plot
 	attach(parentPlot);
@@ -40,7 +45,8 @@ ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 
 ScopeCurve::~ScopeCurve()
 {
-	detach();
+    emit aboutToDestroy(this);
+    detach();
 }
 
 void ScopeCurve::updateVariable(ModuleVariable *var)

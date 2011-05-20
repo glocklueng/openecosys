@@ -18,8 +18,8 @@
 #include "ScopeVariableConfig.h"
 
 
-ScopeVariableConfig::ScopeVariableConfig(ScopeCurve *curve, QWidget *parent)
-	: QDialog(parent), m_curve(curve)
+ScopeVariableConfig::ScopeVariableConfig(ScopeCurve *curve, ScopeView *parent)
+        : QDialog(parent), m_curve(curve), m_view(parent)
 {
 	setupUi(this);
 
@@ -34,6 +34,9 @@ ScopeVariableConfig::ScopeVariableConfig(ScopeCurve *curve, QWidget *parent)
 
 	//Set Color Dialog
 	connect(m_colorButton, SIGNAL(clicked()),this,SLOT(setColorClicked()));
+
+        //Remove Variable
+        connect(m_removeButton, SIGNAL(clicked()),this,SLOT(removeVariableClicked()));
 
 }
 void ScopeVariableConfig::setColorClicked()
@@ -57,4 +60,19 @@ void ScopeVariableConfig::colorSelected ( const QColor & color)
 	palette.setColor(QPalette::WindowText, color);
 	m_label->setPalette(palette);
 
+}
+
+
+void ScopeVariableConfig::removeVariableClicked()
+{
+
+    if (m_curve)
+    {
+        //Must not delete now the curve because we will cause problems with
+        //QwtPlotItem that reuses the pointer after the signal is emitted.
+        //Pointer will be deleted next event cycle.
+        m_curve->deleteLater();
+    }
+
+    close();
 }

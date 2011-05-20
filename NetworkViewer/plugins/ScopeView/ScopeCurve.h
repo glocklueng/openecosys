@@ -75,8 +75,21 @@ public slots:
             \param color The Curve color
         */
 	void setColor(const QColor &color);
+
+
+signals:
+
+        void aboutToDestroy(ScopeCurve *ptr);
+
+protected slots:
+
+
+
 	
 protected:
+
+
+
 	
         ///The variable that is being plotted
 	ModuleVariable *m_variable;
