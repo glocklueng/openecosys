@@ -147,7 +147,11 @@ UserPreferences& UserPreferences::getGlobalPreferences()
 
 QString UserPreferences::getPrefsPath()
 {
+#ifdef __APPLE_CC__
+    return QDir::homePath() + "/Documents/NetworkViewerPrefs.xml";
+#else
     return QDir::homePath() + "/NetworkViewerPrefs.xml";
+#endif
 }
 
 
