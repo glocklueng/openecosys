@@ -19,7 +19,7 @@
 #ifndef _SCOPE_VIEW_H_
 #define _SCOPE_VIEW_H_
 
-
+#include "ScopePlot.h"
 #include "ScopeCurve.h"
 #include "BasePlugin.h"
 #include "qwt_plot_zoomer.h"
@@ -57,8 +57,6 @@ class ScopeView : public BasePlugin, public Ui::ScopeView
     Q_OBJECT;
 
 public:
-
-    enum {COLOR_COLUMN, NAME_COLUMN, ACTION_COLUMN, TREE_WIDGET_COLUMN_SIZE};
 
     /**
         Constructor
@@ -105,25 +103,8 @@ protected slots:
     */
     void customContextMenuRequested ( const QPoint & pos );
 
-#if 0
-    /**
-        Module double clicked
-        \param item The item clicked
-        \param column The column clicked
-    */
-    void moduleItemDoubleClicked ( QTreeWidgetItem * item, int column );
-
-    /**
-        Module clicked
-        \param item The item clicked
-        \param column The column clicked
-    */
-    void moduleItemClicked(QTreeWidgetItem * item, int column);
-
-#endif
-
     ///Internal drop event handler
-    virtual void dropEvent(QDropEvent *event);
+    //virtual void dropEvent(QDropEvent *event);
 
     void legendItemClicked(QwtPlotItem *plotItem);
 
@@ -143,20 +124,21 @@ protected:
     */
     bool event ( QEvent * e );
 
-    bool eventFilter(QObject *obj, QEvent *event);
+    void dropEvent(QDropEvent *event);
+
+    void dragEnterEvent(QDragEnterEvent *event);
 
     QwtPlotZoomer *m_zoomer;
+
     QwtPlotPicker *m_picker;
 
     ///The plot
-    QwtPlot *m_plot;
+    ScopePlot *m_plot;
 
     ///List of all curves on the plot
     QList<ScopeCurve*> m_curves;
 
-    ///Mapping of tree view items and scope curves
-    //QMap<QTreeWidgetItem *, ScopeCurve*> m_itemCurveMap;
-
+    ///View update timer
     QTimer *m_updateTimer;
 
 };

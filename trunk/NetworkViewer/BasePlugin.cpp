@@ -9,7 +9,7 @@
 BasePlugin::BasePlugin(NetworkView *view)
     : QWidget(view), m_view(view)
 {
-
+    setAcceptDrops(true);
 }
 
 

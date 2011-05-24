@@ -245,6 +245,7 @@ void NetworkView::createScopeView()
     //Create MDI window
     QMdiSubWindow *subWindow = createSubWindow("Scope");
     subWindow->setWidget(m_scopeView);
+    subWindow->setAcceptDrops(true);
     subWindow->setAttribute(Qt::WA_DeleteOnClose);
     m_mdiArea->addSubWindow(subWindow);
     subWindow->resize(640,480);
