@@ -37,11 +37,11 @@ ScopeView::ScopeView(NetworkView *parent)
 {
 
     setupUi(this);
+
     setAcceptDrops(true);
 
     //Create (empty) Plot
-    m_plot = new ScopePlot(this);
-    m_plot->setParent(m_frame);
+    m_plot = new QwtPlot(this);
 
     //Plot background color & grid
     QwtPlotGrid *grid = new QwtPlotGrid;
@@ -70,12 +70,18 @@ ScopeView::ScopeView(NetworkView *parent)
     //m_updateTimer->start(100);//10ms timer
 
 
+
+
+
     //Create Legend at bottom
     QwtLegend *legend = new QwtLegend(this);
     m_plot->insertLegend(legend,QwtPlot::BottomLegend);
     legend->setItemMode(QwtLegend::ClickableItem);
     connect(m_plot,SIGNAL(legendClicked(QwtPlotItem*)),this,SLOT(legendItemClicked(QwtPlotItem*)));
+
+
 }
+
 
 void ScopeView::legendItemClicked(QwtPlotItem *plotItem)
 {
@@ -105,6 +111,8 @@ void ScopeView::terminate()
 {
 
 }
+
+
 
 void ScopeView::addCurve(ModuleVariable *variable)
 {
@@ -175,7 +183,6 @@ void ScopeView::addCurve(ModuleVariable *variable)
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeCurve(ModuleVariable*)));
 }
 
-
 void ScopeView::removeCurve(ModuleVariable *variable)
 {
     qDebug("ScopeView::removeCurve(ModuleVariable *variable = %p)",variable);
@@ -192,29 +199,6 @@ void ScopeView::removeCurve(ModuleVariable *variable)
             break;
         }
     }
-}
-
-
-
-void ScopeView::customContextMenuRequested ( const QPoint & pos )
-{
-    qDebug("Custom menu requested");
-
-    QMenu* menu = new QMenu(this);
-    menu->setTitle(tr("SubNetwork"));
-
-    menu->addAction( new QAction("Hello World!", this) );
-    menu->addAction( new QAction("This Rocks!", this) );
-
-    QAction *action = menu->exec(pos);
-
-    if (action)
-    {
-
-    }
-
-    delete menu;
-
 }
 
 void ScopeView::updateTimer()
@@ -276,6 +260,15 @@ void ScopeView::updateTimer()
 }
 
 
+
+
+void ScopeView::destroyCurve(ScopeCurve *curve)
+{
+   qDebug("ScopeView::destroyCurve(ScopeCurve *curve = %p)",curve);
+   m_curves.removeAll(curve);
+}
+
+
 bool ScopeView::event ( QEvent * e )
 {
     if(e->type() == BasePluginEvent::eventType())
@@ -306,14 +299,6 @@ bool ScopeView::event ( QEvent * e )
 
     return BasePlugin::event(e);
 }
-
-void ScopeView::destroyCurve(ScopeCurve *curve)
-{
-   qDebug("ScopeView::destroyCurve(ScopeCurve *curve = %p)",curve);
-   m_curves.removeAll(curve);
-}
-
-
 
 void ScopeView::dropEvent(QDropEvent *dropEvent)
 {
@@ -358,4 +343,5 @@ void ScopeView::dragEnterEvent(QDragEnterEvent *event)
         event->acceptProposedAction();
     }
 }
+
 

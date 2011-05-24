@@ -207,10 +207,10 @@ SET(NetworkViewer_SRCS
 	NetworkView.cpp
 	NetworkModule.cpp
 	NetworkModuleItem.cpp
-	plugins/ScopeView/ScopeCurve.cpp
-	plugins/ScopeView/ScopeView.cpp
-        plugins/ScopeView/ScopeVariableConfig.cpp
-        plugins/ScopeView/ScopePlot.cpp
+#	plugins/ScopeView/ScopeCurve.cpp
+#	plugins/ScopeView/ScopeView.cpp
+#       plugins/ScopeView/ScopeVariableConfig.cpp
+#       plugins/ScopeView/ScopePlot.cpp
 	NetworkScheduler.cpp
 	BasePlugin.cpp
         BasePluginEvent.cpp
@@ -230,10 +230,10 @@ SET(NetworkViewer_HEADERS
 	NetworkView.h
 	NetworkModule.h
 	NetworkModuleItem.h
-	plugins/ScopeView/ScopeCurve.h
-	plugins/ScopeView/ScopeView.h
-        plugins/ScopeView/ScopeVariableConfig.h
-        plugins/ScopeView/ScopePlot.h
+#	plugins/ScopeView/ScopeCurve.h
+#	plugins/ScopeView/ScopeView.h
+#       plugins/ScopeView/ScopeVariableConfig.h
+#        plugins/ScopeView/ScopePlot.h
         NETVMessageEvent.h
         NETVInterfaceHandler.h
 	NetworkScheduler.h

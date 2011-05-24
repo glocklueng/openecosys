@@ -41,7 +41,7 @@ bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 
 
 NetworkView::NetworkView(QWidget *parent)
-    :	QMainWindow(parent), m_scopeView(NULL), m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
+    :	QMainWindow(parent),/* m_scopeView(NULL), */ m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
 {
     setupUi(this);
 
@@ -240,6 +240,8 @@ void NetworkView::processCANMessage(const NETV_MESSAGE &msg)
 
 void NetworkView::createScopeView()
 {
+    /**
+
     m_scopeView = new ScopeView(this);
 
     //Create MDI window
@@ -253,6 +255,7 @@ void NetworkView::createScopeView()
 
 
     connect(m_scopeView,SIGNAL(destroyed(QObject*)),this,SLOT(scopeDestroyed(QObject*)));
+    */
 
 }
 
@@ -381,13 +384,15 @@ void NetworkView::variableWrite(ModuleVariable *variable)
 void NetworkView::scopeRequest(ModuleVariable *variable)
 {
     qDebug("NetworkView::scopeRequest(const ModuleVariable &variable)");
-
+/**
     if (!m_scopeView)
     {
         createScopeView();
     }
 
     m_scopeView->addCurve(variable);
+*/
+
 }
 
 ScopeView* NetworkView::getScopeView()
