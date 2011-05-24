@@ -26,26 +26,6 @@
 #include "qwt_plot_picker.h"
 
 class NetworkView;
-class ScopeView;
-
-/*
-
-class TreeViewEventFilter : public QObject
-{
-    Q_OBJECT;
-
-public:
-
-    TreeViewEventFilter(ScopeView *view);
-
-    protected:
-
-    bool eventFilter(QObject *obj, QEvent *event);
-
-    ScopeView *m_view;
-
-};
-*/
 
 /**
     Scope main window
@@ -63,6 +43,7 @@ public:
         \param parent Parent widget, default = NULL
     */
     ScopeView(NetworkView *parent= NULL);
+
 
     /**
      * 	NOT YET IMPLEMENTED, BUT PLUGINS NEED TO OVERLOAD THIS FUNCTION
@@ -98,14 +79,6 @@ public slots:
 
 protected slots:
 
-    /**
-        \todo Not yet implemented.
-    */
-    void customContextMenuRequested ( const QPoint & pos );
-
-    ///Internal drop event handler
-    //virtual void dropEvent(QDropEvent *event);
-
     void legendItemClicked(QwtPlotItem *plotItem);
 
     void updateTimer();
@@ -122,10 +95,9 @@ protected:
         Event Handler, will process \ref BasePluginEvent
         \param e The event to handle.
     */
+
     bool event ( QEvent * e );
-
     void dropEvent(QDropEvent *event);
-
     void dragEnterEvent(QDragEnterEvent *event);
 
     QwtPlotZoomer *m_zoomer;
@@ -133,7 +105,7 @@ protected:
     QwtPlotPicker *m_picker;
 
     ///The plot
-    ScopePlot *m_plot;
+    QwtPlot *m_plot;
 
     ///List of all curves on the plot
     QList<ScopeCurve*> m_curves;
