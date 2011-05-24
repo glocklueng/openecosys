@@ -25,7 +25,7 @@
 #include <QWebView>
 #include <QFileDialog>
 #include "PreferencesDialog.h"
-#include "ScopeView.h"
+#include "BasePluginEvent.h"
 
 bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 {
@@ -41,7 +41,7 @@ bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 
 
 NetworkView::NetworkView(QWidget *parent)
-    :	QMainWindow(parent),/* m_scopeView(NULL), */ m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
+    :	QMainWindow(parent), m_scopeView(NULL), m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
 {
     setupUi(this);
 
@@ -240,23 +240,12 @@ void NetworkView::processCANMessage(const NETV_MESSAGE &msg)
 
 void NetworkView::createScopeView()
 {
-    /**
+    m_scopeView = createCustomPluginWindow("ScopeView","ScopeView (MAIN)");
 
-    m_scopeView = new ScopeView(this);
-
-    //Create MDI window
-    QMdiSubWindow *subWindow = createSubWindow("Scope");
-    subWindow->setWidget(m_scopeView);
-    subWindow->setAcceptDrops(true);
-    subWindow->setAttribute(Qt::WA_DeleteOnClose);
-    m_mdiArea->addSubWindow(subWindow);
-    subWindow->resize(640,480);
-    subWindow->show();
-
-
-    connect(m_scopeView,SIGNAL(destroyed(QObject*)),this,SLOT(scopeDestroyed(QObject*)));
-    */
-
+    if (m_scopeView)
+    {
+        connect(m_scopeView,SIGNAL(destroyed(QObject*)),this,SLOT(scopeDestroyed(QObject*)));
+    }
 }
 
 void NetworkView::addModule(const ModuleConfiguration &config)
@@ -384,20 +373,17 @@ void NetworkView::variableWrite(ModuleVariable *variable)
 void NetworkView::scopeRequest(ModuleVariable *variable)
 {
     qDebug("NetworkView::scopeRequest(const ModuleVariable &variable)");
-/**
+
     if (!m_scopeView)
     {
         createScopeView();
     }
 
-    m_scopeView->addCurve(variable);
-*/
-
-}
-
-ScopeView* NetworkView::getScopeView()
-{
-    return m_scopeView;
+    if (m_scopeView)
+    {
+        //Send Plugin message
+        QCoreApplication::postEvent(m_scopeView,new BasePluginEvent("addCurve",QVariant((unsigned long long)(variable))));
+    }
 }
 
 void NetworkView::scopeDestroyed(QObject *object)
