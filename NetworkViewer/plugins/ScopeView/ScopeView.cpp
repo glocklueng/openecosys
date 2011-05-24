@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include "NetworkView.h"
 #include <QDropEvent>
+#include <QDragEnterEvent>
 #include "qwt_symbol.h"
 #include "qwt_plot_grid.h"
 #include "qwt_legend.h"
@@ -31,55 +32,6 @@
 //This will insert the plugin in the dictionary...
 static int scope_view_plugin_init = BasePlugin::registerPlugin("ScopeView",new BasePlugin::PluginFactory<ScopeView>());
 
-bool ScopeView::eventFilter(QObject *obj, QEvent *event)
-{    
-    if (event->type() == QEvent::Drop)
-    {
-        //qDebug("Drop event on the Tree widget");
-
-        QDropEvent *dropEvent = dynamic_cast<QDropEvent*>(event);
-        //qDebug("ScopeView::eventFilter(QDropEvent *event = %p)",dropEvent);
-
-        if (dropEvent)
-        {
-
-            qDebug()<< dropEvent->mimeData()->text();
-            qDebug()<< dropEvent->mimeData()->formats();
-
-            QByteArray data = dropEvent->mimeData()->data("application/x-qabstractitemmodeldatalist");
-
-            //qDebug("data size : %i",data.size());
-            QDataStream stream(&data, QIODevice::ReadOnly);
-
-            while (!stream.atEnd())
-            {
-                int row, col;
-                QMap<int,  QVariant> roleDataMap;
-                stream >> row >> col >> roleDataMap;
-
-                //qDebug("got something from row: %i, col: %i",row,col);
-
-                if (roleDataMap.contains(Qt::UserRole))
-                {
-                    //qDebug() << "Found : " << roleDataMap[Qt::UserRole];
-
-                    ModuleVariable *variable = (ModuleVariable*) roleDataMap[Qt::UserRole].toULongLong();
-
-                    //qDebug("got pointer : %p",variable);
-                    Q_ASSERT(variable != NULL);
-                    addCurve(variable);
-                }
-            }
-        }
-        return true;
-    }
-
-   // standard event processing
-   return QObject::eventFilter(obj, event);
-
-}
-
-
 ScopeView::ScopeView(NetworkView *parent)
     : BasePlugin(parent), m_zoomer(NULL), m_picker(NULL)
 {
@@ -87,30 +39,9 @@ ScopeView::ScopeView(NetworkView *parent)
     setupUi(this);
     setAcceptDrops(true);
 
-
-
-    /*
-
-    //Filter events on the tree widget
-    m_treeWidget->setAcceptDrops(true);
-    m_treeWidget->setDragDropMode(QAbstractItemView::DropOnly);
-    m_treeWidget->installEventFilter(this);
-    m_treeWidget->viewport()->installEventFilter(this);
-
-    */
-
     //Create (empty) Plot
-    m_plot = new QwtPlot(m_frame);
-
-
-    m_plot->setAcceptDrops(true);
-    m_plot->installEventFilter(this);
-    m_plot->canvas()->setAcceptDrops(true);
-    m_plot->canvas()->installEventFilter(this);
-    m_frame->setAcceptDrops(true);
-    m_frame->installEventFilter(this);
-
-
+    m_plot = new ScopePlot(this);
+    m_plot->setParent(m_frame);
 
     //Plot background color & grid
     QwtPlotGrid *grid = new QwtPlotGrid;
@@ -132,22 +63,6 @@ ScopeView::ScopeView(NetworkView *parent)
     m_picker = new QwtPlotPicker(m_plot->canvas());
     m_picker->setTrackerMode(QwtPicker::AlwaysOn);
 
-/*
-    m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
-    {
-        m_treeWidget->resizeColumnToContents(i);
-    }
-
-
-
-    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemDoubleClicked(QTreeWidgetItem*,int)));
-    connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(moduleItemClicked(QTreeWidgetItem*,int)));
-    //m_treeWidget->grabKeyboard();
-*/
-
-
     m_plot->setAutoReplot(true);
 
     m_updateTimer = new QTimer(this);
@@ -160,9 +75,6 @@ ScopeView::ScopeView(NetworkView *parent)
     m_plot->insertLegend(legend,QwtPlot::BottomLegend);
     legend->setItemMode(QwtLegend::ClickableItem);
     connect(m_plot,SIGNAL(legendClicked(QwtPlotItem*)),this,SLOT(legendItemClicked(QwtPlotItem*)));
-
-
-
 }
 
 void ScopeView::legendItemClicked(QwtPlotItem *plotItem)
@@ -261,23 +173,6 @@ void ScopeView::addCurve(ModuleVariable *variable)
     m_curves.push_back(curve);
 
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeCurve(ModuleVariable*)));
-
-    /*
-    QTreeWidgetItem *item = new QTreeWidgetItem(m_treeWidget);
-    QPen pen = curve->pen();
-    item->setBackground(COLOR_COLUMN,pen.color());
-    item->setIcon(NAME_COLUMN,QIcon(QPixmap(":images/dsPIC.png")));
-    item->setText(NAME_COLUMN,variable->getName() + "[" + QString::number(variable->getDeviceID()) + "]");
-    item->setText(ACTION_COLUMN,"[Remove]");
-    item->setIcon(ACTION_COLUMN,QIcon(QPixmap(":images/cross.png")));
-    m_itemCurveMap.insert(item,curve);
-
-    //Make sure everything is visible
-    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
-    {
-        m_treeWidget->resizeColumnToContents(i);
-    }
-    */
 }
 
 
@@ -294,89 +189,12 @@ void ScopeView::removeCurve(ModuleVariable *variable)
             //Remove Curve from the list
             m_curves.removeAll(curve);
             curve->deleteLater();
-
-            /*
-            for (QMap<QTreeWidgetItem *, ScopeCurve*>::iterator iter = m_itemCurveMap.begin();
-            iter != m_itemCurveMap.end(); iter++)
-            {
-                if (iter.value() == curve)
-                {
-                    QTreeWidgetItem * item = iter.key();
-
-                    //Let's delete the item and the curve
-                    //m_itemCurveMap.remove(item);
-                    m_curves.removeAll(curve);
-
-                    delete curve;
-                    delete item;
-
-                    //Make sure everything is visible
-                    for (unsigned int i = 0; i < TREE_WIDGET_COLUMN_SIZE; i++)
-                    {
-                        m_treeWidget->resizeColumnToContents(i);
-                    }
-                    break;
-
-                }
-            }
-            */
-
-
             break;
         }
     }
 }
 
 
-/*
-void ScopeView::moduleItemDoubleClicked ( QTreeWidgetItem * item, int column )
-{
-    qDebug("ScopeView::moduleItemClicked ( QTreeWidgetItem * item %p, int column %i)",item,column);
-
-    ScopeVariableConfig config(m_itemCurveMap[item],this);
-
-    config.exec();
-
-    ScopeCurve *curve = m_itemCurveMap[item];
-
-    QPen pen = curve->pen();
-
-    item->setBackground(COLOR_COLUMN,pen.color());
-
-}
-
-void ScopeView::moduleItemClicked(QTreeWidgetItem * item, int column)
-{
-    //Test for remove action
-    if (column == ACTION_COLUMN)
-    {
-        QMessageBox msgBox;
-        msgBox.setText(QString("Do you want to remove the variable : ") + item->text(0) + " ?");
-        msgBox.setInformativeText(QString("This will remove the variable from the scope view."));
-        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Cancel);
-        int ret = msgBox.exec();
-
-        if (ret == QMessageBox::Ok)
-        {
-            ScopeCurve* curve = m_itemCurveMap[item];
-            m_itemCurveMap.remove(item);
-
-            if (curve)
-            {
-                m_curves.removeAll(curve);
-                delete curve;
-            }
-
-            if (item)
-            {
-                delete item;
-            }
-        }
-    }
-
-}
-*/
 
 void ScopeView::customContextMenuRequested ( const QPoint & pos )
 {
@@ -457,11 +275,6 @@ void ScopeView::updateTimer()
 
 }
 
-void ScopeView::dropEvent(QDropEvent *event)
-{
-    qDebug("ScopeView::dropEvent(QDropEvent *event)");
-}
-
 
 bool ScopeView::event ( QEvent * e )
 {
@@ -499,3 +312,50 @@ void ScopeView::destroyCurve(ScopeCurve *curve)
    qDebug("ScopeView::destroyCurve(ScopeCurve *curve = %p)",curve);
    m_curves.removeAll(curve);
 }
+
+
+
+void ScopeView::dropEvent(QDropEvent *dropEvent)
+{
+    qDebug("ScopeView::dropEvent(QDragEnterEvent *event)");
+    qDebug()<< dropEvent->mimeData()->text();
+    qDebug()<< dropEvent->mimeData()->formats();
+
+
+    QByteArray data = dropEvent->mimeData()->data("application/x-qabstractitemmodeldatalist");
+
+    //qDebug("data size : %i",data.size());
+    QDataStream stream(&data, QIODevice::ReadOnly);
+
+    while (!stream.atEnd())
+    {
+        int row, col;
+        QMap<int,  QVariant> roleDataMap;
+        stream >> row >> col >> roleDataMap;
+
+        //qDebug("got something from row: %i, col: %i",row,col);
+        if (roleDataMap.contains(Qt::UserRole))
+        {
+            //qDebug() << "Found : " << roleDataMap[Qt::UserRole];
+            ModuleVariable *variable = (ModuleVariable*) roleDataMap[Qt::UserRole].toULongLong();
+
+            //qDebug("got pointer : %p",variable);
+            Q_ASSERT(variable != NULL);
+            addCurve(variable);
+        }
+    }
+}
+
+
+void ScopeView::dragEnterEvent(QDragEnterEvent *event)
+{
+    qDebug("ScopeView::dragEnterEvent(QDragEnterEvent *event)");
+    qDebug()<< event->mimeData()->text();
+    qDebug()<< event->mimeData()->formats();
+
+    if (event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
+    {
+        event->acceptProposedAction();
+    }
+}
+
