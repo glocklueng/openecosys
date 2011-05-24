@@ -38,7 +38,7 @@
 #include <QLabel>
 #include <QLCDNumber>
 
-class ScopeView;
+
 
 /**
     Handler for menu trigger for plugins.
@@ -124,11 +124,6 @@ public:
             \param config the configuration to use
         */
 	void addModule(const ModuleConfiguration &config);
-
-        /**
-            \return the actual ScopeView. NULL if none.
-        */
-	ScopeView* getScopeView();
 
         /**
             Message notification, will be called from recvThread of \ref NETVInterfaceHandler
@@ -341,7 +336,7 @@ protected:
 	QGraphicsScene* m_scene;
 
         ///The scope view
-	ScopeView *m_scopeView;
+        BasePlugin *m_scopeView;
 
         ///The NETV interface handler
 	NETVInterfaceHandler *m_canHandler;

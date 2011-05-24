@@ -19,7 +19,6 @@
 #ifndef _SCOPE_VIEW_H_
 #define _SCOPE_VIEW_H_
 
-#include "ScopePlot.h"
 #include "ScopeCurve.h"
 #include "BasePlugin.h"
 #include "qwt_plot_zoomer.h"
