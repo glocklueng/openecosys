@@ -74,7 +74,11 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
+    //QAbstractItemModel optional functions
+    virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
+    virtual bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+    virtual QMap<int, QVariant> itemData ( const QModelIndex & index ) const;
+    virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     /**
             \param cpy The ModuleConfiguration to copy
@@ -230,6 +234,12 @@ public slots:
         \param variable The variable to remove. The module configuration will delete the variable.
      */
     void removeVariable(ModuleVariable *variable);
+
+protected slots:
+
+    void variableInternalUpdate(ModuleVariable *var);
+
+    void variableInternalActivated(bool state, ModuleVariable *var);
 
 protected:
 

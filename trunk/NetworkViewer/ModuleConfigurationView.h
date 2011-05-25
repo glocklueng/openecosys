@@ -52,42 +52,31 @@ signals:
 
 protected slots:
 
-    void ModuleVariableAdded(ModuleVariable *var);
-
-    void ModuleVariableRemoved(ModuleVariable *var);
-
-    void ModuleVariableDeleted(ModuleVariable *var);
+    //void ModuleVariableAdded(ModuleVariable *var);
+    //void ModuleVariableRemoved(ModuleVariable *var);
+    //void ModuleVariableDeleted(ModuleVariable *var);
 
     /**
         Called when the associated NetworkModule is destroyed.
     */
     void moduleDestroyed();
 
-    void cellChanged ( int row, int column );
-
-    void cellDoubleClicked(int row, int column);
-
-    void configurationAboutToLoad();
+    //void cellChanged ( int row, int column );
+    void cellDoubleClicked(const QModelIndex &index);
+    //void configurationAboutToLoad();
 
     void activateAllVariables();
-
     void disableAllVariables();
-
     void loadConfiguration();
-
     void saveConfiguration();
-
     void newVariableClicked();
 	
 protected:
 
-    // reimplemented to ensure that only one dataChanged() signal is emitted
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
-
     NetworkModule *m_module;
-    ModuleVariableTableWidget *m_table;
+    //ModuleVariableTableWidget *m_table;
     Ui::ModuleConfigurationView m_ui;
-    QTableView *m_testTable;
+    QTableView *m_table;
 
 
 };

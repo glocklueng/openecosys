@@ -401,7 +401,6 @@ IF (APPLE)
         SET(CPACK_BUNDLE_PLIST "NetworkViewer.plist")
 	SET(CPACK_BUNDLE_STARTUP_COMMAND "start_osx.sh")
 
-
         INCLUDE(CPack)
 
 ENDIF (APPLE)
