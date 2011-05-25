@@ -39,6 +39,11 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     //Make sure we know when the module is destroyed
     connect(m_module,SIGNAL(destroyed()),this,SLOT(moduleDestroyed()));
 
+
+    //m_testTable = new QTableView(this);
+    //m_testTable->setModel(m_module->getConfiguration());
+    //m_ui.verticalLayout->addWidget(m_testTable);
+
     //Add module variables
     for (unsigned int i = 0; i < m_module->getNumVariable(); i++)
     {
@@ -96,7 +101,7 @@ void ModuleConfigurationView::moduleDestroyed()
 
 void ModuleConfigurationView::cellChanged ( int row, int column )
 {
-    //qDebug("ModuleVariableTableWidget::cellChanged row %i col %i",row,column);
+    qDebug("ModuleConfigurationView::cellChanged row %i col %i",row,column);
 
     if (m_module)
     {
@@ -128,7 +133,7 @@ void ModuleConfigurationView::cellChanged ( int row, int column )
 
 void ModuleConfigurationView::cellDoubleClicked(int row, int column)
 {
-    //qDebug("ModuleVariableTableWidget::cellDoubleClicked row %i col %i",row,column);
+    //qDebug("ModuleConfigurationView::cellDoubleClicked row %i col %i",row,column);
 
     if (column == ModuleVariableTableWidget::VARIABLE_NAME && m_module)
     {

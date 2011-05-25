@@ -22,13 +22,13 @@
 #include <QCoreApplication>
 
 ModuleConfiguration::ModuleConfiguration(QObject *parent)
-    : QObject(parent), m_projectID(-1), m_codeVersion(0), m_processorID(0), m_moduleState(0), m_tableVersion(0), m_deviceID(0)
+    : QAbstractItemModel(parent), m_projectID(-1), m_codeVersion(0), m_processorID(0), m_moduleState(0), m_tableVersion(0), m_deviceID(0)
 {
 
 }
 
 ModuleConfiguration::ModuleConfiguration(int projectID, int codeVersion, int processorID, int moduleState, int tableVersion, int deviceID, QObject *parent)
-    : QObject(parent),
+    : QAbstractItemModel(parent),
     m_projectID(projectID),
     m_codeVersion(codeVersion),
     m_processorID(processorID),
@@ -54,7 +54,7 @@ ModuleConfiguration::ModuleConfiguration(int projectID, int codeVersion, int pro
 }
 
 ModuleConfiguration::ModuleConfiguration(const ModuleConfiguration &cpy)
-    : QObject(NULL)
+    : QAbstractItemModel(NULL)
 {
     m_projectID = cpy.m_projectID;
     m_codeVersion = cpy.m_codeVersion;
@@ -62,6 +62,7 @@ ModuleConfiguration::ModuleConfiguration(const ModuleConfiguration &cpy)
     m_moduleState = cpy.m_moduleState;
     m_tableVersion = cpy.m_tableVersion;
     m_deviceID = cpy.m_deviceID;
+    m_filename = cpy.m_filename;
 
     //Deep Copy variables
     for (int i = 0; i  < cpy.m_variables.size(); i++)
@@ -84,14 +85,100 @@ ModuleConfiguration::~ModuleConfiguration()
     qDebug("ModuleConfiguration::~ModuleConfiguration() (done)");
 }
 
+
+QModelIndex ModuleConfiguration::index(int row, int column, const QModelIndex &parent) const
+{
+    if (row >= rowCount(parent) || column >= columnCount(parent))
+    {
+        return QModelIndex();
+    }
+    else
+    {
+        return createIndex(row,column,m_variables[row]);
+    }
+}
+
+
+QModelIndex ModuleConfiguration::parent(const QModelIndex &child) const
+{
+    return QModelIndex();
+}
+
+
+int ModuleConfiguration::rowCount(const QModelIndex &parent) const
+{
+    return m_variables.size();
+}
+
+int ModuleConfiguration::columnCount(const QModelIndex &parent) const
+{
+    return VARIABLE_ENUM_SIZE;
+}
+
+QVariant ModuleConfiguration::data(const QModelIndex &index, int role) const
+{
+
+    if (role == Qt::DisplayRole)
+    {
+
+        if (index.row() < rowCount() && index.column() < columnCount())
+        {
+            ModuleVariable *var = m_variables[index.row()];
+
+            switch(index.column())
+            {
+            case VARIABLE_ACTIVATED:
+                return QVariant(var->getActivated());
+                break;
+
+            case VARIABLE_NAME:
+                return QVariant(var->getName());
+                break;
+
+            case VARIABLE_VALUE_TYPE:
+                return QVariant(ModuleVariable::typeToString(var->getType()));
+                break;
+
+            case VARIABLE_MEMORY_TYPE:
+                return QVariant(var->getMemType());
+                break;
+
+            case VARIABLE_MEMORY_OFFSET:
+                return QVariant(var->getOffset());
+                break;
+
+            case VARIABLE_VALUE:
+                return var->getValue();
+                break;
+
+            case VARIABLE_DESCRIPTION:
+                return QVariant(var->getDescription());
+                break;
+
+            default:
+                return QVariant::Invalid;
+                break;
+            }
+        }
+        else
+        {
+            return QVariant::Invalid;
+        }
+    }
+
+
+    return QVariant::Invalid;
+}
+
 ModuleConfiguration& ModuleConfiguration::operator= (const ModuleConfiguration& cpy)
-                                                    {
+{
     m_projectID = cpy.m_projectID;
     m_codeVersion = cpy.m_codeVersion;
     m_processorID = cpy.m_processorID;
     m_moduleState = cpy.m_moduleState;
     m_tableVersion = cpy.m_tableVersion;
     m_deviceID = cpy.m_deviceID;
+    m_filename = cpy.m_filename;
 
     //Deep Copy variables
     for (int i = 0; i  < cpy.m_variables.size(); i++)

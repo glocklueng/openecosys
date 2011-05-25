@@ -66,7 +66,7 @@ include(${QT_USE_FILE})
 
 SET(QWT_SRC_DIR ${PROJECT_SOURCE_DIR}/qwt_svn/src)
 
-#Create a library with the sources
+#Create a library with the sources b
 SET(QWT_SRCS
     #Base
     ${QWT_SRC_DIR}/qwt_abstract_scale_draw.cpp
@@ -329,7 +329,7 @@ IF (WIN32)
 
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
+        target_link_libraries(networkViewerBase ${QT_LIBRARIES})
         INSTALL(TARGETS networkViewerBase DESTINATION bin)
 	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
 	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
@@ -370,7 +370,7 @@ IF (APPLE)
 
         #NetworkViewer Library
 	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-        target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
+        target_link_libraries(networkViewerBase ${QT_LIBRARIES})
 	#set_target_properties(networkViewerBase PROPERTIES FRAMEWORK "true")
 	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
 	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
@@ -411,7 +411,7 @@ IF (UNIX AND NOT APPLE)
 
     #NetworkViewer Library
     add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-    target_link_libraries(networkViewerBase ${QT_LIBRARIES} qwt-wrap)
+    target_link_libraries(networkViewerBase ${QT_LIBRARIES})
     INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
     INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
