@@ -20,6 +20,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QCoreApplication>
+#include <QIcon>
+#include <QMimeData>
 
 ModuleConfiguration::ModuleConfiguration(QObject *parent)
     : QAbstractItemModel(parent), m_projectID(-1), m_codeVersion(0), m_processorID(0), m_moduleState(0), m_tableVersion(0), m_deviceID(0)
@@ -118,56 +120,248 @@ int ModuleConfiguration::columnCount(const QModelIndex &parent) const
 QVariant ModuleConfiguration::data(const QModelIndex &index, int role) const
 {
 
+ /*
+The general purpose roles (and the associated types) are:
+
+    Qt::DisplayRole             0	The key data to be rendered in the form of text. (QString)
+    Qt::DecorationRole          1	The data to be rendered as a decoration in the form of an icon. (QColor, QIcon or QPixmap)
+    Qt::EditRole                2	The data in a form suitable for editing in an editor. (QString)
+    Qt::ToolTipRole             3	The data displayed in the item's tooltip. (QString)
+    Qt::StatusTipRole           4	The data displayed in the status bar. (QString)
+    Qt::WhatsThisRole           5	The data displayed for the item in "What's This?" mode. (QString)
+    Qt::SizeHintRole            13	The size hint for the item that will be supplied to views. (QSize)
+
+Roles describing appearance and meta data (with associated types):
+
+    Qt::FontRole                6	The font used for items rendered with the default delegate. (QFont)
+    Qt::TextAlignmentRole	7	The alignment of the text for items rendered with the default delegate. (Qt::AlignmentFlag)
+    Qt::BackgroundRole          8	The background brush used for items rendered with the default delegate. (QBrush)
+    Qt::BackgroundColorRole	8	This role is obsolete. Use BackgroundRole instead.
+    Qt::ForegroundRole          9	The foreground brush (text color, typically) used for items rendered with the default delegate. (QBrush)
+    Qt::TextColorRole           9	This role is obsolete. Use ForegroundRole instead.
+    Qt::CheckStateRole          10	This role is used to obtain the checked state of an item. (Qt::CheckState)
+
+Accessibility roles (with associated types):
+
+    Qt::AccessibleTextRole              11	The text to be used by accessibility extensions and plugins, such as screen readers. (QString)
+    Qt::AccessibleDescriptionRole	12	A description of the item for accessibility purposes. (QString)
+
+User roles:
+
+    Qt::UserRole	32	The first role that can be used for application-specific purposes.
+
+*/
+
+    ModuleVariable *var = reinterpret_cast<ModuleVariable*> (index.internalPointer());
+
+    if (!var)
+    {
+        qWarning("QVariant ModuleConfiguration::data(const QModelIndex &index, int role) : Invalid internal pointer");
+        return QVariant::Invalid;
+    }
+
     if (role == Qt::DisplayRole)
     {
-
-        if (index.row() < rowCount() && index.column() < columnCount())
+        switch(index.column())
         {
-            ModuleVariable *var = m_variables[index.row()];
-
-            switch(index.column())
+        case VARIABLE_ACTIVATED:
+            if (var->getActivated())
             {
-            case VARIABLE_ACTIVATED:
-                return QVariant(var->getActivated());
-                break;
-
-            case VARIABLE_NAME:
-                return QVariant(var->getName());
-                break;
-
-            case VARIABLE_VALUE_TYPE:
-                return QVariant(ModuleVariable::typeToString(var->getType()));
-                break;
-
-            case VARIABLE_MEMORY_TYPE:
-                return QVariant(var->getMemType());
-                break;
-
-            case VARIABLE_MEMORY_OFFSET:
-                return QVariant(var->getOffset());
-                break;
-
-            case VARIABLE_VALUE:
-                return var->getValue();
-                break;
-
-            case VARIABLE_DESCRIPTION:
-                return QVariant(var->getDescription());
-                break;
-
-            default:
-                return QVariant::Invalid;
-                break;
+                return "On";
             }
-        }
-        else
-        {
+            else
+            {
+                return "Off";
+            }
+
+            break;
+
+        case VARIABLE_NAME:
+            return QVariant(var->getName());
+            break;
+
+        case VARIABLE_VALUE_TYPE:
+            return QVariant(ModuleVariable::typeToString(var->getType()));
+            break;
+
+        case VARIABLE_MEMORY_TYPE:
+            return QVariant(var->getMemType());
+            break;
+
+        case VARIABLE_MEMORY_OFFSET:
+            return QVariant(var->getOffset());
+            break;
+
+        case VARIABLE_VALUE:
+            return var->getValue();
+            break;
+
+        case VARIABLE_DESCRIPTION:
+            return QVariant(var->getDescription());
+            break;
+
+        default:
             return QVariant::Invalid;
+            break;
+        }
+    }
+    else if (role == Qt::DecorationRole)
+    {
+        if (index.column() == VARIABLE_NAME)
+        {
+            return QVariant(QIcon(":/images/add.png"));
+        }
+    }
+    else if (role == Qt::CheckStateRole)
+    {
+        if (index.column() == VARIABLE_ACTIVATED)
+        {
+            if (var->getActivated())
+            {
+                return Qt::Checked;
+            }
+            else
+            {
+                return Qt::Unchecked;
+            }
+
         }
     }
 
-
     return QVariant::Invalid;
+}
+
+QMap<int, QVariant> ModuleConfiguration::itemData ( const QModelIndex & index ) const
+{
+    //qDebug() << "QMap<int, QVariant> ModuleConfiguration::itemData ( const QModelIndex & index )" << index;
+    QMap<int,QVariant> allData = QAbstractItemModel::itemData(index);
+
+    //Add user role
+    allData[Qt::UserRole] = QVariant((unsigned long long) m_variables[index.row()]);
+
+    return allData;
+}
+
+QVariant ModuleConfiguration::headerData ( int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    {
+        switch(section)
+        {
+        case VARIABLE_ACTIVATED:
+            return "Activated";
+            break;
+
+        case VARIABLE_NAME:
+            return "Name";
+            break;
+
+        case VARIABLE_VALUE_TYPE:
+            return "Value Type";
+            break;
+
+        case VARIABLE_MEMORY_TYPE:
+            return "Mem Type";
+            break;
+
+        case VARIABLE_MEMORY_OFFSET:
+            return "Mem Offset";
+            break;
+
+        case VARIABLE_VALUE:
+            return "Value";
+            break;
+
+        case VARIABLE_DESCRIPTION:
+            return "Description";
+            break;
+
+        default:
+            return QVariant::Invalid;
+            break;
+        }
+    }
+
+    return QAbstractItemModel::headerData(section,orientation,role);
+}
+
+Qt::ItemFlags ModuleConfiguration::flags (const QModelIndex & index ) const
+{
+    /*
+    Qt::NoItemFlags	0	It does not have any properties set.
+    Qt::ItemIsSelectable	1	It can be selected.
+    Qt::ItemIsEditable	2	It can be edited.
+    Qt::ItemIsDragEnabled	4	It can be dragged.
+    Qt::ItemIsDropEnabled	8	It can be used as a drop target.
+    Qt::ItemIsUserCheckable	16	It can be checked or unchecked by the user.
+    Qt::ItemIsEnabled	32	The user can interact with the item.
+    Qt::ItemIsTristate	64	The item is checkable with three separate states.
+    */
+
+    switch (index.column())
+    {
+        case VARIABLE_ACTIVATED:
+            return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+            break;
+
+        case VARIABLE_NAME:
+            return Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+            break;
+
+        case VARIABLE_VALUE_TYPE:
+            return Qt::ItemIsEnabled;
+            break;
+
+        case VARIABLE_MEMORY_TYPE:
+            return Qt::ItemIsEnabled;
+            break;
+
+        case VARIABLE_MEMORY_OFFSET:
+            return Qt::ItemIsEnabled;
+            break;
+
+        case VARIABLE_VALUE:
+            return Qt::ItemIsEditable | Qt::ItemIsEnabled;
+            break;
+
+        case VARIABLE_DESCRIPTION:
+            return Qt::ItemIsEnabled;
+            break;
+
+        default:
+            return Qt::ItemIsEnabled;
+            break;
+    }
+
+    //This should not happen
+    return Qt::NoItemFlags;
+}
+
+bool ModuleConfiguration::setData ( const QModelIndex & index, const QVariant & value, int role)
+{
+    //qDebug("ModuleConfiguration::setData ( const QModelIndex & index, const QVariant & value, int role = %i)",role);
+
+    ModuleVariable *var = reinterpret_cast<ModuleVariable*> (index.internalPointer());
+
+    if (index.column() == VARIABLE_ACTIVATED && index.row() < m_variables.size())
+    {
+        if (var)
+        {
+            qDebug() << "Activated value : " << value;
+            var->setActivated(!var->getActivated());
+            return true;
+        }
+    }
+    if (index.column() == VARIABLE_VALUE && index.row() < m_variables.size())
+    {
+        if(var)
+        {
+            var->setUserValue(value);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 ModuleConfiguration& ModuleConfiguration::operator= (const ModuleConfiguration& cpy)
@@ -260,8 +454,18 @@ void ModuleConfiguration::addVariable(ModuleVariable *variable)
     //Connect signals for user modification
     connect(variable, SIGNAL(userChanged(ModuleVariable*)), this, SLOT(variableUpdated(ModuleVariable*)));
 
+
+    //Abstract model notification
+    connect(variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableInternalUpdate(ModuleVariable*)));
+    connect(variable,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableInternalActivated(bool,ModuleVariable*)));
+
+
     //Emit variable added
     emit variableAdded(variable);
+
+    //QAbstractItemModel signal
+    emit layoutChanged();
+
 }
 
 
@@ -392,6 +596,21 @@ void ModuleConfiguration::variableUpdated(ModuleVariable *var)
     emit variableWrite(var);
 }
 
+void ModuleConfiguration::variableInternalUpdate(ModuleVariable *var)
+{
+    //AbstractItemModel must know when something changed.
+    //TODO : Can this be made more efficient
+    QModelIndex myIndex(index(indexOf(var),VARIABLE_VALUE));
+    emit dataChanged (myIndex,myIndex) ;
+}
+
+void ModuleConfiguration::variableInternalActivated(bool state, ModuleVariable *var)
+{
+    //QAbstractItemModel signal
+    emit layoutChanged();
+}
+
+
 QStringList ModuleConfiguration::scanConfigurations(const QString &basePath, int project_id, int device_id)
 {
     qDebug("ModuleConfiguration::scanConfigurations");
@@ -493,6 +712,9 @@ void ModuleConfiguration::removeVariable(ModuleVariable *variable)
         m_variables.removeAll(variable);
         emit variableRemoved(variable);
         delete variable;
+
+        //QAbstractItemModel signal
+        emit layoutChanged();
     }
 }
 
@@ -500,3 +722,4 @@ QString ModuleConfiguration::getFilename()
 {
         return m_filename;
 }
+
