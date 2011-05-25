@@ -72,6 +72,9 @@ signals:
     */
     void scopeRequest(ModuleVariable *variable);
 
+
+    void enterPressed(int row, int col);
+
 protected slots:
 
     /**

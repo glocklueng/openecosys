@@ -22,20 +22,22 @@
 #include "ModuleVariable.h"
 #include <QDir>
 #include <QStringList>
-
+#include <QAbstractItemModel>
 
 /**
   A ModuleConfiguration holds all the information of the module and contains a list of \ref ModuleVariable.
   \author Dominic Letourneau
   \date Dec 2009
 */
-class ModuleConfiguration : public QObject 
+class ModuleConfiguration : public QAbstractItemModel
 {
 
     Q_OBJECT;
 
 public:
 
+
+    enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_MEMORY_TYPE, VARIABLE_MEMORY_OFFSET, VARIABLE_VALUE, VARIABLE_DESCRIPTION, VARIABLE_ENUM_SIZE};
 
     /**
             Constructor
@@ -65,6 +67,14 @@ public:
             Will destroy all internal variables.
         */
     virtual ~ModuleConfiguration();
+
+    //QAbstractItemModel mandatory functions
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &child) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
 
     /**
             \param cpy The ModuleConfiguration to copy

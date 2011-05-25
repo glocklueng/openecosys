@@ -318,8 +318,22 @@ void ModuleVariableTableWidget::keyPressEvent ( QKeyEvent * event )
     }
     else
     {
+
         //Default implementation
         QTableWidget::keyPressEvent(event);
+
+        if (event->key() == Qt::Key_Enter)
+        {
+            int row = currentRow();
+            int col = currentColumn();
+
+            if (col == VARIABLE_VALUE)
+            {
+                qDebug("enterPressed %i,%i",row,col);
+                emit enterPressed(row,col);
+            }
+        }
+
     }
 }
 

@@ -21,6 +21,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QFileDialog>
 #include <QBrush>
+#include <QDir>
 #include "NETV_define.h"
 
 
@@ -64,13 +65,30 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 	
 	m_textItem->setPlainText(QString(" [ ")
 					  + QString::number((unsigned int) conf->getDeviceID())
-					  + QString(" ]")
+                                          + QString(" ]")
 					  );
+
+
+
+
 	QRectF textBounds = m_textItem->boundingRect();	
 	
         //Center-align Text
 	m_textItem->setPos(bounds.width() /2 - textBounds.width() / 2,bounds.height() + 10);
 	
+        //Filename text item
+        m_filenameTextItem = new QGraphicsTextItem(m_textItem);
+        QStringList extracted = conf->getFilename().split("/");
+        font.setPixelSize(40);
+        m_filenameTextItem->setFont(font);
+        if (extracted.size() > 0)
+        {
+            m_filenameTextItem->setPlainText(extracted.last());
+        }
+        QRectF filenameBounds = m_filenameTextItem->boundingRect();
+        m_filenameTextItem->setPos(textBounds.width() / 2 - filenameBounds.width() / 2,textBounds.height() + 10);
+
+
 
         //CROSS ITEM
         m_crossItem = new CrossModuleItem(this);
@@ -181,3 +199,4 @@ void NetworkModuleItem::removeModule()
 {
     emit removeModule(this);
 }
+

@@ -130,6 +130,8 @@ protected:
 	QTime m_lastUpdate;
         ///Text information
 	QGraphicsTextItem *m_textItem;
+        ///Filename text information
+        QGraphicsTextItem *m_filenameTextItem;
         ///Rectangle surrounding the icon
 	QGraphicsRectItem *m_rectItem;
         ///Cross icon to remove the module when inactive

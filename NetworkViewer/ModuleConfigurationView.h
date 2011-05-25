@@ -81,9 +81,13 @@ protected slots:
 	
 protected:
 
+    // reimplemented to ensure that only one dataChanged() signal is emitted
+    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+
     NetworkModule *m_module;
     ModuleVariableTableWidget *m_table;
     Ui::ModuleConfigurationView m_ui;
+    QTableView *m_testTable;
 
 
 };
