@@ -26,6 +26,20 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.12
+______
+
+* Added configuration name in XML files
+* Fixed ConfigurationView to send variable update events even if it is the same value.
+* Fixed QextSerialPort compilation for Qt 4.7.3
+* Added preferences (will remember last used device)
+* ScopeView rework. Much nicer integration with Qwt, removed space consuming variable list.
+* Script Plugin can now save the current script
+* Adding variables automatically in variable ConfigurationView
+* Saving / configuration in variable ConfigurationView
+* Putting back activate / deactivate buttons in ConfigurationView
+
+
 1.1.11
 ______
 
