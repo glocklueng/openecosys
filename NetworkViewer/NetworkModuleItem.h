@@ -131,7 +131,7 @@ protected:
         ///Text information
 	QGraphicsTextItem *m_textItem;
         ///Filename text information
-        QGraphicsTextItem *m_filenameTextItem;
+        QGraphicsTextItem *m_configTextItem;
         ///Rectangle surrounding the icon
 	QGraphicsRectItem *m_rectItem;
         ///Cross icon to remove the module when inactive

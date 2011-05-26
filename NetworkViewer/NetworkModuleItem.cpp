@@ -76,17 +76,12 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         //Center-align Text
 	m_textItem->setPos(bounds.width() /2 - textBounds.width() / 2,bounds.height() + 10);
 	
-        //Filename text item
-        m_filenameTextItem = new QGraphicsTextItem(m_textItem);
-        QStringList extracted = conf->getFilename().split("/");
-        font.setPixelSize(40);
-        m_filenameTextItem->setFont(font);
-        if (extracted.size() > 0)
-        {
-            m_filenameTextItem->setPlainText(extracted.last());
-        }
-        QRectF filenameBounds = m_filenameTextItem->boundingRect();
-        m_filenameTextItem->setPos(textBounds.width() / 2 - filenameBounds.width() / 2,textBounds.height() + 10);
+        //Config text item
+        m_configTextItem = new QGraphicsTextItem(m_textItem);
+        m_configTextItem->setFont(font);
+        m_configTextItem->setPlainText(conf->getConfigName());
+        QRectF configBounds = m_configTextItem->boundingRect();
+        m_configTextItem->setPos(textBounds.width() / 2 - configBounds.width() / 2,textBounds.height() + 10);
 
 
 

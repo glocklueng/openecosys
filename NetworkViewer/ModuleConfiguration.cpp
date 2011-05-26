@@ -24,7 +24,7 @@
 #include <QMimeData>
 
 ModuleConfiguration::ModuleConfiguration(QObject *parent)
-    : QAbstractItemModel(parent), m_projectID(-1), m_codeVersion(0), m_processorID(0), m_moduleState(0), m_tableVersion(0), m_deviceID(0)
+    : QAbstractItemModel(parent), m_projectID(-1), m_codeVersion(0), m_processorID(0), m_moduleState(0), m_tableVersion(0), m_deviceID(0), m_name("Untitled")
 {
 
 }
@@ -36,7 +36,8 @@ ModuleConfiguration::ModuleConfiguration(int projectID, int codeVersion, int pro
     m_processorID(processorID),
     m_moduleState(moduleState),
     m_tableVersion(tableVersion),
-    m_deviceID(deviceID)
+    m_deviceID(deviceID),
+    m_name("Untitled2")
 {
     //Starting by searching project file
     QStringList configList = scanConfigurations(QCoreApplication::applicationDirPath() + "/../config",projectID,-1);
@@ -65,6 +66,7 @@ ModuleConfiguration::ModuleConfiguration(const ModuleConfiguration &cpy)
     m_tableVersion = cpy.m_tableVersion;
     m_deviceID = cpy.m_deviceID;
     m_filename = cpy.m_filename;
+    m_name = cpy.m_name;
 
     //Deep Copy variables
     for (int i = 0; i  < cpy.m_variables.size(); i++)
@@ -347,7 +349,7 @@ bool ModuleConfiguration::setData ( const QModelIndex & index, const QVariant & 
     {
         if (var)
         {
-            qDebug() << "Activated value : " << value;
+            //qDebug() << "Activated value : " << value;
             var->setActivated(!var->getActivated());
             return true;
         }
@@ -373,6 +375,7 @@ ModuleConfiguration& ModuleConfiguration::operator= (const ModuleConfiguration& 
     m_tableVersion = cpy.m_tableVersion;
     m_deviceID = cpy.m_deviceID;
     m_filename = cpy.m_filename;
+    m_name = cpy.m_name;
 
     //Deep Copy variables
     for (int i = 0; i  < cpy.m_variables.size(); i++)
@@ -409,6 +412,7 @@ bool ModuleConfiguration::saveConfiguration(const QString &filename)
     element.setAttribute("moduleState",QString::number(m_moduleState));
     element.setAttribute("tableVersion",QString::number(m_tableVersion));
     element.setAttribute("deviceID",QString::number(m_deviceID));
+    element.setAttribute("configName",m_name);
 
     for (int i = 0; i<m_variables.size(); i++)
     {
@@ -555,6 +559,14 @@ bool ModuleConfiguration::loadConfiguration(const QString &filename, bool variab
         m_tableVersion = e.attribute("tableVersion").toInt();
         m_deviceID = e.attribute("deviceID").toInt();
     }
+
+    //Newly added name
+    if (e.hasAttribute("configName"))
+    {
+        m_name = e.attribute("configName");
+        qDebug() << "Config Name Found : " << m_name;
+    }
+
     //qDebug() << "Found element : "<<e.tagName();
 
     //Iterate through all child (this would be variables)
@@ -721,5 +733,15 @@ void ModuleConfiguration::removeVariable(ModuleVariable *variable)
 QString ModuleConfiguration::getFilename()
 {
         return m_filename;
+}
+
+QString ModuleConfiguration::getConfigName()
+{
+    return m_name;
+}
+
+void ModuleConfiguration::setConfigName(const QString &name)
+{
+    m_name = name;
 }
 
