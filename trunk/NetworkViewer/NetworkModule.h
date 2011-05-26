@@ -123,7 +123,7 @@ protected:
 
         ///TRUE if the module is active on the bus
         bool m_active;
-	
+
 };
 
 

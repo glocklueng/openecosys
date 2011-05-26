@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
-<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="0" codeVersion="1" processorID="-1" tableVersion="-1" >
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="0" codeVersion="1" processorID="-1" tableVersion="-1" configName="Loopback Test" >
      <ModuleVariable offset="0" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Variable1" />
      <ModuleVariable offset="8" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Variable2" />
 	 <ModuleVariable offset="16" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Variable3" />

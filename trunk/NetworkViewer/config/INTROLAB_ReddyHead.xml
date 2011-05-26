@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
-<ModuleConfiguration moduleState="0" deviceID="-1" projectID="1" codeVersion="0" processorID="0" tableVersion="0" >
+<ModuleConfiguration moduleState="0" deviceID="-1" projectID="1" codeVersion="0" processorID="0" tableVersion="0" configName="Reddy Head">
 	
 	<ModuleVariable offset="0" description="ServoTarget 0" type="uint16" value="" name="ServoTarget 0" /> 
 	<ModuleVariable offset="2" description="ServoTarget 1" type="uint16" value="" name="ServoTarget 1" />

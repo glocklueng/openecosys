@@ -134,6 +134,7 @@ public:
         */
     int indexOf(ModuleVariable *var);
 
+    void setConfigName(const QString &name);
 
 
     //GETS
@@ -174,6 +175,8 @@ public:
     QString getFilename();
 
 
+    QString getConfigName();
+
     //SETS
 
     /**
@@ -213,6 +216,9 @@ signals:
         Emit the signal when the configuration is about to load
     */
     void configurationAboutToLoad();
+
+
+
 
 
 public slots:
@@ -276,6 +282,9 @@ protected:
 
     ///Filename used for configuration
     QString m_filename;
+
+    ///Configuration name
+    QString m_name;
 };
 
 #endif

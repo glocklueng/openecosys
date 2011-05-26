@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-DRIVE10A>
-<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="145" codeVersion="-1" processorID="-1" tableVersion="-1" >
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="145" codeVersion="-1" processorID="-1" tableVersion="-1" configName="J0 Power">
 
 	<ModuleVariable offset="0" description="Description" type="uint16" value="" name="AnalogData[0]" />
 	<ModuleVariable offset="2" description="Description" type="uint16" value="" name="AnalogData[1]" />
