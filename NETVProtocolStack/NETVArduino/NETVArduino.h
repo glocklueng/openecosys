@@ -71,6 +71,10 @@ private:
 	
   unsigned char serial_calculate_checksum(const NETVSerialMessage &message);
 
+	unsigned char netv_read_data_flow_table_v2(unsigned int offset, unsigned char mem_type, unsigned char *buffer, unsigned int size);
+	unsigned char netv_write_data_flow_table_v2(unsigned int offset,unsigned char mem_type, unsigned char *buffer, unsigned int size);
+	
+	
 	unsigned char state;
 	
 };
