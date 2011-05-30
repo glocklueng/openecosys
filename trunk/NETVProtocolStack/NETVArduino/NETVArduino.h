@@ -10,10 +10,19 @@ class NETVArduino
 {
 public:
 	
-	NETVArduino();
+  NETVArduino();
+  void setup(byte* table, unsigned int size);	
+  
+  
 
 private:
 
+  byte* m_table;
+  unsigned int m_size;
+
 };
+
+//External instance
+extern NETVArduino netvArduino;
 
 #endif
