@@ -44,6 +44,51 @@ void NETVArduino::setup(byte* table, unsigned int size)
   }
 }
 
+void NETVArduino::process_message(const NETVSerialMessage &message)
+{
+	if (message.type == NETV_TYPE_EVENTS)
+	{
+		if (message.cmd == NETV_EVENTS_CMD_ALIVE)
+		{
+			for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
+			{
+				m_outgoingMessage.messageBytes[i] = message.messageBytes[i];
+			}
+			
+			//Remove RTR
+			m_outgoingMessage.pri_boot_rtr &= 0xFE;
+			
+			//Set dest
+			m_outgoingMessage.dest = 200;
+			
+			
+			//Fill data
+			m_outgoingMessage.data[0] = 0;  //module state
+			m_outgoingMessage.data[1] = 50; //project_id
+			m_outgoingMessage.data[2] = 200;//module_id
+			m_outgoingMessage.data[3] = 1;  //code version
+			m_outgoingMessage.data[4] = 2;  //table version
+			m_outgoingMessage.data[5] = 10; //boot delay
+			m_outgoingMessage.data[6] = 0;  //device id
+			m_outgoingMessage.data[7] = 0;  //device id
+			
+			//Recalculate checksum
+			m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
+			
+			
+			//Send to serial port
+			for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
+			{
+				Serial.write(m_outgoingMessage.messageBytes[i]);
+			}
+			
+			//Flush serial
+			Serial.flush();
+			
+		}
+	}
+	
+}
 
 void NETVArduino::transceiver()
 {
@@ -76,7 +121,8 @@ void NETVArduino::transceiver()
 					state = LOW;
 				}
 
-				//Answer the request
+				//Process the message
+				process_message(m_incomingMessage);
 				
 			}
 		

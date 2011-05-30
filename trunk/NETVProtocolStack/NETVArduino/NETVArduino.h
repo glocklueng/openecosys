@@ -66,7 +66,8 @@ private:
   //Buffers	
   NETVSerialMessage m_incomingMessage; 
   NETVSerialMessage m_outgoingMessage;
-	
+
+	void process_message(const NETVSerialMessage &message);
 	
   unsigned char serial_calculate_checksum(const NETVSerialMessage &message);
 
