@@ -28,16 +28,9 @@ NETVSharedVariables variables;
 void setup() { 
 
   netvArduino.setup(variables.NETV_MEM_TABLE, sizeof(NETVSharedVariables));  
-  
-  
-  // initialize the digital pin as an output.
-  // Pin 13 has an LED connected on most Arduino boards:
-  pinMode(77, OUTPUT);     
 }
 
-void loop() {
-  digitalWrite(77, HIGH);   // set the LED on
-  delay(1000);              // wait for a second
-  digitalWrite(77, LOW);    // set the LED off
-  delay(1000);              // wait for a second
+void loop() 
+{
+	netvArduino.transceiver();
 }
