@@ -86,63 +86,64 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			Serial.flush();
 			
 		}
-		else if(message.cmd == NETV_TYPE_REQUEST_DATA && m_table != NULL)
+
+	}
+	else if(message.type == NETV_TYPE_REQUEST_DATA && m_table != NULL)
+	{
+		
+		unsigned char eeprom_ram = (message.pri_boot_rtr >> 4) & 0x01;
+		unsigned char read_write = (message.pri_boot_rtr >> 3) & 0x01;
+		unsigned char length = (message.data_length_iface >> 4) & 0x0F;
+		
+		//Make sure we don't overflow
+		if (message.cmd + length <= m_size)
 		{
-			
-			unsigned char eeprom_ram = (message.pri_boot_rtr >> 4) & 0x01;
-			unsigned char read_write = (message.pri_boot_rtr >> 3) & 0x01;
-			unsigned char length = (message.data_length_iface >> 4) & 0x0F;
-			
-			//Make sure we don't overflow
-			if (message.cmd + length < m_size)
+			//READING
+			if (read_write == NETV_REQUEST_READ)
 			{
-				//READING
-				if (read_write == NETV_REQUEST_READ)
-				{
-			
-					for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
-					{
-						m_outgoingMessage.messageBytes[i] = message.messageBytes[i];
-					}
-					
-					//Remove RTR
-					m_outgoingMessage.pri_boot_rtr &= 0xFE;
-					
-					//Set dest
-					m_outgoingMessage.dest = 200;
-					
-					
-					//Copy data
-					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
-					{
-						m_outgoingMessage.data[i - message.cmd] = m_table[i];
-					}
-					
-					//Recalculate checksum
-					m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
-			
-			
-					//Send to serial port
-					for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
-					{
-						Serial.write(m_outgoingMessage.messageBytes[i]);
-					}
-			
-					//Flush serial
-					Serial.flush();
 				
-				}
-				else if (read_write == NETV_REQUEST_WRITE)
+				for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
 				{
-					//WRITING
-					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
-					{
-						m_table[i] = message.data[i - message.cmd];
-					}
-					
+					m_outgoingMessage.messageBytes[i] = message.messageBytes[i];
 				}
-							 
+				
+				//Remove RTR
+				m_outgoingMessage.pri_boot_rtr &= 0xFE;
+				
+				//Set dest
+				m_outgoingMessage.dest = 200;
+				
+				
+				//Copy data
+				for (unsigned int i = message.cmd; i < message.cmd + length; i++)
+				{
+					m_outgoingMessage.data[i - message.cmd] = m_table[i];
+				}
+				
+				//Recalculate checksum
+				m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
+				
+				
+				//Send to serial port
+				for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
+				{
+					Serial.write(m_outgoingMessage.messageBytes[i]);
+				}
+				
+				//Flush serial
+				Serial.flush();
+				
 			}
+			else if (read_write == NETV_REQUEST_WRITE)
+			{
+				//WRITING
+				for (unsigned int i = message.cmd; i < message.cmd + length; i++)
+				{
+					m_table[i] = message.data[i - message.cmd];
+				}
+				
+			}
+			
 		}
 	}
 	
