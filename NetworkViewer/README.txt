@@ -26,6 +26,11 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.12.1
+________
+
+* Fixed Variable Configuration View to prevent overwriting user value when editing.
+
 1.1.12
 ______
 
