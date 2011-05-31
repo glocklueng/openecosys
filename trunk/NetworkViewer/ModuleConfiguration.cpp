@@ -619,7 +619,8 @@ void ModuleConfiguration::variableInternalUpdate(ModuleVariable *var)
 void ModuleConfiguration::variableInternalActivated(bool state, ModuleVariable *var)
 {
     //QAbstractItemModel signal
-    emit layoutChanged();
+    QModelIndex myIndex(index(indexOf(var),VARIABLE_ACTIVATED));
+    emit dataChanged (myIndex,myIndex) ;
 }
 
 

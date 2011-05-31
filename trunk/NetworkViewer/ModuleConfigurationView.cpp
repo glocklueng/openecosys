@@ -41,6 +41,11 @@ ModuleConfigurationView::ModuleConfigurationView(QWidget *parent, NetworkModule 
     //Stretching
     m_table->horizontalHeader()->setStretchLastSection(true);
 
+
+    //Set Delegate
+    m_delegate = new ValueEditorDelegate(m_table);
+    m_table->setItemDelegate(m_delegate);
+
     //Make sure everything is visible
     for (unsigned int i = 0; i < ModuleConfiguration::VARIABLE_DESCRIPTION; i++)
     {
