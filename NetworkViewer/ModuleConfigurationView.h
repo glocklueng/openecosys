@@ -29,6 +29,30 @@
 #include "ModuleVariableTableWidget.h"
 #include "ui_ModuleConfigurationView.h"
 
+
+#include <QAbstractItemDelegate>
+#include <QItemDelegate>
+
+class ValueEditorDelegate : public QItemDelegate
+{
+public:
+
+    ValueEditorDelegate(QObject *parent=NULL)
+        : QItemDelegate(parent)
+    {
+
+    }
+
+    virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const
+    {
+        //This will prevent modification of widget while editing...
+        //qDebug("setEditorData ( QWidget * editor, const QModelIndex & index ) const");
+        //QItemDelegate::setEditorData(editor,index);
+    }
+
+};
+
+
 class ModuleConfigurationView : public QWidget
 {
     Q_OBJECT;
@@ -77,7 +101,7 @@ protected:
     //ModuleVariableTableWidget *m_table;
     Ui::ModuleConfigurationView m_ui;
     QTableView *m_table;
-
+    ValueEditorDelegate *m_delegate;
 
 };
 
