@@ -40,6 +40,98 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define CAN_FIFO_SIZE 32
 #define CAN_NB_CHANNELS 2
 
+/* isCAN1MsgReceived is true if CAN1 FIFO1 received
+ * a message. This flag is updated in the CAN1 ISR. */
+static volatile BOOL isCAN1MsgReceived = FALSE;
+
+/* isCAN2MsgReceived is true if CAN2 FIFO1 received
+ * a message. This flag is updated in the CAN2 ISR. */
+static volatile BOOL isCAN2MsgReceived = FALSE;
+
+
+BYTE CAN1MessageFifoArea[CAN_NB_CHANNELS * CAN_FIFO_SIZE * 16];
+BYTE CAN2MessageFifoArea[CAN_NB_CHANNELS * CAN_FIFO_SIZE * 16];
+
+
+static int overflow_CAN1 = 0;
+static int overflow_CAN2 = 0;
+
+void __attribute__((vector(46), interrupt(ipl4), nomips16)) CAN1InterruptHandler(void)
+{
+    /* This is the CAN1 Interrupt Handler.
+    * Note that there are many source events in the
+    * CAN1 module for this interrupt. These
+    * events are enabled by the  CANEnableModuleEvent()
+    * function. In this example, only the RX_EVENT
+    * is enabled. */
+
+
+    /* Check if the source of the interrupt is
+    * RX_EVENT. This is redundant since only this
+    * event is enabled in this example but
+    * this shows one scheme for handling events. */
+
+    if((CANGetModuleEvent(CAN1) & CAN_RX_EVENT) != 0)
+    {
+
+        /* Within this, you can check which channel caused the
+        * event by using the CANGetModuleEvent() function
+        * which returns a code representing the highest priority
+        * pending event. */
+
+        if(CANGetPendingEventCode(CAN1) == CAN_CHANNEL1_EVENT)
+        {
+            /* This means that channel 1 caused the event.
+            * The CAN_RX_CHANNEL_NOT_EMPTY event is persistent. You
+            * could either read the channel in the ISR
+            * to clear the event condition or as done
+            * here, disable the event source, and set
+            * an application flag to indicate that a message
+            * has been received. The event can be
+            * enabled by the application when it has processed
+            * one message.
+            *
+            * Note that leaving the event enabled would
+            * cause the CPU to keep executing the ISR since
+            * the CAN_RX_CHANNEL_NOT_EMPTY event is persistent (unless
+            * the not empty condition is cleared.)
+            * */
+
+            //Test the channel events
+            if (C1FIFOINT1bits.RXOVFLIF)
+            {
+
+                overflow_CAN1++;
+
+                //OVERFLOW!!!
+                CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_OVERFLOW, FALSE);
+
+            }
+            else
+            {
+                CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_NOT_EMPTY, FALSE);
+            }
+
+            isCAN1MsgReceived = TRUE;
+        }
+    }
+
+    /* The CAN1 Interrupt flag is  cleared at the end of the
+    * interrupt routine. This is because the interrupt source
+    * that could have caused this interrupt  to occur
+    * (CAN_RX_CHANNEL_NOT_EMPTY) is disabled. Attempting to
+    * clear the CAN1 interrupt flag when the the CAN_RX_CHANNEL_NOT_EMPTY
+    * interrupt is enabled will not have any effect because the
+    * base event is still present. */
+
+    INTClearFlag(INT_CAN1);
+
+}
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////
 //   netv_send_message
 //////////////////////////////////////////////////////////////////////
@@ -55,70 +147,77 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //////////////////////////////////////////////////////////////////////
 unsigned char netv_send_message(NETV_MESSAGE *message)
 {
-
-#if 0
-	unsigned long caneid = 0;	
-	unsigned char bufnum = 0;
-
-	if (message) //pointer verification
-	{			
-
-		//Extract eid from message
-
-		//priority
-		caneid |= (((unsigned long)message->msg_priority << 26) & 0x1C000000);
-		//type
-		caneid  |= (((unsigned long)message->msg_type << 18) & 0x03FC0000);
-		//boot
-		caneid  |= (((unsigned long)(((message->msg_eeprom_ram & 0x01) << 1) | (message->msg_read_write & 0x01)) << 16) & 0x00030000);
-		//cmd
-		caneid  |= (((unsigned long) message->msg_cmd << 8) & 0x0000FF00);
-		//dest
-		caneid  |= (((unsigned long) message->msg_dest) & 0x000000FF);
+    unsigned int i = 0;
 
 
-		if (CAN1IsTXReady(0)) //Transmit buffer 0 ready?
-		{
-			bufnum = 0;
-		}
-		else if (CAN1IsTXReady(1)) //Transmit buffer 1 ready?
-		{
-			bufnum = 1;
-		}
-		else if (CAN1IsTXReady(2)) //Transmit buffer 2 ready?
-		{
-			bufnum = 2;
-		}
-		else //No transmit buffer available
-		{
-			//RETURN ERROR CODE
-			return 1;
-		}
+    /* Get a pointer to the next buffer in the channel
+    * check if the returned value is null. */
+    CANTxMessageBuffer * msgPtr = NULL;
 
-		//TRANSMIT DATA
-		if (message->msg_remote) //SENDING REMOTE FRAME
-		{
-			//force data length to zero
-			CAN1SendMessage(CAN_TX_SID(caneid >> 18) & CAN_TX_EID_EN,
-							(CAN_TX_EID(caneid)) & (CAN_REM_TX_REQ),
-							message->msg_data, 0, bufnum);
-		}
-		else //SENDING NORMAL FRAME
-		{
-			CAN1SendMessage(CAN_TX_SID(caneid >> 18) & CAN_TX_EID_EN,
-				(CAN_TX_EID(caneid)) & (CAN_NOR_TX_REQ),
-				message->msg_data, message->msg_data_length, bufnum);
-		}
+    //ACTIVE WAIT ON BUFFER
+    do
+    {
+        msgPtr = CANGetTxMessageBuffer(CAN1,CAN_CHANNEL0);
+    }
+    while (msgPtr == NULL);
 
-		//RETURN SUCCESS CODE
-		return 0;
+    if(message && msgPtr)
+    {
+        unsigned int ID = 0;
+
+        //priority
+        ID |= (((unsigned int)message->msg_priority << 26) & 0x1C000000);
+
+        //type
+        ID |= (((unsigned int)message->msg_type << 18) & 0x03FC0000);
+
+        //boot
+        ID |= (((unsigned int)message->msg_read_write << 16) & 0x00010000);
+        ID |= (((unsigned int)message->msg_eeprom_ram << 17) & 0x00020000);
+
+        //cmd
+        ID |= (((unsigned int)message->msg_cmd << 8) & 0x0000FF00);
+
+        //dest
+        ID |= (((unsigned int)message->msg_dest) & 0x000000FF);
 
 
-	} //IF MESSAGE
-#endif
-	//SOMETHING IS WRONG
-	//RETURN ERROR CODE
-	return 1;
+        msgPtr->msgSID.SID = (ID >> 18);
+        msgPtr->msgEID.EID = (ID & 0x0003FFFF);
+        
+        //Set extended message
+        msgPtr->msgEID.IDE = 1;
+
+        //Those bits should always be cleared
+        msgPtr->msgEID.SRR = 0;
+        msgPtr->msgEID.RB0 = 0;
+        msgPtr->msgEID.RB1 = 0;
+
+        //Set RTR
+        msgPtr->msgEID.RTR = message->msg_remote;
+
+        //copy data length
+        msgPtr->msgEID.DLC = message->msg_data_length;
+
+        //copy data
+        for (i = 0; i < message->msg_data_length; i++)
+        {
+            msgPtr->data[i] = message->msg_data[i];
+        }
+
+        /* This function lets the CAN module
+        * know that the message processing is done
+        * and message is ready to be processed. */
+
+        CANUpdateChannel(CAN1,CAN_CHANNEL0);
+
+        /* Direct the CAN module to flush the
+        * TX channel. This will send any pending
+        * message in the TX channel. */
+
+        CANFlushTxChannel(CAN1,CAN_CHANNEL0);
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -136,113 +235,73 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 //////////////////////////////////////////////////////////////////////
 unsigned char netv_recv_message(NETV_MESSAGE *message)
 {
-	unsigned char retval = 0;
-#if 0
-	if (message)
-	{
-		//Provided dsPIC library does not offer enough functionalities
-		//for reading messages. Doing it by hand.
-		if(C1RX0CONbits.RXFUL) //READ RX0 FRAME
-		{
+    unsigned int i = 0;
+    
+    /* This function will check if a CAN
+    * message is available in CAN1 channel 1.
+    * If so , the message is read. Byte 0 of
+    * the received message will indicate if
+    * LED6 should be switched ON or OFF. */
+    //CANRxMessageBuffer * message;
 
-			//READING EID
-			//PRIORITY
-			message->msg_priority = (CAN1.cxrx0sid >> 10) & 0x0007;
+    if(isCAN1MsgReceived == FALSE)
+    {
+        /* CAN1 did not receive any message so
+        * exit the function. Note that the
+        * isCAN1MsgReceived flag is updated
+        * by the CAN1 ISR. */
+        return 0;
+    }
 
-			//TYPE
-			message->msg_type = (CAN1.cxrx0sid >> 2) & 0x00FF;
+    /* Message was received. Reset message received flag to catch
+    * the next message and read the message. Note that
+    * you could also check the CANGetRxMessage function
+    * return value for null to check if a message has
+    * been received. */
 
-			//BOOT
-			message->msg_eeprom_ram = (CAN1.cxrx0eid >> 11) & 0x0001; 
-			message->msg_read_write = (CAN1.cxrx0eid >> 10) & 0x0001;
+    isCAN1MsgReceived = FALSE;
 
-			//CMD
-			message->msg_cmd = (CAN1.cxrx0eid >> 2) & 0x00FF; 
+    CANRxMessageBuffer *msgPtr = (CANRxMessageBuffer *)CANGetRxMessage(CAN1,CAN_CHANNEL1);
 
-			//DEST
-			message->msg_dest = (((CAN1.cxrx0eid << 6) & 0x00C0) | ((CAN1.cxrx0dlc >> 10) & 0x003F ) )& 0x00FF;
+    /* Check byte 0 of the data payload.
+    * If it is 0 then switch off LED6 else
+    * switch it on. */
 
+    //Copy message...
+    unsigned int SID = (msgPtr->messageWord[0]) & 0x000007FF;
+    unsigned int EID = (msgPtr->messageWord[1] >> 10)  & 0x0003FFFF;
 
-			//MESSAGE REMOTE ?
-			message->msg_remote = (CAN1.cxrx0dlc >> 9) & 0x0001;
+    //Here convert the message buffer to a NETV_CAN message
+    message->msg_priority = (SID >> 8) & 0x07;
+    message->msg_type = (SID) & 0xFF;
+    message->msg_read_write = (EID >> 16) & 0x01 ;
+    message->msg_eeprom_ram = (EID >> 17) & 0x01 ;
+    message->msg_cmd = (EID >> 8) & 0xFF;
+    message->msg_dest = (EID) & 0xFF;
+    message->msg_data_length = msgPtr->msgEID.DLC;
 
-			//READING DATA
-			message->msg_data_length = CAN1.cxrx0dlc & 0x000F;
-			message->msg_data[0] = CAN1.cxrx0b1;
-			message->msg_data[1] = CAN1.cxrx0b1 >> 8;
-			message->msg_data[2] = CAN1.cxrx0b2;
-			message->msg_data[3] = CAN1.cxrx0b2 >> 8;
-			message->msg_data[4] = CAN1.cxrx0b3;
-			message->msg_data[5] = CAN1.cxrx0b3 >> 8;
-			message->msg_data[6] = CAN1.cxrx0b4;
-			message->msg_data[7] = CAN1.cxrx0b4 >> 8;
-			
-			//FILTER HIT
-			//message->msg_filter_hit = CAN1.cxrx0con & 0x0001;
-			
-			//CLEAR OVERFLOW
-			//message->msg_overflow = C1INTFbits.RX0OVR;
-			C1INTFbits.RX0OVR = 0;
+    //copy data
+    for (i = 0; i < 8; i++)
+    {
+        message->msg_data[i] = msgPtr->data[i];
+    }
 
-			//DONE WITH THIS FRAME
-			C1RX0CONbits.RXFUL = 0;
+    message->msg_remote = msgPtr->msgEID.RTR;
+  
 
-			retval = 1;
-		}
-		else if (C1RX1CONbits.RXFUL) //READ RX1 FRAME
-		{
-			//READING EID
-			//PRIORITY
-			message->msg_priority = (CAN1.cxrx1sid >> 10) & 0x0007;
-
-			//TYPE
-			message->msg_type = (CAN1.cxrx1sid >> 2) & 0x00FF;
-
-			//BOOT
-			message->msg_eeprom_ram = (CAN1.cxrx1eid >> 11) & 0x0001; 
-			message->msg_read_write = (CAN1.cxrx1eid >> 10) & 0x0001;
-
-			//CMD
-			message->msg_cmd = (CAN1.cxrx1eid >> 2) & 0x00FF; 
-
-			//DEST
-			message->msg_dest = (((CAN1.cxrx1eid << 6) & 0x00C0) | ((CAN1.cxrx1dlc >> 10) & 0x003F ) )& 0x00FF;
+    /* Call the CANUpdateChannel() function to let
+    * CAN 1 module know that the message processing
+    * is done. Enable the receive channale not empty event
+    * so that the CAN module generates an interrupt when
+    * the event occurs the next time.*/
 
 
-			//MESSAGE REMOTE ?
-			message->msg_remote = (CAN1.cxrx1dlc >> 9) & 0x0001;
+    CANUpdateChannel(CAN1, CAN_CHANNEL1);
+    CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_NOT_EMPTY, TRUE);
+    CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_OVERFLOW, TRUE);
 
-			//READING DATA
-			message->msg_data_length = CAN1.cxrx1dlc & 0x000F;
-			message->msg_data[0] = CAN1.cxrx1b1;
-			message->msg_data[1] = CAN1.cxrx1b1 >> 8;
-			message->msg_data[2] = CAN1.cxrx1b2;
-			message->msg_data[3] = CAN1.cxrx1b2 >> 8;
-			message->msg_data[4] = CAN1.cxrx1b3;
-			message->msg_data[5] = CAN1.cxrx1b3 >> 8;
-			message->msg_data[6] = CAN1.cxrx1b4;
-			message->msg_data[7] = CAN1.cxrx1b4 >> 8;
-			
-			//FILTER HIT
-			//message->msg_filter_hit = CAN1.cxrx1con & 0x0007;
+    return 1;
 
-			//CLEAR OVERFLOW
-			//message->msg_overflow = C1INTFbits.RX1OVR;
-			C1INTFbits.RX1OVR = 0;
-			
-			//DONE WITH THIS FRAME
-			C1RX1CONbits.RXFUL = 0;
-
-			retval = 1;
-		}
-	} //VALID MESSAGE PTR
-	else
-	{
-		retval = 0;
-	} //INVALID MESSAGE PTR
-	
-#endif
-	return retval;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -344,76 +403,93 @@ void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id)
 void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask) 
 {
 
-#if 0
-	unsigned char i = 0;
+    CAN_BIT_CONFIG canBitConfig;
 
-	// Setup input and output pins
-	TRISFbits.TRISF0 = 1; //CAN RX
-	TRISFbits.TRISF1 = 0; //CAN TX
+    /* This function will intialize
+    * CAN1 module. */
 
-	// Set request for configuration mode
-	// FCAN = FCY
-	CAN1SetOperationMode(CAN_IDLE_CON &
-	CAN_MASTERCLOCK_1 &
-	CAN_REQ_OPERMODE_CONFIG &
-	CAN_CAPTURE_DIS);
+    /* Step 1: Switch the CAN module
+    * ON and switch it to Configuration
+    * mode. Wait till the mode switch is
+    * complete. */
 
-	// Wait until we are in the config mode
-	while(C1CTRLbits.OPMODE != C1CTRLbits.REQOP);
-
-	// Load configuration register
-	CAN1Initialize(CAN_SYNC_JUMP_WIDTH1 &
-		CAN_BAUD_PRE_SCALE(1),
-		CAN_WAKEUP_BY_FILTER_DIS &
-		CAN_PHASE_SEG2_TQ(3) &
-		CAN_PHASE_SEG1_TQ(5) &
-		CAN_PROPAGATIONTIME_SEG_TQ(1) &
-		CAN_SEG2_FREE_PROG &
-		CAN_SAMPLE1TIME);
-	
-   	//make sure that mask[1].dest = at least 0xFF
-   	mask[1].mask_dest = 0xFF;
-
-   	//Set MASK
-   	for(i=0;i<2;i++){
-      	netv_apply_accept_mask(&mask[i],i);
-   	}
-
-	//Setup filters
- 	//make sure to possess a filter with dest = 0xFF
-   	filter[2].filter_dest = 0xFF;
-
-   	//Set Filter
-   	for(i=0;i<6;i++){
-      	netv_apply_filter(&filter[i],i);
-   	}
+    CANEnableModule(CAN1,TRUE);
 
 
-	//Transmit buffer configuration
-	for (i = 0; i < 3; i++)
-	{
-		CAN1SetTXMode(i,
-			CAN_TX_STOP_REQ &
-			CAN_TX_PRIORITY_HIGH );
-	}
 
-	//Receive buffer configuration
-	for (i = 0; i < 2; i++)
-	{
-		CAN1SetRXMode(i,
-			CAN_RXFUL_CLEAR &
-			CAN_BUF0_DBLBUFFER_EN);
-	}
+    CANSetOperatingMode(CAN1, CAN_CONFIGURATION);
+    while(CANGetOperatingMode(CAN1) != CAN_CONFIGURATION);
 
-	/* Set request for Normal mode */
-	CAN1SetOperationMode(CAN_IDLE_CON & CAN_CAPTURE_DIS &
-	CAN_MASTERCLOCK_1 &
-	CAN_REQ_OPERMODE_NOR);
 
-	//WAIT until we are in normal mode
-	while(C1CTRLbits.OPMODE != C1CTRLbits.REQOP);
-#endif
-	
+    //Enable time stamping...
+    CANSetTimeStampValue(CAN1, 0x0);
+    CANSetTimeStampPrescalar(CAN1,CAN_TIMER_PRESCALER);
+    CANEnableFeature(CAN1, CAN_RX_TIMESTAMP, TRUE);
+
+
+    /* Step 2: Configure the Clock.The
+    * CAN_BIT_CONFIG data structure is used
+    * for this purpose. The propagation segment,
+    * phase segment 1 and phase segment 2
+    * are configured to have 3TQ. SYSTEM_FREQ
+    * and CAN_BUS_SPEED are defined in  */
+    canBitConfig.phaseSeg2Tq            = CAN_BIT_3TQ;
+    canBitConfig.phaseSeg1Tq            = CAN_BIT_5TQ;
+    canBitConfig.propagationSegTq       = CAN_BIT_1TQ;
+    canBitConfig.phaseSeg2TimeSelect    = TRUE;
+    canBitConfig.sample3Time            = FALSE;
+    canBitConfig.syncJumpWidth          = CAN_BIT_1TQ;
+
+    CANSetSpeed(CAN1,&canBitConfig,SYS_XTAL_FREQ,CAN_BUS_SPEED);
+
+    /* Step 3: Assign the buffer area to the
+    * CAN module.
+    */
+    CANAssignMemoryBuffer(CAN1,CAN1MessageFifoArea,sizeof(CAN1MessageFifoArea));
+
+    /* Step 4: Configure channel 0 for TX and size of
+    * 8 message buffers with RTR disabled and low medium
+    * priority. Configure channel 1 for RX and size
+    * of 8 message buffers and receive the full message.
+    */
+
+    CANConfigureChannelForTx(CAN1, CAN_CHANNEL0, CAN_FIFO_SIZE, CAN_TX_RTR_DISABLED, CAN_LOW_MEDIUM_PRIORITY);
+    CANConfigureChannelForRx(CAN1, CAN_CHANNEL1, CAN_FIFO_SIZE, CAN_RX_FULL_RECEIVE);
+
+    /* Step 5: Configure filters and mask. Configure
+    * filter 0 to accept EID messages with ID 0x8004001.
+    * Configure filter mask 0 to compare all the ID
+    * bits and to filter by the ID type specified in
+    * the filter configuration.Messages accepted by
+    * filter 0 should be stored in channel 1. */
+
+    CANConfigureFilter      (CAN1, CAN_FILTER0, 0x00000000, CAN_EID);
+    CANConfigureFilterMask  (CAN1, CAN_FILTER_MASK0, 0x00000000, CAN_EID, CAN_FILTER_MASK_IDE_TYPE);
+    CANLinkFilterToChannel  (CAN1, CAN_FILTER0, CAN_FILTER_MASK0, CAN_CHANNEL1);
+    CANEnableFilter         (CAN1, CAN_FILTER0, TRUE);
+
+    /* Step 6: Enable interrupt and events. Enable the receive
+    * channel not empty  event (channel event) and the receive
+    * channel event (module event).
+    * The interrrupt peripheral library is used to enable
+    * the CAN interrupt to the CPU. */
+
+    CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_NOT_EMPTY, TRUE);
+    CANEnableChannelEvent(CAN1, CAN_CHANNEL1, CAN_RX_CHANNEL_OVERFLOW, TRUE);
+    CANEnableModuleEvent (CAN1, CAN_RX_EVENT, TRUE);
+
+    /* These functions are from interrupt peripheral
+    * library. */
+
+    INTSetVectorPriority(INT_CAN_1_VECTOR, INT_PRIORITY_LEVEL_4);
+    INTSetVectorSubPriority(INT_CAN_1_VECTOR, INT_SUB_PRIORITY_LEVEL_0);
+    INTEnable(INT_CAN1, INT_ENABLED);
+
+    /* Step 7: Switch the CAN mode
+    * to normal mode. */
+
+    CANSetOperatingMode(CAN1, CAN_NORMAL_OPERATION);
+    while(CANGetOperatingMode(CAN1) != CAN_NORMAL_OPERATION);
  
 }
 
