@@ -140,15 +140,15 @@ void netv_transceiver(unsigned char netv_addr)
                                 //mSYSTEMUnlock();
 
                                 //Set arm reset
-                                RSWRSTSET = 1;
+                                //RSWRSTSET = 1;
 
                                 //Read register to trigger reset
-                                volatile int *p = &RSWRST;
+                                //volatile int *p = &RSWRST;
 
                                 //Wait until the reset happens
-                                while(1);
+                                //while(1);
 
-                                Reset();
+                               // Reset();
                break;
          }//end switch msg_cmd
 
