@@ -44,9 +44,8 @@ typedef struct _mask {
 } NETV_MASK;
 
 //Hardware specific
-void netv_init_can_driver(NETV_FILTER *filter,NETV_MASK *mask);
-void netv_apply_accept_mask(NETV_MASK *mask, unsigned char mask_id);
-void netv_apply_filter(NETV_FILTER *filter, unsigned char filter_id);
+void netv_init_can_driver(unsigned char canAddr);
+
 
 
 
