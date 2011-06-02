@@ -770,3 +770,47 @@ bool ModuleVariable::getActivated() const
     return m_activated;
 }
 
+
+unsigned int ModuleVariable::getSize() const
+{
+    switch(m_type)
+    {
+    case DOUBLE:
+        return 8;
+        break;
+
+    case FLOAT:
+        return 4;
+        break;
+
+    case SINT32:
+        return 4;
+        break;
+
+    case UINT32:
+        return 4;
+        break;
+
+    case SINT16:
+        return 2;
+        break;
+
+    case UINT16:
+        return 2;
+        break;
+
+    case SINT8:
+        return 1;
+        break;
+
+    case UINT8:
+        return 1;
+        break;
+
+    case INVALID:
+        return 0;
+        break;
+    }
+    return 0;
+}
+

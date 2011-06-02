@@ -264,7 +264,7 @@ void ModuleConfigurationView::saveConfiguration()
 
 void ModuleConfigurationView::newVariableClicked()
 {
-    AddVariableDialog dialog;
+    AddVariableDialog dialog(m_module);
     dialog.exec();
 
     if (dialog.result() == QDialog::Accepted)

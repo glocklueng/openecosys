@@ -268,6 +268,8 @@ public:
         */
         Q_INVOKABLE int getOffset() const;
 
+        Q_INVOKABLE unsigned int getSize() const;
+
         /**
             \return the variable's description
         */
