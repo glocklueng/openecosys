@@ -20,6 +20,7 @@
 
 #include <QDialog>
 #include "ModuleVariable.h"
+#include "NetworkModule.h"
 
 namespace Ui {
     class AddVariableDialog;
@@ -37,11 +38,12 @@ public:
     int getVariableMemoryOffset();
     QString getVariableDescription();
 
-    explicit AddVariableDialog(QWidget *parent = 0);
+    explicit AddVariableDialog(NetworkModule *module = NULL);
     ~AddVariableDialog();
 
 private:
     Ui::AddVariableDialog *ui;
+    NetworkModule *m_module;
 };
 
 #endif // ADDVARIABLEDIALOG_H

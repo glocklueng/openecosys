@@ -19,11 +19,29 @@
 #include "AddVariableDialog.h"
 #include "ui_AddVariableDialog.h"
 
-AddVariableDialog::AddVariableDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AddVariableDialog)
+AddVariableDialog::AddVariableDialog(NetworkModule *module) :
+    QDialog(NULL), m_module(module), ui(new Ui::AddVariableDialog)
+
 {
     ui->setupUi(this);
+
+
+    //Calculate automatically the offset
+    if (m_module)
+    {
+        unsigned int offset = 0;
+
+        ModuleConfiguration *conf = m_module->getConfiguration();
+
+        for (unsigned int i = 0; i < conf->size(); i++)
+        {
+            ModuleVariable *var = (*conf)[i];
+            offset += var->getSize();
+        }
+
+        //Set Offset
+        ui->m_variableOffsetSpinBox->setValue(offset);
+    }
 }
 
 AddVariableDialog::~AddVariableDialog()
