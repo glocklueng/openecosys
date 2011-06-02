@@ -1,0 +1,26 @@
+<!DOCTYPE INTROLAB-NETWORKVIEWER>
+<ModuleConfiguration moduleState="5" deviceID="200" projectID="100" configName="ADELeg (PIC32)" codeVersion="1" processorID="0" tableVersion="2">
+     <ModuleVariable offset="0" description="" type="float" value="0" memType="0" name="Torque_e"/>
+     <ModuleVariable offset="4" description="" type="float" value="0" memType="0" name="Torque_b"/>
+     <ModuleVariable offset="8" description="" type="float" value="0" memType="0" name="Pos_e"/>
+     <ModuleVariable offset="12" description="" type="float" value="0" memType="0" name="Pos_b"/>
+     <ModuleVariable offset="16" description="" type="float" value="0" memType="0" name="Speed_e"/>
+     <ModuleVariable offset="20" description="" type="float" value="0" memType="0" name="Speed_b"/>
+     <ModuleVariable offset="24" description="" type="float" value="0" memType="0" name="WRef_e"/>
+     <ModuleVariable offset="28" description="" type="float" value="0" memType="0" name="XRef_e"/>
+     <ModuleVariable offset="32" description="" type="float" value="0" memType="0" name="KxVal_e"/>
+     <ModuleVariable offset="36" description="" type="float" value="0" memType="0" name="KwVal_e"/>
+     <ModuleVariable offset="40" description="" type="float" value="0" memType="0" name="TVal_e"/>
+     <ModuleVariable offset="44" description="" type="float" value="0" memType="0" name="TImped_e"/>
+     <ModuleVariable offset="48" description="" type="float" value="0" memType="0" name="WRef_b"/>
+     <ModuleVariable offset="52" description="" type="float" value="0" memType="0" name="XRef_b"/>
+     <ModuleVariable offset="56" description="" type="float" value="0" memType="0" name="KxVal_b"/>
+     <ModuleVariable offset="60" description="" type="float" value="0" memType="0" name="KwVal_b"/>
+     <ModuleVariable offset="64" description="" type="float" value="0" memType="0" name="TVal_b"/>
+     <ModuleVariable offset="68" description="" type="float" value="0" memType="0" name="TImped_b"/>
+     <ModuleVariable offset="72" description="" type="float" value="0.000628319" memType="0" name="posSensorToRad"/>
+     <ModuleVariable offset="76" description="" type="float" value="0.000546185" memType="0" name="torqueSensorToNm"/>
+     <ModuleVariable offset="80" description="" type="uint8" value="17" memType="0" name="eModule"/>
+     <ModuleVariable offset="81" description="" type="uint8" value="18" memType="0" name="bModule"/>
+     <ModuleVariable offset="82" description="Control Mode. 0 = Config, 1 = Normal" type="uint8" value="0" memType="0" name="mode"/>
+</ModuleConfiguration>
