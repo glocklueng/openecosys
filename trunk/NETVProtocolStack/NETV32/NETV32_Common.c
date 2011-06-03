@@ -201,11 +201,13 @@ void netv_transceiver(unsigned char netv_addr) {
                     }//end sub-switch read_write
                     break;
             }
-            // processe the received message
-            netv_proc_message(&g_rMessage);
-        }
+           
+        } //if dest
 
-    }
+        // processe the received message
+        netv_proc_message(&g_rMessage);
+
+    }//while
 }
 
 
