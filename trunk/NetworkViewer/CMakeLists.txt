@@ -278,6 +278,7 @@ SET (XML_FILES
     config/INTROLAB_ReddyHead.xml
     config/INTROLAB_dsPICDrive.xml
     config/LoopbackTest.xml
+	config/INTROLAB_ADELeg.xml
 )
 
 
