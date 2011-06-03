@@ -152,90 +152,92 @@ void NetworkView::processCANMessage(const NETV_MESSAGE &msg)
 {
     //qDebug("NetworkView::processCANMessage(const NETV_MESSAGE &msg)");
     //NETVDevice::printMessage(msg,std::cout);
-
-    //WILL HANDLE ONLY REQUEST TYPE
-    if (msg.msg_type == NETV_TYPE_REQUEST_DATA)
+    if (!msg.msg_remote)
     {
-    	
-        //NETVDevice::printMessage(msg,std::cout);
-
-        //Let's see to which module it belongs...
-        //Update the variable if it fits...
-        for(QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
+        //WILL HANDLE ONLY REQUEST TYPE
+        if (msg.msg_type == NETV_TYPE_REQUEST_DATA)
         {
-            NetworkModule *module = iter.value();
-            
-            ModuleConfiguration *conf = module->getConfiguration();
-            Q_ASSERT(conf);
 
-            if (conf->getDeviceID() == msg.msg_dest)
+            //NETVDevice::printMessage(msg,std::cout);
+
+            //Let's see to which module it belongs...
+            //Update the variable if it fits...
+            for(QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
             {
-                for(int i =0; i < conf->size(); i++)
+                NetworkModule *module = iter.value();
+
+                ModuleConfiguration *conf = module->getConfiguration();
+                Q_ASSERT(conf);
+
+                if (conf->getDeviceID() == msg.msg_dest)
                 {
-                    //Need to check the offset and the memory type
-                    if ((*conf)[i]->getOffset() == msg.msg_cmd && (*conf)[i]->getMemType() == (ModuleVariable::VARIABLE_MEMORY_TYPE) (msg.msg_boot >> 1))
+                    for(int i =0; i < conf->size(); i++)
                     {
-                        //FOUND IT
-                        //UPDATING VALUE
-                    	//qDebug("found variable : ");
-                        (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length);
-                        break;
+                        //Need to check the offset and the memory type
+                        if ((*conf)[i]->getOffset() == msg.msg_cmd && (*conf)[i]->getMemType() == (ModuleVariable::VARIABLE_MEMORY_TYPE) (msg.msg_boot >> 1))
+                        {
+                            //FOUND IT
+                            //UPDATING VALUE
+                            //qDebug("found variable : ");
+                            (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length);
+                            break;
+                        }
                     }
                 }
             }
-        } 
-    }//type == REQUEST_DATA
-    else if (msg.msg_type == NETV_TYPE_EVENTS)
-    {
-
-        if (msg.msg_cmd == NETV_EVENTS_CMD_ALIVE && msg.msg_data_length == 8)
+        }//type == REQUEST_DATA
+        else if (msg.msg_type == NETV_TYPE_EVENTS)
         {
-            //qDebug("ALIVE REQUEST ANSWERED...");
 
-            /*
-				msg.msg_data[0] = config->module_state;
-				msg.msg_data[1] = config->project_id;
-				msg.msg_data[2] = config->module_id;
-				msg.msg_data[3] = config->code_version;
-				msg.msg_data[4] = config->table_version;
-				msg.msg_data[5] = config->boot_delay;
-				msg.msg_data[6] = config->devid_low;
-				msg.msg_data[7] = config->devid_high;
-			*/
-            int module_state = msg.msg_data[0];
-            int project_id = msg.msg_data[1];
-            int module_id = msg.msg_data[2];
-            int code_version = msg.msg_data[3];
-            int table_version = msg.msg_data[4];
-            int boot_delay = msg.msg_data[5];
-            int devID = (((int) msg.msg_data[7]) << 8) | (int) msg.msg_data[6];
-
-            //Look for already existing modules...
-            bool found = false;
-            for (QMap<NetworkModuleItem*, NetworkModule*>::iterator i = m_modules.begin(); i != m_modules.end(); i++)
+            if (msg.msg_cmd == NETV_EVENTS_CMD_ALIVE && msg.msg_data_length == 8)
             {
-                NetworkModule *module = i.value();
+                //qDebug("ALIVE REQUEST ANSWERED...");
 
-                if (module->getConfiguration()->getDeviceID() == module_id)
+                /*
+                                    msg.msg_data[0] = config->module_state;
+                                    msg.msg_data[1] = config->project_id;
+                                    msg.msg_data[2] = config->module_id;
+                                    msg.msg_data[3] = config->code_version;
+                                    msg.msg_data[4] = config->table_version;
+                                    msg.msg_data[5] = config->boot_delay;
+                                    msg.msg_data[6] = config->devid_low;
+                                    msg.msg_data[7] = config->devid_high;
+                            */
+                int module_state = msg.msg_data[0];
+                int project_id = msg.msg_data[1];
+                int module_id = msg.msg_data[2];
+                int code_version = msg.msg_data[3];
+                int table_version = msg.msg_data[4];
+                int boot_delay = msg.msg_data[5];
+                int devID = (((int) msg.msg_data[7]) << 8) | (int) msg.msg_data[6];
+
+                //Look for already existing modules...
+                bool found = false;
+                for (QMap<NetworkModuleItem*, NetworkModule*>::iterator i = m_modules.begin(); i != m_modules.end(); i++)
                 {
-                    found = true;
-                    //qDebug("already found module : %i",module_id);
-                    i.key()->timeUpdate(QTime::currentTime());
+                    NetworkModule *module = i.value();
+
+                    if (module->getConfiguration()->getDeviceID() == module_id)
+                    {
+                        found = true;
+                        //qDebug("already found module : %i",module_id);
+                        i.key()->timeUpdate(QTime::currentTime());
+                    }
                 }
+
+                if (!found)
+                {
+                    qDebug("Inserting new module %i",module_id);
+
+                    //fill configuration information...
+                    ModuleConfiguration conf(project_id, code_version, devID, module_state, table_version, module_id);
+
+                    addModule(conf);
+                }
+
             }
-
-            if (!found)
-            {
-                qDebug("Inserting new module %i",module_id);
-
-                //fill configuration information...
-                ModuleConfiguration conf(project_id, code_version, devID, module_state, table_version, module_id);
-
-                addModule(conf);
-            }
-
-        }
-    }//type == EVENTS
+        }//type == EVENTS
+    } // NOT REMOTE
 }
 
 void NetworkView::createScopeView()
