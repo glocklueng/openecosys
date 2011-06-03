@@ -164,9 +164,9 @@ unsigned char netv_send_message(NETV_MESSAGE *message) {
         ID |= (((unsigned int) message->msg_type << 18) & 0x03FC0000);
 
         //boot
-        ID |= (((unsigned int) message->msg_read_write << 16) & 0x00010000);
-        ID |= (((unsigned int) message->msg_eeprom_ram << 17) & 0x00020000);
-
+        ID |= ((unsigned int) message->msg_eeprom_ram << 17);
+        ID |= ((unsigned int) message->msg_read_write << 16);
+        
         //cmd
         ID |= (((unsigned int) message->msg_cmd << 8) & 0x0000FF00);
 
@@ -269,8 +269,8 @@ unsigned char netv_recv_message(NETV_MESSAGE *message) {
         //Here convert the message buffer to a NETV_CAN message
         message->msg_priority = (SID >> 8) & 0x07;
         message->msg_type = (SID) & 0xFF;
-        message->msg_read_write = (EID >> 16) & 0x01;
         message->msg_eeprom_ram = (EID >> 17) & 0x01;
+        message->msg_read_write = (EID >> 16) & 0x01;
         message->msg_cmd = (EID >> 8) & 0xFF;
         message->msg_dest = (EID) & 0xFF;
         message->msg_data_length = msgPtr->msgEID.DLC;
