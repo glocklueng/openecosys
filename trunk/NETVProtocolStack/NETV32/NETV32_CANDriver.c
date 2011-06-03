@@ -155,8 +155,6 @@ unsigned char netv_send_message(NETV_MESSAGE *message) {
 
     if (message && msgPtr) {
 
-        mPORTDToggleBits(BIT_5);
-
         unsigned int ID = 0;
 
         //priority
@@ -259,8 +257,6 @@ unsigned char netv_recv_message(NETV_MESSAGE *message) {
     CANRxMessageBuffer *msgPtr = (CANRxMessageBuffer *) CANGetRxMessage(CAN1, CAN_CHANNEL1);
 
     if (msgPtr && message) {
-
-        mPORTDToggleBits(BIT_7);
 
         /* Check byte 0 of the data payload.
          * If it is 0 then switch off LED6 else
