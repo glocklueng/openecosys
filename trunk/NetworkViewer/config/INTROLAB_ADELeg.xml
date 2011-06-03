@@ -20,8 +20,8 @@
      <ModuleVariable offset="68" description="" type="float" value="0" memType="0" name="TImped_b"/>
      <ModuleVariable offset="72" description="" type="float" value="0.000628319" memType="0" name="posSensorToRad"/>
      <ModuleVariable offset="76" description="" type="float" value="0.000546185" memType="0" name="torqueSensorToNm"/>
-	 <ModuleVariable offset="80" description="" type="uint32" value="0" memType="0" name="TorqueCommand_e"/>
-     <ModuleVariable offset="84" description="" type="uint32" value="0" memType="0" name="TorqueCommand_b"/>
+	 <ModuleVariable offset="80" description="" type="sint32" value="0" memType="0" name="TorqueCommand_e"/>
+     <ModuleVariable offset="84" description="" type="sint32" value="0" memType="0" name="TorqueCommand_b"/>
      <ModuleVariable offset="88" description="" type="uint8" value="17" memType="0" name="eModule"/>
      <ModuleVariable offset="89" description="" type="uint8" value="18" memType="0" name="bModule"/>
      <ModuleVariable offset="90" description="Control Mode. 0 = Config, 1 = Normal" type="uint8" value="0" memType="0" name="mode"/>
