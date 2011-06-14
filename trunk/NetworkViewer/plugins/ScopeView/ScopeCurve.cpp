@@ -20,6 +20,7 @@
 #include "qwt_symbol.h"
 #include "qwt_legend.h"
 #include "qwt_legend_item.h"
+#include <math.h>
 
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 :	m_variable(var),  m_plot(parentPlot)
@@ -83,11 +84,11 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
 			setData(&m_time[0], &m_values[0], m_time.size());
 
                         //draw curve (all)
-                        draw(0,m_values.size() -1);
+                        draw(std::max((size_t)0,m_values.size() - 2) ,m_values.size() -1);
 			
 
 
-                           //m_plot->replot();
+                        //m_plot->replot();
 		}
 	}
 }
