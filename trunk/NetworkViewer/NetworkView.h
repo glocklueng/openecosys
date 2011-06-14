@@ -195,6 +195,18 @@ public slots:
         */
         void closeAllMDIWindows();
 
+
+        /**
+            Will enable all variables from every module.
+         */
+        void enableAllModuleVariables();
+
+        /**
+            Will disable all variables from every module
+         */
+        void disableAllModuleVariables();
+
+
         /**
             Clear the text edit used for debug messages
         */
