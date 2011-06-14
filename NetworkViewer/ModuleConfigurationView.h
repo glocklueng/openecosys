@@ -32,6 +32,7 @@
 
 #include <QAbstractItemDelegate>
 #include <QItemDelegate>
+#include <QLineEdit>
 
 class ValueEditorDelegate : public QItemDelegate
 {
@@ -48,6 +49,33 @@ public:
         //This will prevent modification of widget while editing...
         //qDebug("setEditorData ( QWidget * editor, const QModelIndex & index ) const");
         //QItemDelegate::setEditorData(editor,index);
+    }
+
+    virtual QWidget* createEditor( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        //qDebug("virtual QWidget *	createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const");
+
+        //Get the model
+        const QAbstractItemModel * model = index.model();
+
+        //Get the data
+        QVariant data = model->data(index);
+
+        //TODO Should we do something about the option parameter?
+
+        //Create te line editor
+        QLineEdit *lineEdit = new QLineEdit(parent);
+
+        //Set variable information
+        lineEdit->setText(data.toString());
+
+        return lineEdit;
+        //return QItemDelegate::createEditor(parent,option,index);
+    }
+
+    virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
+    {
+        QItemDelegate::setModelData(editor, model, index);
     }
 
 };
