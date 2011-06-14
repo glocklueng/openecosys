@@ -463,9 +463,10 @@ void ModuleConfiguration::addVariable(ModuleVariable *variable)
     connect(variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableInternalUpdate(ModuleVariable*)));
     connect(variable,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableInternalActivated(bool,ModuleVariable*)));
 
-
+   
     //Emit variable added
     emit variableAdded(variable);
+
 
     //QAbstractItemModel signal
     emit layoutChanged();

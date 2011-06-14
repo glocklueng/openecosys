@@ -119,7 +119,7 @@ bool ModuleVariable::loadXML(QDomElement &element)
         //Default value (from string)...
         if (element.attributeNode("value").value().size())
         {
-            setValue(element.attributeNode("value").value());
+            setValue(element.attributeNode("value").value(),true);
         }
 
 

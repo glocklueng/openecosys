@@ -247,6 +247,18 @@ void ModuleConfigurationView::loadConfiguration()
             qDebug() << "Loading configuration :" << fileName;
             //Loading config, variables only
             m_module->getConfiguration()->loadConfiguration(fileName,true);
+
+	    for (unsigned int i = 0; i < m_module->getConfiguration()->size(); i++)
+            {
+		    ModuleVariable *variable = (*m_module->getConfiguration())[i];
+
+		    //This is a hack to get the internal value written to the bus
+		    //Can we do better
+		    QVariant value = variable->getValue();
+
+		    variable->setUserValue(value);
+	    }
+
     }
 }
 
