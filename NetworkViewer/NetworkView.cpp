@@ -81,11 +81,19 @@ NetworkView::NetworkView(QWidget *parent)
     connect(actionDevice_Selection,SIGNAL(triggered(bool)),this,SLOT(deviceSelectorTriggered(bool)));
     connect(actionPreferences,SIGNAL(triggered(bool)),this,SLOT(preferencesTriggered(bool)));
 
+    //Tools
+    connect(actionEnable_All_Variables,SIGNAL(triggered()),this,SLOT(enableAllModuleVariables()));
+    connect(actionDisable_All_Variables,SIGNAL(triggered()),this,SLOT(disableAllModuleVariables()));
 
+    //Windows
     connect(actionTile_Windows,SIGNAL(triggered()),this,SLOT(tileMDIWindows()));
     connect(actionClose_All_Windows,SIGNAL(triggered()),this,SLOT(closeAllMDIWindows()));
     connect(actionCascade_Windows,SIGNAL(triggered()),this,SLOT(cascadeMDIWindows()));
     connect(actionQuit,SIGNAL(triggered()),this,SLOT(close()));
+
+
+
+
 
     //Show Connect to device dialog
     deviceSelectorTriggered(true);
@@ -810,6 +818,38 @@ void NetworkView::closeAllMDIWindows()
 {
     m_mdiArea->closeAllSubWindows();
 }
+
+
+void NetworkView::enableAllModuleVariables()
+{
+    for (QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
+    {
+        ModuleConfiguration *conf = iter.value()->getConfiguration();
+
+        for (unsigned int i = 0; i < conf->size(); i++)
+        {
+            ModuleVariable *var = (*conf)[i];
+            var->setActivated(true);
+        }
+    }
+
+}
+
+
+void NetworkView::disableAllModuleVariables()
+{
+    for (QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
+    {
+        ModuleConfiguration *conf = iter.value()->getConfiguration();
+
+        for (unsigned int i = 0; i < conf->size(); i++)
+        {
+            ModuleVariable *var = (*conf)[i];
+            var->setActivated(false);
+        }
+    }
+}
+
 
 
 void NetworkView::updateConnStats()
