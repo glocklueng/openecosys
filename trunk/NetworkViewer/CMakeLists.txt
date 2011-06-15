@@ -273,12 +273,13 @@ SET (QTVERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
 
 SET (XML_FILES
     config/INTROLAB_J0Pwr.xml
-	config/INTROLAB_Unidrive_v1.xml
+    config/INTROLAB_Unidrive_v1.xml
     config/INTROLAB_Unidrive_v2.xml
     config/INTROLAB_ReddyHead.xml
     config/INTROLAB_dsPICDrive.xml
     config/LoopbackTest.xml
-	config/INTROLAB_ADELeg.xml
+    config/INTROLAB_ADELeg.xml
+    config/NETVArduino_Analog.xml
 )
 
 
