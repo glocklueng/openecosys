@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
-<ModuleConfiguration moduleState="0" deviceID="200" projectID="50" configName="Untitled2" codeVersion="1" processorID="0" tableVersion="2">
+<ModuleConfiguration moduleState="0" deviceID="200" projectID="50" configName="NETVArduino_Analog" codeVersion="1" processorID="0" tableVersion="2">
      <ModuleVariable offset="0" description="" type="uint16" value="309" memType="0" name="analog0"/>
      <ModuleVariable offset="2" description="" type="uint16" value="305" memType="0" name="analog1"/>
      <ModuleVariable offset="4" description="" type="uint16" value="301" memType="0" name="analog2"/>
