@@ -26,6 +26,14 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.13
+________
+
+* Added Arduino Analog Example.
+* Fixed Plot performances.
+* Fixed module ConfigurationView not displaying initial value when editing.
+* Fixed saving & restoring variables from a module (writing back stored values).
+
 1.1.12.1
 ________
 
