@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QWebView>
 #include <QCoreApplication>
+#include "Highlighter.h"
 
 //This will insert the plugin in the dictionary...
 static int sample_plugin_init = BasePlugin::registerPlugin("ScriptEngine",new BasePlugin::PluginFactory<ScriptEngine>());
@@ -150,6 +151,9 @@ ScriptEngine::ScriptEngine(NetworkView *view)
 	//Setup UI
 	m_ui.setupUi(this);
 
+        //m_ui.m_textEditScript;
+        //m_ui.m_textEditMessages
+        Highlighter *highlighter = new Highlighter(m_ui.m_textEditScript->document());
 
         //update all variables
         updateEngineVariables();
@@ -190,7 +194,7 @@ void ScriptEngine::timerUpdate()
 {
     //qDebug("void ScriptEngine::timerUpdate()");
     QList<NetworkModule*> allModules = m_view->getModules();
-    m_ui.lcdNumber->display(allModules.size());
+
 
     if (m_running)
     {
@@ -375,9 +379,6 @@ void ScriptEngine::updateEngineVariables(bool modulesOnly)
     Q_ASSERT(m_view);
 
     QList<NetworkModule*> allModules = m_view->getModules();
-
-    //Update LCD   
-    m_ui.lcdNumber->display(allModules.size());
 
     if (!modulesOnly)
     {

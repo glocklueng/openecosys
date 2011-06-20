@@ -4,15 +4,17 @@
 
 
 SET(Plugin_SRCS
-	ScriptEngine.cpp
+    ScriptEngine.cpp
+    Highlighter.cpp
 )
 
 SET(Plugin_HEADERS 
-	ScriptEngine.h
+    ScriptEngine.h
+    Highlighter.h
 )
 
 SET(Plugin_UIS
-	ScriptEngine.ui
+    ScriptEngine.ui
 )
 
 SET(Plugin_QRC 
