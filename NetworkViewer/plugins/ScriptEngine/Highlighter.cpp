@@ -73,6 +73,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
             << "\\baddToPlot\\b"
             << "\\baddSliderControl\\b"
             << "\\bcreatePseudoModule\\b"
+            << "\\baddPseudoModule\\b"
             << "\\btime\\b"
             << "\\bcycle\\b"
             << "\\bmodules\\b"
