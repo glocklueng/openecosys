@@ -21,26 +21,26 @@
 NETVArduino netvArduino;
 
 NETVArduino::NETVArduino()
-: m_table(NULL), m_size(0)
+: m_projectID(0), m_moduleID(0), m_codeVersion(0), m_baudrate(0), m_table(NULL), m_size(0) 
 {
 	
 }
 
-void NETVArduino::setup(byte* table, unsigned int size)
+void NETVArduino::setup(byte projectID, byte moduleID, byte codeVersion, unsigned long baudrate, byte* table, unsigned int size)
+
 {
-  if (table && size > 0)
-  {
-       m_table = table;
-       m_size = size;
-	  	  
+  m_projectID = projectID;
+  m_moduleID = moduleID;
+  m_codeVersion = codeVersion;
+  m_baudrate = baudrate;
+  m_table = table;
+  m_size = size;
+
+
+  if (m_table && m_size > 0)
+  {	  	  
 	  //Open serial port
-	  Serial.begin(115200);
-	  
-	  state = LOW;
-	  
-	  pinMode(77, OUTPUT);
-	  digitalWrite(77, state);
-	  
+	  Serial.begin(baudrate);
   }
 }
 
@@ -48,6 +48,8 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 {
 	if (message.type == NETV_TYPE_EVENTS)
 	{
+	
+		//If it is an alive request, answer with our own address
 		if (message.cmd == NETV_EVENTS_CMD_ALIVE)
 		{
 			for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
@@ -58,19 +60,19 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			//Remove RTR
 			m_outgoingMessage.pri_boot_rtr &= 0xFE;
 			
-			//Set dest
-			m_outgoingMessage.dest = 200;
+			//Set dest sinc this message was sent to dest=0xFF (BROADCAST)
+			m_outgoingMessage.dest = m_moduleID;
 			
 			
 			//Fill data
-			m_outgoingMessage.data[0] = 0;  //module state
-			m_outgoingMessage.data[1] = 50; //project_id
-			m_outgoingMessage.data[2] = 200;//module_id
-			m_outgoingMessage.data[3] = 1;  //code version
+			m_outgoingMessage.data[0] = NETV_NORMAL_MODE_ID;  //module state
+			m_outgoingMessage.data[1] = m_projectID; //project_id
+			m_outgoingMessage.data[2] = m_moduleID;//module_id
+			m_outgoingMessage.data[3] = m_codeVersion;  //code version
 			m_outgoingMessage.data[4] = 2;  //table version
 			m_outgoingMessage.data[5] = 10; //boot delay
-			m_outgoingMessage.data[6] = 0;  //device id
-			m_outgoingMessage.data[7] = 0;  //device id
+			m_outgoingMessage.data[6] = 0x12;  //device id
+			m_outgoingMessage.data[7] = 0x34;  //device id
 			
 			//Recalculate checksum
 			m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
@@ -85,68 +87,64 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			//Flush serial
 			Serial.flush();
 			
-		}
+		} //If it is an alive request
 
 	}
 	else if(message.type == NETV_TYPE_REQUEST_DATA && m_table != NULL)
 	{
-		
-		unsigned char eeprom_ram = (message.pri_boot_rtr >> 4) & 0x01;
-		unsigned char read_write = (message.pri_boot_rtr >> 3) & 0x01;
-		unsigned char length = (message.data_length_iface >> 4) & 0x0F;
-		
-		//Make sure we don't overflow
-		if (message.cmd + length <= m_size)
+		if (message.dest == m_moduleID)
 		{
-			//READING
-			if (read_write == NETV_REQUEST_READ)
-			{
-				
-				for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
-				{
-					m_outgoingMessage.messageBytes[i] = message.messageBytes[i];
-				}
-				
-				//Remove RTR
-				m_outgoingMessage.pri_boot_rtr &= 0xFE;
-				
-				//Set dest
-				m_outgoingMessage.dest = 200;
-				
-				
-				//Copy data
-				for (unsigned int i = message.cmd; i < message.cmd + length; i++)
-				{
-					m_outgoingMessage.data[i - message.cmd] = m_table[i];
-				}
-				
-				//Recalculate checksum
-				m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
-				
-				
-				//Send to serial port
-				for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
-				{
-					Serial.write(m_outgoingMessage.messageBytes[i]);
-				}
-				
-				//Flush serial
-				Serial.flush();
-				
-			}
-			else if (read_write == NETV_REQUEST_WRITE)
-			{
-				//WRITING
-				for (unsigned int i = message.cmd; i < message.cmd + length; i++)
-				{
-					m_table[i] = message.data[i - message.cmd];
-				}
-				
-			}
+			unsigned char eeprom_ram = (message.pri_boot_rtr >> 4) & 0x01;
+			unsigned char read_write = (message.pri_boot_rtr >> 3) & 0x01;
+			unsigned char length = (message.data_length_iface >> 4) & 0x0F;
 			
-		}
-	}
-	
+			//Make sure we don't overflow
+			if (message.cmd + length <= m_size)
+			{
+				//READING
+				if (read_write == NETV_REQUEST_READ)
+				{
+					
+					for (unsigned int i= 0; i < sizeof(NETVSerialMessage); i++)
+					{
+						m_outgoingMessage.messageBytes[i] = message.messageBytes[i];
+					}
+					
+					//Remove RTR
+					m_outgoingMessage.pri_boot_rtr &= 0xFE;
+								
+					//Copy data
+					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
+					{
+						m_outgoingMessage.data[i - message.cmd] = m_table[i];
+					}
+					
+					//Recalculate checksum
+					m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
+					
+					
+					//Send to serial port
+					for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
+					{
+						Serial.write(m_outgoingMessage.messageBytes[i]);
+					}
+					
+					//Flush serial
+					Serial.flush();
+					
+				}
+				else if (read_write == NETV_REQUEST_WRITE)
+				{
+					//WRITING
+					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
+					{
+						m_table[i] = message.data[i - message.cmd];
+					}
+					
+				}
+			}			
+		} //Message intended for us?
+	}	
 }
 
 void NETVArduino::transceiver()
@@ -169,29 +167,21 @@ void NETVArduino::transceiver()
 			//Verify the checksum			
 			if (serial_calculate_checksum(m_incomingMessage) == m_incomingMessage.checksum)
 			{
-				digitalWrite(77, state);	
-				
-				if (state == LOW)
-				{
-					state = HIGH;
-				}
-				else 
-				{
-					state = LOW;
-				}
-
 				//Process the message
-				process_message(m_incomingMessage);
-				
-			}
-		
-		}
-		
+				process_message(m_incomingMessage);				
+			}		
+		}		
 	}
-	
-	
-	
+}
 
+
+void NETVArduino::mapMemory(byte* table, unsigned int size)
+{
+	if (table && size > 0)
+	{
+       m_table = table;
+       m_size = size;	  
+    }
 }
 
 
