@@ -23,8 +23,13 @@
 #include "NETV_define.h"
 
 
+//The message start byte
+#define START_BYTE 0xF2
+
 /**
-	Serial Message
+	Serial Message data structure. This is made
+	compatible with NetworkViewer by emulating
+	CAN messages through serial bus.
  */
 typedef union
 {
@@ -42,50 +47,72 @@ typedef union
 	byte messageBytes[15];
 } NETVSerialMessage;
 
-//The message start byte
-#define START_BYTE 0xF2
 
 
+/*
+	This class will handle communication with the serial port and
+	reading / writing to a shared memory.
+*/
 class NETVArduino
 {
 	
 public:
 	
+  //Default Constructor	
   NETVArduino();
-  
-/**
-			m_outgoingMessage.data[0] = 0;  //module state
-			m_outgoingMessage.data[1] = 50; //project_id
-			m_outgoingMessage.data[2] = 200;//module_id
-			m_outgoingMessage.data[3] = 1;  //code version
-			m_outgoingMessage.data[4] = 2;  //table version
-			m_outgoingMessage.data[5] = 10; //boot delay
-			m_outgoingMessage.data[6] = 0;  //device id
-			m_outgoingMessage.data[7] = 0;  //device id
-*/  
+  	
 	
+  /**
+	setup needs to be called before using NETVarduino. It will set internal variables and
+	open the serial port.
+	
+	\param projectID The id of the project that will be used by NetworkViewer to automatically load its configuration (XML files)
+	\param moduleID The module id can be comprised between 0 and 254, 255 is reserved for broadcasting
+	\param baudrate The baudrate for serial communication, no parity, 1 stop bit. Defaults to 115200 baud
+	\param table This is the shared memory pointer you want to use
+	\param size This is the size in bytes of the shared memory	
+  */  
   void setup(byte projectID, byte moduleID, byte codeVersion, unsigned long baudrate=115200, byte* table=0, unsigned int size=0);
   
+  /**
+	Set the memory that will be mapped (if you did not do it in the setup function)
+	\param table the shared memory pointer
+	\param size the size of the shared memory
+  */
   void mapMemory(byte* table, unsigned int size);
   
+  
+  /**
+	Call this function in your main loop. It will look at available bytes on the serial port
+	and parse it to fit with NETVProtocolStack serial protocol. Read/Write requests are
+	handled automatically in this function.
+  */
   void transceiver();  
 
 private:
 
+  ///Our projectID
   byte m_projectID;
+  ///Our moduleID
   byte m_moduleID;
+  ///Our code version
   byte m_codeVersion;
+  ///Used baudrate
   byte m_baudrate;
+  ///Shared memory pointer
   byte* m_table;
+  ///Shared memory size
   unsigned int m_size;
-  
-  
-  //Buffers	
+  ///Input buffer
   NETVSerialMessage m_incomingMessage; 
+  ///Output buffer
   NETVSerialMessage m_outgoingMessage;
+  
+  ///Internal processing of serial messages. This function is called when the cheksum is valid
   void process_message(const NETVSerialMessage &message);
+  ///Calculates the checksum of a message
   unsigned char serial_calculate_checksum(const NETVSerialMessage &message);
-  unsigned char state;	
+	
 };
 
 //External instance

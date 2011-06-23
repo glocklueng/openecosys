@@ -60,7 +60,7 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			//Remove RTR
 			m_outgoingMessage.pri_boot_rtr &= 0xFE;
 			
-			//Set dest sinc this message was sent to dest=0xFF (BROADCAST)
+			//Set dest since this message was sent to dest=0xFF (BROADCAST)
 			m_outgoingMessage.dest = m_moduleID;
 			
 			
