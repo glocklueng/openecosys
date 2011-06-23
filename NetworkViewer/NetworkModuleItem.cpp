@@ -53,6 +53,14 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         conf->prettyPrint(myBuffer);
 	
 	int device_id = conf->getDeviceID();
+
+        //We have an arduino device here
+        if (conf->getProcessorID() == 0x3412)
+        {
+            this->setPixmap(QPixmap(":images/Arduino.png"));
+        }
+
+
 	
 	
 	QRectF bounds = boundingRect();
