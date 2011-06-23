@@ -52,29 +52,40 @@ class NETVArduino
 public:
 	
   NETVArduino();
+  
+/**
+			m_outgoingMessage.data[0] = 0;  //module state
+			m_outgoingMessage.data[1] = 50; //project_id
+			m_outgoingMessage.data[2] = 200;//module_id
+			m_outgoingMessage.data[3] = 1;  //code version
+			m_outgoingMessage.data[4] = 2;  //table version
+			m_outgoingMessage.data[5] = 10; //boot delay
+			m_outgoingMessage.data[6] = 0;  //device id
+			m_outgoingMessage.data[7] = 0;  //device id
+*/  
 	
-  void setup(byte* table, unsigned int size);	
+  void setup(byte projectID, byte moduleID, byte codeVersion, unsigned long baudrate=115200, byte* table=0, unsigned int size=0);
   
-  void transceiver();
+  void mapMemory(byte* table, unsigned int size);
   
+  void transceiver();  
 
 private:
 
+  byte m_projectID;
+  byte m_moduleID;
+  byte m_codeVersion;
+  byte m_baudrate;
   byte* m_table;
   unsigned int m_size;
-
+  
+  
   //Buffers	
   NETVSerialMessage m_incomingMessage; 
   NETVSerialMessage m_outgoingMessage;
-
-	void process_message(const NETVSerialMessage &message);
-	
+  void process_message(const NETVSerialMessage &message);
   unsigned char serial_calculate_checksum(const NETVSerialMessage &message);
-
-		
-	
-	unsigned char state;
-	
+  unsigned char state;	
 };
 
 //External instance
