@@ -352,6 +352,23 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate)
                 cfsetospeed(&Posix_CommConfig, B115200);
 #endif
                 break;
+
+
+          default:
+
+		qDebug("QextSerialPort Portability Warning: user defined baud rate %i",baudRate);
+
+#ifdef CBAUD
+                Posix_CommConfig.c_cflag&=(~CBAUD);
+                Posix_CommConfig.c_cflag|=baudRate;
+#else
+                cfsetispeed(&Posix_CommConfig, baudRate);
+                cfsetospeed(&Posix_CommConfig, baudRate);
+#endif
+	break;
+
+
+
         }
         tcsetattr(fd, TCSAFLUSH, &Posix_CommConfig);
     }
