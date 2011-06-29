@@ -27,11 +27,11 @@
 	 <ModuleVariable offset="62" description="Quadrature Encoder Counter (16 bits)" type="sint32" value="" name="QEI" />
 	 
 	 <ModuleVariable offset="66" description="Current Speed / Velocity" type="sint32" value="" name="Speed" />
-     <ModuleVariable offset="70" description="Current Torque" type="sint32" value="" name="Torque" />
+     <ModuleVariable offset="70" description="Maximum Speed Allowed" type="sint32" value="" name="SpeedMax" />
 	 <ModuleVariable offset="74" description="Current Position" type="sint32" value="" name="Position" />
 	 <ModuleVariable offset="78" description="Current Acceleration" type="sint32" value="" name="Acceleration" />
 	 <ModuleVariable offset="82" description="Maximum Acceleration Allowed" type="sint32" value="" name="AccelerationMax" /> 
-	 <ModuleVariable offset="86" description="Maximum Speed Allowed" type="sint32" value="" name="SpeedMax" />
+	 <ModuleVariable offset="86" description="Current Torque" type="sint32" value="" name="Torque" />
 	 
 	 <ModuleVariable offset="90" description="PID Reference Point" type="sint32" value="" name="RefPoint" />
 	 <ModuleVariable offset="94" description="PID Measured Point" type="sint32" value="" name="MesPoint" />
@@ -83,7 +83,12 @@
 	 <ModuleVariable offset="242" description="Init value when in position mode and InitType != 0" type="sint32" value="" name="InitValue" />
 	 <ModuleVariable offset="246" description="Init Type 0=NONE, 1=QEI" type="uint8" value="" name="InitType" />
 	 <ModuleVariable offset="247" description="Initialized 0=FALSE 1=TRUE" type="uint8" value="" name="Initialized" />
+	 <ModuleVariable offset="248" description="Feedback Position at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerPosition" />
+	 <ModuleVariable offset="249" description="Feedback Speed at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerSpeed" />
+	 <ModuleVariable offset="250" description="Feedback Torque at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerTorque" />
 
+	 
+	 
 	 <ModuleVariable memType="1" offset="8" description="Should  be always 0" type="uint8" value="" name="startupProfile" />
 	 <ModuleVariable memType="1" offset="9" description="0=Start in Config Mode, 1=Start in Normal Mode" type="uint8" value="" name="startupMode" />
 	 
