@@ -66,13 +66,13 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
     Q_ASSERT(config.size() == 2);
 
     //Port configuration
-    QextPortSettings s;
-    s.baudRate = (BaudRateType) config[1].toInt();
-    s.dataBits =  DATA_8;
-    s.flowControl = FLOW_OFF;
-    s.parity = PAR_NONE;
-    s.stopBits = STOP_1;
-    s.timeoutMsecs = 0;
+    PortSettings s;
+    s.BaudRate = (BaudRateType) config[1].toInt();
+    s.DataBits =  DATA_8;
+    s.FlowControl = FLOW_OFF;
+    s.Parity = PAR_NONE;
+    s.StopBits = STOP_1;
+    s.Timeout_Millisec = 1;
     m_serialPort = new QextSerialPort(config[0], s);
 
 
@@ -86,7 +86,7 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
     else
     {
         //connect signals
-        qDebug("SerialEmulator::initialize() : Opening config : %s, baudrate : %i",args,s.baudRate);
+        qDebug("SerialEmulator::initialize() : Opening config : %s, baudrate : %i",args,s.BaudRate);
         connect(m_serialPort,SIGNAL(readyRead()),this,SLOT(serialReadyRead()));
         connect(m_serialPort,SIGNAL(bytesWritten(qint64)),this,SLOT(serialBytesWritten(qint64)));
         m_testTimer = new QTimer(this);
