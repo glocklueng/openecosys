@@ -9,18 +9,18 @@ SET(QT_USE_QTCORE TRUE)
 include(${QT_USE_FILE})
 
 SET(QextSerialPort_SRCS
-    qextportinfo.cpp
-    qextportsettings.cpp
+#    qextportinfo.cpp
+#    qextportsettings.cpp
     qextserialport.cpp
-    qextserialhandshake.cpp
+#    qextserialhandshake.cpp
 )
 
 SET(QextSerialPort_HEADERS
-    qextportinfo.h
-    qextportsettings.h
+#    qextportinfo.h
+#    qextportsettings.h
     qextserialport.h
     qextserialenumerator.h
-    qextserialhandshake.h
+#    qextserialhandshake.h
     qextserialport_global.h
 )
 
