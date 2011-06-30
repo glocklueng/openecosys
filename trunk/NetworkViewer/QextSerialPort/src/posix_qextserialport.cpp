@@ -6,6 +6,7 @@
 #include <QMutexLocker>
 #include <QDebug>
 
+
 void QextSerialPort::platformSpecificInit()
 {
     fd = 0;
@@ -84,11 +85,15 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate)
                 break;
 
             default:
+		qDebug("default void QextSerialPort::setBaudRate(BaudRateType baudRate)");
                 Settings.BaudRate=baudRate;
                 break;
         }
     }
     if (isOpen()) {
+
+	qDebug("isOpen");
+
         switch (baudRate) {
 
             /*50 baud*/
@@ -355,21 +360,11 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate)
                 cfsetospeed(&Posix_CommConfig, B115200);
 #endif
                 break;
-				
-				/*Custom baudrate */
-            default:
-                qDebug("QextSerialPort: Custom baud rate selected :  %i",baudRate);
-#ifdef CBAUD
-                Posix_CommConfig.c_cflag&=(~CBAUD);
-                Posix_CommConfig.c_cflag|=baudRate;
-#else
-                cfsetispeed(&Posix_CommConfig, baudRate);
-                cfsetospeed(&Posix_CommConfig, baudRate);
-#endif
-                break;		
-				
-				
-				
+	
+             default:
+		qDebug("QextSerialPort : Unsupported baud rate : ",baudRate);
+		break;			
+					
         }
         tcsetattr(fd, TCSAFLUSH, &Posix_CommConfig);
     }
@@ -691,6 +686,8 @@ void QextSerialPort::setTimeout(long millisec)
 */
 bool QextSerialPort::open(OpenMode mode)
 {
+    qDebug("QextSerialPort::open(OpenMode mode)");
+
     QMutexLocker lock(mutex);
     if (mode == QIODevice::NotOpen)
         return isOpen();
@@ -721,7 +718,9 @@ bool QextSerialPort::open(OpenMode mode)
             Posix_CommConfig.c_cc[VSTOP] = vdisable;
             Posix_CommConfig.c_cc[VSUSP] = vdisable;
 #endif //_POSIX_VDISABLE
+	    qDebug("open set baudrate : %i",Settings.BaudRate);
             setBaudRate(Settings.BaudRate);
+
             setDataBits(Settings.DataBits);
             setParity(Settings.Parity);
             setStopBits(Settings.StopBits);
