@@ -137,6 +137,7 @@ class SerialEmulator : public QObject, public NETVDevice
         long serialBytesOut;
         long serialBytesFlushed;
         QTimer *m_testTimer;
+        bool m_debug;
 };
 
 
