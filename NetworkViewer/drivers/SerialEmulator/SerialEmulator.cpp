@@ -41,7 +41,7 @@ QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 }
 
 SerialEmulator::SerialEmulator(const char* args)
-    : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false), m_timeDelay(0)
+    : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false), m_timeDelay(5)
 {
 
     serialBytesIn = 0;
