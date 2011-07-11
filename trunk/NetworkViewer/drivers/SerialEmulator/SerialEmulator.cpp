@@ -28,7 +28,7 @@
 #include "SerialEmulatorConfigure.h"
 
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0","SerialPort;speed;debug(optional)"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0;0","SerialPort;speed;debug(optional);timeDelay(optional)"));
 
 
 //Template specialization for configure
@@ -41,7 +41,7 @@ QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 }
 
 SerialEmulator::SerialEmulator(const char* args)
-    : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false)
+    : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false), m_timeDelay(0)
 {
 
     serialBytesIn = 0;
@@ -81,6 +81,10 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
         m_debug = (bool) config[2].toInt();
     }
 
+    if (config.size() == 4)
+    {
+        m_timeDelay = config[3].toInt();
+    }
 
     if (!m_serialPort->open(QIODevice::ReadWrite))
     {
@@ -91,6 +95,9 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
     }
     else
     {
+        m_openTime = QTime::currentTime();
+        m_openTime.start();
+
         //connect signals
         qDebug("SerialEmulator::initialize() : Opening config : %s, baudrate : %i",args,s.BaudRate);
         connect(m_serialPort,SIGNAL(readyRead()),this,SLOT(serialReadyRead()));
@@ -107,9 +114,17 @@ NETVDevice::State SerialEmulator::sendMessage(NETV_MESSAGE &message)
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     if (m_serialPort)
     {
-	//We need to post the event so the message is processed in the right thread
-        QCoreApplication::postEvent(this,new SerialEmulatorSendEvent(message));
-	
+
+        if (m_openTime.elapsed() / 1000 > m_timeDelay)
+        {
+            //We need to post the event so the message is processed in the right thread
+            QCoreApplication::postEvent(this,new SerialEmulatorSendEvent(message));
+        }
+        else
+        {
+            qDebug("Discarding message elapsed : %i minimum delay : %i",m_openTime.elapsed() / 1000, m_timeDelay);
+        }
+
         return NETVDevice::NETVDEVICE_OK;
     }
     else
