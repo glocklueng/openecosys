@@ -29,20 +29,31 @@ NETVArduino::NETVArduino()
 void NETVArduino::setup(byte projectID, byte moduleID, byte codeVersion, unsigned long baudrate, byte* table, unsigned int size)
 
 {
-  m_projectID = projectID;
-  m_moduleID = moduleID;
-  m_codeVersion = codeVersion;
-  m_baudrate = baudrate;
-  m_table = table;
-  m_size = size;
+	m_projectID = projectID;
+	m_moduleID = moduleID;
+	m_codeVersion = codeVersion;
+	m_baudrate = baudrate;
+	m_table = table;
+	m_size = size;
 
 
-  if (m_table && m_size > 0)
-  {	  	  
-	  //Open serial port
-	  Serial.begin(baudrate);
-  }
+	if (m_table && m_size > 0)
+	{	  	  
+		//Open serial port
+		Serial.begin(baudrate);
+		  
+		//Flush serial
+		Serial.flush();
+
+		//Empty serial data 
+		while(Serial.available() > 0)
+		{
+			Serial.read();
+		}
+	}
 }
+
+bool toggle = false;
 
 void NETVArduino::process_message(const NETVSerialMessage &message)
 {
@@ -86,7 +97,7 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			
 			//Flush serial
 			Serial.flush();
-			
+
 		} //If it is an alive request
 
 	}
@@ -149,11 +160,13 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 
 void NETVArduino::transceiver()
 {
+
 	//Look for START_BYTE
 	while (Serial.available() >= sizeof(NETVSerialMessage))
 	{
-		byte value = Serial.read();
 		
+		byte value = Serial.read();
+				
 		if (value == START_BYTE)
 		{
 			m_incomingMessage.messageBytes[0] = START_BYTE;
@@ -168,9 +181,19 @@ void NETVArduino::transceiver()
 			if (serial_calculate_checksum(m_incomingMessage) == m_incomingMessage.checksum)
 			{
 				//Process the message
-				process_message(m_incomingMessage);				
-			}		
-		}		
+				process_message(m_incomingMessage);					
+			}	
+			else
+			{
+				//TODO
+				//Some kind of synchronisation here might be required
+				if (Serial.available() > 0)
+				{
+					//offset one byte until the checksum is ok...					
+					Serial.read();
+				}
+			}
+		}	
 	}
 }
 
