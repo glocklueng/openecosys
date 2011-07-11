@@ -28,7 +28,7 @@
 #include "SerialEmulatorConfigure.h"
 
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0;0","SerialPort;speed;debug(optional);timeDelay(optional)"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0;5","SerialPort;speed;debug(optional);timeDelay(optional)"));
 
 
 //Template specialization for configure
