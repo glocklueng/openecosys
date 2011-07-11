@@ -26,6 +26,7 @@
 #include <QList>
 #include <QEvent>
 #include <QTimer>
+#include <QTime>
 #include "qextserialport.h"
 #include "qextserialenumerator.h"
 
@@ -138,6 +139,8 @@ class SerialEmulator : public QObject, public NETVDevice
         long serialBytesFlushed;
         QTimer *m_testTimer;
         bool m_debug;
+        unsigned int m_timeDelay;
+        QTime m_openTime;
 };
 
 
