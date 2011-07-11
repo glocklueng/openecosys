@@ -702,12 +702,12 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate) {
                 Win_CommConfig.dcb.BaudRate=CBR_256000;
                 break;
 				
-			default:
-			/*Custom baudrate */
+
+            /*Custom baudrate */
             default:
                 qDebug("QextSerialPort: Custom baud rate selected :  %i",baudRate);
-				Win_CommConfig.dcb.BaudRate=baudRate;
-			break;
+                Win_CommConfig.dcb.BaudRate=baudRate;
+                break;
 				
         }
         SetCommConfig(Win_Handle, &Win_CommConfig, sizeof(COMMCONFIG));

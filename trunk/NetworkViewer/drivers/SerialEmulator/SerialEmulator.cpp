@@ -28,7 +28,7 @@
 #include "SerialEmulatorConfigure.h"
 
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0","SerialPort;speed;debug(optional)"));
 
 
 //Template specialization for configure
@@ -41,7 +41,7 @@ QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 }
 
 SerialEmulator::SerialEmulator(const char* args)
-    : m_serialPort(NULL), m_pollTimer(NULL)
+    : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false)
 {
 
     serialBytesIn = 0;
@@ -63,7 +63,7 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
 {
 
     QStringList config = QString(args).split(";");
-    Q_ASSERT(config.size() == 2);
+    Q_ASSERT(config.size() >= 2);
 
     //Port configuration
     PortSettings s;
@@ -74,6 +74,12 @@ NETVDevice::State SerialEmulator::initialize(const char* args)
     s.StopBits = STOP_1;
     s.Timeout_Millisec = 1;
     m_serialPort = new QextSerialPort(config[0], s);
+
+
+    if (config.size() == 3)
+    {
+        m_debug = (bool) config[2].toInt();
+    }
 
 
     if (!m_serialPort->open(QIODevice::ReadWrite))
@@ -152,10 +158,12 @@ NETVDevice::State SerialEmulator::recvMessage(NETV_MESSAGE &message)
             //copy data
             for(unsigned i = 0; i < 8; i++)
             {
-               message.msg_data[i] = buf.data[i];
+                message.msg_data[i] = buf.data[i];
             }
 
+
             //NETVDevice::printMessage(message);
+
 	}
 	
 	m_recvQueueMutex.unlock();
@@ -191,10 +199,10 @@ void SerialEmulator::serialReadyRead()
             }
             else
             {
-               //Flushing byte
-               unsigned char byte = m_serialPort->read(1).at(0);
-               qDebug("SerialEmulator::serialReadyRead() - Flushing byte : %2.2x",(int) byte);
-               serialBytesFlushed++;
+                //Flushing byte
+                unsigned char byte = m_serialPort->read(1).at(0);
+                qDebug("SerialEmulator::serialReadyRead() - Flushing byte : %2.2x",(int) byte);
+                serialBytesFlushed++;
             }
         }
 
@@ -222,27 +230,28 @@ void SerialEmulator::serialReadyRead()
             CANSerialMessage msg;
             memcpy((char*) &msg.messageBytes[0], &array.data()[i],sizeof(CANSerialMessage));
 
-/*
-            qDebug("Recv Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
+            if (m_debug)
+            {
+                qDebug("++++> Recv Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
 
-                    (int) msg.messageBytes[0],
-                    (int) msg.messageBytes[1],
-                    (int) msg.messageBytes[2],
-                    (int) msg.messageBytes[3],
-                    (int) msg.messageBytes[4],
-                    (int) msg.messageBytes[5],
-                    (int) msg.messageBytes[6],
-                    (int) msg.messageBytes[7],
-                    (int) msg.messageBytes[8],
-                    (int) msg.messageBytes[9],
-                    (int) msg.messageBytes[10],
-                    (int) msg.messageBytes[11],
-                    (int) msg.messageBytes[12],
-                    (int) msg.messageBytes[13],
-                    (int) msg.messageBytes[14]
-                   );
+                        (int) msg.messageBytes[0],
+                        (int) msg.messageBytes[1],
+                        (int) msg.messageBytes[2],
+                        (int) msg.messageBytes[3],
+                        (int) msg.messageBytes[4],
+                        (int) msg.messageBytes[5],
+                        (int) msg.messageBytes[6],
+                        (int) msg.messageBytes[7],
+                        (int) msg.messageBytes[8],
+                        (int) msg.messageBytes[9],
+                        (int) msg.messageBytes[10],
+                        (int) msg.messageBytes[11],
+                        (int) msg.messageBytes[12],
+                        (int) msg.messageBytes[13],
+                        (int) msg.messageBytes[14]
+                       );
 
-*/
+            }
 
             //Look for START_BYTE and VALIDATE CHECKSUM
             if ((msg.start_byte == START_BYTE) && (msg.checksum == serial_calculate_checksum(&msg)))
@@ -260,21 +269,21 @@ void SerialEmulator::serialReadyRead()
                 qDebug("SerialEmulator::serialReadyRead() - Checksum error found : %i, calculated: %i, start_byte : %i",(int)msg.checksum,(int) serial_calculate_checksum(&msg),(int) msg.start_byte);
                 qDebug("Checksum Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
 
-                        (int) msg.messageBytes[0],
-                        (int) msg.messageBytes[1],
-                        (int) msg.messageBytes[2],
-                        (int) msg.messageBytes[3],
-                        (int) msg.messageBytes[4],
-                        (int) msg.messageBytes[5],
-                        (int) msg.messageBytes[6],
-                        (int) msg.messageBytes[7],
-                        (int) msg.messageBytes[8],
-                        (int) msg.messageBytes[9],
-                        (int) msg.messageBytes[10],
-                        (int) msg.messageBytes[11],
-                        (int) msg.messageBytes[12],
-                        (int) msg.messageBytes[13],
-                        (int) msg.messageBytes[14]
+                       (int) msg.messageBytes[0],
+                       (int) msg.messageBytes[1],
+                       (int) msg.messageBytes[2],
+                       (int) msg.messageBytes[3],
+                       (int) msg.messageBytes[4],
+                       (int) msg.messageBytes[5],
+                       (int) msg.messageBytes[6],
+                       (int) msg.messageBytes[7],
+                       (int) msg.messageBytes[8],
+                       (int) msg.messageBytes[9],
+                       (int) msg.messageBytes[10],
+                       (int) msg.messageBytes[11],
+                       (int) msg.messageBytes[12],
+                       (int) msg.messageBytes[13],
+                       (int) msg.messageBytes[14]
                        );
             }
 	}
@@ -332,26 +341,27 @@ bool SerialEmulator::event(QEvent *event)
             //Make sure the socket is flushed...
             m_serialPort->flush();
 
-/*
-            qDebug("+++Send Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
+            if (m_debug)
+            {
+                qDebug("----> Send Message Bytes : %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x",
 
-                    (int) buf.messageBytes[0],
-                    (int) buf.messageBytes[1],
-                    (int) buf.messageBytes[2],
-                    (int) buf.messageBytes[3],
-                    (int) buf.messageBytes[4],
-                    (int) buf.messageBytes[5],
-                    (int) buf.messageBytes[6],
-                    (int) buf.messageBytes[7],
-                    (int) buf.messageBytes[8],
-                    (int) buf.messageBytes[9],
-                    (int) buf.messageBytes[10],
-                    (int) buf.messageBytes[11],
-                    (int) buf.messageBytes[12],
-                    (int) buf.messageBytes[13],
-                    (int) buf.messageBytes[14]
-                   );
-*/
+                        (int) buf.messageBytes[0],
+                        (int) buf.messageBytes[1],
+                        (int) buf.messageBytes[2],
+                        (int) buf.messageBytes[3],
+                        (int) buf.messageBytes[4],
+                        (int) buf.messageBytes[5],
+                        (int) buf.messageBytes[6],
+                        (int) buf.messageBytes[7],
+                        (int) buf.messageBytes[8],
+                        (int) buf.messageBytes[9],
+                        (int) buf.messageBytes[10],
+                        (int) buf.messageBytes[11],
+                        (int) buf.messageBytes[12],
+                        (int) buf.messageBytes[13],
+                        (int) buf.messageBytes[14]
+                       );
+            }
 
             return true;
         }
@@ -360,10 +370,13 @@ bool SerialEmulator::event(QEvent *event)
     return QObject::event(event);
 }
 
- void SerialEmulator::testTimer()
- {
-    qDebug("IN: %li OUT: %li FLUSHED: %li",serialBytesIn,serialBytesOut,serialBytesFlushed);
+void SerialEmulator::testTimer()
+{
+    if (m_debug)
+    {
+        qDebug("IN: %li OUT: %li FLUSHED: %li",serialBytesIn,serialBytesOut,serialBytesFlushed);
+    }
 
     serialBytesIn = 0;
     serialBytesOut = 0;
- }
+}
