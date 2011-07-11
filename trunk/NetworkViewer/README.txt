@@ -26,6 +26,14 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.14
+________
+
+* Added delay when opening serial port with Arduino/ChipKit to avoid being stuck in the bootloader
+* Added syntax highlight for Javascript / ScriptEngine 
+* Updated QextSerialPort to latest version
+
+
 1.1.13
 ________
 
