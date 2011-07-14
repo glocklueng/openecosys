@@ -80,6 +80,12 @@ ScopeView::ScopeView(NetworkView *parent)
     connect(m_plot,SIGNAL(legendClicked(QwtPlotItem*)),this,SLOT(legendItemClicked(QwtPlotItem*)));
 
 
+    //Connect tool buttons & spinbox
+    connect(m_clearToolButton,SIGNAL(clicked()),this,SLOT(clearCurves()));
+    connect(m_bufferSizeSpinbox,SIGNAL(valueChanged(int)),this,SLOT(setCurveMaxBufferSize(int)));
+
+
+
 }
 
 
@@ -343,5 +349,36 @@ void ScopeView::dragEnterEvent(QDragEnterEvent *event)
         event->acceptProposedAction();
     }
 }
+
+void ScopeView::setCurveMaxBufferSize(int size)
+{
+
+    qDebug("ScopeView::setCurveMaxBufferSize(int size = %i)",size);
+
+    //Set all curve to the new buffer size
+    for(unsigned int i = 0; i<m_curves.size(); i++)
+    {
+        m_curves[i]->setMaximumBufferSize(size);
+    }
+
+    //Replot
+    m_plot->replot();
+}
+
+
+void ScopeView::clearCurves()
+{
+    qDebug("ScopeView::clearCurves()");
+
+    //Set all curve to the new buffer size
+    for(unsigned int i = 0; i<m_curves.size(); i++)
+    {
+        m_curves[i]->clearBuffer();
+    }
+
+    //Replot
+    m_plot->replot();
+}
+
 
 

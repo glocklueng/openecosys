@@ -88,6 +88,11 @@ protected slots:
     */
     void destroyCurve(ScopeCurve *curve);
 
+
+    void setCurveMaxBufferSize(int size);
+
+    void clearCurves();
+
 protected:
 
     /**

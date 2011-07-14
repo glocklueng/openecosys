@@ -23,7 +23,7 @@
 #include <math.h>
 
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
-:	m_variable(var),  m_plot(parentPlot)
+:	m_variable(var),  m_plot(parentPlot), m_maxBufferSize(SCOPE_CURVE_DEFAULT_BUFFER_SIZE)
 {
 	Q_ASSERT(m_variable);
 
@@ -65,7 +65,7 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
 		if (ok)
 		{
 			//Push back values
-			if (m_time.size() < SCOPE_CURVE_MAX_SIZE)
+                        if (m_time.size() < m_maxBufferSize)
 			{
 				m_time.push_back(elapsed);
 				m_values.push_back(value);
@@ -119,4 +119,30 @@ void ScopeCurve::setColor(const QColor &color)
 ModuleVariable* ScopeCurve::getVariable()
 {
 	return m_variable;
+}
+
+
+void ScopeCurve::setMaximumBufferSize(unsigned long size)
+{
+    m_maxBufferSize = size;
+
+    if (m_time.size() > m_maxBufferSize)
+    {
+        //Resize data, keep last m_maxBufferSize;
+        m_time.erase(m_time.begin(),m_time.begin() + (m_time.size() - m_maxBufferSize));
+        m_values.erase(m_values.begin(),m_values.begin() + (m_values.size() - m_maxBufferSize));
+    }
+
+    //set plot data
+    setData(&m_time[0], &m_values[0], m_time.size());
+
+}
+
+void ScopeCurve::clearBuffer()
+{
+    m_time.resize(0);
+    m_values.resize(0);
+
+    //set plot data
+    setData(&m_time[0], &m_values[0], m_time.size());
 }

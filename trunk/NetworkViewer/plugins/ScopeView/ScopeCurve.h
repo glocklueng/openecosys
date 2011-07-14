@@ -28,7 +28,7 @@
 #include <QTimer>
 
 ///Maximum of points on the curve for each variable
-#define SCOPE_CURVE_MAX_SIZE 500
+#define SCOPE_CURVE_DEFAULT_BUFFER_SIZE 500
 
 
 /**
@@ -76,20 +76,25 @@ public slots:
         */
 	void setColor(const QColor &color);
 
+        /**
+            Set the maximum size of the data
+            \param size the length of the buffers
+        */
+        void setMaximumBufferSize(unsigned long size);
+
+        /**
+            Clear the buffer (empty the data)
+        */
+        void clearBuffer();
+
 
 signals:
 
         void aboutToDestroy(ScopeCurve *ptr);
 
 protected slots:
-
-
-
 	
 protected:
-
-
-
 	
         ///The variable that is being plotted
 	ModuleVariable *m_variable;
@@ -102,6 +107,9 @@ protected:
 
         ///The plot where to draw the curve
 	QwtPlot *m_plot;
+
+        ///The maximum buffer size
+        unsigned long m_maxBufferSize;
 };
 
 
