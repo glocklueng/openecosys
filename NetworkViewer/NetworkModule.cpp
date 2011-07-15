@@ -19,7 +19,7 @@
 #include "NetworkModule.h"
 
 NetworkModule::NetworkModule(const ModuleConfiguration &config, QObject *parent)
-    : QObject(parent), m_configuration(config), m_active(true)
+    : QObject(parent), m_configuration(config), m_active(true), m_lastUpdateTime(QTime::currentTime())
 {
     setProperty("name",QString("NetworkModule:") + QString::number(m_configuration.getDeviceID()));
     connect(&m_configuration, SIGNAL(variableWrite(ModuleVariable*)),this,SLOT(variableUpdate(ModuleVariable*)));
@@ -94,4 +94,14 @@ bool NetworkModule::createScriptVariable(const QString &_name, const QString &_d
 
     return false;
 
+}
+
+void NetworkModule::setUpdateTime(const QTime &time)
+{
+    m_lastUpdateTime = time;
+}
+
+QTime NetworkModule::getUpdateTime() const
+{
+    return m_lastUpdateTime;
 }

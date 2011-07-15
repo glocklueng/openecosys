@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include "PreferencesDialog.h"
 #include "BasePluginEvent.h"
+#include <QMenu>
 
 bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 {
@@ -788,7 +789,6 @@ QMdiSubWindow* NetworkView::createSubWindow(QString title)
     //Create MDI window
     QMdiSubWindow *subWindow = new QMdiSubWindow(this);
     subWindow->setWindowTitle(title);
-
     subWindow->setAttribute(Qt::WA_DeleteOnClose);
 
     //Create Window menu
