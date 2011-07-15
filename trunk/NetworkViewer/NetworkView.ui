@@ -41,11 +41,13 @@
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">
-     <string>&amp;File</string>
+     <string>&amp;NetworkViewer</string>
     </property>
     <addaction name="actionDevice_Selection"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuPlugin">
@@ -276,6 +278,11 @@
   <action name="actionEnable_All_Variables">
    <property name="text">
     <string>Enable all variables</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
