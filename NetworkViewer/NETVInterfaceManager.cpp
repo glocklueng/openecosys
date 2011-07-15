@@ -32,17 +32,38 @@ NETVInterfaceManager::NETVInterfaceManager(NETVDevice *device, const char* args,
         m_handler = new NETVInterfaceHandler(device,args,this);
 
 
+        //Register to message notify
+        m_handler->registerObserver(this);
+
+
         //Create the scheduler
-        //TODO Scheduler interface change...
+        m_scheduler = new NetworkScheduler(this);
+    }
+}
 
+NETVInterfaceManager::~NETVInterfaceManager()
+{
+    if (m_scheduler)
+    {
+        delete m_scheduler;
+        m_scheduler = NULL;
+    }
 
+    if (m_handler)
+    {
+        m_handler->unregisterObserver(this);
 
+        delete m_handler;
+        m_handler = NULL;
     }
 }
 
 
 void NETVInterfaceManager::sendAliveRequest()
 {
+
+    //qDebug("NETVInterfaceManager::sendAliveRequest()");
+
     //Building NETV request...
     NETV_MESSAGE message;
 
@@ -69,11 +90,11 @@ void NETVInterfaceManager::sendAliveRequest()
 
 void NETVInterfaceManager::requestVariable(ModuleVariable *variable)
 {
-    Q_ASSERT(variable);
 
+    //qDebug("NETVInterfaceManager::requestVariable(ModuleVariable *variable = %p)",variable);
+    Q_ASSERT(variable);
     NetworkModule *module = getModule(variable->getDeviceID());
     Q_ASSERT(module);
-
 
     if (module->active() && variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0 )
     {
@@ -116,6 +137,8 @@ void NETVInterfaceManager::requestVariable(ModuleVariable *variable)
 
 void NETVInterfaceManager::writeVariable(ModuleVariable *variable)
 {
+
+    //qDebug("NETVInterfaceManager::writeVariable(ModuleVariable *variable = %p)",variable);
     Q_ASSERT(variable);
 
     if (variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0)
@@ -186,7 +209,6 @@ NetworkModule* NETVInterfaceManager::getModule(unsigned int deviceID)
 void  NETVInterfaceManager::notifyNETVMessage(const NETV_MESSAGE &msg)
 {
     //qDebug("NETVInterfaceManager::notifyNETVMessage(const NETV_MESSAGE &msg)");
-
     //WATCH OUT, THIS IS CALLED FROM ANOTHER THREAD (NETVInterfaceHandler working thread)
     //Posting message to self (in the GUI thread)
     NETVMessageEvent *event = new NETVMessageEvent(msg);
@@ -197,7 +219,7 @@ bool  NETVInterfaceManager::event ( QEvent * e )
 {
     if (e->type() == QEvent::User)
     {
-        //qDebug("NetworkView::event %p QEvent::User",e);
+        //qDebug("NETVInterfaceManager::event %p QEvent::User",e);
         if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
         {
             processCANMessage(event->getMessage());
@@ -210,7 +232,7 @@ bool  NETVInterfaceManager::event ( QEvent * e )
 
 void NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)
 {
-    //qDebug("NetworkView::processCANMessage(const NETV_MESSAGE &msg)");
+    //qDebug("NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)");
     //NETVDevice::printMessage(msg,std::cout);
     if (!msg.msg_remote)
     {
@@ -303,6 +325,8 @@ void NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)
 
 bool NETVInterfaceManager::addModule(NetworkModule *module)
 {
+    qDebug("NETVInterfaceManager::addModule(NetworkModule *module = %p)",module);
+
     if (module)
     {
         if (m_modules.contains(module))
@@ -313,6 +337,9 @@ bool NETVInterfaceManager::addModule(NetworkModule *module)
         {
             m_modules.push_back(module);
             emit moduleAdded(module);
+
+            //Connect user write
+            connect(module,SIGNAL(variableWrite(ModuleVariable*)),this,SLOT(writeVariable(ModuleVariable*)));
 
             //Add module to scheduling
             if (m_scheduler)
@@ -328,6 +355,8 @@ bool NETVInterfaceManager::addModule(NetworkModule *module)
 
 bool NETVInterfaceManager::removeModule(NetworkModule *module)
 {
+    qDebug("NETVInterfaceManager::removeModule(NetworkModule *module = %p)",module);
+
     if (module)
     {
         if (m_modules.contains(module))
@@ -349,4 +378,8 @@ bool NETVInterfaceManager::removeModule(NetworkModule *module)
     return false;
 }
 
+NETVInterfaceHandler* NETVInterfaceManager::getInterfaceHandler()
+{
+    return m_handler;
+}
 

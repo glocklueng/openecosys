@@ -18,16 +18,16 @@
 
 
 #include "NetworkScheduler.h"
-#include "NetworkView.h"
+#include "NETVInterfaceManager.h"
 #include <QTime>
 
-NetworkScheduler::NetworkScheduler(NetworkView *view)
-    : QObject(view),
-    m_view(view),
+NetworkScheduler::NetworkScheduler(NETVInterfaceManager *manager)
+    : QObject(manager),
+    m_manager(manager),
     m_schedulerTimer(NULL),
     m_aliveTimer(NULL)
 {
-    Q_ASSERT(m_view != NULL);
+    Q_ASSERT(m_manager != NULL);
 
 
     m_aliveTimer = new QTimer(this);
@@ -48,7 +48,6 @@ void NetworkScheduler::schedulerUpdate()
     //How many variables should we update at once?
     for (int iter = 0; iter < 1; iter++)
     {
-
         //verify that we have something to schedule
         if (m_variableScheduleList.size())
         {
@@ -58,8 +57,8 @@ void NetworkScheduler::schedulerUpdate()
 
             if (var->getActivated())
             {
-                //qDebug() << "Schedululing : "<<var->getName()<<" device id : "<<var->getDeviceID();
-                m_view->requestVariable(var);
+                //Request variable on the bus
+                m_manager->requestVariable(var);
 
                 //At the end for rescheduling if activated...
                 m_variableScheduleList.push_back(var);
@@ -116,10 +115,9 @@ void NetworkScheduler::removeModule(NetworkModule* module)
 
 void NetworkScheduler::schedulerAliveRequest()
 {
-    if (m_view)
+    if (m_manager)
     {
-        //for (int i = 0; i < 800; i++)
-        m_view->sendAliveRequest();
+        m_manager->sendAliveRequest();
     }
 }
 

@@ -40,6 +40,8 @@ public:
     ///Constructor
     NETVInterfaceManager(NETVDevice *device, const char* args, QObject *parent = NULL);
 
+    virtual ~NETVInterfaceManager();
+
     /**
         Message notification, will be called from recvThread of \ref NETVInterfaceHandler
         \param msg the NETV message
@@ -50,21 +52,24 @@ public:
 
     void requestVariable(ModuleVariable *variable);
 
-    void writeVariable(ModuleVariable *variable);
+    bool addModule(NetworkModule *module);
+
+    bool removeModule(NetworkModule *module);
 
     NetworkModule *getModule(unsigned int deviceID);
 
+    NETVInterfaceHandler* getInterfaceHandler();
+
 signals:
 
-    void moduleAdded(const NetworkModule *module);
-    void moduleRemoved(const NetworkModule *module);
+    void moduleAdded(NetworkModule *module);
+    void moduleRemoved(NetworkModule *module);
+
+protected slots:
+
+    void writeVariable(ModuleVariable *variable);
 
 protected:
-
-    bool addModule(NetworkModule *module);
-
-
-    bool removeModule(NetworkModule *module);
 
     /**
         Process a NETV message

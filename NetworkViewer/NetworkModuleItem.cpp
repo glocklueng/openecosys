@@ -98,7 +98,11 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         m_crossItem->setPos(-50,-50);
         m_crossItem->scale(0.5,0.5);
         m_crossItem->setZValue(1);
-        m_crossItem->hide();
+
+        if (m_module->active())
+        {
+            m_crossItem->hide();
+        }
 
 	
 	//Add status rectangle

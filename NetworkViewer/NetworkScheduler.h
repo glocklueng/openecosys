@@ -24,8 +24,7 @@
 #include <QTimer>
 #include "NetworkModule.h"
 
-class NetworkView;
-
+class NETVInterfaceManager;
 
 /**
     Module responsible of making periodical queries for variables (simple implementation)
@@ -41,14 +40,13 @@ public:
         Constructor
         \param view The parent view
     */
-    NetworkScheduler(NetworkView *view);
+    NetworkScheduler(NETVInterfaceManager *manager);
 
     /**
         Add a module for scheduling
         \param module The module to add
     */
     void addModule(NetworkModule* module);
-
 
     /**
         Remove a module for scheduling
@@ -117,8 +115,9 @@ protected slots:
     void variableActivated(bool activated, ModuleVariable *var);
 
 protected:
-    ///The parent view
-    NetworkView *m_view;
+
+    ///The parent manager
+    NETVInterfaceManager *m_manager;
     ///The variable scheduler timer
     QTimer *m_schedulerTimer;
     ///The list of scheduled modules

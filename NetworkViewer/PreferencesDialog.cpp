@@ -25,6 +25,11 @@ PreferencesDialog::PreferencesDialog(NetworkView *parent)
     //Update dialog
     setupUi(this);
 
+
+    qDebug("Fixme : PreferencesDialog::PreferencesDialog(NetworkView *parent) is broken");
+
+    /**
+
     //Update NetworkScheduler values
     NetworkScheduler *scheduler = m_view->getNetworkScheduler();
 
@@ -41,4 +46,7 @@ PreferencesDialog::PreferencesDialog(NetworkView *parent)
         connect(m_aliveRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setAliveRequestInterval(int)));
         connect(m_variableRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setVariableRequestInterval(int)));
     }
+
+
+    */
 }
