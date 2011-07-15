@@ -137,12 +137,15 @@ void DeviceSelectorDialog::configureButtonClicked()
     {
         QString result = m_factory->configure();
 
-        lineEditArgs->setText(result);
+        if(result.size() > 0)
+        {
+            lineEditArgs->setText(result);
 
-        //Set preferences
-        UserPreferences &prefs = UserPreferences::getGlobalPreferences();
-        prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText(),false);
-        prefs.setKey("DeviceSelectorDialog::device_args",result);
+            //Set preferences
+            UserPreferences &prefs = UserPreferences::getGlobalPreferences();
+            prefs.setKey("DeviceSelectorDialog::device_name",comboBox->currentText(),false);
+            prefs.setKey("DeviceSelectorDialog::device_args",result);
+        }
     }
 }
 
