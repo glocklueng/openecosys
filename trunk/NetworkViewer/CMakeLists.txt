@@ -220,6 +220,7 @@ SET(NetworkViewer_SRCS
         PreferencesDialog.cpp
         AddVariableDialog.cpp
         UserPreferences.cpp
+        NETVInterfaceManager.cpp
 )
 
 
@@ -247,6 +248,7 @@ SET(NetworkViewer_HEADERS
         PreferencesDialog.h
         AddVariableDialog.h
         UserPreferences.h
+        NETVInterfaceManager.h
 )
 
 SET(NetworkViewer_UIS

@@ -21,7 +21,7 @@
 #define _NETWORK_MODULE_H_
 
 #include "ModuleConfiguration.h"
-
+#include <QTime>
 
 /**
   The Network module will contain the module configuration and variables.
@@ -90,6 +90,17 @@ public:
         */
         void setActive(bool active);
 
+        /**
+            Set the last time the module have been seen on the bus
+            \param time the current time
+        */
+        void setUpdateTime(const QTime &time = QTime::currentTime());
+
+        /**
+            Get the last time the module have been seen on the bus
+        */
+        QTime getUpdateTime() const;
+
 signals:
 
         /**
@@ -124,6 +135,8 @@ protected:
         ///TRUE if the module is active on the bus
         bool m_active;
 
+        ///Last time the module have been seen on the bus
+        QTime m_lastUpdateTime;
 };
 
 
