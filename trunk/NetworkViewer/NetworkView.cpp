@@ -42,7 +42,7 @@ bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 
 
 NetworkView::NetworkView(QWidget *parent)
-    :	QMainWindow(parent), m_scopeView(NULL), m_canHandler(NULL), m_scheduler(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
+    :	QMainWindow(parent), m_scopeView(NULL), m_manager(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
 {
     setupUi(this);
 
@@ -72,9 +72,6 @@ NetworkView::NetworkView(QWidget *parent)
     statusbar->addPermanentWidget(m_sentLCD);
     statusbar->showMessage("Please select device first from the File menu");
 
-    //Create a network scheduler
-    m_scheduler = new NetworkScheduler(this);
-
     //Create the plugin menu (they are scanned in the main.cpp file)
     createPluginMenu();
 
@@ -92,10 +89,6 @@ NetworkView::NetworkView(QWidget *parent)
     connect(actionClose_All_Windows,SIGNAL(triggered()),this,SLOT(closeAllMDIWindows()));
     connect(actionCascade_Windows,SIGNAL(triggered()),this,SLOT(cascadeMDIWindows()));
     connect(actionQuit,SIGNAL(triggered()),this,SLOT(close()));
-
-
-
-
 
     //Show Connect to device dialog
     deviceSelectorTriggered(true);
@@ -120,134 +113,11 @@ NetworkView::~NetworkView()
 {
     qDebug("NetworkView::~NetworkView()");
 
-    if (m_canHandler)
+    if (m_manager)
     {
-        m_canHandler->unregisterObserver(this);
-
-        qDebug("deleting m_canHandler");
-        delete m_canHandler;
-        m_canHandler = NULL;
+        delete m_manager;
     }
 
-}
-
-
-void NetworkView::notifyNETVMessage(const NETV_MESSAGE &msg)
-{
-    //qDebug("NetworkView::notifyNETVMessage(const NETV_MESSAGE &msg)");
-    
-    //Posting message to self (in the GUI thread)
-    NETVMessageEvent *event = new NETVMessageEvent(msg);
-    QCoreApplication::postEvent (this, event, Qt::HighEventPriority);
-}
-
-bool NetworkView::event ( QEvent * e )
-{
-    if (e->type() == QEvent::User)
-    {
-        //qDebug("NetworkView::event %p QEvent::User",e);
-        if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
-        {
-
-
-            processCANMessage(event->getMessage());
-            return true;
-        }
-    }
-
-    return QMainWindow::event(e);
-}
-
-void NetworkView::processCANMessage(const NETV_MESSAGE &msg)
-{
-    //qDebug("NetworkView::processCANMessage(const NETV_MESSAGE &msg)");
-    //NETVDevice::printMessage(msg,std::cout);
-    if (!msg.msg_remote)
-    {
-        //WILL HANDLE ONLY REQUEST TYPE
-        if (msg.msg_type == NETV_TYPE_REQUEST_DATA)
-        {
-
-            //NETVDevice::printMessage(msg,std::cout);
-
-            //Let's see to which module it belongs...
-            //Update the variable if it fits...
-            for(QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
-            {
-                NetworkModule *module = iter.value();
-
-                ModuleConfiguration *conf = module->getConfiguration();
-                Q_ASSERT(conf);
-
-                if (conf->getDeviceID() == msg.msg_dest)
-                {
-                    for(int i =0; i < conf->size(); i++)
-                    {
-                        //Need to check the offset and the memory type
-                        if ((*conf)[i]->getOffset() == msg.msg_cmd && (*conf)[i]->getMemType() == (ModuleVariable::VARIABLE_MEMORY_TYPE) (msg.msg_boot >> 1))
-                        {
-                            //FOUND IT
-                            //UPDATING VALUE
-                            //qDebug("found variable : ");
-                            (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length);
-                            break;
-                        }
-                    }
-                }
-            }
-        }//type == REQUEST_DATA
-        else if (msg.msg_type == NETV_TYPE_EVENTS)
-        {
-
-            if (msg.msg_cmd == NETV_EVENTS_CMD_ALIVE && msg.msg_data_length == 8)
-            {
-                //qDebug("ALIVE REQUEST ANSWERED...");
-
-                /*
-                                    msg.msg_data[0] = config->module_state;
-                                    msg.msg_data[1] = config->project_id;
-                                    msg.msg_data[2] = config->module_id;
-                                    msg.msg_data[3] = config->code_version;
-                                    msg.msg_data[4] = config->table_version;
-                                    msg.msg_data[5] = config->boot_delay;
-                                    msg.msg_data[6] = config->devid_low;
-                                    msg.msg_data[7] = config->devid_high;
-                            */
-                int module_state = msg.msg_data[0];
-                int project_id = msg.msg_data[1];
-                int module_id = msg.msg_data[2];
-                int code_version = msg.msg_data[3];
-                int table_version = msg.msg_data[4];
-                int boot_delay = msg.msg_data[5];
-                int devID = (((int) msg.msg_data[7]) << 8) | (int) msg.msg_data[6];
-
-                //Look for already existing modules...
-                bool found = false;
-                for (QMap<NetworkModuleItem*, NetworkModule*>::iterator i = m_modules.begin(); i != m_modules.end(); i++)
-                {
-                    NetworkModule *module = i.value();
-
-                    if (module->getConfiguration()->getDeviceID() == module_id)
-                    {
-                        found = true;
-                        //qDebug("already found module : %i",module_id);
-                        i.key()->timeUpdate(QTime::currentTime());
-                    }
-                }
-
-                if (!found)
-                {
-                    qDebug("Inserting new module %i",module_id);
-
-                    //fill configuration information...
-                    ModuleConfiguration conf(project_id, code_version, devID, module_state, table_version, module_id);
-
-                    addModule(conf);
-                }
-
-            }
-        }//type == EVENTS
-    } // NOT REMOTE
 }
 
 void NetworkView::createScopeView()
@@ -260,48 +130,24 @@ void NetworkView::createScopeView()
     }
 }
 
-void NetworkView::addModule(const ModuleConfiguration &config)
+void NetworkView::addModule(NetworkModule *module)
 {
-    NetworkModule *module = new NetworkModule(config,this);
-
-
-    qDebug("NetworkView::addModule created module %p",module);
-
-    //Create view for this module
+    Q_ASSERT(module);
     int index = m_modules.size();
-
-    NetworkModuleItem* item = new NetworkModuleItem(module);
-
-    qDebug("NetworkView::addModule created module %p, item = %p",module,item);
-
-    item->timeUpdate(QTime::currentTime());
-
+    NetworkModuleItem *item = new NetworkModuleItem(module);
     QRectF rect = item->boundingRect();
-
     item->setPos(index * (rect.width() * 0.45), 0);
-
     item->show();
-
     m_scene->addItem(item);
-
     m_modules.insert(item,module);
-
 
     connect(item,SIGNAL(doubleClicked(NetworkModuleItem*)),this,SLOT(moduleDoubleClicked(NetworkModuleItem*)));
     connect(item,SIGNAL(removeModule(NetworkModuleItem*)),this,SLOT(removeModule(NetworkModuleItem*)));
 
-    //User modification
-    connect(module,SIGNAL(variableWrite(ModuleVariable*)),this,SLOT(variableWrite(ModuleVariable*)));
-
-    //Add module to the scheduler
-    m_scheduler->addModule(module);
-
+    emit moduleAdded(module);
 
     //Sort all modules
     sortModuleItems();
-
-    //Emit signal
-    emit moduleAdded(module);
 }
 
 void NetworkView::sortModuleItems()
@@ -335,8 +181,6 @@ void NetworkView::sortModuleItems()
             }
         }
     }
-
-
 
     m_scene->setSceneRect(m_scene->itemsBoundingRect());
 
@@ -376,12 +220,6 @@ void NetworkView::moduleDoubleClicked(NetworkModuleItem* module)
     qDebug("RECV SLOT  (done): moduleDoubleClicked %p",module);
 }
 
-void NetworkView::variableWrite(ModuleVariable *variable)
-{
-    //qDebug("------------------------------------ NetworkView::variableWrite(const ModuleVariable &variable)");
-    writeVariable(variable);
-}
-
 void NetworkView::scopeRequest(ModuleVariable *variable)
 {
     qDebug("NetworkView::scopeRequest(const ModuleVariable &variable)");
@@ -404,110 +242,6 @@ void NetworkView::scopeDestroyed(QObject *object)
     m_scopeView = NULL;
 }
 
-void NetworkView::writeVariable(ModuleVariable *variable)
-{
-    Q_ASSERT(variable);
-
-    if (variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0)
-    {
-
-	//qDebug("NetworkView::writeVariable %s",variable->getName().toStdString().c_str());
-
-        //Building NETV request...
-	NETV_MESSAGE canMsg;
-
-        canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
-        canMsg.msg_type = NETV_TYPE_REQUEST_DATA;
-	
-	//Requesting the right type of memory
-	switch(variable->getMemType())
-	{
-        case ModuleVariable::RAM_VARIABLE:
-            canMsg.msg_boot = (NETV_REQUEST_RAM << 1) | (NETV_REQUEST_WRITE);
-            break;
-
-        case ModuleVariable::EEPROM_VARIABLE:
-            canMsg.msg_boot = (NETV_REQUEST_EEPROM << 1) | (NETV_REQUEST_WRITE);
-            break;
-	}
-	
-	canMsg.msg_cmd = variable->getOffset();
-	canMsg.msg_dest = variable->getDeviceID();
-
-	//This is a NOT remote request
-	canMsg.msg_remote = 0;
-
-	//Of the size of the variable...
-	canMsg.msg_data_length = variable->getLength();
-
-	//Set The data
-	QByteArray array = variable->toByteArray();
-
-	//Copy the data
-	for (int i =0; i < min(8,array.size()); i++)
-	{
-            canMsg.msg_data[i] = array[i];
-	}
-
-        //Sending to NETV bus...
-	if (m_canHandler)
-	{				
-            m_canHandler->pushNETVMessage(canMsg);
-	}
-    }
-}
-
-void NetworkView::requestVariable(ModuleVariable *variable)
-{
-    Q_ASSERT(variable);
-
-    NetworkModule *module = this->getModule(variable->getDeviceID());
-    Q_ASSERT(module);
-
-
-
-    if (module->active() &&   variable->getMemType() < ModuleVariable::SCRIPT_VARIABLE && variable->getOffset() >= 0 )
-    {
-        //qDebug("NetworkView::requestVariable %s",variable.getName().toStdString().c_str());
-
-
-
-
-        //Building NETV request...
-        NETV_MESSAGE canMsg;
-
-        canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
-        canMsg.msg_type = NETV_TYPE_REQUEST_DATA;
-
-        //Requesting the right type of memory
-        switch(variable->getMemType())
-        {
-        case ModuleVariable::RAM_VARIABLE:
-            canMsg.msg_boot = (NETV_REQUEST_RAM << 1) | (NETV_REQUEST_READ);
-            break;
-
-        case ModuleVariable::EEPROM_VARIABLE:
-            canMsg.msg_boot = (NETV_REQUEST_EEPROM << 1) | (NETV_REQUEST_READ);
-            break;
-
-        }
-
-        canMsg.msg_cmd = variable->getOffset();
-        canMsg.msg_dest = variable->getDeviceID();
-
-        //This is a remote request
-        canMsg.msg_remote = 1;
-
-        //Of the size of the variable...
-        canMsg.msg_data_length = variable->getLength();
-
-        //Sending to NETV bus...
-        if (m_canHandler)
-        {
-            m_canHandler->pushNETVMessage(canMsg);
-        }
-    }
-}
 
 void NetworkView::printDebug(const QString &message)
 {
@@ -515,64 +249,13 @@ void NetworkView::printDebug(const QString &message)
     m_textEdit->append(time.toString("<b>[hh:mm:ss.zz]</b> ") + message);
 }
 
-void NetworkView::sendAliveRequest()
-{
 
-    //Look for too old modules
-    //Remove modules that are not present anymore on the  bus
-    for (QMap<NetworkModuleItem*, NetworkModule*>::iterator i = m_modules.begin(); i != m_modules.end(); i++)
-    {
-        NetworkModuleItem *module = i.key();
 
-        QTime lastUpdate = module->getLastUpdateTime();
-
-        //MORE THAN 5 SECONDS INACTIVE?
-        if (lastUpdate.addSecs(5) < QTime::currentTime())
-        {
-            i.key()->setActive(false);
-            //This is really important because of the removeModule will alter the QMap structure...
-            //removeModule(i.key());
-            //break;
-        }
-        else
-        {
-            i.key()->setActive(true);
-        }
-    }
-
-    //Building NETV request...
-    NETV_MESSAGE canMsg;
-
-    canMsg.msg_priority = NETV_PRIORITY_HIGHEST;
-    canMsg.msg_type = NETV_TYPE_EVENTS;
-    canMsg.msg_boot = 0;
-    canMsg.msg_cmd = NETV_EVENTS_CMD_ALIVE;
-
-    //broadcast
-    canMsg.msg_dest = 0xFF;
-
-    //This is a remote request
-    canMsg.msg_remote = 1;
-
-    //Of zero size...
-    canMsg.msg_data_length = 8;
-
-    //Sending to NETV bus...
-    if (m_canHandler)
-    {
-        m_canHandler->pushNETVMessage(canMsg);
-    }
-}
 
 void NetworkView::removeModule(NetworkModuleItem* module)
 {
     //qDebug("NetworkView::removeModule(NetworkModuleItem* module = %p)",module);
     NetworkModule *realModule = m_modules[module];
-
-    //qDebug("size before : %i",m_modules.size() );
-
-    //Remove from scheduler
-    m_scheduler->removeModule(realModule);
 
     //Remove from Map
     m_modules.remove(module);
@@ -586,8 +269,20 @@ void NetworkView::removeModule(NetworkModuleItem* module)
     //Remove network module
     if (realModule)
     {
-        emit moduleRemoved(realModule);
-        delete realModule;
+
+        //is it a pseudo module if so, delete it
+        if (realModule->getConfiguration()->getDeviceID() > 255)
+        {
+            emit moduleRemoved(realModule);
+            delete realModule;
+        }
+        else
+        {
+
+            emit moduleRemoved(realModule);
+            //Remove from manager
+            m_manager->removeModule(realModule);
+        }
     }
 
     //refresh module list view
@@ -683,10 +378,7 @@ void NetworkView::preferencesTriggered(bool checked)
     prefs.exec();
 }
 
-NetworkScheduler* NetworkView::getNetworkScheduler()
-{
-    return m_scheduler;
-}
+
 
 void NetworkView::deviceSelectorTriggered(bool checked)
 {
@@ -714,12 +406,11 @@ void NetworkView::deviceSelectorTriggered(bool checked)
     if (return_value)
     {
         //Destroy old handler if required...
-        if(m_canHandler)
+        if(m_manager)
         {
-            qDebug("Destroying old handler");
-            m_canHandler->unregisterObserver(this);
-            delete m_canHandler;
-            m_canHandler = NULL;
+            qDebug("Destroying old manager");
+            delete m_manager;
+            m_manager = NULL;
         }
 
         //Update selected device
@@ -742,8 +433,11 @@ void NetworkView::deviceSelectorTriggered(bool checked)
 
             if (dev)
             {
-                m_canHandler = new NETVInterfaceHandler(dev,NULL,this);
-                m_canHandler->registerObserver(this);
+                //m_canHandler = new NETVInterfaceHandler(dev,NULL,this);
+                //m_canHandler->registerObserver(this);
+
+                m_manager = new NETVInterfaceManager(dev,NULL,this);
+                connect(m_manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
 
             }
 
@@ -855,11 +549,18 @@ void NetworkView::disableAllModuleVariables()
 
 void NetworkView::updateConnStats()
 {
-    if (m_canHandler)
+
+    if (m_manager)
     {
-        m_receivedLCD->display(m_canHandler->messageReceivedCounter());
-        m_sentLCD->display(m_canHandler->messageSentCounter());
+        NETVInterfaceHandler* handler = m_manager->getInterfaceHandler();
+
+        if (handler)
+        {
+            m_receivedLCD->display(handler->messageReceivedCounter());
+            m_sentLCD->display(handler->messageSentCounter());
+        }
     }
+
 }
 
 void NetworkView::clearTextEdit()

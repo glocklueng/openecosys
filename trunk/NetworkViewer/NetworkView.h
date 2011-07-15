@@ -19,24 +19,23 @@
 #ifndef _NETWORK_VIEW_H_
 #define _NETWORK_VIEW_H_
 
-#include "ui_NetworkView.h"
 #include <QMainWindow>
-#include "NetworkModule.h"
-
 #include <QGraphicsPixmapItem>
 #include <QBuffer>
 #include <QMap>
-#include "ModuleConfigurationView.h"
 #include <QMdiSubWindow>
 #include <QPushButton>
-#include "NetworkModuleItem.h"
-#include "NETVInterfaceHandler.h"
-#include "NETVMessageEvent.h"
-#include "NetworkScheduler.h"
-#include "BasePlugin.h"
-#include "DeviceSelectorDialog.h"
 #include <QLabel>
 #include <QLCDNumber>
+
+#include "ui_NetworkView.h"
+#include "NetworkModule.h"
+#include "ModuleConfigurationView.h"
+#include "NetworkModuleItem.h"
+#include "NETVInterfaceManager.h"
+#include "BasePlugin.h"
+#include "DeviceSelectorDialog.h"
+
 
 
 
@@ -94,7 +93,7 @@ protected:
     The main window
     \author Dominic Letourneau
 */
-class NetworkView : public QMainWindow, public Ui::NetworkView, public NETVMessageObserverIF
+class NetworkView : public QMainWindow, public Ui::NetworkView
 {
         //The NetworkScheduler can access internal members
         friend class NetworkScheduler;
@@ -120,28 +119,10 @@ public:
 	void createScopeView();	
 
         /**
-            Add a module with a default configuration.
-            \param config the configuration to use
-        */
-	void addModule(const ModuleConfiguration &config);
-
-        /**
-            Message notification, will be called from recvThread of \ref NETVInterfaceHandler
-            \param msg the NETV message
-        */
-	virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
-
-        /**
             Get all network modules
             \return QList<NetworkModule*> The sorted by deviceID list
         */
-	QList<NetworkModule*> getModules();
-
-        /**
-            Request a variable update on the bus
-            \param variable the required variable
-        */
-	void requestVariable(ModuleVariable *variable);
+        QList<NetworkModule*> getModules();
 
         /**
             Help Window request will popup a Web  browser with the determined url
@@ -171,11 +152,10 @@ public:
         QMdiSubWindow* createSubWindow(QString title = "Untitled");
 
         /**
-            \return The currently used NetworkScheduler, NULL if none.
-
+            Will create a plugin window
+            \param pluginName the plugin name
+            \param windowTitle The Window title
         */
-        NetworkScheduler* getNetworkScheduler();
-
         BasePlugin* createCustomPluginWindow(const QString &pluginName, const QString &windowTitle="");
 
 public slots:
@@ -224,11 +204,6 @@ public slots:
         */
         void scopeRequest(ModuleVariable *variable);
 
-        /**
-            Write a variable to the NETV bus
-            \param variable The variable to write
-        */
-        void variableWrite(ModuleVariable *variable);
 
         /**
             Remove a module from the view. Will also delete the associated \ref NetworkModule
@@ -242,23 +217,22 @@ public slots:
         */
         void printDebug(const QString &message);
 
+        /**
+            Add a module (detected on the bus or pseudo module)
+        */
+        void addModule(NetworkModule *module);
+
 signals:
 
-        /**
-            Emit this signal when a module is added
-        */
-        void moduleAdded(NetworkModule* module);
-
-        /**
-            Emit this signal when a module is removed
-        */
-        void moduleRemoved(NetworkModule* module);
-
+        void moduleRemoved(NetworkModule *module);
+        void moduleAdded(NetworkModule *module);
 
 protected slots:
-	
-        void moduleDockWidgetLocationChanged(Qt::DockWidgetArea area );
 
+        /**
+            Called when the dock widget is changed
+        */
+        void moduleDockWidgetLocationChanged(Qt::DockWidgetArea area );
 
         /**
             The scope view has been destroyed
@@ -271,11 +245,6 @@ protected slots:
             \module the module item (icon)
         */
 	void moduleDoubleClicked(NetworkModuleItem* module);
-
-        /**
-            Send alive request on the bus. This is called periodically
-        */
-	void sendAliveRequest();
 
         /**
             Activate a plugin from the menu
@@ -301,7 +270,6 @@ protected slots:
         */
         void aboutTriggered(bool checked);
 
-
         /**
             Update connection statistics
         */
@@ -321,31 +289,9 @@ protected:
 	void selectModule(NetworkModuleItem *module);
 
         /**
-            Event Handler, will process \ref NETVMessageEvent
-            \param e The event to handle.
-        */
-	bool event ( QEvent * e );
-
-        /**
-            Process a NETV message
-            \param msg The message to process
-        */
-        void processCANMessage(const NETV_MESSAGE &msg);
-
-        /**
-            Write a variable to the NETV bus
-            \param variable The variable to write
-        */
-	void writeVariable(ModuleVariable *variable);
-
-        /**
             Create the plugin menu according to loaded plugins
         */
 	void createPluginMenu();
-
-
-
-
 
         ///Mapping between module items (icons) and real modules
 	QMap<NetworkModuleItem*, NetworkModule *> m_modules;
@@ -356,11 +302,9 @@ protected:
         ///The scope view
         BasePlugin *m_scopeView;
 
-        ///The NETV interface handler
-	NETVInterfaceHandler *m_canHandler;
-
-        ///The variable scheduling algorithm
-	NetworkScheduler* m_scheduler;
+        ///Interface manager
+        ///TODO Add multiple interface managers
+        NETVInterfaceManager *m_manager;
 
         ///The label in the status bar (with the device selected name)
 	QLabel *m_label;

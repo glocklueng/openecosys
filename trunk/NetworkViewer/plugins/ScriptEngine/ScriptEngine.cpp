@@ -545,6 +545,24 @@ void ScriptEngine::helpButtonClicked()
 
 bool ScriptEngine::createPseudoModule(int module_id)
 {
+
+    qDebug("TODO ScriptEngine::createPseudoModule(int module_id = %i)",module_id);
+
+    if (!m_view->getModule(module_id) && module_id > 255)
+    {
+        ModuleConfiguration conf(-1,-1,-1,-1,-1,module_id);
+        NetworkModule *module = new NetworkModule(conf,m_view);
+
+        //The module is not active...
+        module->setActive(false);
+
+        m_view->addModule(module);
+        updateEngineVariables(true);
+        return true;
+    }
+
+#if 0
+
     //Make sure the module does not exist
     if (!m_view->getModule(module_id) && module_id > 255)
     {
@@ -555,6 +573,9 @@ bool ScriptEngine::createPseudoModule(int module_id)
 
         return true;
     }
+#endif
+
+
     return false;
 }
 
