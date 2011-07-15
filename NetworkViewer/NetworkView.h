@@ -295,6 +295,12 @@ protected slots:
         */
         void preferencesTriggered(bool checked);
 
+        /**
+            About in the menu
+            \param checked if the action is checked
+        */
+        void aboutTriggered(bool checked);
+
 
         /**
             Update connection statistics

@@ -80,6 +80,7 @@ NetworkView::NetworkView(QWidget *parent)
     //Menu actions
     connect(actionDevice_Selection,SIGNAL(triggered(bool)),this,SLOT(deviceSelectorTriggered(bool)));
     connect(actionPreferences,SIGNAL(triggered(bool)),this,SLOT(preferencesTriggered(bool)));
+    connect(actionAbout,SIGNAL(triggered(bool)),this,SLOT(aboutTriggered(bool)));
 
     //Tools
     connect(actionEnable_All_Variables,SIGNAL(triggered()),this,SLOT(enableAllModuleVariables()));
@@ -900,4 +901,9 @@ void NetworkView::moduleDockWidgetLocationChanged(Qt::DockWidgetArea area )
 
     //Will display modules according to dock position
     sortModuleItems();
+}
+
+void NetworkView::aboutTriggered(bool checked)
+{
+    helpWindowRequest("http://sourceforge.net/apps/mediawiki/openecosys/index.php?title=NetworkViewer:About");
 }
