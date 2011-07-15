@@ -28,7 +28,7 @@
 #include "SerialEmulatorConfigure.h"
 
 
-static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200;0;5","SerialPort;speed;debug(optional);timeDelay(optional)"));
+static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed;debug(optional);timeDelay(optional)"));
 
 
 //Template specialization for configure
@@ -36,8 +36,16 @@ template<>
 QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 {
     SerialEmulatorConfigure myDialog;
-    myDialog.exec();
-    return QString(myDialog.getSerialPortString()+ ";" + myDialog.getBaudRateString());
+    if (myDialog.exec())
+    {
+        //Dialog Accepted
+        return QString(myDialog.getSerialPortString()+ ";" + myDialog.getBaudRateString());
+    }
+    else
+    {
+        //Dialog Rejected
+        return QString("");
+    }
 }
 
 SerialEmulator::SerialEmulator(const char* args)
