@@ -17,12 +17,11 @@
  */
 
 #include "DeviceSelectorDialog.h"
-#include "NetworkView.h"
 #include "NETVDevice.h"
 #include "UserPreferences.h"
 
-DeviceSelectorDialog::DeviceSelectorDialog(NetworkView *view)
-    : m_view(view), m_factory(NULL)
+DeviceSelectorDialog::DeviceSelectorDialog(QWidget *parent)
+    : QDialog(parent), m_factory(NULL)
 {
 
     qDebug("DeviceSelectorDialog");

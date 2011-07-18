@@ -331,3 +331,8 @@ int NETVInterfaceHandler::messageSentCounter()
 {
     return m_messageSent;
 }
+
+NETVDevice* NETVInterfaceHandler::getDevice()
+{
+    return m_device;
+}

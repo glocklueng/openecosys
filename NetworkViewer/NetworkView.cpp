@@ -27,6 +27,7 @@
 #include "PreferencesDialog.h"
 #include "BasePluginEvent.h"
 #include <QMenu>
+#include "NETVInterfaceManagerView.h"
 
 bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 {
@@ -42,7 +43,7 @@ bool ModuleGreater(NetworkModule* first, NetworkModule* second)
 
 
 NetworkView::NetworkView(QWidget *parent)
-    :	QMainWindow(parent), m_scopeView(NULL), m_manager(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
+    :	QMainWindow(parent), m_scopeView(NULL), m_moduleDockWidgetArea(Qt::TopDockWidgetArea)
 {
     setupUi(this);
 
@@ -113,9 +114,10 @@ NetworkView::~NetworkView()
 {
     qDebug("NetworkView::~NetworkView()");
 
-    if (m_manager)
+    while(m_interfaceManagerList.size() > 0)
     {
-        delete m_manager;
+        delete m_interfaceManagerList.first();
+        m_interfaceManagerList.pop_front();
     }
 
 }
@@ -280,8 +282,12 @@ void NetworkView::removeModule(NetworkModuleItem* module)
         {
 
             emit moduleRemoved(realModule);
-            //Remove from manager
-            m_manager->removeModule(realModule);
+
+            for (unsigned int i = 0; i < m_interfaceManagerList.size(); i++)
+            {
+                //Remove from manager
+                m_interfaceManagerList[i]->removeModule(realModule);
+            }
         }
     }
 
@@ -382,6 +388,14 @@ void NetworkView::preferencesTriggered(bool checked)
 
 void NetworkView::deviceSelectorTriggered(bool checked)
 {
+
+    //Execute interface manager view
+    NETVInterfaceManagerView managerView(this);
+
+    managerView.exec();
+
+
+    /**
     DeviceSelectorDialog dialog(this);
 
 
@@ -405,13 +419,6 @@ void NetworkView::deviceSelectorTriggered(bool checked)
 
     if (return_value)
     {
-        //Destroy old handler if required...
-        if(m_manager)
-        {
-            qDebug("Destroying old manager");
-            delete m_manager;
-            m_manager = NULL;
-        }
 
         //Update selected device
         m_label->setText(dialog.selectedDevice());
@@ -436,13 +443,18 @@ void NetworkView::deviceSelectorTriggered(bool checked)
                 //m_canHandler = new NETVInterfaceHandler(dev,NULL,this);
                 //m_canHandler->registerObserver(this);
 
-                m_manager = new NETVInterfaceManager(dev,NULL,this);
-                connect(m_manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
+                NETVInterfaceManager *manager = new NETVInterfaceManager(dev,NULL,this);
+                connect(manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
+
+                m_interfaceManagerList.push_back(manager);
 
             }
 
         }
     } //if return value
+
+
+    */
 
     qDebug("device selection returned");
 }
@@ -550,17 +562,19 @@ void NetworkView::disableAllModuleVariables()
 void NetworkView::updateConnStats()
 {
 
-    if (m_manager)
-    {
-        NETVInterfaceHandler* handler = m_manager->getInterfaceHandler();
+    //Will get stats of all managers compiled
+    int sent = 0;
+    int recv = 0;
 
-        if (handler)
-        {
-            m_receivedLCD->display(handler->messageReceivedCounter());
-            m_sentLCD->display(handler->messageSentCounter());
-        }
+    for (unsigned int i = 0; i < m_interfaceManagerList.size(); i++)
+    {
+        NETVInterfaceHandler* handler = m_interfaceManagerList[i]->getInterfaceHandler();
+        sent += handler->messageSentCounter();
+        recv += handler->messageReceivedCounter();
     }
 
+    m_receivedLCD->display(recv);
+    m_sentLCD->display(sent);
 }
 
 void NetworkView::clearTextEdit()
@@ -608,3 +622,57 @@ void NetworkView::aboutTriggered(bool checked)
 {
     helpWindowRequest("http://sourceforge.net/apps/mediawiki/openecosys/index.php?title=NetworkViewer:About");
 }
+
+QList<NETVInterfaceManager*> NetworkView::getInterfaceManagerList()
+{
+    return m_interfaceManagerList;
+}
+
+bool NetworkView::addNETVInterfaceManager(NETVInterfaceManager *manager)
+{
+    if (!m_interfaceManagerList.contains(manager))
+    {
+        //Add to the list
+        m_interfaceManagerList.push_back(manager);
+
+        //Connect signals
+        connect(manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
+        connect(manager,SIGNAL(moduleRemoved(NetworkModule*)),this,SLOT(removeModule(NetworkModule*)));
+
+        return true;
+    }
+
+    return false;
+}
+
+
+bool NetworkView::removeNETVInterfaceManager(NETVInterfaceManager *manager)
+{
+
+    if (m_interfaceManagerList.contains(manager))
+    {
+        m_interfaceManagerList.removeAll(manager);
+
+        delete manager;
+
+        return true;
+    }
+
+    return false;
+}
+
+void NetworkView::removeModule(NetworkModule* module)
+{
+    //Reverse lookup on map
+    //QMap<NetworkModuleItem*, NetworkModule *> m_modules;
+    for (QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
+    {
+        if (iter.value() == module)
+        {
+            removeModule(iter.key());
+            break;
+        }
+    }
+}
+
+

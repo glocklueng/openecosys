@@ -349,6 +349,13 @@ class NETVDevice
           //Will initialize with defined arguments
           virtual State initialize(const char* args) = 0;
 
+
+          ///Return device name
+          QString getName();
+
+          ///Return device args
+          QString getArgs();
+
           /** send a NETV_MESSAGE
                \param message The message to send
                \return State The status after the message has been sent
@@ -436,6 +443,12 @@ class NETVDevice
 
      protected:
 
+          /** Scan for filter hits
+               \param message the message to verify
+          */
+          void applyFilters(NETV_MESSAGE &message);
+
+
           static QMap<QString,BaseDeviceFactory*>& getFactoryMap();
 
           /**
@@ -451,10 +464,11 @@ class NETVDevice
           /// Software filters
           vector<NETV_FILTER> m_filters;
 
-          /** Scan for filter hits
-               \param message the message to verify
-          */
-          void applyFilters(NETV_MESSAGE &message);
+          /// The device name
+          QString m_name;
+
+          /// The device arguments
+          QString m_args;
 
 };
 

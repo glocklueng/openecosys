@@ -169,6 +169,10 @@ class NETVInterfaceHandler : public QObject
     */
     int messageSentCounter();
 
+    /**
+        \return the Device handle
+    */
+    NETVDevice* getDevice();
 
     protected slots:
 
@@ -177,6 +181,7 @@ class NETVInterfaceHandler : public QObject
 
     ///Will be called when the receive thread ends
     void recvThreadFinished();
+
 
     protected:
 
