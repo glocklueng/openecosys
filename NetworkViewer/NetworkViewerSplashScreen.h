@@ -21,6 +21,7 @@
 
 #include <QSplashScreen>
 #include "NetworkView.h"
+#include <QTimer>
 
 class NetworkViewerSplashScreen : public QSplashScreen
 {
@@ -34,8 +35,17 @@ class NetworkViewerSplashScreen : public QSplashScreen
     {
 
         showMessage("http://www.openecosys.org",Qt::AlignRight);
+
+	m_timer = new QTimer(this);
+        connect(m_timer,SIGNAL(timeout()),this,SLOT(close()));
+
+	//The splash screen will close after 5000 ms
+	m_timer->start(5000);
     }
 
+protected:
+
+    QTimer *m_timer;
 
 };
 

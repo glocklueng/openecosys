@@ -21,6 +21,8 @@
 
 #include "ui_PreferencesDialog.h"
 #include <QDialog>
+#include <QMouseEvent>
+#include <QTimer>
 
 class NetworkView;
 
@@ -30,11 +32,12 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialog
 
 public:
 
-    PreferencesDialog(NetworkView *parent);
+    PreferencesDialog(NetworkView *parent=NULL);
 
 protected:
 
     NetworkView *m_view;
+
 
 };
 
