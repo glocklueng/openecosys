@@ -39,8 +39,8 @@ class NetworkViewerSplashScreen : public QSplashScreen
 	m_timer = new QTimer(this);
         connect(m_timer,SIGNAL(timeout()),this,SLOT(close()));
 
-	//The splash screen will close after 5000 ms
-	m_timer->start(5000);
+	//The splash screen will close after 2000 ms
+	m_timer->start(2000);
     }
 
 protected:
