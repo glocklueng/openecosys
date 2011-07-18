@@ -60,6 +60,8 @@ public:
 
     NETVInterfaceHandler* getInterfaceHandler();
 
+    QList<NetworkModule*> getModules();
+
 signals:
 
     void moduleAdded(NetworkModule *module);

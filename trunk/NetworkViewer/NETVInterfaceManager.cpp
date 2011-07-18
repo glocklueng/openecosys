@@ -56,6 +56,12 @@ NETVInterfaceManager::~NETVInterfaceManager()
         delete m_handler;
         m_handler = NULL;
     }
+
+    //Remove all modules
+    while(m_modules.size() > 0)
+    {
+        removeModule(m_modules.front());
+    }
 }
 
 
@@ -381,5 +387,10 @@ bool NETVInterfaceManager::removeModule(NetworkModule *module)
 NETVInterfaceHandler* NETVInterfaceManager::getInterfaceHandler()
 {
     return m_handler;
+}
+
+QList<NetworkModule*> NETVInterfaceManager::getModules()
+{
+    return m_modules;
 }
 

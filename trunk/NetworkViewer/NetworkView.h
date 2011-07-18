@@ -124,6 +124,20 @@ public:
         */
         QList<NetworkModule*> getModules();
 
+
+
+        /**
+            \return a list of NETVInterfaceManagers
+        */
+        QList<NETVInterfaceManager*> getInterfaceManagerList();
+
+
+        bool addNETVInterfaceManager(NETVInterfaceManager *manager);
+
+
+        bool removeNETVInterfaceManager(NETVInterfaceManager *manager);
+
+
         /**
             Help Window request will popup a Web  browser with the determined url
             \param url The required URL to display
@@ -222,6 +236,11 @@ public slots:
         */
         void addModule(NetworkModule *module);
 
+        /**
+            Remove a Module
+        */
+        void removeModule(NetworkModule* module);
+
 signals:
 
         void moduleRemoved(NetworkModule *module);
@@ -304,7 +323,7 @@ protected:
 
         ///Interface manager
         ///TODO Add multiple interface managers
-        NETVInterfaceManager *m_manager;
+        QList<NETVInterfaceManager*> m_interfaceManagerList;
 
         ///The label in the status bar (with the device selected name)
 	QLabel *m_label;

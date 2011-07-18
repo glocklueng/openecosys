@@ -43,9 +43,9 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
 
     /**
         Constructor
-        \param view The \ref NetworkView (Main Window)
+        \param parent The parent widget
     */
-    DeviceSelectorDialog(NetworkView *view);
+    DeviceSelectorDialog(QWidget *parent=NULL);
 
 
     /**
@@ -83,9 +83,6 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
     void deviceArgsChanged(const QString &text);
 
     protected:
-
-    ///The NetworkView (Main Window)
-    NetworkView *m_view;
 
     ///The current factory
     NETVDevice::BaseDeviceFactory* m_factory;
