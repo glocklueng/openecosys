@@ -139,7 +139,7 @@ void NetworkView::addModule(NetworkModule *module)
     int index = m_modules.size();
     NetworkModuleItem *item = new NetworkModuleItem(module);
     QRectF rect = item->boundingRect();
-    item->setPos(index * (rect.width() * 0.45), 0);
+    item->setPos(index * (rect.width()), 0);
     item->show();
     m_scene->addItem(item);
     m_modules.insert(item,module);
@@ -158,35 +158,45 @@ void NetworkView::sortModuleItems()
     //Will get a sorted by module_id list
     QList<NetworkModule*> allModules = getModules();
 
+
+    float cum_width = 0;
+    float cum_height = 0;
+
     //This is not very efficient, but will work
     for (int index = 0; index < allModules.size(); index++)
     {
         //Let's find the item associated with the module
         for (QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
         {
+	    
+
             if (iter.value() == allModules[index])
             {
                 //Found it, placing it at the right index
                 NetworkModuleItem *item = iter.key();
                 QRectF rect = item->boundingRect();
-
+		rect = rect.unite(item->childrenBoundingRect());
 
 
                 if (m_moduleDockWidgetArea == Qt::LeftDockWidgetArea || m_moduleDockWidgetArea == Qt::RightDockWidgetArea)
                 {
-                    item->setPos(0,index * (rect.height() * item->scale() / 3));
+                    item->setPos(0, cum_height + (rect.height() / 2) * 0.35);
                 }
                 else
                 {
-                    item->setPos(index * (rect.width() * item->scale() / 3), 0);
+                    item->setPos(cum_width + (rect.width() / 2) * 0.35, 0);
                 }
+		
+		//cumulate and pad...
+		cum_width += rect.width() * 0.35 + 10;
+                cum_height += rect.height() * 0.35 + 10;
                 break;
             }
         }
     }
 
     m_scene->setSceneRect(m_scene->itemsBoundingRect());
-
+    //m_moduleGraphicsView->fitInView(m_scene->itemsBoundingRect(),Qt::KeepAspectRatio);
 }
 
 void NetworkView::moduleDoubleClicked(NetworkModuleItem* module)

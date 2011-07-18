@@ -42,7 +42,7 @@ void CrossModuleItem::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 
 
 NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *parent)
-: QGraphicsPixmapItem(QPixmap(":images/dsPIC.png"), parent), m_module(module), m_textItem(NULL), m_rectItem(NULL), m_crossItem(NULL)
+: QGraphicsPixmapItem(parent), m_module(module), m_textItem(NULL), m_rectItem(NULL), m_crossItem(NULL)
 {
         QBuffer myBuffer;
         myBuffer.open(QIODevice::ReadWrite);
@@ -59,9 +59,11 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         {
             this->setPixmap(QPixmap(":images/Arduino.png"));
         }
+	else
+	{
+	    setPixmap(QPixmap(":images/dsPIC.png")); 
+	}
 
-
-	
 	
 	QRectF bounds = boundingRect();
 	
@@ -137,8 +139,7 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
 	//Add tooltip
         setToolTip(QString(myBuffer.data()));
 	
-	
-	scale(0.25,0.25);
+	scale(0.35,0.35);
 }
 
 NetworkModule* NetworkModuleItem::getNetworkModule()
