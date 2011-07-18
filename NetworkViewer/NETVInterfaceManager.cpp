@@ -43,6 +43,13 @@ NETVInterfaceManager::NETVInterfaceManager(NETVDevice *device, const char* args,
 
 NETVInterfaceManager::~NETVInterfaceManager()
 {
+
+    //Remove all modules
+    while(m_modules.size() > 0)
+    {
+        removeModule(m_modules.front());
+    }
+
     if (m_scheduler)
     {
         delete m_scheduler;
@@ -55,12 +62,6 @@ NETVInterfaceManager::~NETVInterfaceManager()
 
         delete m_handler;
         m_handler = NULL;
-    }
-
-    //Remove all modules
-    while(m_modules.size() > 0)
-    {
-        removeModule(m_modules.front());
     }
 }
 

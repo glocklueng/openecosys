@@ -92,7 +92,8 @@ NetworkView::NetworkView(QWidget *parent)
     connect(actionQuit,SIGNAL(triggered()),this,SLOT(close()));
 
     //Show Connect to device dialog
-    deviceSelectorTriggered(true);
+    NETVInterfaceManagerView managerView(this,true);
+    managerView.exec();
 
     //Conn statistics timer
     m_connStatsTimer = new QTimer(this);
@@ -390,71 +391,9 @@ void NetworkView::deviceSelectorTriggered(bool checked)
 {
 
     //Execute interface manager view
-    NETVInterfaceManagerView managerView(this);
+    NETVInterfaceManagerView managerView(this,false);
 
     managerView.exec();
-
-
-    /**
-    DeviceSelectorDialog dialog(this);
-
-
-    qDebug("will start dialog");
-
-
-    ///Execute dialog
-    int return_value = dialog.exec();
-
-    qDebug("done exec");
-
-    QStringList deviceList = NETVDevice::deviceList();
-
-    qDebug("Device list:");
-
-    for (int i= 0; i < deviceList.size(); i++)
-    {
-        qDebug() << deviceList[i];
-    }
-
-
-    if (return_value)
-    {
-
-        //Update selected device
-        m_label->setText(dialog.selectedDevice());
-
-        if (dialog.getFactory())
-        {
-
-            NETVDevice *dev = NULL;
-
-            qDebug("Found factory");
-	    if(dialog.args().size())
-	    {
-            	dev = NETVDevice::createDevice(dialog.selectedDevice(), dialog.args().toStdString().c_str());
-	    }
-	    else
-            {
-		dev = NETVDevice::createDevice(dialog.selectedDevice(),NULL);
-	    }
-
-            if (dev)
-            {
-                //m_canHandler = new NETVInterfaceHandler(dev,NULL,this);
-                //m_canHandler->registerObserver(this);
-
-                NETVInterfaceManager *manager = new NETVInterfaceManager(dev,NULL,this);
-                connect(manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
-
-                m_interfaceManagerList.push_back(manager);
-
-            }
-
-        }
-    } //if return value
-
-
-    */
 
     qDebug("device selection returned");
 }
