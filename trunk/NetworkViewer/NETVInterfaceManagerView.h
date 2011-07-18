@@ -15,7 +15,7 @@ class NETVInterfaceManagerView : public QDialog, public Ui::NETVInterfaceManager
 
 public:
 
-    NETVInterfaceManagerView(NetworkView *parent = NULL);
+    NETVInterfaceManagerView(NetworkView *parent = NULL, bool loadPrefs = false);
 
 
 protected slots:
@@ -25,6 +25,8 @@ protected slots:
 
 protected:
 
+    void saveUserPrefs();
+    void loadUserPrefs();
     void createInterfaceList();
     NetworkView *m_view;
     QMap<QListWidgetItem*, NETVInterfaceManager*> m_itemMap;
