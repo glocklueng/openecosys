@@ -92,7 +92,7 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate)
     }
     if (isOpen()) {
 
-	qDebug("isOpen");
+	qDebug("++++++++++++++ isOpen");
 
         switch (baudRate) {
 
@@ -362,7 +362,7 @@ void QextSerialPort::setBaudRate(BaudRateType baudRate)
                 break;
 	
              default:
-		qDebug("QextSerialPort : Unsupported baud rate : ",baudRate);
+		qDebug("QextSerialPort : Unsupported baud rate : %i",baudRate);
 		break;			
 					
         }
@@ -729,8 +729,10 @@ bool QextSerialPort::open(OpenMode mode)
             tcsetattr(fd, TCSAFLUSH, &Posix_CommConfig);
 
             if (queryMode() == QextSerialPort::EventDriven) {
+		qDebug("Event driven");
                 readNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
                 connect(readNotifier, SIGNAL(activated(int)), this, SIGNAL(readyRead()));
+		connect(readNotifier, SIGNAL(activated(int)), this, SIGNAL(socketNotifier(int)));
             }
         } else {
             qDebug() << "could not open file:" << QString::fromLocal8Bit(strerror(errno));

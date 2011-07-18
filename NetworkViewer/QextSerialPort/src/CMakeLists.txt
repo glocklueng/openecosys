@@ -9,18 +9,12 @@ SET(QT_USE_QTCORE TRUE)
 include(${QT_USE_FILE})
 
 SET(QextSerialPort_SRCS
-#    qextportinfo.cpp
-#    qextportsettings.cpp
     qextserialport.cpp
-#    qextserialhandshake.cpp
 )
 
 SET(QextSerialPort_HEADERS
-#    qextportinfo.h
-#    qextportsettings.h
     qextserialport.h
     qextserialenumerator.h
-#    qextserialhandshake.h
     qextserialport_global.h
 )
 
@@ -57,6 +51,7 @@ IF (WIN32)
     SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} win_qextserialport.cpp qextserialenumerator_win.cpp)
     SET(QextSerialPort_External_Libraries -lsetupapi -ladvapi32 -luser32)
 ENDIF(WIN32)
+
 
 
 
