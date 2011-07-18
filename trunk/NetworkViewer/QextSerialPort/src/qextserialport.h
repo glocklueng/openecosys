@@ -52,28 +52,30 @@
 
 enum BaudRateType
 {
-    BAUD50,                //POSIX ONLY
-    BAUD75,                //POSIX ONLY
-    BAUD110,
-    BAUD134,               //POSIX ONLY
-    BAUD150,               //POSIX ONLY
-    BAUD200,               //POSIX ONLY
-    BAUD300,
-    BAUD600,
-    BAUD1200,
-    BAUD1800,              //POSIX ONLY
-    BAUD2400,
-    BAUD4800,
-    BAUD9600,
-    BAUD14400,             //WINDOWS ONLY
-    BAUD19200,
-    BAUD38400,
-    BAUD56000,             //WINDOWS ONLY
-    BAUD57600,
-    BAUD76800,             //POSIX ONLY
-    BAUD115200,
-    BAUD128000,            //WINDOWS ONLY
-    BAUD256000             //WINDOWS ONLY
+    BAUD50 = 50,                //POSIX ONLY
+    BAUD75 = 75,                //POSIX ONLY
+    BAUD110 = 110,
+    BAUD134 = 134,               //POSIX ONLY
+    BAUD150 = 150,               //POSIX ONLY
+    BAUD200 = 200,               //POSIX ONLY
+    BAUD300 = 300,
+    BAUD600 = 600,
+    BAUD1200 = 1200,
+    BAUD1800 = 1800,              //POSIX ONLY
+    BAUD2400 = 2400,
+    BAUD4800 = 4800,
+    BAUD9600 = 9600,
+    BAUD14400 = 14400,             //WINDOWS ONLY
+    BAUD19200 = 19200,
+    BAUD38400 = 38400,
+    BAUD56000 = 56000,             //WINDOWS ONLY
+    BAUD57600 = 57600,
+    BAUD76800 = 76800,             //POSIX ONLY
+    BAUD115200 = 115200,
+    BAUD128000 = 128000,            //WINDOWS ONLY
+    BAUD256000 = 256000,             //WINDOWS ONLY
+    BAUD500000 = 500000,
+    BAUD1000000 = 1000000
 };
 
 enum DataBitsType
