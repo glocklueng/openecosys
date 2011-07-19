@@ -60,6 +60,8 @@ public:
 
     NETVInterfaceHandler* getInterfaceHandler();
 
+    NetworkScheduler* getScheduler();
+
     QList<NetworkModule*> getModules();
 
 
