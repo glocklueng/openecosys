@@ -22,6 +22,7 @@ protected slots:
 
     void addButtonClicked();
     void removeButtonClicked();
+    void itemDoubleClicked ( QListWidgetItem * item );
 
 protected:
 

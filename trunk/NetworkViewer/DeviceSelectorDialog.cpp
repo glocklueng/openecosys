@@ -20,7 +20,7 @@
 #include "NETVDevice.h"
 #include "UserPreferences.h"
 
-DeviceSelectorDialog::DeviceSelectorDialog(QWidget *parent)
+DeviceSelectorDialog::DeviceSelectorDialog(QWidget *parent, const QString &devName, const QString &devArgs)
     : QDialog(parent), m_factory(NULL)
 {
 
@@ -42,10 +42,29 @@ DeviceSelectorDialog::DeviceSelectorDialog(QWidget *parent)
     connect(m_configureButton,SIGNAL(clicked()),this,SLOT(configureButtonClicked()));
     connect(lineEditArgs,SIGNAL(textChanged(QString)),this,SLOT(deviceArgsChanged(QString)));
 
-    qDebug("Prefs size : %i",prefs.size());
+    //qDebug("Prefs size : %i",prefs.size());
 
-    //Set combo to preferences
-    if (prefs.contains("DeviceSelectorDialog::device_name"))
+    if (devName.size() > 0 && devArgs.size() > 0)
+    {
+        comboBox->setCurrentIndex(comboBox->findText(devName));
+        lineEditArgs->setText(devArgs);
+
+        //Cannot change this..
+        comboBox->setEnabled(false);
+        lineEditArgs->setEnabled(false);
+        m_configureButton->setEnabled(false);
+
+        //Update Factory
+        m_factory= NETVDevice::getFactoryNamed(comboBox->currentText());
+
+        //Update documentation
+        if (m_factory)
+        {
+            textEditDoc->setText(m_factory->getDocumentation());
+        }
+
+    } //Set combo to preferences
+    else if (prefs.contains("DeviceSelectorDialog::device_name"))
     {
         qDebug("Preference found : DeviceSelectorDialog::device_name");
 
@@ -156,3 +175,12 @@ void DeviceSelectorDialog::deviceArgsChanged(const QString &text)
     prefs.setKey("DeviceSelectorDialog::device_args",text);
 }
 
+int DeviceSelectorDialog::getUpdatePeriod()
+{
+    return m_updatePeriodSpinbox->value();
+}
+
+void DeviceSelectorDialog::setUpdatePeriod(int period)
+{
+    m_updatePeriodSpinbox->setValue(period);
+}

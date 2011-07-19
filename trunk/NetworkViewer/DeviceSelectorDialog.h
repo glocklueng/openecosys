@@ -45,7 +45,7 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
         Constructor
         \param parent The parent widget
     */
-    DeviceSelectorDialog(QWidget *parent=NULL);
+    DeviceSelectorDialog(QWidget *parent=NULL, const QString &name="", const QString &args="");
 
 
     /**
@@ -69,6 +69,11 @@ class DeviceSelectorDialog : public QDialog, public Ui::DeviceSelectorDialog
         \return NETVDevice::BaseDeviceFactory* The current factory associated with the selection
     */
     NETVDevice::BaseDeviceFactory* getFactory();
+
+
+    int getUpdatePeriod();
+
+    void setUpdatePeriod(int period);
 
 
     protected slots:

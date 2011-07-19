@@ -408,6 +408,11 @@ NETVInterfaceHandler* NETVInterfaceManager::getInterfaceHandler()
     return m_handler;
 }
 
+NetworkScheduler* NETVInterfaceManager::getScheduler()
+{
+    return m_scheduler;
+}
+
 QList<NetworkModule*> NETVInterfaceManager::getModules()
 {
     return m_modules;
