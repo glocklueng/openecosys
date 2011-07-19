@@ -93,7 +93,7 @@ protected slots:
         Remove a variable from scheduling
         \param var the variable to remove from schedule
     */
-    void removeScheduledVariable(ModuleVariable *var);
+    void removeScheduledVariable(ModuleVariable *var, bool disconnect=false);
 
     /**
         Called by the timer m_schedulerTimer (periodic)
