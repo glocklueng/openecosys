@@ -587,6 +587,7 @@ bool NetworkView::addNETVInterfaceManager(NETVInterfaceManager *manager)
         //Connect signals
         connect(manager,SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(addModule(NetworkModule*)));
         connect(manager,SIGNAL(moduleRemoved(NetworkModule*)),this,SLOT(removeModule(NetworkModule*)));
+        connect(manager,SIGNAL(moduleActive(NetworkModule*,bool)),this,SLOT(moduleActive(NetworkModule*,bool)));
 
         return true;
     }
@@ -619,6 +620,19 @@ void NetworkView::removeModule(NetworkModule* module)
         if (iter.value() == module)
         {
             removeModule(iter.key());
+            break;
+        }
+    }
+}
+
+
+void NetworkView::moduleActive(NetworkModule *module, bool active)
+{
+    for (QMap<NetworkModuleItem*, NetworkModule *>::iterator iter = m_modules.begin(); iter != m_modules.end(); iter++)
+    {
+        if (iter.value() == module)
+        {
+            iter.key()->setActive(active);
             break;
         }
     }
