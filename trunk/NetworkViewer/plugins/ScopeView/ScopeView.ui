@@ -100,8 +100,15 @@
       </item>
       <item>
        <widget class="QToolButton" name="m_clearToolButton">
+        <property name="toolTip">
+         <string>Clear Scope</string>
+        </property>
         <property name="text">
          <string>C</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../NetworkViewer.qrc">
+          <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
         </property>
        </widget>
       </item>
