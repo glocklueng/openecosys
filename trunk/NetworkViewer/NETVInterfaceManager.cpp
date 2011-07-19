@@ -21,7 +21,7 @@
 #include "NETVMessageEvent.h"
 
 NETVInterfaceManager::NETVInterfaceManager(NETVDevice *device, const char* args, QObject *parent)
-    :    QObject(parent), m_handler(NULL), m_scheduler(NULL)
+    :    QObject(parent), m_handler(NULL), m_scheduler(NULL), m_watchdogTimer(NULL)
 {
 
     if (device)
@@ -38,6 +38,11 @@ NETVInterfaceManager::NETVInterfaceManager(NETVDevice *device, const char* args,
 
         //Create the scheduler
         m_scheduler = new NetworkScheduler(this);
+
+        //Create watchdog timer (1000 ms)
+        m_watchdogTimer = new QTimer(this);
+        connect(m_watchdogTimer,SIGNAL(timeout()),this,SLOT(watchdogTimeout()));
+        m_watchdogTimer->start(1000);
     }
 }
 
@@ -85,7 +90,7 @@ void NETVInterfaceManager::sendAliveRequest()
     //This is a remote request
     message.msg_remote = 1;
 
-    //Of zero size...
+    //With no data bytes
     message.msg_data_length = 8;
 
     //Sending to NETV bus...
@@ -312,6 +317,19 @@ void NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)
 
                         //Update time
                         module->setUpdateTime(QTime::currentTime());
+
+                        //Module previously deactivated?
+                        if (!module->active())
+                        {
+                            module->setActive(true);
+
+                            if (m_scheduler)
+                            {
+                                m_scheduler->addModule(module);
+                            }
+
+                            emit moduleActive(module,true);
+                        }
                     }
                 }
 
@@ -395,3 +413,22 @@ QList<NetworkModule*> NETVInterfaceManager::getModules()
     return m_modules;
 }
 
+void NETVInterfaceManager::watchdogTimeout()
+{
+    //Scan for inactive modules
+    for (unsigned int i = 0; i < m_modules.size(); i++)
+    {
+        if (m_modules[i]->getUpdateTime().secsTo(QTime::currentTime()) > 5)
+        {
+            qDebug("Module not active : %p",m_modules[i]);
+            m_modules[i]->setActive(false);
+
+            if (m_scheduler)
+            {
+                m_scheduler->removeModule(m_modules[i]);
+            }
+
+            emit moduleActive(m_modules[i],false);
+        }
+    }
+}

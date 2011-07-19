@@ -294,6 +294,13 @@ protected slots:
         */
         void updateConnStats();
 
+        /**
+            Update the active state of a module
+            \param module the module
+            \param active TRUE if active
+        */
+        void moduleActive(NetworkModule *module, bool active);
+
 protected:
 
         /**

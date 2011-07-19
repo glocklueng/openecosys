@@ -74,7 +74,7 @@ void NetworkScheduler::schedulerUpdate()
 
 void NetworkScheduler::addModule(NetworkModule* module)
 {
-    qDebug("NetworkScheduler::addModule %p, conf size: %i",module,module->getConfiguration()->size());
+    //qDebug("NetworkScheduler::addModule %p, conf size: %i",module,module->getConfiguration()->size());
 
     if (!m_modules.contains(module))
     {
@@ -100,10 +100,16 @@ void NetworkScheduler::addModule(NetworkModule* module)
 
 void NetworkScheduler::removeModule(NetworkModule* module)
 {
-    qDebug("NetworkScheduler::removeModule(NetworkModule* module = %p",module);
+    //qDebug("NetworkScheduler::removeModule(NetworkModule* module = %p",module);
 
     //Remove variables for scheduling
     ModuleConfiguration *conf = module->getConfiguration();
+
+    //Disconnect new variables are available, shedule them
+    disconnect(module->getConfiguration(),SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(addScheduledVariable(ModuleVariable*)));
+
+    //Disconnect variables are removed from module, remove from schedule
+    disconnect(module->getConfiguration(),SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(removeScheduledVariable(ModuleVariable*)));
 
     for (int i = 0; i < conf->size(); i++)
     {
@@ -143,6 +149,12 @@ void NetworkScheduler::removeScheduledVariable(ModuleVariable *var)
     if (m_variableScheduleList.contains(var))
     {
         qDebug() << "Removing (OLD) variable for scheduling:"<<var->getName()<<" device id: "<<var->getDeviceID();
+
+        //Disconnect variable activation change
+        disconnect(var,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableActivated(bool,ModuleVariable*)));
+
+        //Disconnect variable for auto removal when destroyed
+        disconnect(var,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeScheduledVariable(ModuleVariable*)));
 
         m_variableScheduleList.removeAll(var);
     }

@@ -62,14 +62,20 @@ public:
 
     QList<NetworkModule*> getModules();
 
+
+
 signals:
 
     void moduleAdded(NetworkModule *module);
     void moduleRemoved(NetworkModule *module);
+    void moduleActive(NetworkModule *module, bool active);
 
 protected slots:
 
     void writeVariable(ModuleVariable *variable);
+
+    void watchdogTimeout();
+
 
 protected:
 
@@ -90,6 +96,9 @@ protected:
 
     ///All modules on this interface
     QList<NetworkModule*> m_modules;
+
+    ///Watchdog timer
+    QTimer *m_watchdogTimer;
 
 };
 
