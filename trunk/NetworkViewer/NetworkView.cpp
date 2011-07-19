@@ -59,7 +59,7 @@ NetworkView::NetworkView(QWidget *parent)
     //Add scope
     createScopeView();
 
-    m_label = new QLabel("NOT CONNECTED",this);
+    m_label = new QLabel("0",this);
     statusbar->addPermanentWidget(m_label);
 
     m_receivedLCD = new QLCDNumber(10,this);
@@ -522,6 +522,7 @@ void NetworkView::updateConnStats()
         recv += handler->messageReceivedCounter();
     }
 
+    m_label->setText(QString::number(m_interfaceManagerList.size()));
     m_receivedLCD->display(recv);
     m_sentLCD->display(sent);
 }
