@@ -32,7 +32,7 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES=${OBJECTDIR}/main.o
 
 
 CFLAGS=
@@ -65,7 +65,7 @@ MP_AR_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
 
 MP_PROCESSOR_OPTION=30F5015
-MP_LINKER_FILE_OPTION=,-Tp30f5015.gld
+MP_LINKER_FILE_OPTION=,--script=p30F5015_bootloader.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -81,7 +81,49 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
+	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${CP} ${OBJECTDIR}/main.o.tmp ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.tmp 
+else 
+	@sed -e 's/\"//g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${CP} ${OBJECTDIR}/main.o.tmp ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.tmp
+endif
+	@touch ${OBJECTDIR}/main.o.err 
+	@cat ${OBJECTDIR}/main.o.err 
+	@if [ -f ${OBJECTDIR}/main.o.ok ] ; then rm -f ${OBJECTDIR}/main.o.ok; else exit 1; fi
+	
 else
+${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
+	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${CP} ${OBJECTDIR}/main.o.tmp ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.tmp 
+else 
+	@sed -e 's/\"//g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${CP} ${OBJECTDIR}/main.o.tmp ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o.tmp
+endif
+	@touch ${OBJECTDIR}/main.o.err 
+	@cat ${OBJECTDIR}/main.o.err 
+	@if [ -f ${OBJECTDIR}/main.o.ok ] ; then rm -f ${OBJECTDIR}/main.o.ok; else exit 1; fi
+	
 endif
 
 # ------------------------------------------------------------------------------------
