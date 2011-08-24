@@ -1,11 +1,17 @@
-
-#include <p30F5015.h>
+#include "bsp.h"
+#include "NETV16_Common.h"
 
 //--------------------------Device Configuration------------------------
 _FOSC(CSW_FSCM_OFF & HS2_PLL8);
 _FWDT(WDT_OFF);
 _FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN);
 //----------------------------------------------------------------------
+
+
+void netv_proc_message(NETV_MESSAGE *msg)
+{
+
+}
 
 int main()
 {
