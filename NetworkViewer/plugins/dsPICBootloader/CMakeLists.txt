@@ -14,7 +14,7 @@ SET(Plugin_HEADERS
 )
 
 SET(Plugin_UIS
-	
+        dsPICBootloader.ui
 )
 
 SET(Plugin_QRC 

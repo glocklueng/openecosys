@@ -20,6 +20,7 @@
 #define _DSPICBOOTLOADER_H_
 
 #include "BasePlugin.h"
+#include "ui_dsPICBootloader.h"
 
 class dsPICBootloader : public BasePlugin
 {
@@ -36,6 +37,10 @@ public:
 
     ///terminate not used right now
     virtual void terminate();
+
+protected:
+
+    Ui::dsPICBootloader m_ui;
 
 };
 
