@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef _NETV16_NETV_DRIVER_H_
 #define _NETV16_NETV_DRIVER_H_
 
-#include "NETV16_Shared.h"
 #include "NETV16_Device.h"
 #include "NETV16_Common.h"
 
