@@ -5,10 +5,12 @@
 
 SET(Plugin_SRCS
 	dsPICBootloader.cpp
+        hexutils.cpp
 )	
 
 SET(Plugin_HEADERS 
 	dsPICBootloader.h
+        hexutils.h
 )
 
 SET(Plugin_UIS
