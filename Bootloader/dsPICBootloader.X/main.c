@@ -108,18 +108,46 @@ void writeBootConfig(BootConfig* config)
 	}
 }
 
+void send_alive_answer(BootConfig *config)
+{
+    NETV_MESSAGE msg;
+    int i = 0;
 
+    msg.msg_priority = 0x00;
+    msg.msg_type = NETV_TYPE_EVENTS;
+    msg.msg_cmd = NETV_EVENTS_CMD_ALIVE;
+    msg.msg_dest = config->module_id;
+    msg.msg_eeprom_ram = NETV_REQUEST_EEPROM;
+    msg.msg_read_write = NETV_REQUEST_READ;
+    msg.msg_data_length = 8;
+    msg.msg_remote = 0;
+
+    //Fill module information
+    msg.msg_data[0] = config->module_state;
+    msg.msg_data[1] = config->project_id;
+    msg.msg_data[2] = config->module_id;
+    msg.msg_data[3] = config->code_version;
+    msg.msg_data[4] = config->table_version;
+    msg.msg_data[5] = config->boot_delay;
+    msg.msg_data[6] = config->devid_low;
+    msg.msg_data[7] = config->devid_high;
+
+    while(netv_send_message(&msg));
+}
 
 
 
 //This code should be working with multiple interface...
 int main()
 {
-    //BootConfig *config = netv_get_boot_config();
+    unsigned int i = 0;
+    BootConfig config;
     NETV_MESSAGE inputMessage;
+    NETV_MASK mask_in[2];
+    NETV_FILTER filter_in[6];
 
     //Read actual configuration
-    //netv_read_boot_config(config);
+    readBootConfig(&config);
 
     TRISBbits.TRISB13 = 0; //B13 = OUTPUT
     LATBbits.LATB13 = 0; //TURN ON LED
@@ -130,12 +158,43 @@ int main()
     T1_SOURCE_INT, 39063);
 
 
+    //init mask
+    for(i=0;i<2;i++){
+        mask_in[i].mask_priority = 0;
+        mask_in[i].mask_type = 0;
+        mask_in[i].mask_cmd = 0;
+        mask_in[i].mask_dest = 0xFF;
+    }
 
+    //init filter
+    for(i=0;i<6;i++){
+        filter_in[i].filter_priority = 0;
+        filter_in[i].filter_type = 0;
+        filter_in[i].filter_cmd = 0;
+        filter_in[i].filter_dest = config.module_id;
+    }
 
-    void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask);
+    //init can
+    netv_init_can_driver(filter_in,mask_in);
 
     while(1)
     {
+        //Answer ALIVE REQUEST
+
+        //RECEIVE CAN MESSAGES
+        if(netv_recv_message(&inputMessage))
+        {
+            if (inputMessage.msg_type == NETV_TYPE_EVENTS)
+            {
+                //HANDLE ALIVE REQUESTS
+                if (inputMessage.msg_cmd == NETV_EVENTS_CMD_ALIVE)
+                {
+                   send_alive_answer(&config);
+                }
+            }
+        }
+
+
 
         //Timer1 interrupt flag
         if (IFS0bits.T1IF)
