@@ -45,7 +45,7 @@ MESSAGE TYPE DEFINITIONS
 #define NETV_TYPE_ACTUATOR_LOW_PRIORITY    0x08
 #define NETV_TYPE_SENSOR_LOW_PRIORITY      0x10
 #define NETV_TYPE_REQUEST_DATA             0x20
-#define NETV_TYPE_USER2                    0x40
+#define NETV_TYPE_BOOTLOADER               0x40
 #define NETV_TYPE_EVENTS                   0x80
 
 /*
