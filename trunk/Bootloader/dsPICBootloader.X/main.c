@@ -40,20 +40,7 @@ _ICD(PGD & ICS_PGD)
 // Initial bootloader config in eeprom
 // Variable located in EEPROM
 
-//THIS IS CAUSING PROBLEMS UNDER MPLABX
 
-/*
-
-int __attribute__ ((space(eedata))) g_bootData[8] = {BOOT_IDLE,
-        0x0000, // PROJECT_ID
-        0x0001, // MODULE_ID
-        0x0001, // CODE_VERSION
-        0x0002, // TABLE_VERSION
-        0x0006, // BOOT_DELAY (SECONDS)
-        0x0000, // DEVID LOW
-        0x0000}; //DEVID HIGH
-
- */
  
 //Bootloader commands
 enum {CMD_NOP,CMD_RESET,CMD_START_WRITE,CMD_END_WRITE};
@@ -100,7 +87,8 @@ void writeBootConfig(BootConfig* config)
 		data[3] = config->code_version;
 		data[4] = config->table_version;
 		data[5] = config->boot_delay;
-		//DEVID DOES NOT NEED TO BE WRITTEN!
+                data[6] = config->devid_low;
+                data[7] = config->devid_high;
 
 		//WRITING BACK PAGE
 		WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW,data,16);
@@ -135,8 +123,22 @@ void send_alive_answer(BootConfig *config)
     while(netv_send_message(&msg));
 }
 
+//THIS IS CAUSING PROBLEMS UNDER MPLABX
 
 
+/*
+int __attribute__ ((space(eedata), aligned(16))) g_bootData[] = {
+        BOOT_IDLE, //BOOT MODE
+        0x0000, // PROJECT_ID
+        0x0001, // MODULE_ID
+        0x0001, // CODE_VERSION
+        0x0002, // TABLE_VERSION
+        0x0006, // BOOT_DELAY (SECONDS)
+        0x0000, // DEVID LOW
+        0x0000}; //DEVID HIGH
+*/
+ 
+ 
 //This code should be working with multiple interface...
 int main()
 {
@@ -148,6 +150,20 @@ int main()
 
     //Read actual configuration
     readBootConfig(&config);
+
+    //Initialize config for the first time
+    if (config.module_id == 0xFF)
+    {
+        config.boot_delay = 6;
+        config.table_version = 0x02;
+        config.module_state = BOOT_IDLE;
+        config.project_id = 0;
+        config.code_version = 0;
+        config.module_id = 0x00;
+        
+        //Write configuration
+        writeBootConfig(&config);
+    }
 
     TRISBbits.TRISB13 = 0; //B13 = OUTPUT
     LATBbits.LATB13 = 0; //TURN ON LED
@@ -179,8 +195,6 @@ int main()
 
     while(1)
     {
-        //Answer ALIVE REQUEST
-
         //RECEIVE CAN MESSAGES
         if(netv_recv_message(&inputMessage))
         {
