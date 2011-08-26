@@ -27,6 +27,9 @@ dsPICBootloader::dsPICBootloader(NetworkView *view)
     : BasePlugin(view)
 {
 
+    //Create UI
+    m_ui.setupUi(this);
+
 }
 
 void dsPICBootloader::init()
