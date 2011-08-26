@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV16_Common.h"
 
 //--------------------------Device Configuration------------------------
-_FOSC(CSW_FSCM_OFF & HS2_PLL8);
+_FOSC(CSW_FSCM_OFF & XT_PLL8);
 _FWDT(WDT_OFF);
 _FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN);
 //----------------------------------------------------------------------
@@ -61,6 +61,9 @@ int main()
 
     //Read actual configuration
     netv_read_boot_config(config);
+
+    TRISBbits.TRISB13 = 0; //B13 = OUTPUT
+    LATBbits.LATB13 = 0; //TURN ON LED
 
     while(1);
 
