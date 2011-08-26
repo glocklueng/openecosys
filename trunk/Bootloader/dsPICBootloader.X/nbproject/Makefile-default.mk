@@ -32,7 +32,7 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o ${OBJECTDIR}/main.o
+OBJECTFILES=${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ${OBJECTDIR}/eeprom_flash.o ${OBJECTDIR}/main.o
 
 
 CFLAGS=
@@ -40,7 +40,7 @@ ASFLAGS=
 LDLIBSOPTIONS=
 
 # Path to java used to run MPLAB X when this makefile was created
-MP_JAVA_PATH=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/
+MP_JAVA_PATH=C:\\Program\ Files\ \(x86\)\\Java\\jre6/bin/
 OS_CURRENT="$(shell uname -s)"
 ############# Tool locations ##########################################
 # If you copy a project from one host to another, the path where the  #
@@ -48,17 +48,17 @@ OS_CURRENT="$(shell uname -s)"
 # If you open this project with MPLAB X in the new host, this         #
 # makefile will be regenerated and the paths will be corrected.       #
 #######################################################################
-MP_CC=/Applications/microchip/mplabc30/v3.30b/bin/pic30-gcc
+MP_CC=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-gcc.exe
 # MP_BC is not defined
-MP_AS=/Applications/microchip/mplabc30/v3.30b/bin/pic30-as
-MP_LD=/Applications/microchip/mplabc30/v3.30b/bin/pic30-ld
-MP_AR=/Applications/microchip/mplabc30/v3.30b/bin/pic30-ar
+MP_AS=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-as.exe
+MP_LD=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-ld.exe
+MP_AR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-ar.exe
 # MP_BC is not defined
-MP_CC_DIR=/Applications/microchip/mplabc30/v3.30b/bin
+MP_CC_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
 # MP_BC_DIR is not defined
-MP_AS_DIR=/Applications/microchip/mplabc30/v3.30b/bin
-MP_LD_DIR=/Applications/microchip/mplabc30/v3.30b/bin
-MP_AR_DIR=/Applications/microchip/mplabc30/v3.30b/bin
+MP_AS_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
+MP_LD_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
+MP_AR_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
 # MP_BC_DIR is not defined
 
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -69,7 +69,53 @@ MP_LINKER_FILE_OPTION=,--script=p30F5015_bootloader.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/eeprom_flash.o: eeprom_flash.s  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.ok ${OBJECTDIR}/eeprom_flash.o.err 
+	@echo ${MP_AS} $(MP_EXTRA_AS_PRE)  eeprom_flash.s -o ${OBJECTDIR}/eeprom_flash.o -omf=elf -p=$(MP_PROCESSOR_OPTION) --defsym=__MPLAB_BUILD=1 --defsym=__MPLAB_DEBUG=1 --defsym=__ICD2RAM=1 --defsym=__DEBUG=1 --defsym=__MPLAB_DEBUGGER_ICD3=1 -g  -MD ${OBJECTDIR}/eeprom_flash.o.d$(MP_EXTRA_AS_POST)
+	@-${MP_AS} $(MP_EXTRA_AS_PRE)  eeprom_flash.s -o ${OBJECTDIR}/eeprom_flash.o -omf=elf -p=$(MP_PROCESSOR_OPTION) --defsym=__MPLAB_BUILD=1 --defsym=__MPLAB_DEBUG=1 --defsym=__ICD2RAM=1 --defsym=__DEBUG=1 --defsym=__MPLAB_DEBUGGER_ICD3=1 -g  -MD ${OBJECTDIR}/eeprom_flash.o.d$(MP_EXTRA_AS_POST) 2>&1 > ${OBJECTDIR}/eeprom_flash.o.err  ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/eeprom_flash.o.ok ; fi 
+ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
+	@if ! [ -f ${OBJECTDIR}/eeprom_flash.o.d ] ; then touch ${OBJECTDIR}/eeprom_flash.o.d ; fi 
+	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/eeprom_flash.o.d > ${OBJECTDIR}/eeprom_flash.o.tmp
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${CP} ${OBJECTDIR}/eeprom_flash.o.tmp ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.tmp}
+else 
+	@if ! [ -f ${OBJECTDIR}/eeprom_flash.o.d ] ; then touch ${OBJECTDIR}/eeprom_flash.o.d ; fi 
+	@sed -e 's/\"//g' ${OBJECTDIR}/eeprom_flash.o.d > ${OBJECTDIR}/eeprom_flash.o.tmp
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${CP} ${OBJECTDIR}/eeprom_flash.o.tmp ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.tmp
+endif
+	@touch ${OBJECTDIR}/eeprom_flash.o.err 
+	@cat ${OBJECTDIR}/eeprom_flash.o.err 
+	@if [ -f ${OBJECTDIR}/eeprom_flash.o.ok ] ; then rm -f ${OBJECTDIR}/eeprom_flash.o.ok; else exit 1; fi
+	
 else
+${OBJECTDIR}/eeprom_flash.o: eeprom_flash.s  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.ok ${OBJECTDIR}/eeprom_flash.o.err 
+	@echo ${MP_AS} $(MP_EXTRA_AS_PRE)  eeprom_flash.s -o ${OBJECTDIR}/eeprom_flash.o -omf=elf -p=$(MP_PROCESSOR_OPTION) --defsym=__MPLAB_BUILD=1  -MD ${OBJECTDIR}/eeprom_flash.o.d$(MP_EXTRA_AS_POST)
+	@-${MP_AS} $(MP_EXTRA_AS_PRE)  eeprom_flash.s -o ${OBJECTDIR}/eeprom_flash.o -omf=elf -p=$(MP_PROCESSOR_OPTION) --defsym=__MPLAB_BUILD=1  -MD ${OBJECTDIR}/eeprom_flash.o.d$(MP_EXTRA_AS_POST) 2>&1 > ${OBJECTDIR}/eeprom_flash.o.err  ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/eeprom_flash.o.ok ; fi 
+ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
+	@if ! [ -f ${OBJECTDIR}/eeprom_flash.o.d ] ; then touch ${OBJECTDIR}/eeprom_flash.o.d ; fi 
+	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/eeprom_flash.o.d > ${OBJECTDIR}/eeprom_flash.o.tmp
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${CP} ${OBJECTDIR}/eeprom_flash.o.tmp ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.tmp}
+else 
+	@if ! [ -f ${OBJECTDIR}/eeprom_flash.o.d ] ; then touch ${OBJECTDIR}/eeprom_flash.o.d ; fi 
+	@sed -e 's/\"//g' ${OBJECTDIR}/eeprom_flash.o.d > ${OBJECTDIR}/eeprom_flash.o.tmp
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.d 
+	@${CP} ${OBJECTDIR}/eeprom_flash.o.tmp ${OBJECTDIR}/eeprom_flash.o.d 
+	@${RM} ${OBJECTDIR}/eeprom_flash.o.tmp
+endif
+	@touch ${OBJECTDIR}/eeprom_flash.o.err 
+	@cat ${OBJECTDIR}/eeprom_flash.o.err 
+	@if [ -f ${OBJECTDIR}/eeprom_flash.o.ok ] ; then rm -f ${OBJECTDIR}/eeprom_flash.o.ok; else exit 1; fi
+	
 endif
 
 # ------------------------------------------------------------------------------------
@@ -81,75 +127,12 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o: ../NETVProtocolStack/NETV16/NETV16_Shared.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o ../NETVProtocolStack/NETV16/NETV16_Shared.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o ../NETVProtocolStack/NETV16/NETV16_Shared.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok; else exit 1; fi
-	
-${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o: ../NETVProtocolStack/NETV16/NETV16_Memory.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o ../NETVProtocolStack/NETV16/NETV16_Memory.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o ../NETVProtocolStack/NETV16/NETV16_Memory.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok; else exit 1; fi
-	
-${OBJECTDIR}/_ext/1908611077/NETV16_Common.o: ../NETVProtocolStack/NETV16/NETV16_Common.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o ../NETVProtocolStack/NETV16/NETV16_Common.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o ../NETVProtocolStack/NETV16/NETV16_Common.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok; else exit 1; fi
-	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	@${RM} ${OBJECTDIR}/main.o.d 
@@ -169,8 +152,8 @@ ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o: ../NETVProtocolStack/NETV16/NET
 	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.tmp
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
@@ -187,75 +170,12 @@ endif
 	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok; else exit 1; fi
 	
 else
-${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o: ../NETVProtocolStack/NETV16/NETV16_Shared.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o ../NETVProtocolStack/NETV16/NETV16_Shared.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o ../NETVProtocolStack/NETV16/NETV16_Shared.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Shared.o.ok; else exit 1; fi
-	
-${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o: ../NETVProtocolStack/NETV16/NETV16_Memory.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o ../NETVProtocolStack/NETV16/NETV16_Memory.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o ../NETVProtocolStack/NETV16/NETV16_Memory.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Memory.o.ok; else exit 1; fi
-	
-${OBJECTDIR}/_ext/1908611077/NETV16_Common.o: ../NETVProtocolStack/NETV16/NETV16_Common.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o ../NETVProtocolStack/NETV16/NETV16_Common.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o ../NETVProtocolStack/NETV16/NETV16_Common.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ; fi 
-ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
-	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp 
-else 
-	@sed -e 's/\"//g' ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${CP} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.tmp
-endif
-	@touch ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@cat ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.err 
-	@if [ -f ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok ] ; then rm -f ${OBJECTDIR}/_ext/1908611077/NETV16_Common.o.ok; else exit 1; fi
-	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	@${RM} ${OBJECTDIR}/main.o.d 
@@ -275,8 +195,8 @@ ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o: ../NETVProtocolStack/NETV16/NET
 	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.tmp
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
@@ -304,7 +224,7 @@ else
 dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
 	${MP_CC} $(MP_EXTRA_LD_PRE)  -omf=elf  -mcpu=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf ${OBJECTFILES}        -Wl,--defsym=__MPLAB_BUILD=1,--report-mem$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION)
-	${MP_CC_DIR}/pic30-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf -omf=elf
+	${MP_CC_DIR}\\pic30-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf -omf=elf
 endif
 
 

@@ -8,10 +8,9 @@
         <itemPath>../NETVProtocolStack/NETV16/NETV16_CANDriver.h</itemPath>
         <itemPath>../NETVProtocolStack/NETV16/NETV16_Common.h</itemPath>
         <itemPath>../NETVProtocolStack/NETV16/NETV16_Device.h</itemPath>
-        <itemPath>../NETVProtocolStack/NETV16/NETV16_Memory.h</itemPath>
-        <itemPath>../NETVProtocolStack/NETV16/NETV16_Shared.h</itemPath>
       </logicalFolder>
       <itemPath>bsp.h</itemPath>
+      <itemPath>memory.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -31,10 +30,8 @@
                    projectFiles="true">
       <logicalFolder name="f1" displayName="NETV" projectFiles="true">
         <itemPath>../NETVProtocolStack/NETV16/NETV16_CANDriver.c</itemPath>
-        <itemPath>../NETVProtocolStack/NETV16/NETV16_Common.c</itemPath>
-        <itemPath>../NETVProtocolStack/NETV16/NETV16_Memory.c</itemPath>
-        <itemPath>../NETVProtocolStack/NETV16/NETV16_Shared.c</itemPath>
       </logicalFolder>
+      <itemPath>eeprom_flash.s</itemPath>
       <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -53,7 +50,7 @@
         <platformTool>ICD3PlatformTool</platformTool>
         <languageToolchain>C30</languageToolchain>
         <languageToolchainVersion>3_30b</languageToolchainVersion>
-        <platform>4</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
@@ -62,7 +59,7 @@
         </linkerTool>
       </compileType>
       <C30>
-        <property key="optimization-level" value="0"/>
+        <property key="optimization-level" value="s"/>
         <property key="preprocessor-macros" value=""/>
         <property key="code-model" value="default"/>
         <property key="const-model" value="default"/>
@@ -100,12 +97,80 @@
         <property key="assembler-symbols" value=""/>
       </C30-AS>
       <C30-LD>
+        <property key="preprocessor-macros" value=""/>
+        <property key="general-code-protect" value="no_code_protect"/>
+        <property key="secure-write-protect" value="no_write_protect"/>
+        <property key="warn-section-align" value="false"/>
+        <property key="heap-size" value=""/>
+        <property key="remove-unused-sections" value="false"/>
+        <property key="stack-size" value=""/>
+        <property key="linker-symbols" value=""/>
+        <property key="trace-symbols" value=""/>
+        <property key="map-file" value=""/>
+        <property key="enable-pack-data" value="true"/>
+        <property key="boot-eeprom" value="no_eeprom"/>
+        <property key="general-write-protect" value="no_write_protect"/>
+        <property key="enable-handles" value="true"/>
+        <property key="enable-data-init" value="true"/>
+        <property key="secure-flash" value="no_flash"/>
+        <property key="boot-write-protect" value="no_write_protect"/>
+        <property key="boot-flash" value="no_flash"/>
+        <property key="report-memory-usage" value="false"/>
+        <property key="generate-cross-reference-file" value="false"/>
+        <property key="input-libraries" value=""/>
+        <property key="secure-ram" value="no_ram"/>
+        <property key="enable-check-sections" value="false"/>
+        <property key="enable-default-isr" value="true"/>
+        <property key="symbol-stripping" value="keep-all"/>
+        <property key="boot-ram" value="no_ram"/>
+        <property key="secure-eeprom" value="no_eeprom"/>
+        <property key="extra-lib-directories" value=""/>
       </C30-LD>
       <C30Global>
         <property key="fast-math" value="false"/>
         <property key="legacy-libc" value="false"/>
       </C30Global>
       <ICD3PlatformTool>
+        <property key="UART 1" value="true"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="memories.id" value="false"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="QEI" value="true"/>
+        <property key="INPUT CAPTURE 4" value="true"/>
+        <property key="INPUT CAPTURE 3" value="true"/>
+        <property key="INPUT CAPTURE 2" value="true"/>
+        <property key="INPUT CAPTURE 1" value="true"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="OUTPUT COMPARE 4" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="OUTPUT COMPARE 3" value="true"/>
+        <property key="OUTPUT COMPARE 2" value="true"/>
+        <property key="OUTPUT COMPARE 1" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="memories.programmemory.start" value="0x0"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="I2C" value="true"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x0"/>
+        <property key="PWM" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="ADC" value="true"/>
+        <property key="voltagevalue" value="5.0"/>
+        <property key="memories.programmemory.end" value="0xafff"/>
+        <property key="TIMER5" value="true"/>
+        <property key="TIMER4" value="true"/>
+        <property key="TIMER3" value="true"/>
+        <property key="SPI 2" value="true"/>
+        <property key="TIMER2" value="true"/>
+        <property key="SPI 1" value="true"/>
+        <property key="TIMER1" value="true"/>
+        <property key="programoptions.preserveprogramrange.end" value="0xff"/>
       </ICD3PlatformTool>
     </conf>
   </confs>
