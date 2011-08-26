@@ -5,14 +5,10 @@
 
 #define FCY 20000000
 
-//Will use eeprom
-#define USE_EEPROM
+//DEVICE MEMORY MAP INFORMATION
+#define EEPROM_BASE_ADDRESS_LOW 0xFC00
+#define EEPROM_BASE_ADDRESS_HIGH 0x007F
 
-//Empty struct
-typedef struct
-{
-    unsigned int unused;
-} GlobalNETVVariables;
 
 #endif
 

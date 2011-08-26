@@ -23,15 +23,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "bsp.h"
 #include "NETV16_Common.h"
+#include "NETV16_CANDriver.h"
+#include <libpic30.h>
+#include <timer.h>
+#include "memory.h"
+
 
 //--------------------------Device Configuration------------------------
-_FOSC(CSW_FSCM_OFF & XT_PLL8);
-_FWDT(WDT_OFF);
-_FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN);
+_FOSC(CSW_FSCM_OFF & XT_PLL8)
+_FWDT(WDT_OFF)
+_FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
+_FGS(GWRP_OFF & GCP_CODE_PROT_OFF)
+_ICD(PGD & ICS_PGD)
 //----------------------------------------------------------------------
 
 // Initial bootloader config in eeprom
 // Variable located in EEPROM
+
+//THIS IS CAUSING PROBLEMS UNDER MPLABX
+
+/*
+
 int __attribute__ ((space(eedata))) g_bootData[8] = {BOOT_IDLE,
         0x0000, // PROJECT_ID
         0x0001, // MODULE_ID
@@ -41,31 +53,102 @@ int __attribute__ ((space(eedata))) g_bootData[8] = {BOOT_IDLE,
         0x0000, // DEVID LOW
         0x0000}; //DEVID HIGH
 
-
+ */
+ 
 //Bootloader commands
 enum {CMD_NOP,CMD_RESET,CMD_START_WRITE,CMD_END_WRITE};
 
+void readBootConfig(BootConfig *config)
+{
+	unsigned int devid;
 
+	if (config)
+	{
+		config->module_state  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW);
+		config->project_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 2);
+		config->module_id  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 4);
+		config->code_version  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 6);
+		config->table_version = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 8);
+		config->boot_delay  = (unsigned char) ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + 10);
 
+		//read devid
+		devid = ReadMem(0xFF,0x0000);
+		config->devid_low = devid & 0x00FF;
+		config->devid_high = devid >> 8;
 
+	}
+}
 
-void netv_proc_message(NETV_MESSAGE *msg)
+void writeBootConfig(BootConfig* config)
 {
 
+	if (config)
+	{
+
+		unsigned int data[16]; //first page of data
+		unsigned int addrlow = 0;
+
+		//READING MEMORY
+		for (addrlow = 0; addrlow < 32; addrlow += 2)
+		{
+			data[addrlow >> 1] = ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + addrlow);
+		}
+
+		data[0] = config->module_state;
+		data[1] = config->project_id;
+		data[2] = config->module_id;
+		data[3] = config->code_version;
+		data[4] = config->table_version;
+		data[5] = config->boot_delay;
+		//DEVID DOES NOT NEED TO BE WRITTEN!
+
+		//WRITING BACK PAGE
+		WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW,data,16);
+
+	}
 }
+
+
+
+
 
 //This code should be working with multiple interface...
 int main()
 {
-    BootConfig *config = netv_get_boot_config();
+    //BootConfig *config = netv_get_boot_config();
+    NETV_MESSAGE inputMessage;
 
     //Read actual configuration
-    netv_read_boot_config(config);
+    //netv_read_boot_config(config);
 
     TRISBbits.TRISB13 = 0; //B13 = OUTPUT
     LATBbits.LATB13 = 0; //TURN ON LED
 
-    while(1);
+    //START TIMER1 (0.5 SEC & 20 MIPS)
+    OpenTimer1(T1_ON & T1_GATE_OFF &
+    T1_PS_1_256 & T1_SYNC_EXT_OFF &
+    T1_SOURCE_INT, 39063);
+
+
+
+
+    void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask);
+
+    while(1)
+    {
+
+        //Timer1 interrupt flag
+        if (IFS0bits.T1IF)
+        {
+            //clear interrupt flag
+            IFS0bits.T1IF = 0;
+
+            //Toggle led
+            LATBbits.LATB13 = ~LATBbits.LATB13;
+
+        }
+
+    }
 
     return 0;
 }
