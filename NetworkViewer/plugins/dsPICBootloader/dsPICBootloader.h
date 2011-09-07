@@ -25,6 +25,8 @@
 #include "NETVDevice.h"
 #include "hexutils.h"
 #include "NetworkModule.h"
+#include "NETVInterfaceHandler.h"
+
 
 
 //Bootloader commands
@@ -46,7 +48,7 @@ enum
     BOOTLOADER_RESET
 };
 
-class dsPICBootloader : public BasePlugin
+class dsPICBootloader : public BasePlugin, public NETVMessageObserverIF
 {
     Q_OBJECT;
 
@@ -62,18 +64,29 @@ public:
     ///terminate not used right now
     virtual void terminate();
 
+
+    /**
+        Message notification, will be called from recvThread of \ref NETVInterfaceHandler
+        \param msg the NETV message
+    */
+    virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
+
 protected slots:
 
     void loadHEX();
+    void upload();
 
 
     void printMessage(const QString &message);
 
     void addResetCommand(unsigned int moduleID);
     void addSetBaseAddress(unsigned int moduleID, unsigned int address);
+    void addSendDataInc(unsigned int moduleID, std::vector<unsigned char> &data);
 
 protected:
 
+
+    NETVInterfaceHandler *m_interface;
     Ui::dsPICBootloader m_ui;
     QList<NETV_MESSAGE> m_msgQueue;
 
