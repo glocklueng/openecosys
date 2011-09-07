@@ -13,6 +13,7 @@
 #include <fstream>
 #include <algorithm>
 
+
 /*
 FORMAT ":BBAAAATTHHHH...HHHHCC"
 
@@ -139,6 +140,8 @@ namespace hexutils
          size_t size();
          
          hex32line& getLine(unsigned int no);
+
+         bool validate();
                 
      private:
                   
