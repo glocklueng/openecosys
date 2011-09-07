@@ -365,7 +365,7 @@ std::ostream &resethex(std::ostream &stream)
       }
       
       //sort lines
-      sort_lines();
+      //sort_lines();
    
       //remove non normal address lines
         
@@ -387,6 +387,18 @@ std::ostream &resethex(std::ostream &stream)
         sort(m_lines.begin(), m_lines.end());   
  }
 
+
+ bool hex32doc::validate()
+ {
+     for (unsigned int i = 0; i < m_lines.size(); i++)
+     {
+         if (!m_lines[i].verifyChecksum())
+         {
+             return false;
+         }
+     }
+     return true;
+ }
 }//namespace hexutils
 
 
