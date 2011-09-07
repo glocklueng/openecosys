@@ -58,6 +58,8 @@ public:
 
     dsPICBootloader(NetworkView *view);
 
+    virtual ~dsPICBootloader();
+
     ///init not used right now
     virtual void init();
 
@@ -92,6 +94,9 @@ protected:
 
 
     void generateMessageQueue(hexutils::hex32doc &doc, NetworkModule *module);
+
+    ///QObject event handler overload
+    virtual bool event (QEvent * e);
 
 };
 
