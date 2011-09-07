@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <sstream>
 #include "NetworkView.h"
+#include "NETVMessageEvent.h"
 
 //This will insert the plugin in the dictionary...
 static int dspicbootloader_plugin_init = BasePlugin::registerPlugin("dsPICBootloader",new BasePlugin::PluginFactory<dsPICBootloader>());
@@ -55,6 +56,15 @@ dsPICBootloader::dsPICBootloader(NetworkView *view)
             //Add combo item
             m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(mod->getConfiguration()->getDeviceID()),QPoint(i,mod->getConfiguration()->getDeviceID()));
         }
+    }
+}
+
+dsPICBootloader::~dsPICBootloader()
+{
+    if (m_interface)
+    {
+        m_interface->unregisterObserver(this);
+        m_interface = NULL;
     }
 }
 
@@ -295,54 +305,77 @@ void dsPICBootloader::upload()
     }
 }
 
-
-
 void dsPICBootloader::notifyNETVMessage(const NETV_MESSAGE &msg)
 {
-    //Bootloader feedback...
-    if (msg.msg_type == NETV_TYPE_BOOTLOADER && m_interface)
-    {
-
-        unsigned int index = m_ui.m_moduleSelectionCombo->currentIndex();
-
-        //Do you get the point! ;)
-        QPoint data = m_ui.m_moduleSelectionCombo->itemData(index).toPoint();
-
-
-        //Feedback from the right module
-        if (msg.msg_dest == data.y())
-        {
-            printMessage("Feedback!!!");
-
-            //Validate feedback
-            if (1 /*m_msgQueue.front() == msg*/)
-            {
-                printMessage("Validated Feedback!!!");
-                m_msgQueue.pop_front();
-
-                //Increment progressbar
-                m_ui.m_progressBar->setValue(m_ui.m_progressBar->value() + 1);
-
-                printMessage(QString("Queue size : ") + QString::number(m_msgQueue.size()));
-
-                if (m_msgQueue.size() > 0)
-                {
-                    //Send next
-                    m_interface->pushNETVMessage(m_msgQueue.front());
-                }
-                else
-                {
-                    printMessage("Done programming.");
-                    m_interface->unregisterObserver(this);
-                }
-
-            }
-            else
-            {
-                //Re-send message
-                //Abort?
-            }
-        }
-
-    }
+    //THIS IS CALLED FROM ANOTHER THREAD, BE CAREFUL
+    QCoreApplication::postEvent(this, new NETVMessageEvent(msg),Qt::HighEventPriority);
 }
+
+bool  dsPICBootloader::event ( QEvent * e )
+{
+    if (e->type() == QEvent::User)
+    {
+        //qDebug("NETVInterfaceManager::event %p QEvent::User",e);
+        if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
+        {
+            NETV_MESSAGE msg = event->getMessage();
+
+
+            //printMessage(QString("notify type ") + QString::number(msg.msg_type));
+
+            //Bootloader feedback...
+            if (msg.msg_type == NETV_TYPE_BOOTLOADER)
+            {
+                 printMessage("Feedback!!!");
+                unsigned int index = m_ui.m_moduleSelectionCombo->currentIndex();
+
+                //Do you get the point! ;)
+                QPoint data = m_ui.m_moduleSelectionCombo->itemData(index).toPoint();
+
+
+                //Feedback from the right module
+                if (msg.msg_dest == data.y())
+                {
+                    printMessage("Feedback!!!");
+
+                    //Validate feedback
+                    if (1 /*m_msgQueue.front() == msg*/)
+                    {
+                        printMessage("Validated Feedback!!!");
+                        m_msgQueue.pop_front();
+
+                        //Increment progressbar
+                        m_ui.m_progressBar->setValue(m_ui.m_progressBar->value() + 1);
+
+                        printMessage(QString("Queue size : ") + QString::number(m_msgQueue.size()));
+
+                        if (m_msgQueue.size() > 0)
+                        {
+                            //Send next
+                            m_interface->pushNETVMessage(m_msgQueue.front());
+                        }
+                        else
+                        {
+                            printMessage("Done programming.");
+                            m_interface->unregisterObserver(this);
+                        }
+
+                    }
+                    else
+                    {
+                        //Re-send message
+                        //Abort?
+                    }
+                }
+
+            }
+
+            //We have processed this event
+            return true;
+        }
+    }
+
+    return QObject::event(e);
+}
+
+

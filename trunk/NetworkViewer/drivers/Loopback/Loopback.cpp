@@ -110,6 +110,16 @@ NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
             //Signal semaphore
             m_semaphore.release(m_moduleList.size());
         }
+
+    }
+    else if (message.msg_type == NETV_TYPE_BOOTLOADER)
+    {
+        //Send back bootloader ACK...
+        m_mutex.lock();
+        //return message
+        m_messageList.push_back(message);
+        m_mutex.unlock();
+        m_semaphore.release(1);
     }
 
     //We have processed the message
