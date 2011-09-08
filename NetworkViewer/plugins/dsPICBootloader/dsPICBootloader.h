@@ -26,27 +26,12 @@
 #include "hexutils.h"
 #include "NetworkModule.h"
 #include "NETVInterfaceHandler.h"
+#include <QTimer>
+#include <QTime>
 
 
 
-//Bootloader commands
-enum
-{
-    BOOTLOADER_SET_BASE_ADDR,
-    BOOTLOADER_GET_BASE_ADDR,
-    BOOTLOADER_SET_MODULE_ADDR,
-    BOOTLOADER_GET_MODULE_ADDR,
-    BOOTLOADER_SET_STATE,
-    BOOTLOADER_GET_STATE,
-    BOOTLOADER_SET_DELAY,
-    BOOTLOADER_GET_DELAY,
-    BOOTLOADER_READ_INC,
-    BOOTLOADER_WRITE_INC,
-    BOOTLOADER_READ_PAGE,
-    BOOTLOADER_WRITE_PAGE,
-    BOOTLOADER_WRITE_BOOTCONFIG,
-    BOOTLOADER_RESET
-};
+
 
 class dsPICBootloader : public BasePlugin, public NETVMessageObserverIF
 {
@@ -77,10 +62,12 @@ protected slots:
 
     void loadHEX();
     void upload();
-
+    void timeout();
+    void stop();
 
     void printMessage(const QString &message);
 
+    void addEmergencyProgram(unsigned int moduleID);
     void addResetCommand(unsigned int moduleID);
     void addSetBaseAddress(unsigned int moduleID, unsigned int address);
     void addSendDataInc(unsigned int moduleID, std::vector<unsigned char> &data);
@@ -98,6 +85,8 @@ protected:
     ///QObject event handler overload
     virtual bool event (QEvent * e);
 
+    QTimer *m_timer;
+    QTime m_elapsed;
 };
 
 #endif

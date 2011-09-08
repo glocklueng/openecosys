@@ -77,6 +77,47 @@ typedef struct _message
           msg_filter_hit=message.msg_filter_hit;
           msg_dwTime = message.msg_dwTime;
      }
+
+     _message& operator=(const _message &message)
+     {
+         msg_priority=message.msg_priority;
+         msg_type=message.msg_type;
+         msg_cmd=message.msg_cmd;
+         msg_boot=message.msg_boot;
+         msg_dest=message.msg_dest;
+         msg_data_length=message.msg_data_length;
+         memcpy(msg_data,message.msg_data,8);
+         msg_remote=message.msg_remote;
+         msg_filter_hit=message.msg_filter_hit;
+         msg_dwTime = message.msg_dwTime;
+         return *this;
+     }
+
+     bool operator==(const _message &message)
+     {
+         if (msg_priority != message.msg_priority) return false;
+         if (msg_type != message.msg_type) return false;
+         if (msg_cmd != message.msg_cmd) return false;
+         if (msg_boot != message.msg_boot) return false;
+         if (msg_dest != message.msg_dest) return false;
+         if (msg_data_length != message.msg_data_length) return false;
+         if (message.msg_data_length <= 8)
+         {
+             for (unsigned int i = 0; i < message.msg_data_length; i++)
+             {
+                 if (msg_data[i] != message.msg_data[i]) return false;
+             }
+         }
+         else
+         {
+             return false;
+         }
+
+         if (msg_remote != message.msg_remote) return false;
+         return true;
+     }
+
+
      /// Message priority 0=high to 7=low
      unsigned char msg_priority; 
      /// Message type (8 bit mask)

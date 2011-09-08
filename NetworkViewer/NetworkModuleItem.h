@@ -100,6 +100,11 @@ public slots:
         */
 	void timeUpdate(QTime time);
 
+        /**
+            Module state changed
+        */
+        void stateChanged();
+
 signals:
 	
         /**

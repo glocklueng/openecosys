@@ -29,7 +29,7 @@ static int dspicbootloader_plugin_init = BasePlugin::registerPlugin("dsPICBootlo
 
 
 dsPICBootloader::dsPICBootloader(NetworkView *view)
-    : BasePlugin(view), m_interface(NULL)
+    : BasePlugin(view), m_interface(NULL), m_timer(NULL)
 {
 
     //Create UI
@@ -39,6 +39,7 @@ dsPICBootloader::dsPICBootloader(NetworkView *view)
     //Connect Signals
     connect(m_ui.m_loadHEXButton,SIGNAL(clicked()),this,SLOT(loadHEX()));
     connect(m_ui.m_uploadButton,SIGNAL(clicked()),this,SLOT(upload()));
+    connect(m_ui.m_stopButton,SIGNAL(clicked()),this,SLOT(stop()));
 
 
     //Fill Combo
@@ -103,31 +104,38 @@ void dsPICBootloader::loadHEX()
 
         printMessage("Done!");
 
-
         printMessage("Document line size : " + QString::number(doc.size()));
 
         if (doc.validate())
         {
-
             doc.parse();
             ostringstream buffer;
             doc.print(buffer);
-
-             printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
-
+            printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
             generateMessageQueue(doc,NULL);
-
-
-
-
         } //document validate
         else
         {
             printMessage(fileName + "Checksum errors found, aborting");
         }
     } //filename validate
+}
 
 
+void dsPICBootloader::addEmergencyProgram(unsigned int moduleID)
+{
+    //Setup message
+    NETV_MESSAGE message;
+    message.msg_priority = 0;
+    message.msg_cmd = NETV_EMERGENCY_CMD_PROGRAM;
+    message.msg_data_length = 0;
+    message.msg_type = NETV_TYPE_EMERGENCY;
+    message.msg_boot = 0;
+    message.msg_remote = 0;
+    message.msg_dest = moduleID;
+
+    //Add to queue
+    m_msgQueue.push_back(message);
 }
 
 
@@ -195,8 +203,8 @@ void dsPICBootloader::generateMessageQueue(hexutils::hex32doc &doc, NetworkModul
     unsigned int baseAddress = 0;
     bool highAddressChanged = false;
 
-    //RESET FIRST
-    addResetCommand(moduleID);
+    //ASK MODULE TO SWITCH BACK TO BOOTLOADER
+    addEmergencyProgram(moduleID);
 
     //SET BASE ADDRESS TO 0
     addSetBaseAddress(moduleID,baseAddress);
@@ -261,6 +269,9 @@ void dsPICBootloader::generateMessageQueue(hexutils::hex32doc &doc, NetworkModul
             }
         }
     }
+
+    //RESET WHEN DONE!
+    addResetCommand(moduleID);
 }
 
 void dsPICBootloader::upload()
@@ -283,6 +294,10 @@ void dsPICBootloader::upload()
         //Register ourself to messages...
         if (m_interface)
         {
+            //Start timer
+            m_elapsed.start();
+
+
             m_interface->registerObserver(this);
 
 
@@ -290,12 +305,21 @@ void dsPICBootloader::upload()
 
             //Reset ProgressBar
             m_ui.m_progressBar->setMinimum(0);
-            m_ui.m_progressBar->setMaximum(m_msgQueue.size());
+            //first message does not count (EMERGENCY_PROGRAM)
+            m_ui.m_progressBar->setMaximum(m_msgQueue.size() - 1);
             m_ui.m_progressBar->setValue(0);
 
 
             //Send first message
+            //This should be the EMERGENCY_PROGRAM_COMMAND
+            //We will then wait for the module to be in the bootloader
             m_interface->pushNETVMessage(m_msgQueue.front());
+
+
+            m_timer = new QTimer(this);
+            connect(m_timer,SIGNAL(timeout()),this,SLOT(timeout()));
+            m_timer->start(1000); //1000ms
+
         }
 
     }
@@ -319,12 +343,10 @@ bool  dsPICBootloader::event ( QEvent * e )
         if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
         {
             NETV_MESSAGE msg = event->getMessage();
-
-
             //printMessage(QString("notify type ") + QString::number(msg.msg_type));
 
             //Bootloader feedback...
-            if (msg.msg_type == NETV_TYPE_BOOTLOADER)
+            if (msg.msg_type == NETV_TYPE_BOOTLOADER && m_interface)
             {
                  printMessage("Feedback!!!");
                 unsigned int index = m_ui.m_moduleSelectionCombo->currentIndex();
@@ -336,28 +358,28 @@ bool  dsPICBootloader::event ( QEvent * e )
                 //Feedback from the right module
                 if (msg.msg_dest == data.y())
                 {
-                    printMessage("Feedback!!!");
-
                     //Validate feedback
-                    if (1 /*m_msgQueue.front() == msg*/)
+                    if (m_msgQueue.front() == msg)
                     {
-                        printMessage("Validated Feedback!!!");
                         m_msgQueue.pop_front();
 
                         //Increment progressbar
                         m_ui.m_progressBar->setValue(m_ui.m_progressBar->value() + 1);
 
-                        printMessage(QString("Queue size : ") + QString::number(m_msgQueue.size()));
+                        //printMessage(QString("Queue size : ") + QString::number(m_msgQueue.size()));
 
                         if (m_msgQueue.size() > 0)
                         {
                             //Send next
                             m_interface->pushNETVMessage(m_msgQueue.front());
+
+                            //Resetart timer
+                            m_elapsed.start();
                         }
                         else
                         {
                             printMessage("Done programming.");
-                            m_interface->unregisterObserver(this);
+                            stop();
                         }
 
                     }
@@ -365,6 +387,8 @@ bool  dsPICBootloader::event ( QEvent * e )
                     {
                         //Re-send message
                         //Abort?
+                        printMessage("Transfer error, stopping");
+                        stop();
                     }
                 }
 
@@ -378,4 +402,69 @@ bool  dsPICBootloader::event ( QEvent * e )
     return QObject::event(e);
 }
 
+void dsPICBootloader::timeout()
+{
+    //Which module are we programming ?
+    //Is it ready?
+    QPoint data = m_ui.m_moduleSelectionCombo->itemData(m_ui.m_moduleSelectionCombo->currentIndex()).toPoint();
 
+    NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
+    NetworkModule *module = manager->getModule(data.y());
+
+    if (module)
+    {
+        //Boot mode?
+        if (module->getConfiguration()->getModuleState() == NETV_BOOT_MODE_ID)
+        {
+            //Elapsed time
+            if(m_elapsed.elapsed() > 100) //100ms
+            {
+
+                printMessage("Timeout...");
+                if (m_msgQueue.front().msg_type != NETV_TYPE_BOOTLOADER)
+                {
+                    m_msgQueue.pop_front();
+                    printMessage("Ready!");
+                }
+
+                printMessage(QString("Queue size : ") + QString::number(m_msgQueue.size()));
+                //(Re)Send message on top of the stack
+                m_interface->pushNETVMessage(m_msgQueue.front());
+            }
+        }
+        else
+        {
+            printMessage(QString("Module not ready... ") + QString::number(module->getConfiguration()->getModuleState()));
+
+            if (m_elapsed.elapsed() > 10000)
+            {
+                //abort transfer...
+                stop();
+            }
+        }
+    }
+    else
+    {
+        stop();
+    }
+}
+
+void dsPICBootloader::stop()
+{
+    printMessage("Stopping...");
+
+    if (m_timer)
+    {
+        delete m_timer;
+        m_timer = NULL;
+    }
+
+    if (m_interface)
+    {
+        m_interface->unregisterObserver(this);
+        m_interface = NULL;
+    }
+
+    m_ui.m_progressBar->setValue(0);
+    m_msgQueue.clear();
+}

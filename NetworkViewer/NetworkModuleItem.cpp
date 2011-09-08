@@ -47,9 +47,14 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         QBuffer myBuffer;
         myBuffer.open(QIODevice::ReadWrite);
 	
-	ModuleConfiguration *conf = module->getConfiguration();
+        ModuleConfiguration *conf = m_module->getConfiguration();
 	Q_ASSERT(conf);
 	
+
+        //Will change color when state change
+        connect(conf,SIGNAL(moduleStateChanged()),this,SLOT(stateChanged()));
+
+
         conf->prettyPrint(myBuffer);
 	
 	int device_id = conf->getDeviceID();
@@ -208,3 +213,33 @@ void NetworkModuleItem::removeModule()
     emit removeModule(this);
 }
 
+
+void NetworkModuleItem::stateChanged()
+{
+    ModuleConfiguration *conf = m_module->getConfiguration();
+    Q_ASSERT(conf);
+    if (m_rectItem)
+    {
+        QBrush myBrush(Qt::SolidPattern);
+
+        switch(conf->getModuleState())
+        {
+                case NETV_IDLE_MODE_ID :
+                        myBrush.setColor(Qt::yellow);
+                break;
+
+                case NETV_BOOT_MODE_ID:
+                        myBrush.setColor(Qt::red);
+                break;
+
+                case NETV_NORMAL_MODE_ID:
+                        myBrush.setColor(Qt::green);
+                break;
+
+                default:
+                        myBrush.setColor(Qt::yellow);
+                break;
+        }
+        m_rectItem->setBrush(myBrush);
+    }
+}

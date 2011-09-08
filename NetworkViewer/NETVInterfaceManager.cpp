@@ -313,6 +313,9 @@ void NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)
 
                     if (module->getConfiguration()->getDeviceID() == module_id)
                     {
+                        //Update module state
+                        module->getConfiguration()->setModuleState(module_state);
+
                         found = true;
 
                         //Update time

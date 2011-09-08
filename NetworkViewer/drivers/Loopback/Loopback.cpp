@@ -114,12 +114,48 @@ NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
     }
     else if (message.msg_type == NETV_TYPE_BOOTLOADER)
     {
-        //Send back bootloader ACK...
-        m_mutex.lock();
-        //return message
-        m_messageList.push_back(message);
-        m_mutex.unlock();
-        m_semaphore.release(1);
+
+        unsigned int device_id = message.msg_dest;
+
+        if (device_id < m_moduleList.size())
+        {
+
+            if(m_moduleList[device_id].state == NETV_BOOT_MODE_ID)
+            {
+                //Send back bootloader ACK...
+                m_mutex.lock();
+                //return message
+                m_messageList.push_back(message);
+                m_mutex.unlock();
+                m_semaphore.release(1);
+
+
+                //Must be in boot mode to answer bootloader
+                if (message.msg_cmd == BOOTLOADER_RESET)
+                {
+                    qDebug("Loopback::sendMessage BOOTLOADER_RESET");
+                    m_moduleList[device_id].state = NETV_NORMAL_MODE_ID;
+                }
+            }
+        }
+    }
+    else if (message.msg_type == NETV_TYPE_EMERGENCY)
+    {
+        unsigned int device_id = message.msg_dest;
+
+        if (device_id < m_moduleList.size())
+        {
+            if (message.msg_cmd == NETV_EMERGENCY_CMD_RESET)
+            {
+                qDebug("Loopback::sendMessage NETV_EMERGENCY_CMD_RESET");
+                m_moduleList[device_id].state = NETV_NORMAL_MODE_ID;
+            }
+            else if (message.msg_cmd == NETV_EMERGENCY_CMD_PROGRAM)
+            {
+                qDebug("Loopback::sendMessage NETV_EMERGENCY_CMD_PROGRAM");
+                m_moduleList[device_id].state = NETV_BOOT_MODE_ID;
+            }
+        }
     }
 
     //We have processed the message

@@ -91,7 +91,7 @@
         <item>
          <widget class="QPushButton" name="m_stopButton">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>STOP</string>
