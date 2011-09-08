@@ -503,6 +503,13 @@ void ModuleConfiguration::setDeviceID(int id)
     m_deviceID = id;
 }
 
+void ModuleConfiguration::setModuleState(int state)
+{
+    m_moduleState = state;
+    emit moduleStateChanged();
+}
+
+
 bool ModuleConfiguration::loadConfiguration(const QString &filename, bool variablesOnly)
 {
     QDomDocument doc("INTROLAB-NETWORKVIEWER");

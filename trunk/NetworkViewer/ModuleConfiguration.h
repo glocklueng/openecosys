@@ -180,10 +180,19 @@ public:
     //SETS
 
     /**
-            Set m_deviceID
-            \param id the device ID
-        */
+        Set m_deviceID
+        \param id the device ID
+    */
     void setDeviceID(int id);
+
+    /**
+        Set m_moduleState
+        \param state the new state
+    */
+    void setModuleState(int state);
+
+
+
 
     /**
          * Will scan xml configuration files automatically and traverse all sub-directory. Possible configurations will be appended in the QStringList result.
@@ -217,7 +226,10 @@ signals:
     */
     void configurationAboutToLoad();
 
-
+    /**
+        The state changed...
+    */
+    void moduleStateChanged();
 
 
 
