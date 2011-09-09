@@ -157,6 +157,7 @@ enum
 int main()
 {
     unsigned int i = 0;
+    unsigned int ready = 0;
     unsigned int timer1Count = 0;
     unsigned long baseAddr = 0;
     unsigned int pageOffset = 0;
@@ -258,6 +259,8 @@ int main()
 
                         //Starting at the beginning of the buffer
                         pageOffset = 0;
+
+                        ready = 1;
 
                         //Load FLASH
                         if (baseAddr >= BOOTLOADER_ADDRESS)
@@ -364,7 +367,7 @@ int main()
                         {
 
                             //Watch out for reset vector, must not overrite it
-                            if (baseAddr == 0)
+                            if (baseAddr == 0 && ready)
                             {
 
                                 pageData[0] =  BOOTLOADER_ADDRESS;
@@ -377,7 +380,7 @@ int main()
 
 
                             //Make sure we don't overwrite the bootloader
-                            if (baseAddr < BOOTLOADER_ADDRESS)
+                            if (baseAddr < BOOTLOADER_ADDRESS && ready)
                             {
                                 //Writing
                                 //WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size);
