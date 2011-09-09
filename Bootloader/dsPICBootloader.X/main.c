@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <libpic30.h>
 #include <timer.h>
 #include "memory.h"
+#include <string.h>
 
 
 //--------------------------Device Configuration------------------------
@@ -40,10 +41,6 @@ _ICD(PGD & ICS_PGD)
 // Initial bootloader config in eeprom
 // Variable located in EEPROM
 
-
- 
-//Bootloader commands
-enum {CMD_NOP,CMD_RESET,CMD_START_WRITE,CMD_END_WRITE};
 
 void readBootConfig(BootConfig *config)
 {
@@ -111,7 +108,8 @@ void send_alive_answer(BootConfig *config)
     msg.msg_remote = 0;
 
     //Fill module information
-    msg.msg_data[0] = config->module_state;
+    //msg.msg_data[0] = config->module_state;
+    msg.msg_data[0] = NETV_BOOT_IDLE;
     msg.msg_data[1] = config->project_id;
     msg.msg_data[2] = config->module_id;
     msg.msg_data[3] = config->code_version;
@@ -138,11 +136,40 @@ int __attribute__ ((space(eedata), aligned(16))) g_bootData[] = {
         0x0000}; //DEVID HIGH
 */
  
+
+
+
+//Bootloader commands
+enum
+{
+    BOOTLOADER_SET_BASE_ADDR,
+    BOOTLOADER_GET_BASE_ADDR,
+    BOOTLOADER_SET_MODULE_ADDR,
+    BOOTLOADER_GET_MODULE_ADDR,
+    BOOTLOADER_SET_STATE,
+    BOOTLOADER_GET_STATE,
+    BOOTLOADER_SET_DELAY,
+    BOOTLOADER_GET_DELAY,
+    BOOTLOADER_READ_INC,
+    BOOTLOADER_WRITE_INC,
+    BOOTLOADER_READ_PAGE,
+    BOOTLOADER_WRITE_PAGE,
+    BOOTLOADER_WRITE_BOOTCONFIG,
+    BOOTLOADER_RESET
+};
+
+#define BOOTLOADER_NACK 0b10000000;
+#define PAGE_SIZE 64 //64 words (128 bytes)
+#define WORD_SIZE 2  //1 word = 2 bytes
  
 //This code should be working with multiple interface...
 int main()
 {
     unsigned int i = 0;
+    unsigned int timer1Count = 0;
+    unsigned long baseAddr = 0;
+    unsigned int pageOffset = 0;
+    unsigned int pageData[PAGE_SIZE];
     BootConfig config;
     NETV_MESSAGE inputMessage;
     NETV_MASK mask_in[2];
@@ -156,14 +183,15 @@ int main()
     {
         config.boot_delay = 6;
         config.table_version = 0x02;
-        config.module_state = BOOT_IDLE;
-        config.project_id = 0;
-        config.code_version = 0;
+        config.module_state = NETV_BOOT_IDLE;
+        config.project_id = 0xFF;
+        config.code_version = 0xFF;
         config.module_id = 0x00;
         
         //Write configuration
         writeBootConfig(&config);
     }
+
 
     TRISBbits.TRISB13 = 0; //B13 = OUTPUT
     LATBbits.LATB13 = 0; //TURN ON LED
@@ -206,9 +234,212 @@ int main()
                    send_alive_answer(&config);
                 }
             }
-        }
+            else if (inputMessage.msg_type == NETV_TYPE_EMERGENCY)
+            {
+                
+            }
+            else if (inputMessage.msg_type == NETV_TYPE_BOOTLOADER)
+            {
+
+                //As soon as we receive a bootloader message
+                //We are in bootloader mode
+                config.module_state = NETV_BOOT_IDLE;
+
+                NETV_MESSAGE answerMessage = inputMessage;
 
 
+                //HANDLE EMERGENCY COMMANDS
+                switch (inputMessage.msg_cmd)
+                {
+                    case BOOTLOADER_SET_BASE_ADDR:
+
+                        //GET ADDR
+                        baseAddr = (unsigned long) inputMessage.msg_data[0];
+                        baseAddr |= ((unsigned long) inputMessage.msg_data[1]) << 8;
+                        baseAddr |= ((unsigned long) inputMessage.msg_data[2]) << 16;
+                        baseAddr |= ((unsigned long) inputMessage.msg_data[3]) << 24;
+
+                        //Starting at the beginning of the buffer
+                        pageOffset = 0;
+
+                        //Load FLASH
+                        if (baseAddr >= BOOTLOADER_ADDRESS)
+                        {
+                            //NACK
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        }
+                        break;
+
+                    case BOOTLOADER_GET_BASE_ADDR:
+                        answerMessage.msg_remote = 0;
+                        answerMessage.msg_data_length = 4;
+                        answerMessage.msg_data[0] = (unsigned long) BOOTLOADER_ADDRESS >> 24;
+                        answerMessage.msg_data[1] = (unsigned long) BOOTLOADER_ADDRESS >> 16;
+                        answerMessage.msg_data[2] = (unsigned long) BOOTLOADER_ADDRESS >> 8;
+                        answerMessage.msg_data[3] = (unsigned long) BOOTLOADER_ADDRESS;
+                        break;
+
+                    case BOOTLOADER_SET_MODULE_ADDR:
+                        if (inputMessage.msg_data_length == 1)
+                        {
+
+                            config.module_id = inputMessage.msg_data[0];
+                            //Write config
+                            writeBootConfig(&config);
+
+                            //Send answer & Reset NOW!
+                            while(netv_send_message(&answerMessage));
+                            __delay_ms(50);
+                            asm("RESET");
+
+                        }
+                        else
+                        {
+                             //NACK
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        }
+                        break;
+                        
+                    case BOOTLOADER_GET_MODULE_ADDR:
+                        answerMessage.msg_remote = 0;
+                        answerMessage.msg_data_length = 1;
+                        answerMessage.msg_data[0] = config.module_id;
+                        break;
+
+                    case BOOTLOADER_SET_STATE:
+
+                        if (inputMessage.msg_data_length == 1)
+                        {
+                            config.module_state = inputMessage.msg_data[0];
+                        }
+                        else
+                        {
+                            //NACK
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        }
+                        break;
+
+                    case BOOTLOADER_GET_STATE:
+                        //RETURN STATE
+                        answerMessage.msg_remote = 0;
+                        answerMessage.msg_data_length = 1;
+                        answerMessage.msg_data[0] = config.module_state;
+                        break;
+
+                    case BOOTLOADER_SET_DELAY:
+                        if(inputMessage.msg_data_length == 1)
+                        {
+                            config.boot_delay = inputMessage.msg_data[0];
+                        }
+                        else
+                        {
+                             //NACK
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        }
+                        break;
+
+                    case BOOTLOADER_GET_DELAY:
+                        //RETURN DELAY
+                        answerMessage.msg_remote = 0;
+                        answerMessage.msg_data_length = 1;
+                        answerMessage.msg_data[0] = config.boot_delay;
+                        break;
+
+                    case BOOTLOADER_READ_INC:
+                            //NACK (NOT YET IMPLEMENTED)
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        break;
+
+                    case BOOTLOADER_WRITE_INC:
+                        //make sure we don't overflow our buffer
+                        if (pageOffset + (inputMessage.msg_data_length) / WORD_SIZE <= PAGE_SIZE)
+                        {
+                            memcpy(&pageData[pageOffset],inputMessage.msg_data, inputMessage.msg_data_length);
+                            pageOffset += (inputMessage.msg_data_length) / WORD_SIZE;
+                        }
+                        else
+                        {
+                            answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        }
+                            
+                        //time to write (except for reset vector)
+                        if (pageOffset % PAGE_SIZE == 0)
+                        {
+
+                            //Watch out for reset vector, must not overrite it
+                            if (baseAddr == 0)
+                            {                                
+                                pageData[0] =  BOOTLOADER_ADDRESS;
+                            }
+
+
+                            //Make sure we don't overwrite the bootloader
+                            if (baseAddr < BOOTLOADER_ADDRESS)
+                            {
+                                //Writing
+                                //WriteMem(unsigned int addr_high, unsigned int addr_low, unsigned int* dataPtr, unsigned int size);
+                                WriteMem((unsigned int)(baseAddr >> 16),(unsigned int) (baseAddr & 0x0000FFFF), pageData,PAGE_SIZE);
+
+                                //Next page
+                                baseAddr += PAGE_SIZE;
+                                pageOffset = 0;
+                            }
+                            else
+                            {
+                                //NACK
+                                answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                            }
+                        }
+                        break;
+
+                    case BOOTLOADER_READ_PAGE:
+                        //NACK (NOT YET IMPLEMENTED)
+                        answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        break;
+
+                    case BOOTLOADER_WRITE_PAGE:
+                        //NACK (NOT YET IMPLEMENTED)
+                        answerMessage.msg_cmd |= BOOTLOADER_NACK;
+                        break;
+
+                    case BOOTLOADER_WRITE_BOOTCONFIG:
+                        writeBootConfig(&config);
+                        break;
+
+                    case BOOTLOADER_RESET:
+
+                        while(netv_send_message(&answerMessage));
+
+                        __delay_ms(50);
+                        
+                        //RESET!
+                        asm("RESET");
+                        //ACK
+                        break;
+                }
+
+
+               //Send ACK / NACK / ANSWER
+               while(netv_send_message(&answerMessage));
+                
+                
+            } //Bootloader type
+        } //RECV CAN MESSAGE
+
+        //HANDLE NORMAL MODE
+        if (config.module_state == NETV_BOOT_NORMAL)
+        {
+                //LOOK FOR TIMEOUT
+                //THEN JUMP INTO USER CODE AT 0x100
+                if (timer1Count >= config.boot_delay)
+                {
+                        //LED OFF
+                        LATBbits.LATB13 = 1;
+
+                        //JUMPING to standard location
+                        {__asm__ volatile ("goto 0x0100");}
+                }
+        } //BOOT NORMAL
 
         //Timer1 interrupt flag
         if (IFS0bits.T1IF)
@@ -219,8 +450,9 @@ int main()
             //Toggle led
             LATBbits.LATB13 = ~LATBbits.LATB13;
 
+            //increment timer counter
+            timer1Count++;
         }
-
     }
 
     return 0;
