@@ -113,9 +113,9 @@ void dsPICBootloader::loadHEX()
             m_ui.m_filenameLineEdit->setText(fileName);
             m_ui.m_sizeLineEdit->setText(QString::number(m_doc.dataSize()));
 
-            ostringstream buffer;
-            m_doc.print(buffer);
-            printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
+            //ostringstream buffer;
+            //m_doc.print(buffer);
+            //printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
         } //document validate
         else
         {
