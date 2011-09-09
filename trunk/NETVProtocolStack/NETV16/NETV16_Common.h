@@ -109,7 +109,7 @@ typedef struct _BootConfig
 
 
 //MODULE STATES
-enum {BOOT_IDLE=0x0A, BOOT_PROGRAM_FLASH=0x01, BOOT_PROGRAM_EEPROM=0x02, BOOT_NORMAL=0x05};
+enum {NETV_BOOT_IDLE=0x0A, NETV_BOOT_NORMAL=0x05};
 
 
 //Function prototypes
