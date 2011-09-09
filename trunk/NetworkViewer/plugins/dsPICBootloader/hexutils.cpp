@@ -1,5 +1,5 @@
 #include "hexutils.h"
-
+#include <qDebug>
 
 
 namespace hexutils 
@@ -353,7 +353,7 @@ std::ostream &resethex(std::ostream &stream)
                 full_address <<= 16;
                 full_address |= (unsigned int) m_lines[i].getAddress();    
                 full_address >>= 1; // div 2 for real hardware address                        
-                                       
+                                                       
                 //modify line to store full address
                 m_lines[i].setAddress(full_address);
  
@@ -364,9 +364,9 @@ std::ostream &resethex(std::ostream &stream)
            }                  
       }
       
-      //sort lines
-      //sort_lines();
-   
+      //sort lines by addresses
+      sort_lines();
+
       //remove non normal address lines
         
  }
