@@ -28,9 +28,12 @@
 #include "NETVInterfaceHandler.h"
 #include <QTimer>
 #include <QTime>
+#include "hexutils.h"
 
 
-
+#define BOOT_LOADER_ADDRESS 0x9000
+#define BOOT_LOADER_PAGE_SIZE 64
+#define BOOT_LOADER_WORD_SIZE 2
 
 
 class dsPICBootloader : public BasePlugin, public NETVMessageObserverIF
@@ -70,7 +73,7 @@ protected slots:
     void addEmergencyProgram(unsigned int moduleID);
     void addResetCommand(unsigned int moduleID);
     void addSetBaseAddress(unsigned int moduleID, unsigned int address);
-    void addSendDataInc(unsigned int moduleID, std::vector<unsigned char> &data);
+    void addSendDataInc(unsigned int moduleID, QVector<unsigned char> &data);
 
 protected:
 
@@ -81,12 +84,17 @@ protected:
 
 
     void generateMessageQueue(hexutils::hex32doc &doc, NetworkModule *module);
+    void generateMemoryMap(hexutils::hex32doc &doc);
 
     ///QObject event handler overload
     virtual bool event (QEvent * e);
 
     QTimer *m_timer;
     QTime m_elapsed;
+    QVector<unsigned char> m_memoryData;
+    hexutils::hex32doc m_doc;
+    NetworkModule *m_module;
+
 };
 
 #endif

@@ -29,7 +29,7 @@ static int dspicbootloader_plugin_init = BasePlugin::registerPlugin("dsPICBootlo
 
 
 dsPICBootloader::dsPICBootloader(NetworkView *view)
-    : BasePlugin(view), m_interface(NULL), m_timer(NULL)
+    : BasePlugin(view), m_interface(NULL), m_timer(NULL), m_module(NULL)
 {
 
     //Create UI
@@ -91,7 +91,6 @@ void dsPICBootloader::printMessage(const QString &message)
 
 void dsPICBootloader::loadHEX()
 {
-    hexutils::hex32doc doc;
 
     QString fileName = QFileDialog::getOpenFileName(this,
          tr("Open HEX File"), ".", tr("HEX Files (*.hex)"));
@@ -100,19 +99,18 @@ void dsPICBootloader::loadHEX()
     {
         printMessage(QString("loading : ") + fileName);
 
-        doc.load(fileName.toStdString());
+        m_doc.load(fileName.toStdString());
 
         printMessage("Done!");
 
-        printMessage("Document line size : " + QString::number(doc.size()));
+        printMessage("Document line size : " + QString::number(m_doc.size()));
 
-        if (doc.validate())
+        if (m_doc.validate())
         {
-            doc.parse();
+            m_doc.parse();
             ostringstream buffer;
-            doc.print(buffer);
+            m_doc.print(buffer);
             printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
-            generateMessageQueue(doc,NULL);
         } //document validate
         else
         {
@@ -174,18 +172,24 @@ void dsPICBootloader::addResetCommand(unsigned int moduleID)
 }
 
 
-void dsPICBootloader::addSendDataInc(unsigned int moduleID, std::vector<unsigned char> &data)
+void dsPICBootloader::addSendDataInc(unsigned int moduleID, QVector<unsigned char> &data)
 {
 
     //Segmenting into 8 bytes data packets
+    if (data.size() % 8 != 0)
+    {
+        printMessage(QString("addSendDataInc strange size :") + QString::number(data.size()));
+    }
+
+
     for (unsigned int i = 0; i < data.size(); i+=8)
     {
 
         NETV_MESSAGE message;
         message.msg_priority = 0;
         message.msg_cmd = BOOTLOADER_WRITE_INC;
-        message.msg_data_length = std::min((unsigned int)data.size() - i,(unsigned int)8);
-        memcpy(message.msg_data,&data[i], std::min((unsigned int)data.size() - i,(unsigned int)8));
+        message.msg_data_length = 8;
+        memcpy(message.msg_data,&data.data()[i],8);
         message.msg_type = NETV_TYPE_BOOTLOADER;
         message.msg_boot = 0;
         message.msg_remote = 0;
@@ -195,88 +199,113 @@ void dsPICBootloader::addSendDataInc(unsigned int moduleID, std::vector<unsigned
 
 }
 
-
-void dsPICBootloader::generateMessageQueue(hexutils::hex32doc &doc, NetworkModule *module)
+void dsPICBootloader::generateMemoryMap(hexutils::hex32doc &doc)
 {
-    //This will generate the sequence of message to be sent to the module
-    unsigned int moduleID = 0;
-    unsigned int baseAddress = 0;
-    bool highAddressChanged = false;
+    //document lines are ordered by address
+    //Real addresses are already parsed correctly (high bytes) and stored into lines
 
-    //ASK MODULE TO SWITCH BACK TO BOOTLOADER
-    addEmergencyProgram(moduleID);
+    //Emtpy memory data
+    m_memoryData.resize(0);
 
-    //SET BASE ADDRESS TO 0
-    addSetBaseAddress(moduleID,baseAddress);
-
-    //PROCESS HEX DATA
-    for (size_t i = 0; i < doc.size(); i++)
+    //Go through all lines
+    for (size_t i =0; i < doc.size(); i++)
     {
+
         hexutils::hex32line &line = doc.getLine(i);
 
+        //We are only interested in data lines
         if (line.getType() == 0x00)
         {
-            //update address
-            unsigned int addr = line.getAddress();
 
-            baseAddress &= 0xFFFF0000; //Clear old LSB
-            baseAddress |= (addr & 0x0000FFFF); //Set new LSB
+            unsigned int addr = line.getAddress() * BOOT_LOADER_WORD_SIZE;
 
-            //Data line
-            if (highAddressChanged)
+
+            if (addr < (BOOT_LOADER_ADDRESS * BOOT_LOADER_WORD_SIZE))
             {
-                printMessage("Set base address : "+ QString::number(baseAddress,16).toUpper());
 
-
-                unsigned int modulo = baseAddress % 64;
-                //Calculate base page address
-                if (modulo != 0)
+                //Dynamically growing memory region
+                if (m_memoryData.size() < (addr + line.getNbBytes()))
                 {
-                    printMessage("Should load page at address : " + QString::number(baseAddress - modulo,16) + "with offset " + QString::number(modulo));
+                    m_memoryData.resize(addr + line.getNbBytes());
                 }
 
-
-
-                //Send base address first
-                addSetBaseAddress(moduleID,baseAddress);
-                highAddressChanged = false;
+                //Copy memory data
+                for (unsigned int j = addr; j < (addr + line.getNbBytes());j++)
+                {
+                    m_memoryData[j] = line.getData()[j - addr];
+                }
             }
-
-            //Send data line
-            addSendDataInc(moduleID,line.getData());
-
-        }
-        else if (line.getType() == 0x01)
-        {
-            //end document
-            break;
-        }
-        else if (line.getType() == 0x04)
-        {
-            if (line.getNbBytes() == 2)
+            else
             {
-                highAddressChanged = true;
-
-                //Get the MSB
-                unsigned int msb = 0;
-
-                msb = ((unsigned int) line.getData()[0]) << 24;
-                msb |= ((unsigned int) line.getData()[1]) << 16;
-
-                //Update base address
-                //Must be divided by 2 for real PIC address
-                baseAddress = msb / 2; //set new MSB
+                printMessage(QString("Flushing Line @0x") + QString::number(addr/BOOT_LOADER_WORD_SIZE,16));
             }
+
         }
     }
 
-    //RESET WHEN DONE!
-    addResetCommand(moduleID);
+    if (m_memoryData.size() > 2)
+    {
+        //page size is 64 words * 2 bytes
+        int modulo = m_memoryData.size() % (BOOT_LOADER_WORD_SIZE * BOOT_LOADER_PAGE_SIZE);
+
+        if (modulo > 0)
+        {
+            m_memoryData.resize(m_memoryData.size() + ((BOOT_LOADER_WORD_SIZE * BOOT_LOADER_PAGE_SIZE) - modulo));
+            printMessage(QString("Resizing memory map to fit page size :") + QString::number(m_memoryData.size()));
+        }
+
+
+        printMessage(QString("Memory Map ends @0x") + QString::number(m_memoryData.size() / BOOT_LOADER_WORD_SIZE,16));
+
+        //Make sure the reset vector is correct
+        //"Jump @0x9000"
+        m_memoryData[0] = (unsigned char) (BOOT_LOADER_ADDRESS & 0x00FF);
+        m_memoryData[1] = (unsigned char) (BOOT_LOADER_ADDRESS >> 8);
+    }
+
+}
+
+
+void dsPICBootloader::generateMessageQueue(hexutils::hex32doc &doc, NetworkModule *module)
+{
+    if (module)
+    {
+        //Clear message queue
+        m_msgQueue.clear();
+
+        unsigned int moduleID = module->getConfiguration()->getDeviceID();
+
+        //This will organize memory so that everything is aligned on FLASH pages
+        generateMemoryMap(doc);
+
+        //Ask module to switch back to bootloader
+        addEmergencyProgram(moduleID);
+
+        //Set base address to 0
+        addSetBaseAddress(moduleID,0);
+
+        //This will generate multiple can messages
+        addSendDataInc(moduleID,m_memoryData);
+
+        //Reset when done!
+        addResetCommand(moduleID);
+    }
 }
 
 void dsPICBootloader::upload()
 {
     printMessage("Uploading...");
+
+    //get selected module
+    QPoint data = m_ui.m_moduleSelectionCombo->itemData(m_ui.m_moduleSelectionCombo->currentIndex()).toPoint();
+
+    NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
+    m_module = manager->getModule(data.y());
+
+    if (m_module)
+    {
+        generateMessageQueue(m_doc,m_module);
+    }
 
 
     if (m_msgQueue.size())
@@ -348,7 +377,7 @@ bool  dsPICBootloader::event ( QEvent * e )
             //Bootloader feedback...
             if (msg.msg_type == NETV_TYPE_BOOTLOADER && m_interface)
             {
-                 printMessage("Feedback!!!");
+
                 unsigned int index = m_ui.m_moduleSelectionCombo->currentIndex();
 
                 //Do you get the point! ;)
@@ -404,17 +433,10 @@ bool  dsPICBootloader::event ( QEvent * e )
 
 void dsPICBootloader::timeout()
 {
-    //Which module are we programming ?
-    //Is it ready?
-    QPoint data = m_ui.m_moduleSelectionCombo->itemData(m_ui.m_moduleSelectionCombo->currentIndex()).toPoint();
-
-    NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
-    NetworkModule *module = manager->getModule(data.y());
-
-    if (module)
+    if (m_module && m_interface)
     {
         //Boot mode?
-        if (module->getConfiguration()->getModuleState() == NETV_BOOT_MODE_ID)
+        if (m_module->getConfiguration()->getModuleState() == NETV_BOOT_MODE_ID)
         {
             //Elapsed time
             if(m_elapsed.elapsed() > 100) //100ms
@@ -434,7 +456,7 @@ void dsPICBootloader::timeout()
         }
         else
         {
-            printMessage(QString("Module not ready... ") + QString::number(module->getConfiguration()->getModuleState()));
+            printMessage(QString("Module not ready... ") + QString::number(m_module->getConfiguration()->getModuleState()));
 
             if (m_elapsed.elapsed() > 10000)
             {
@@ -467,4 +489,6 @@ void dsPICBootloader::stop()
 
     m_ui.m_progressBar->setValue(0);
     m_msgQueue.clear();
+    m_memoryData.resize(0);
+    m_module = NULL;
 }
