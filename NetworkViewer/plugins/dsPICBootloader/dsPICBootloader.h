@@ -74,6 +74,11 @@ protected slots:
     void addResetCommand(unsigned int moduleID);
     void addSetBaseAddress(unsigned int moduleID, unsigned int address);
     void addSendDataInc(unsigned int moduleID, QVector<unsigned char> &data);
+    void addSetState(unsigned int moduleID, unsigned char state);
+    void addWriteBootConfig(unsigned int moduleID);
+
+    void moduleAdded(NetworkModule *module);
+    void moduleRemoved(NetworkModule *module);
 
 protected:
 
@@ -85,6 +90,7 @@ protected:
 
     void generateMessageQueue(hexutils::hex32doc &doc, NetworkModule *module);
     void generateMemoryMap(hexutils::hex32doc &doc);
+    void rebuildCombo();
 
     ///QObject event handler overload
     virtual bool event (QEvent * e);

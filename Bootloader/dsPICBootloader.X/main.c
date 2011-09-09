@@ -68,15 +68,7 @@ void writeBootConfig(BootConfig* config)
 
 	if (config)
 	{
-
 		unsigned int data[16]; //first page of data
-		unsigned int addrlow = 0;
-
-		//READING MEMORY
-		for (addrlow = 0; addrlow < 32; addrlow += 2)
-		{
-			data[addrlow >> 1] = ReadMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW + addrlow);
-		}
 
 		data[0] = config->module_state;
 		data[1] = config->project_id;
@@ -89,7 +81,6 @@ void writeBootConfig(BootConfig* config)
 
 		//WRITING BACK PAGE
 		WriteMem(EEPROM_BASE_ADDRESS_HIGH,EEPROM_BASE_ADDRESS_LOW,data,16);
-
 	}
 }
 
@@ -241,9 +232,11 @@ int main()
             else if (inputMessage.msg_type == NETV_TYPE_BOOTLOADER)
             {
 
-                //As soon as we receive a bootloader message
-                //We are in bootloader mode
-                config.module_state = NETV_BOOT_IDLE;
+                //Toggle led
+                LATBbits.LATB13 = ~LATBbits.LATB13;
+
+                //Reset timer
+                timer1Count = 0;
 
                 NETV_MESSAGE answerMessage = inputMessage;
 
@@ -252,6 +245,10 @@ int main()
                 switch (inputMessage.msg_cmd)
                 {
                     case BOOTLOADER_SET_BASE_ADDR:
+
+                        //As soon as we receive a bootloader message
+                        //We are in bootloader mode
+                        config.module_state = NETV_BOOT_IDLE;
 
                         //GET ADDR
                         baseAddr = (unsigned long) inputMessage.msg_data[0];
@@ -273,10 +270,10 @@ int main()
                     case BOOTLOADER_GET_BASE_ADDR:
                         answerMessage.msg_remote = 0;
                         answerMessage.msg_data_length = 4;
-                        answerMessage.msg_data[0] = (unsigned long) BOOTLOADER_ADDRESS >> 24;
-                        answerMessage.msg_data[1] = (unsigned long) BOOTLOADER_ADDRESS >> 16;
-                        answerMessage.msg_data[2] = (unsigned long) BOOTLOADER_ADDRESS >> 8;
-                        answerMessage.msg_data[3] = (unsigned long) BOOTLOADER_ADDRESS;
+                        answerMessage.msg_data[0] = (unsigned char)((unsigned long) BOOTLOADER_ADDRESS >> 24);
+                        answerMessage.msg_data[1] = (unsigned char)((unsigned long) BOOTLOADER_ADDRESS >> 16);
+                        answerMessage.msg_data[2] = (unsigned char)((unsigned long) BOOTLOADER_ADDRESS >> 8);
+                        answerMessage.msg_data[3] = (unsigned char)((unsigned long) BOOTLOADER_ADDRESS);
                         break;
 
                     case BOOTLOADER_SET_MODULE_ADDR:
@@ -368,8 +365,14 @@ int main()
 
                             //Watch out for reset vector, must not overrite it
                             if (baseAddr == 0)
-                            {                                
+                            {
+
                                 pageData[0] =  BOOTLOADER_ADDRESS;
+                                
+                                //Make sure we dont't boot in normal mode
+                                //if data transfer aborts
+                                config.module_state =  NETV_BOOT_IDLE;
+                                writeBootConfig(&config);
                             }
 
 

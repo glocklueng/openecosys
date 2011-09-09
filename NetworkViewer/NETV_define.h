@@ -79,7 +79,7 @@
 */
 #define NETV_NORMAL_MODE_ID          0x05
 #define NETV_BOOT_MODE_ID            0x0A
-#define NETV_IDLE_MODE_ID            0x0B
+
 
 
 //Bootloader commands
