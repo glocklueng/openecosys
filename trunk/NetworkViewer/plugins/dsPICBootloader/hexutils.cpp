@@ -399,6 +399,23 @@ std::ostream &resethex(std::ostream &stream)
      }
      return true;
  }
+
+ size_t hex32doc::dataSize() const
+ {
+     size_t size = 0;
+
+     for (unsigned int i = 0; i < m_lines.size(); i++)
+     {
+         if (m_lines[i].getType() == 0x00)
+         {
+             size += m_lines[i].getNbBytes();
+         }
+     }
+
+     return size;
+ }
+
 }//namespace hexutils
+
 
 

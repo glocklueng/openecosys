@@ -102,9 +102,17 @@ void dsPICBootloader::loadHEX()
 
         printMessage("Document line size : " + QString::number(m_doc.size()));
 
+
+
+
+
         if (m_doc.validate())
         {
             m_doc.parse();
+
+            m_ui.m_filenameLineEdit->setText(fileName);
+            m_ui.m_sizeLineEdit->setText(QString::number(m_doc.dataSize()));
+
             ostringstream buffer;
             m_doc.print(buffer);
             printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
@@ -334,9 +342,7 @@ void dsPICBootloader::upload()
     if (m_module)
     {
         generateMessageQueue(m_doc,m_module);
-        connect(m_module,SIGNAL(moduleDestroyed()),this,SLOT(moduleDestroyed(NetworkModule*)));
     }
-
 
     if (m_msgQueue.size())
     {
@@ -345,8 +351,6 @@ void dsPICBootloader::upload()
 
         //Do you get the point! ;)
         QPoint data = m_ui.m_moduleSelectionCombo->itemData(index).toPoint();
-
-
 
         m_interface = m_view->getInterfaceManagerList()[data.x()]->getInterfaceHandler();
 

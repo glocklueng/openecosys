@@ -138,6 +138,8 @@ namespace hexutils
          void parse();
          
          size_t size();
+
+         size_t dataSize() const;
          
          hex32line& getLine(unsigned int no);
 
