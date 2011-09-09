@@ -44,20 +44,17 @@ dsPICBootloader::dsPICBootloader(NetworkView *view)
 
     //Fill Combo
     QList<NETVInterfaceManager*> interfaceList = view->getInterfaceManagerList();
-
-
     for (unsigned int i= 0; i < interfaceList.size(); i++)
     {
-        QList<NetworkModule*> allModules = interfaceList[i]->getModules();
-
-        for (unsigned j = 0; j < allModules.size(); j++)
-        {
-            NetworkModule* mod = allModules[j];
-
-            //Add combo item
-            m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(mod->getConfiguration()->getDeviceID()),QPoint(i,mod->getConfiguration()->getDeviceID()));
-        }
+        connect(interfaceList[i],SIGNAL(moduleAdded(NetworkModule*)),this,SLOT(moduleAdded(NetworkModule*)));
+        connect(interfaceList[i],SIGNAL(moduleRemoved(NetworkModule*)),this,SLOT(moduleRemoved(NetworkModule*)));
     }
+
+    rebuildCombo();
+
+
+
+
 }
 
 dsPICBootloader::~dsPICBootloader()
@@ -171,6 +168,32 @@ void dsPICBootloader::addResetCommand(unsigned int moduleID)
 
 }
 
+void dsPICBootloader::addSetState(unsigned int moduleID, unsigned char state)
+{
+    NETV_MESSAGE message;
+    message.msg_priority = 0;
+    message.msg_cmd = BOOTLOADER_SET_STATE;
+    message.msg_data_length = 1;
+    message.msg_data[0] = state;
+    message.msg_type = NETV_TYPE_BOOTLOADER;
+    message.msg_boot = 0;
+    message.msg_remote = 0;
+    message.msg_dest = moduleID;
+    m_msgQueue.push_back(message);
+}
+
+void dsPICBootloader::addWriteBootConfig(unsigned int moduleID)
+{
+    NETV_MESSAGE message;
+    message.msg_priority = 0;
+    message.msg_cmd = BOOTLOADER_WRITE_BOOTCONFIG;
+    message.msg_data_length = 0;
+    message.msg_type = NETV_TYPE_BOOTLOADER;
+    message.msg_boot = 0;
+    message.msg_remote = 0;
+    message.msg_dest = moduleID;
+    m_msgQueue.push_back(message);
+}
 
 void dsPICBootloader::addSendDataInc(unsigned int moduleID, QVector<unsigned char> &data)
 {
@@ -287,6 +310,12 @@ void dsPICBootloader::generateMessageQueue(hexutils::hex32doc &doc, NetworkModul
         //This will generate multiple can messages
         addSendDataInc(moduleID,m_memoryData);
 
+        //Set module to normal mode
+        addSetState(moduleID,NETV_NORMAL_MODE_ID);
+
+        //Write config, will reboot in normal mode
+        addWriteBootConfig(moduleID);
+
         //Reset when done!
         addResetCommand(moduleID);
     }
@@ -305,6 +334,7 @@ void dsPICBootloader::upload()
     if (m_module)
     {
         generateMessageQueue(m_doc,m_module);
+        connect(m_module,SIGNAL(moduleDestroyed()),this,SLOT(moduleDestroyed(NetworkModule*)));
     }
 
 
@@ -491,4 +521,42 @@ void dsPICBootloader::stop()
     m_msgQueue.clear();
     m_memoryData.resize(0);
     m_module = NULL;
+}
+
+void dsPICBootloader::moduleAdded(NetworkModule *module)
+{
+    rebuildCombo();
+}
+
+void dsPICBootloader::moduleRemoved(NetworkModule *module)
+{
+    if (m_module == module)
+    {
+        m_module = NULL;
+        stop();
+    }
+
+    rebuildCombo();
+}
+
+void dsPICBootloader::rebuildCombo()
+{
+    //Clear combo first
+    m_ui.m_moduleSelectionCombo->clear();
+
+    //Fill Combo
+    QList<NETVInterfaceManager*> interfaceList = m_view->getInterfaceManagerList();
+
+    for (unsigned int i= 0; i < interfaceList.size(); i++)
+    {
+        QList<NetworkModule*> allModules = interfaceList[i]->getModules();
+
+        for (unsigned j = 0; j < allModules.size(); j++)
+        {
+            NetworkModule* mod = allModules[j];
+
+            //Add combo item
+            m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(mod->getConfiguration()->getDeviceID()),QPoint(i,mod->getConfiguration()->getDeviceID()));
+        }
+    }
 }

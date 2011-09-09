@@ -119,11 +119,7 @@ NetworkModuleItem::NetworkModuleItem(NetworkModule* module, QGraphicsItem *paren
         QBrush myBrush(Qt::SolidPattern);
 
 	switch(conf->getModuleState())
-	{
-                case NETV_IDLE_MODE_ID :
-			myBrush.setColor(Qt::yellow);
-		break;
-		
+	{		
                 case NETV_BOOT_MODE_ID:
 			myBrush.setColor(Qt::red);
 		break;
@@ -224,10 +220,6 @@ void NetworkModuleItem::stateChanged()
 
         switch(conf->getModuleState())
         {
-                case NETV_IDLE_MODE_ID :
-                        myBrush.setColor(Qt::yellow);
-                break;
-
                 case NETV_BOOT_MODE_ID:
                         myBrush.setColor(Qt::red);
                 break;

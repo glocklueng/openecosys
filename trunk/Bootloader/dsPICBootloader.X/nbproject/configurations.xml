@@ -83,11 +83,11 @@
         <property key="extra-include-directories-for-assembler" value=""/>
         <property key="preprocessor-macros" value=""/>
         <property key="list-file" value=""/>
-        <property key="list-assembly" value="false"/>
         <property key="list-source" value="false"/>
+        <property key="list-assembly" value="false"/>
         <property key="relax" value="false"/>
-        <property key="extra-include-directories-for-preprocessor" value=""/>
         <property key="warning-level" value="emit-warnings"/>
+        <property key="extra-include-directories-for-preprocessor" value=""/>
         <property key="list-section-info" value="false"/>
         <property key="omit-forms" value="false"/>
         <property key="list-symbols" value="false"/>
@@ -113,18 +113,18 @@
         <property key="enable-handles" value="true"/>
         <property key="enable-data-init" value="true"/>
         <property key="secure-flash" value="no_flash"/>
-        <property key="boot-write-protect" value="no_write_protect"/>
-        <property key="boot-flash" value="no_flash"/>
-        <property key="report-memory-usage" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
+        <property key="report-memory-usage" value="false"/>
+        <property key="boot-flash" value="no_flash"/>
+        <property key="boot-write-protect" value="no_write_protect"/>
         <property key="input-libraries" value=""/>
         <property key="secure-ram" value="no_ram"/>
         <property key="enable-check-sections" value="false"/>
         <property key="enable-default-isr" value="true"/>
         <property key="symbol-stripping" value="keep-all"/>
         <property key="boot-ram" value="no_ram"/>
-        <property key="secure-eeprom" value="no_eeprom"/>
         <property key="extra-lib-directories" value=""/>
+        <property key="secure-eeprom" value="no_eeprom"/>
       </C30-LD>
       <C30Global>
         <property key="fast-math" value="false"/>
@@ -138,7 +138,7 @@
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
         <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
-        <property key="memories.eeprom" value="true"/>
+        <property key="memories.eeprom" value="false"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="QEI" value="true"/>
         <property key="INPUT CAPTURE 4" value="true"/>
