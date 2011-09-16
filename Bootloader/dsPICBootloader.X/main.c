@@ -61,7 +61,8 @@ void init_led()
 
 
     #ifdef _DSPIC30F4011_
-        //TODO LED...
+        TRISCbits.TRISC13 = 0; //C13 = OUTPUT
+        LATCbits.LATC13 = 0; //TURN ON LED
     #endif
         
 }
@@ -76,7 +77,7 @@ void toggle_led()
 
 
     #ifdef _DSPIC30F4011_
-       //TODO LED...
+       LATCbits.LATC13 = ~LATCbits.LATC13; 
     #endif
 
 
@@ -90,7 +91,7 @@ void set_led(unsigned char state)
 
 
     #ifdef _DSPIC30F4011_
-       //TODO LED...
+       LATCbits.LATC13 = state;
     #endif
     
 }
