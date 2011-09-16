@@ -16,7 +16,7 @@ RM=rm -f
 CP=cp 
 
 # Macros
-CND_CONF=default
+CND_CONF=dsPIC30F4011
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 IMAGE_TYPE=debug
 FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
@@ -40,7 +40,7 @@ ASFLAGS=
 LDLIBSOPTIONS=
 
 # Path to java used to run MPLAB X when this makefile was created
-MP_JAVA_PATH=C:\\Program\ Files\ \(x86\)\\Java\\jre6/bin/
+MP_JAVA_PATH=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/
 OS_CURRENT="$(shell uname -s)"
 ############# Tool locations ##########################################
 # If you copy a project from one host to another, the path where the  #
@@ -48,24 +48,24 @@ OS_CURRENT="$(shell uname -s)"
 # If you open this project with MPLAB X in the new host, this         #
 # makefile will be regenerated and the paths will be corrected.       #
 #######################################################################
-MP_CC=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-gcc.exe
+MP_CC=/Applications/microchip/mplabc30/v3.30b/bin/pic30-gcc
 # MP_BC is not defined
-MP_AS=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-as.exe
-MP_LD=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-ld.exe
-MP_AR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin\\pic30-ar.exe
+MP_AS=/Applications/microchip/mplabc30/v3.30b/bin/pic30-as
+MP_LD=/Applications/microchip/mplabc30/v3.30b/bin/pic30-ld
+MP_AR=/Applications/microchip/mplabc30/v3.30b/bin/pic30-ar
 # MP_BC is not defined
-MP_CC_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
+MP_CC_DIR=/Applications/microchip/mplabc30/v3.30b/bin
 # MP_BC_DIR is not defined
-MP_AS_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
-MP_LD_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
-MP_AR_DIR=C:\\Program\ Files\ \(x86\)\\Microchip\\mplabc30\\v3.30b\\bin
+MP_AS_DIR=/Applications/microchip/mplabc30/v3.30b/bin
+MP_LD_DIR=/Applications/microchip/mplabc30/v3.30b/bin
+MP_AR_DIR=/Applications/microchip/mplabc30/v3.30b/bin
 # MP_BC_DIR is not defined
 
 .build-conf: ${BUILD_SUBPROJECTS}
-	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
+	${MAKE}  -f nbproject/Makefile-dsPIC30F4011.mk dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
 
-MP_PROCESSOR_OPTION=30F5015
-MP_LINKER_FILE_OPTION=,--script=p30F5015_bootloader.gld
+MP_PROCESSOR_OPTION=30F4011
+MP_LINKER_FILE_OPTION=,--script=p30F4011_bootloader.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -131,8 +131,8 @@ ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	@${RM} ${OBJECTDIR}/main.o.d 
@@ -152,8 +152,8 @@ ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o: ../NETVProtocolStack/NETV16/NET
 	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.tmp
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
@@ -174,8 +174,8 @@ ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o.ok ${OBJECTDIR}/main.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/main.o.d -o ${OBJECTDIR}/main.o main.c    2>&1  > ${OBJECTDIR}/main.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/main.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/main.o.d > ${OBJECTDIR}/main.o.tmp
 	@${RM} ${OBJECTDIR}/main.o.d 
@@ -195,8 +195,8 @@ ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o: ../NETVProtocolStack/NETV16/NET
 	@${MKDIR} ${OBJECTDIR}/_ext/1908611077 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err 
-	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
-	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
+	@echo ${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c  
+	@-${MP_CC} $(MP_EXTRA_CC_PRE)  -omf=elf -x c -c -mcpu=$(MP_PROCESSOR_OPTION) -D_DSPIC30F4011_ -I"." -I"../NETVProtocolStack/NETV16" -Os -MMD -MF ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d -o ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o ../NETVProtocolStack/NETV16/NETV16_CANDriver.c    2>&1  > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.err ; if [ $$? -eq 0 ] ; then touch ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.ok ; fi 
 ifneq (,$(findstring MINGW32,$(OS_CURRENT))) 
 	@sed -e 's/\"//g' -e 's/\\$$/__EOL__/g' -e 's/\\ /__ESCAPED_SPACES__/g' -e 's/\\/\//g' -e 's/__ESCAPED_SPACES__/\\ /g' -e 's/__EOL__$$/\\/g' ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d > ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.tmp
 	@${RM} ${OBJECTDIR}/_ext/1908611077/NETV16_CANDriver.o.d 
@@ -224,7 +224,7 @@ else
 dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
 	${MP_CC} $(MP_EXTRA_LD_PRE)  -omf=elf  -mcpu=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf ${OBJECTFILES}        -Wl,--defsym=__MPLAB_BUILD=1,--report-mem$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION)
-	${MP_CC_DIR}\\pic30-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf -omf=elf
+	${MP_CC_DIR}/pic30-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf -omf=elf
 endif
 
 
@@ -233,8 +233,8 @@ endif
 
 # Clean Targets
 .clean-conf:
-	${RM} -r build/default
-	${RM} -r dist/default
+	${RM} -r build/dsPIC30F4011
+	${RM} -r dist/dsPIC30F4011
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl
