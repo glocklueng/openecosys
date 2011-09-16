@@ -65,7 +65,7 @@ MP_AR_DIR=/Applications/microchip/mplabc30/v3.30b/bin
 	${MAKE}  -f nbproject/Makefile-dsPIC30F5015.mk dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
 
 MP_PROCESSOR_OPTION=30F5015
-MP_LINKER_FILE_OPTION=,--script=p30F4011_bootloader.gld
+MP_LINKER_FILE_OPTION=,--script=p30F5015_bootloader.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)

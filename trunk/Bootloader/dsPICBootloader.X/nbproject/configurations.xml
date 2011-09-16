@@ -20,6 +20,7 @@
                    displayName="Linker Files"
                    projectFiles="true">
       <itemPath>p30F4011_bootloader.gld</itemPath>
+      <itemPath>p30F5015_bootloader.gld</itemPath>
     </logicalFolder>
     <logicalFolder name="ObjectFiles"
                    displayName="Object Files"
@@ -172,6 +173,8 @@
         <property key="TIMER1" value="true"/>
         <property key="programoptions.preserveprogramrange.end" value="0xff"/>
       </ICD3PlatformTool>
+      <item path="p30F4011_bootloader.gld" ex="true" overriding="false">
+      </item>
     </conf>
     <conf name="dsPIC30F4011" type="2">
       <toolsSet>
@@ -303,6 +306,8 @@
         <property key="TIMER1" value="true"/>
         <property key="programoptions.preserveprogramrange.end" value="0xff"/>
       </ICD3PlatformTool>
+      <item path="p30F5015_bootloader.gld" ex="true" overriding="false">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
