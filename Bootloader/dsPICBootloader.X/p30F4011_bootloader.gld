@@ -17,7 +17,7 @@ MEMORY
   reset          : ORIGIN = 0x0,           LENGTH = 0x4
   ivt            : ORIGIN = 0x4,           LENGTH = 0x7C
   aivt           : ORIGIN = 0x84,          LENGTH = 0x7C
-  program (xr)   : ORIGIN = 0x6000,         LENGTH = ((16K * 2) - 0x6000)
+  program (xr)   : ORIGIN = 0x7000,         LENGTH = ((16K * 2) - 0x7000)
   eedata         : ORIGIN = 0x7FFC00,      LENGTH = 0x400
   FUID0          : ORIGIN = 0x8005C0,      LENGTH = 0x2
   FUID1          : ORIGIN = 0x8005C2,      LENGTH = 0x2
