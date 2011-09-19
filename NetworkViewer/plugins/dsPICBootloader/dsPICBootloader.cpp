@@ -23,6 +23,7 @@
 #include <sstream>
 #include "NetworkView.h"
 #include "NETVMessageEvent.h"
+#include <QInputDialog>
 
 //This will insert the plugin in the dictionary...
 static int dspicbootloader_plugin_init = BasePlugin::registerPlugin("dsPICBootloader",new BasePlugin::PluginFactory<dsPICBootloader>());
@@ -31,6 +32,8 @@ static int dspicbootloader_plugin_init = BasePlugin::registerPlugin("dsPICBootlo
 dsPICBootloader::dsPICBootloader(NetworkView *view)
     : BasePlugin(view), m_interface(NULL), m_timer(NULL), m_module(NULL)
 {
+
+
 
     //Create UI
     m_ui.setupUi(this);
@@ -52,8 +55,22 @@ dsPICBootloader::dsPICBootloader(NetworkView *view)
 
     rebuildCombo();
 
+    if (m_ui.m_moduleSelectionCombo->count() > 0)
+    {
+        comboActivated(0);
+    }
+
+    //Combo signal
+    connect(m_ui.m_moduleSelectionCombo,SIGNAL(activated(int)),this,SLOT(comboActivated(int)));
 
 
+    //Change ID button
+    connect(m_ui.m_changeModuleIDButton,SIGNAL(clicked()),this,SLOT(changeModuleID()));
+
+    //Make sure we don't make any requests
+    m_view->disableAllModuleVariables();
+
+    printMessage("Disabling all variables");
 
 }
 
@@ -90,7 +107,7 @@ void dsPICBootloader::loadHEX()
 {
 
     QString fileName = QFileDialog::getOpenFileName(this,
-         tr("Open HEX File"), ".", tr("HEX Files (*.hex)"));
+                                                    tr("Open HEX File"), m_ui.m_filenameLineEdit->text(), tr("HEX Files (*.hex)"));
 
     if (fileName.size() > 0)
     {
@@ -102,10 +119,6 @@ void dsPICBootloader::loadHEX()
 
         printMessage("Document line size : " + QString::number(m_doc.size()));
 
-
-
-
-
         if (m_doc.validate())
         {
             m_doc.parse();
@@ -116,9 +129,13 @@ void dsPICBootloader::loadHEX()
             //ostringstream buffer;
             //m_doc.print(buffer);
             //printMessage(QString::fromAscii(buffer.str().c_str(),buffer.str().size()));
+
+            m_ui.m_uploadButton->setEnabled(true);
+
         } //document validate
         else
         {
+            m_ui.m_uploadButton->setEnabled(false);
             printMessage(fileName + "Checksum errors found, aborting");
         }
     } //filename validate
@@ -346,6 +363,13 @@ void dsPICBootloader::upload()
 
     if (m_msgQueue.size())
     {
+
+        m_ui.m_loadHEXButton->setEnabled(false);
+        m_ui.m_uploadButton->setEnabled(false);
+        m_ui.m_stopButton->setEnabled(true);
+        m_ui.m_moduleSelectionCombo->setEnabled(false);
+        m_ui.m_changeModuleIDButton->setEnabled(false);
+
         //get selected module
         unsigned int index = m_ui.m_moduleSelectionCombo->currentIndex();
 
@@ -521,6 +545,21 @@ void dsPICBootloader::stop()
         m_interface = NULL;
     }
 
+    m_ui.m_loadHEXButton->setEnabled(true);
+
+    if (m_doc.size())
+    {
+        m_ui.m_uploadButton->setEnabled(true);
+    }
+    else
+    {
+        m_ui.m_uploadButton->setEnabled(false);
+    }
+
+    m_ui.m_stopButton->setEnabled(false);
+    m_ui.m_moduleSelectionCombo->setEnabled(true);
+    m_ui.m_changeModuleIDButton->setEnabled(true);
+
     m_ui.m_progressBar->setValue(0);
     m_msgQueue.clear();
     m_memoryData.resize(0);
@@ -563,4 +602,90 @@ void dsPICBootloader::rebuildCombo()
             m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(mod->getConfiguration()->getDeviceID()),QPoint(i,mod->getConfiguration()->getDeviceID()));
         }
     }
+
+    if (m_ui.m_moduleSelectionCombo->count() > 0)
+    {
+        comboActivated(0);
+    }
 }
+
+ void dsPICBootloader::comboActivated(int index)
+ {
+
+     //get selected module
+     QPoint data = m_ui.m_moduleSelectionCombo->itemData(index).toPoint();
+
+     NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
+     m_module = manager->getModule(data.y());
+
+     //Update labels
+     if (m_module)
+     {
+        m_ui.m_moduleIDLabel->setText(QString::number(m_module->getConfiguration()->getDeviceID()));
+        m_ui.m_projectIDLabel->setText(QString::number(m_module->getConfiguration()->getProjectID()));
+        m_ui.m_codeVersionLabel->setText(QString::number(m_module->getConfiguration()->getCodeVersion()));
+        m_ui.m_tableVersionLabel->setText(QString::number(m_module->getConfiguration()->getTableVersion()));
+        m_ui.m_deviceIDLabel->setText(QString::number(m_module->getConfiguration()->getProcessorID()));
+     }
+
+ }
+
+ void dsPICBootloader::changeModuleID()
+ {
+     if (m_module)
+     {
+        //SHOW DIALOG
+        QInputDialog dialog(this);
+        dialog.setInputMode(QInputDialog::IntInput);
+        dialog.setLabelText("Enter new Module ID");
+        dialog.setIntMinimum(0);
+        dialog.setIntMaximum(254);
+        dialog.setIntValue(m_module->getConfiguration()->getDeviceID());
+        if (dialog.exec())
+        {
+
+            //Let's change the id...
+            int id = dialog.intValue();
+
+            printMessage(QString("Changing address to ") + QString::number(id));
+
+
+            m_msgQueue.clear();
+            addEmergencyProgram(m_module->getConfiguration()->getDeviceID());
+            //addResetCommand(m_module->getConfiguration()->getDeviceID());
+
+
+
+            NETV_MESSAGE message;
+            message.msg_priority = 0;
+            message.msg_cmd = BOOTLOADER_SET_MODULE_ADDR;
+            message.msg_data_length = 1;
+            message.msg_type = NETV_TYPE_BOOTLOADER;
+            message.msg_boot = 0;
+            message.msg_remote = 0;
+            message.msg_dest = m_module->getConfiguration()->getDeviceID();
+            message.msg_data[0] = (unsigned char) id;
+
+            m_msgQueue.push_back(message);
+
+            QPoint data = m_ui.m_moduleSelectionCombo->itemData(m_ui.m_moduleSelectionCombo->currentIndex()).toPoint();
+            NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
+            m_interface = manager->getInterfaceHandler();
+
+            //Send first message
+            m_interface->pushNETVMessage(m_msgQueue.front());
+            //m_interface->pushNETVMessage(message);
+            m_timer = new QTimer(this);
+            connect(m_timer,SIGNAL(timeout()),this,SLOT(timeout()));
+            m_timer->start(1000); //1000ms
+
+
+            /*
+            QPoint data = m_ui.m_moduleSelectionCombo->itemData(m_ui.m_moduleSelectionCombo->currentIndex()).toPoint();
+            NETVInterfaceManager *manager = m_view->getInterfaceManagerList()[data.x()];
+            manager->getInterfaceHandler()->pushNETVMessage(message);
+            */
+
+        }
+     }
+ }

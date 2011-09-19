@@ -295,6 +295,9 @@ std::ostream &resethex(std::ostream &stream)
   
  void hex32doc::load(const std::string &filename)
  {
+
+     clear();
+
       char buffer[1024]; //1K buffer       
       std::ifstream input(filename.c_str());
       while(!input.eof())
