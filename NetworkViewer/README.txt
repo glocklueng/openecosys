@@ -32,6 +32,13 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.15
+________
+* Support multiple interface at the same time
+* dsPIC bootloader plugin support
+* Separation of the communication and the GUI started.
+* Minor GUI fixes
+
 1.1.14
 ________
 
