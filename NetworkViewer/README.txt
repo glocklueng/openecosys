@@ -34,9 +34,11 @@ _____________
 
 1.1.15
 ________
-* Support multiple interface at the same time
+* Support multiple (simultaneous) interfaces at the same time
+* Fixed Linux baud rate settings
 * dsPIC bootloader plugin support
-* Separation of the communication and the GUI started.
+* Separation of the communication and core functionalities and the GUI started. This will enable
+  console mode NetworkViewer.
 * Minor GUI fixes
 
 1.1.14
