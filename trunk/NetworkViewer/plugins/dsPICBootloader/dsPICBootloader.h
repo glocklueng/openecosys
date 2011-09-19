@@ -79,6 +79,8 @@ protected slots:
 
     void moduleAdded(NetworkModule *module);
     void moduleRemoved(NetworkModule *module);
+    void comboActivated(int index);
+    void changeModuleID();
 
 protected:
 
