@@ -336,14 +336,14 @@ int main()
 
                     case BOOTLOADER_SET_MODULE_ADDR:
                         if (inputMessage.msg_data_length == 1)
-                        {
-
-                            config.module_id = inputMessage.msg_data[0];
+                        {                          
+                            //Send answer & Apply & Reset NOW!
+                            while(netv_send_message(&answerMessage));
+							
+							config.module_id = inputMessage.msg_data[0];
                             //Write config
                             writeBootConfig(&config);
-
-                            //Send answer & Reset NOW!
-                            while(netv_send_message(&answerMessage));
+							
                             __delay_ms(50);
                             asm("RESET");
 
