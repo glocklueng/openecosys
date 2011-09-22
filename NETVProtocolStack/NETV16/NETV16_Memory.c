@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <libpic30.h>
 
 #ifdef USE_EEPROM
-int __attribute__ ((space(eedata))) eeData = BOOT_NORMAL; // Variable located in EEPROM  //Used as the base address
+int __attribute__ ((space(eedata))) eeData = NETV_BOOT_NORMAL; // Variable located in EEPROM  //Used as the base address
 #endif
 
 unsigned int WriteMem(unsigned int offset, unsigned int* dataPtr, unsigned int size)
