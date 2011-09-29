@@ -90,13 +90,7 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 			
 			
 			//Send to serial port
-			for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
-			{
-				Serial.write(m_outgoingMessage.messageBytes[i]);
-			}
-			
-			//Flush serial
-			Serial.flush();
+			send(m_outgoingMessage);
 
 		} //If it is an alive request
 
@@ -136,13 +130,7 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 					
 					
 					//Send to serial port
-					for (unsigned int i = 0; i < sizeof(NETVSerialMessage); i++)
-					{
-						Serial.write(m_outgoingMessage.messageBytes[i]);
-					}
-					
-					//Flush serial
-					Serial.flush();
+					send(m_outgoingMessage);
 					
 				}
 				else if (read_write == NETV_REQUEST_WRITE)
@@ -224,3 +212,59 @@ unsigned char NETVArduino::serial_calculate_checksum(const NETVSerialMessage &me
 	return checksum;
 		
 }
+
+void NETVArduino::send(const NETVSerialMessage &msg)
+{
+	
+	//Make sure checksum is ok before sending
+	if (serial_calculate_checksum(msg) == msg.checksum)
+    {
+		Serial.write(msg.messageBytes,sizeof(NETVSerialMessage));		
+		Serial.flush();
+	}
+	
+}
+
+bool NETVArduino::updateVariable(byte *var, unsigned int size)
+{
+	if (m_table && var && size <= 8)
+	{
+			//Make sure the variable is contained into the table
+			if (var <= m_table && ((var + size) < (m_table + m_size)))
+			{
+				//Calculate the memory offset
+				int offset = var - m_table;				
+				offset = offset & 0xFF;
+				
+				//build the message
+				NETVSerialMessage msg;				
+				msg.start_byte = START_BYTE;
+				msg.pri_boot_rtr = 0;
+				msg.type = NETV_TYPE_REQUEST_DATA;
+				msg.cmd = offset;
+				msg.dest = m_moduleID;
+				msg.data_length_iface = (size << 4);
+				
+				for (unsigned int i = 0; i < size; i++)
+				{
+					msg.data[i] = var[i];
+				}
+				
+				//Calculate checksum
+				msg.checksum = serial_calculate_checksum(msg);
+				
+				
+				//Send the message
+				send(msg);
+				
+				return true;
+								
+			}
+	}
+	
+	return false;
+	
+}
+
+
+

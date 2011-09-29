@@ -88,6 +88,24 @@ public:
 	handled automatically in this function.
   */
   void transceiver();  
+	
+	
+  /**
+	Send a message to the serial port.
+    \param msg The message to send. Checksum will be (re) calculated.
+  */
+  void send(const NETVSerialMessage &msg);
+
+	
+  /**
+	Manual update of one variable. Can be used for periodic update. The variable must be contained in the
+    memory map.
+    \param var the pointer to the variable.
+    \param size the size of the variable. Must not exceed 8 bytes.
+	\return bool TRUE is success
+  */
+  bool updateVariable(byte *var, unsigned int size);
+	
 
 private:
 
