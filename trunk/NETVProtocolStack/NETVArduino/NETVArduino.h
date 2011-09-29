@@ -99,7 +99,7 @@ public:
 	
   /**
 	Manual update of one variable. Can be used for periodic update. The variable must be contained in the
-    memory map.
+    memory map and will be sent to the serial protocol.
     \param var the pointer to the variable.
     \param size the size of the variable. Must not exceed 8 bytes.
 	\return bool TRUE is success
