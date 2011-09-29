@@ -125,11 +125,12 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 					m_outgoingMessage.pri_boot_rtr &= 0xFE;
 								
 					//Copy data
+					cli();
 					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
 					{
 						m_outgoingMessage.data[i - message.cmd] = m_table[i];
 					}
-					
+					sei();
 					//Recalculate checksum
 					m_outgoingMessage.checksum = serial_calculate_checksum(m_outgoingMessage);
 					
@@ -147,11 +148,12 @@ void NETVArduino::process_message(const NETVSerialMessage &message)
 				else if (read_write == NETV_REQUEST_WRITE)
 				{
 					//WRITING
+					cli();
 					for (unsigned int i = message.cmd; i < message.cmd + length; i++)
 					{
 						m_table[i] = message.data[i - message.cmd];
 					}
-					
+					sei();
 				}
 			}			
 		} //Message intended for us?
