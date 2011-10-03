@@ -1,5 +1,5 @@
 #include "hexutils.h"
-#include <qDebug>
+#include <QDebug>
 
 
 namespace hexutils 
