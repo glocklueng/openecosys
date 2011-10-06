@@ -11,8 +11,6 @@ include(${QT_USE_FILE})
 SET(NetworkViewer_UIS
 	ModuleConfigurationView.ui
 	NetworkView.ui
-#	plugins/ScopeView/ScopeView.ui
-#	plugins/ScopeView/ScopeVariableConfig.ui
 	TestView.ui
 	DeviceSelectorDialog.ui
 	PreferencesDialog.ui
@@ -34,6 +32,8 @@ SET(NetworkViewer_SRCS
 )
 
 SET(NetworkViewer_HEADERS 
+	BasePlugin.h
+	BasePluginEvent.h
 	ModuleConfigurationView.h
 	NetworkView.h
 	NetworkModuleItem.h

@@ -147,3 +147,4 @@ INSTALL(FILES ${QWT_HEADERS} DESTINATION include/qwt)
 
 #ADD src subdirectory
 ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(plugins)
