@@ -28,7 +28,7 @@ QT4_WRAP_UI(Logger_UI_SRCS ${Logger_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(Logger_MOC_SRCS ${Logger_HEADERS})
 
-INCLUDE_DIRECTORIES(./ ${Logger_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${PLUGIN_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(Logger SHARED ${Logger_SRCS} ${Logger_HEADERS} ${Logger_QRC_SRCS} ${Logger_MOC_SRCS} ${Logger_UI_SRCS}  )
 target_link_libraries(Logger  ${QT_LIBRARIES} ${PLUGIN_LIBRARIES})
