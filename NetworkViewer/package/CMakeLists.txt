@@ -1,8 +1,15 @@
 #package
-#include files
+
+########################
+# Configurations
+########################
+SET(CPACK_PACKAGE_VERSION_MAJOR ${NETWORKVIEWER_VERSION_MAJOR})
+SET(CPACK_PACKAGE_VERSION_MINOR ${NETWORKVIEWER_VERSION_MINOR})
+SET(CPACK_PACKAGE_VERSION_PATCH ${NETWORKVIEWER_VERSION_PATCH})
+SET(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
+
+
 IF (WIN32)
-
-
 
 	SET (QT_DLL
 			"${QT_BINARY_DIR}/Qt3Support4.dll"
@@ -26,25 +33,18 @@ IF (WIN32)
 			"${QT_BINARY_DIR}/libgcc_s_dw2-1.dll"
 	    )
 
-
-
-
-
-
         #Install DLLS
         INSTALL( FILES ${QT_DLL} DESTINATION bin)
-
-
 
         ###########################
         # Packaging stuff for WIN32
         ############################
         SET(CPACK_SOURCE_GENERATOR "ZIP")
-        SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt")
+        SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING.txt")
         SET(CPACK_PACKAGE_NAME "OpenECoSys-NetworkViewer")
         SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "NetworkViewer")
         SET(CPACK_PACKAGE_VENDOR "Dominic Letourneau")
-        SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
+        SET(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.txt")
         SET(CPACK_PACKAGE_CONTACT "dominic.letourneau@usherbrooke.ca")
         SET(CPACK_PACKAGE_INSTALL_DIRECTORY "NetworkViewer-${CPACK_PACKAGE_VERSION}")
         SET(CPACK_NSIS_URL_INFO_ABOUT "http://introlab.gel.usherbrooke.ca")
@@ -57,58 +57,29 @@ ENDIF (WIN32)
 
 IF (APPLE)
 
+	SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING.txt")
+	SET(CPACK_GENERATOR Bundle)
 
-        #NetworkViewer Library
-	add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-        target_link_libraries(networkViewerBase ${QT_LIBRARIES})
-	#set_target_properties(networkViewerBase PROPERTIES FRAMEWORK "true")
-	INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
-	INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
-
-
-        #NetworkViewer Executable
-        add_executable(NetworkViewer main.cpp)
-	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
-	target_link_libraries(NetworkViewer networkViewerBase)
-	INSTALL(TARGETS NetworkViewer DESTINATION bin)
-
-
-        SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING.txt")
-        SET(CPACK_GENERATOR Bundle)
-
-        #BUNDLE INFO
+	#BUNDLE INFO
 	SET(CPACK_BUNDLE_NAME "NetworkViewer")
-        SET(MACOSX_BUNDLE_INFO_STRING "NetworkViewer")
+	SET(MACOSX_BUNDLE_INFO_STRING "NetworkViewer")
 	SET(CPACK_PACKAGE_DEFAULT_LOCATION "/Applications")
 	SET(CPACK_BUNDLE_ICON "NetworkViewer.icns")
 	SET(CPACK_PACKAGE_ICON "NetworkViewer.icns")
-        SET(MACOSX_BUNDLE_GUI_IDENTIFIER "NetworkViewer")
-        SET(MACOSX_BUNDLE_LONG_VERSION_STRING "NetworkViewer-${CPACK_PACKAGE_VERSION}")
-        SET(MACOSX_BUNDLE_BUNDLE_NAME "NetworkViewer.app")
-        SET(MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}")
-        SET(MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}")
-        SET(MACOSX_BUNDLE_COPYRIGHT "README.txt")
-        SET(CPACK_BUNDLE_PLIST "NetworkViewer.plist")
+	SET(MACOSX_BUNDLE_GUI_IDENTIFIER "NetworkViewer")
+	SET(MACOSX_BUNDLE_LONG_VERSION_STRING "NetworkViewer-${CPACK_PACKAGE_VERSION}")
+	SET(MACOSX_BUNDLE_BUNDLE_NAME "NetworkViewer.app")
+	SET(MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}")
+	SET(MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}")
+	SET(MACOSX_BUNDLE_COPYRIGHT "README.txt")
+	SET(CPACK_BUNDLE_PLIST "NetworkViewer.plist")
 	SET(CPACK_BUNDLE_STARTUP_COMMAND "start_osx.sh")
 
-        INCLUDE(CPack)
+	INCLUDE(CPack)
 
 ENDIF (APPLE)
 
 #TODO LINUX SPECIFIC...
 IF (UNIX AND NOT APPLE)
-
-    #NetworkViewer Library
-    add_library(networkViewerBase SHARED ${NetworkViewer_SRCS} ${NetworkViewer_MOC_SRCS} ${NetworkViewer_UI_SRCS} ${SRCS_QRC} ${NetworkViewer_HEADERS})
-    target_link_libraries(networkViewerBase ${QT_LIBRARIES})
-    INSTALL(TARGETS networkViewerBase qwt-wrap DESTINATION lib EXPORT networkViewerBase-export-targets)
-    INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
-
-
-    #NetworkViewer Executable
-    add_executable(NetworkViewer WIN32 main.cpp)
-    set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
-    target_link_libraries(NetworkViewer networkViewerBase)
-    INSTALL(TARGETS NetworkViewer DESTINATION bin)
 
 ENDIF(UNIX AND NOT APPLE)
