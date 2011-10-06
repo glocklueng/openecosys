@@ -1,1 +1,0 @@
-qwt_svn http://qwt.svn.sourceforge.net/svnroot/qwt/branches/qwt-5.2
