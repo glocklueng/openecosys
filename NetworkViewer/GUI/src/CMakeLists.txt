@@ -56,7 +56,7 @@ SET(NetworkViewer_Base_HEADERS
 )
 
 
-SET(NetworkViewer_Plugin_QRC
+SET(NetworkViewer_Base_QRC
     NetworkViewer.qrc
 )
 
