@@ -66,13 +66,15 @@ INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR}
                 ${PROJECT_SOURCE_DIR}
                 ${CMAKE_CURRENT_BINARY_DIR}
                 ${QWT_SRC_DIR}
-				${PROJECT_SOURCE_DIR}/core/src
+                ${PROJECT_SOURCE_DIR}/core/src
                 )
 
 
 #Install headers
 INSTALL( FILES ${NetworkViewer_HEADERS} DESTINATION include)
 INSTALL( FILES ${NetworkViewer_UI_SRCS} DESTINATION include/ui)
+
+SET(NETWORKVIEWER_GENERATED_INCLUDE ${CMAKE_CURRENT_BINARY_DIR})
 
 
 #NetworkViewer Executable

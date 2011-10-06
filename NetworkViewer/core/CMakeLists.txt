@@ -1,3 +1,4 @@
 #core
+ADD_SUBDIRECTORY(QextSerialPort)
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(drivers)

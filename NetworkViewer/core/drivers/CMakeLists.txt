@@ -4,7 +4,7 @@
 
 SET(DRIVER_INCLUDES
         ${PROJECT_SOURCE_DIR}/core/src
-        ${PROJECT_SOURCE_DIR}/QextSerialPort/src
+        ${PROJECT_SOURCE_DIR}/core/QextSerialPort/src
         ${PROJECT_SOURCE_DIR}/drivers
         ${QT_INCLUDES}
 )
