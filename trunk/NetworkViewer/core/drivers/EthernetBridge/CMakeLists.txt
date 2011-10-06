@@ -33,9 +33,9 @@ QT4_WRAP_UI(EthernetBridge_UI_SRCS ${EthernetBridge_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(EthernetBridge_MOC_SRCS ${EthernetBridge_HEADERS})
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ ${PROJECT_SOURCE_DIR}/drivers  ${PROJECT_SOURCE_DIR}/drivers/EthernetBridge ${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BUILD_DIR})
 
 add_library(EthernetBridgeDriver SHARED ${EthernetBridge_SRCS} ${EthernetBridge_HEADERS} ${EthernetBridge_QRC_SRCS} ${EthernetBridge_MOC_SRCS} ${EthernetBridge_UI_SRCS}  )
-target_link_libraries(EthernetBridgeDriver  networkViewerBase ${QT_LIBRARIES} )
+target_link_libraries(EthernetBridgeDriver  ${DRIVER_LIBRARIES} ${QT_LIBRARIES} )
 set_target_properties(EthernetBridgeDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS EthernetBridgeDriver DESTINATION drivers/EthernetBridge)

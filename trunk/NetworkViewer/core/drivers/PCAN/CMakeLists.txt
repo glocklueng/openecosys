@@ -1,3 +1,6 @@
+MESSAGE( STATUS "Buiding PCAN driver...")
+
+
 
 IF (WIN32)
 	SET(PCAN_SRCS PCANDevice.cpp)
@@ -31,7 +34,7 @@ QT4_WRAP_UI(PCAN_UI_SRCS ${PCAN_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(PCAN_MOC_SRCS ${PCAN_HEADERS})
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ ${PROJECT_SOURCE_DIR}/drivers  ${PROJECT_SOURCE_DIR}/drivers/PCAN ${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${PROJECT_SOURCE_DIR}/core/drivers/PCAN ${CMAKE_CURRENT_BINARY_DIR})
 
 
 IF(WIN32)
@@ -39,10 +42,9 @@ IF(WIN32)
 	MESSAGE( STATUS "Buiding PCAN driver for Windows...")
 
 	add_library(PCANDriver SHARED ${PCAN_SRCS} ${PCAN_HEADERS} ${PCAN_QRC_SRCS} ${PCAN_MOC_SRCS} ${PCAN_UI_SRCS}  )
-        target_link_libraries(PCANDriver  networkViewerBase ${QT_LIBRARIES} -L${PROJECT_SOURCE_DIR}/drivers/PCAN PCANBasic.dll)
+        target_link_libraries(PCANDriver  ${DRIVER_LIBRARIES} -L${PROJECT_SOURCE_DIR}/core/drivers/PCAN PCANBasic.dll)
 	set_target_properties(PCANDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
 	INSTALL(TARGETS PCANDriver DESTINATION drivers/PCANDriver)
-
 
 	SET(PCAN_DLL
                 PCANBasic.dll
@@ -55,11 +57,9 @@ ENDIF(WIN32)
 
 
 IF (UNIX AND NOT APPLE)
-
 	MESSAGE( STATUS "Buiding PCAN driver for Linux...")
-
 	add_library(PCANDriver SHARED ${PCAN_SRCS} ${PCAN_HEADERS} ${PCAN_QRC_SRCS} ${PCAN_MOC_SRCS} ${PCAN_UI_SRCS}  )
-	target_link_libraries(PCANDriver  networkViewerBase ${QT_LIBRARIES} -L/usr/lib -lpcan)
+        target_link_libraries(PCANDriver  ${DRIVER_LIBRARIES} -L/usr/lib -lpcan)
 	INSTALL(TARGETS PCANDriver DESTINATION drivers/PCANDriver)
 
 

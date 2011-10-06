@@ -31,6 +31,8 @@
 static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed;debug(optional);timeDelay(optional)"));
 
 
+
+
 //Template specialization for configure
 template<>
 QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
@@ -47,6 +49,7 @@ QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
         return QString("");
     }
 }
+
 
 SerialEmulator::SerialEmulator(const char* args)
     : m_serialPort(NULL), m_pollTimer(NULL), m_debug(false), m_timeDelay(5)

@@ -2,7 +2,19 @@
 # Configurations
 ########################
 
-SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/drivers)
+SET(DRIVER_INCLUDES
+        ${PROJECT_SOURCE_DIR}/core/src
+        ${PROJECT_SOURCE_DIR}/QextSerialPort/src
+        ${PROJECT_SOURCE_DIR}/drivers
+        ${QT_INCLUDES}
+)
+
+SET(DRIVER_LIBRARIES
+        networkViewerBase
+        ${QT_LIBRARIES}
+)
+
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/drivers)
 
 ADD_SUBDIRECTORY(SerialBridge)
 ADD_SUBDIRECTORY(EthernetBridge)
@@ -10,6 +22,6 @@ ADD_SUBDIRECTORY(SerialEmulator)
 ADD_SUBDIRECTORY(Loopback)
 
 IF (NOT APPLE)
-	ADD_SUBDIRECTORY(PCAN)
+    ADD_SUBDIRECTORY(PCAN)
 ENDIF (NOT APPLE)
 
