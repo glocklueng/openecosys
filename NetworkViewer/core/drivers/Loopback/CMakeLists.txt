@@ -34,12 +34,9 @@ QT4_WRAP_UI(Loopback_UI_SRCS ${Loopback_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(Loopback_MOC_SRCS ${Loopback_HEADERS})
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ 
-${PROJECT_SOURCE_DIR}/drivers  
-${PROJECT_SOURCE_DIR}/driver/Loopback
-${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(LoopbackDriver SHARED ${Loopback_SRCS} ${Loopback_HEADERS} ${Loopback_QRC_SRCS} ${Loopback_MOC_SRCS} ${Loopback_UI_SRCS}  )
-target_link_libraries(LoopbackDriver  networkViewerBase ${QT_LIBRARIES} )
+target_link_libraries(LoopbackDriver  ${DRIVER_LIBRARIES} )
 set_target_properties(LoopbackDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS LoopbackDriver DESTINATION drivers/Loopback)

@@ -34,9 +34,9 @@ QT4_WRAP_UI(SerialBridge_UI_SRCS ${SerialBridge_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(SerialBridge_MOC_SRCS ${SerialBridge_HEADERS})
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ ${PROJECT_SOURCE_DIR}/QextSerialPort/src ${PROJECT_SOURCE_DIR}/drivers  ${PROJECT_SOURCE_DIR}/drivers/SerialBridge ${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_library(SerialBridgeDriver SHARED ${SerialBridge_SRCS} ${SerialBridge_HEADERS} ${SerialBridge_QRC_SRCS} ${SerialBridge_MOC_SRCS} ${SerialBridge_UI_SRCS}  )
-target_link_libraries(SerialBridgeDriver  networkViewerBase QextSerialPort ${QT_LIBRARIES} )
+target_link_libraries(SerialBridgeDriver  ${DRIVER_LIBRARIES} QextSerialPort)
 set_target_properties(SerialBridgeDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS SerialBridgeDriver DESTINATION drivers/SerialBridge)
