@@ -16,8 +16,6 @@ SET(NETV_CORE_SRCS
 )
 
 SET(NETV_CORE_HEADERS
-	BasePlugin.h
-	BasePluginEvent.h
 	ModuleConfiguration.h
 	ModuleVariable.h
 	NETV_define.h

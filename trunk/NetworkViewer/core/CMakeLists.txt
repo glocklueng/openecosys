@@ -1,2 +1,3 @@
 #core
 ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(drivers)
