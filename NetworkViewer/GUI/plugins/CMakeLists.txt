@@ -8,6 +8,7 @@ SET(PLUGIN_INCLUDES
 )	
 
 SET (PLUGIN_LIBRARIES
+        networkViewerCore
 	networkViewerBase
 	${QT_LIBRARIES}
 )

@@ -10,7 +10,7 @@ SET(DRIVER_INCLUDES
 )
 
 SET(DRIVER_LIBRARIES
-        networkViewerBase
+        networkViewerCore
         ${QT_LIBRARIES}
 )
 

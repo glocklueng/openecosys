@@ -1,6 +1,4 @@
-########################
-# Configurations
-########################
+MESSAGE( STATUS "Buiding Sample plugin...")
 
 include(${QT_USE_FILE})
 
