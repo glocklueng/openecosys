@@ -73,6 +73,7 @@ QT4_WRAP_CPP(NetworkViewer_Base_MOC_SRCS ${NetworkViewer_Base_HEADERS})
 add_library(networkViewerBase SHARED ${NetworkViewer_Base_SRCS} ${NetworkViewer_Base_HEADERS} ${NetworkViewer_Base_MOC_SRCS} ${NetworkViewer_Base_UI_SRCS} ${SRCS_QRC})
 target_link_libraries(networkViewerBase networkViewerCore ${QT_LIBRARIES})
 INSTALL(TARGETS networkViewerBase DESTINATION bin)
+INSTALL(TARGETS networkViewerBase DESTINATION lib)
 
 #FIXME EXPORTS
 #INSTALL(TARGETS networkViewerBase DESTINATION lib EXPORT networkViewerBase-export-targets)
