@@ -1,20 +1,19 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/dsPIC.png</file>
-        <file>images/cross.png</file>
-        <file>images/cancel.png</file>
-        <file>images/ok.png</file>
-        <file>images/add.png</file>
-        <file>images/minus.png</file>
-        <file>images/playGreen.png</file>
-        <file>images/playRed.png</file>
-        <file>images/pauseRed.png</file>
-        <file>images/pauseGreen.png</file>
-        <file>images/introlab.png</file>
-        <file>scripts/TestScript.js</file>
-        <file>images/Play-Normal-icon.png</file>
-        <file>images/Stop-Normal-Blue-icon.png</file>
-        <file>images/Save-Icon.png</file>
-        <file>images/Arduino.png</file>
+        <file>../images/dsPIC.png</file>
+        <file>../images/cross.png</file>
+        <file>../images/cancel.png</file>
+        <file>../images/ok.png</file>
+        <file>../images/add.png</file>
+        <file>../images/minus.png</file>
+        <file>../images/playGreen.png</file>
+        <file>../images/playRed.png</file>
+        <file>../images/pauseRed.png</file>
+        <file>../images/pauseGreen.png</file>
+        <file>../images/introlab.png</file>
+        <file>../images/Play-Normal-icon.png</file>
+        <file>../images/Stop-Normal-Blue-icon.png</file>
+        <file>../images/Save-Icon.png</file>
+        <file>../images/Arduino.png</file>
     </qresource>
 </RCC>
