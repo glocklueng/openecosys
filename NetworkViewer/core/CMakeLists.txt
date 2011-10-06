@@ -1,0 +1,2 @@
+#core
+ADD_SUBDIRECTORY(src)
