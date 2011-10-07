@@ -24,6 +24,7 @@ static bool TCP_REMOTE_CLIENT_DEVICE_INIT = NETVDevice::registerDeviceFactory("T
 
 
 TcpRemoteClient::TcpRemoteClient(const char *args)
+    :   m_remoteClient(NULL)
 {
     if (args)
     {
@@ -33,11 +34,29 @@ TcpRemoteClient::TcpRemoteClient(const char *args)
 
 NETVDevice::State TcpRemoteClient::initialize(const char* args)
 {
-    return NETVDevice::NETVDEVICE_FAIL;
+    QStringList argsList = QString(args).split(";");
+
+    if (argsList.size() >= 2)
+    {
+        QString host = argsList[0];
+        int port = argsList[1].toInt();
+
+        m_remoteClient = new NETVRemoteClient(host,port,this);
+
+        return NETVDevice::NETVDEVICE_OK;
+    }
+    else
+    {
+        return NETVDevice::NETVDEVICE_FAIL;
+    }
 }
 
 NETVDevice::State TcpRemoteClient::sendMessage(NETV_MESSAGE &message)
 {
+    if (m_remoteClient)
+    {
+        return NETVDevice::NETVDEVICE_OK;
+    }
 
     return NETVDevice::NETVDEVICE_FAIL;
 }
@@ -45,6 +64,11 @@ NETVDevice::State TcpRemoteClient::sendMessage(NETV_MESSAGE &message)
 
 NETVDevice::State TcpRemoteClient::recvMessage(NETV_MESSAGE &message)
 {
+    if (m_remoteClient)
+    {
+        return NETVDevice::NETVDEVICE_UNDERFLOW;
+    }
+
     return NETVDevice::NETVDEVICE_FAIL;
 }
 

@@ -66,6 +66,8 @@ protected:
     //Internal event processing...
     bool event(QEvent *event);
 
+    NETVRemoteClient *m_remoteClient;
+
 };
 
 
