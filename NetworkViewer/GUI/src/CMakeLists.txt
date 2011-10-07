@@ -77,7 +77,7 @@ INSTALL(TARGETS networkViewerBase DESTINATION lib)
 
 #FIXME EXPORTS
 #INSTALL(TARGETS networkViewerBase DESTINATION lib EXPORT networkViewerBase-export-targets)
-#INSTALL(EXPORT networkViewerCore-export-targets networkViewerBase-export-targets DESTINATION share/cmake)
+#INSTALL(EXPORT networkViewerBase-export-targets DESTINATION share/cmake)
 
 #Install headers
 INSTALL( FILES ${NetworkViewer_Base_HEADERS} DESTINATION include)
