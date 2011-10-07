@@ -32,6 +32,7 @@ bool UserPreferences::load()
     QFile file(getPrefsPath());
     if (file.open(QIODevice::ReadOnly))
     {
+        qDebug() << "Prefs file opened : " << getPrefsPath();
 
         QDomDocument doc("INTROLAB-NETWORKVIEWER-PREFS");
 
@@ -83,6 +84,10 @@ bool UserPreferences::load()
         }//while n.isNull
 
         return true;
+    }
+    else
+    {
+        qDebug() << "Prefs file not found : " << getPrefsPath();
     }
 
     //File does not exist

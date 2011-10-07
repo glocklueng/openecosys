@@ -153,6 +153,9 @@ void NETVInterfaceManagerView::loadUserPrefs()
 {
     UserPreferences& prefs = UserPreferences::getGlobalPreferences();
 
+    //Load preferences
+    prefs.load();
+
     if (prefs.contains("NETVInterfaceManagerView:nb_interface"))
     {
         int count = prefs.getKey("NETVInterfaceManagerView:nb_interface").toInt();
