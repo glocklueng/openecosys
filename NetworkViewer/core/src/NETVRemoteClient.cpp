@@ -17,4 +17,102 @@
  */
 
 #include "NETVRemoteClient.h"
+#include <QDebug>
+#include "NETVDevice.h"
+#include "NETVMessageEvent.h"
 
+
+
+NETVRemoteClient::NETVRemoteClient(const QString &hostname, int port, QObject *parent)
+    :   QTcpSocket(parent)
+{
+    //Let's try to connect
+    connect(this,SIGNAL(connected()),this,SLOT(clientConnected()));
+    connect(this,SIGNAL(disconnected()),this,SLOT(clientDisconnected()));
+    connect(this,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(writeError(QAbstractSocket::SocketError)));
+
+    //Connect to server
+    connectToHost(hostname,port);
+
+}
+
+
+void NETVRemoteClient::clientConnected(void)
+{
+    //We are now connected, connecting readyRead signal
+    connect(this,SIGNAL(readyRead()),this,SLOT(readyReadSocket()));
+}
+
+void NETVRemoteClient::clientDisconnected(void)
+{
+
+}
+
+void NETVRemoteClient::readyReadSocket(void)
+{
+    qDebug("NETVRemoteClient::readyReadSocket(void) bytesAvailable : %i",bytesAvailable());
+
+    //Read all data on socket
+    while(bytesAvailable() >= 20)
+    {
+        //Read one message
+        NETV_MESSAGE msg;
+        msg.unserialize(*this);
+
+        //Do something about it...
+        emit messageReady(msg);
+
+    }
+}
+
+void NETVRemoteClient::writeError(QAbstractSocket::SocketError socketError)
+{
+    qDebug("NETVRemoteClient::writeError(QAbstractSocket::SocketError socketError = %i)",(int) socketError);
+
+    QString m_error;
+
+    switch (socketError)
+    {
+        case QAbstractSocket::RemoteHostClosedError:
+            m_error = tr("TCPC_REMOTE_HOST_CLOSED");
+            break;
+        case QAbstractSocket::HostNotFoundError:
+            m_error = tr("TCPC_HOST_NOT_FOUND");
+            break;
+        case QAbstractSocket::ConnectionRefusedError:
+            m_error = tr("TCPC_CONNECTION_REFUSED");
+            break;
+        case QAbstractSocket::SocketTimeoutError:
+            m_error = tr("TCPC_TIMEOUT");
+            break;
+        case QAbstractSocket::NetworkError:
+            m_error = tr("TCPC_NETWORK_TIMEOUT");
+            break;
+        default:
+            m_error = tr("TCPC_UNKNOWN_ERROR");
+            break;
+    }
+
+    qDebug() << m_error;
+
+}
+
+bool NETVRemoteClient::event( QEvent * e )
+{
+    if (e->type() == QEvent::User)
+    {
+        qDebug("NETVRemoteClient::event %p QEvent::User",e);
+        if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
+        {
+            //we need to send the data
+            if (isWritable())
+            {
+                event->getMessage().serialize(*this);
+            }
+
+            return true;
+        }
+    }
+
+    return QTcpSocket::event(e);
+}

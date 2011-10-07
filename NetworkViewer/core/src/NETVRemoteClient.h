@@ -19,5 +19,28 @@
 #ifndef _NETV_REMOTE_CLIENT_H_
 #define _NETV_REMOTE_CLIENT_H_
 
+#include <QTcpSocket>
+#include "NETVDevice.h"
+
+class NETVRemoteClient : public QTcpSocket
+{
+    Q_OBJECT;
+
+public :
+
+    NETVRemoteClient(const QString &hostname, int port, QObject *parent = NULL);
+
+signals:
+
+    void messageReady(const NETV_MESSAGE &msg);
+
+protected:
+
+    void clientConnected(void);
+    void clientDisconnected(void);
+    void readyReadSocket(void);
+    void writeError(QAbstractSocket::SocketError socketError);
+    bool event ( QEvent * e );
+};
 
 #endif
