@@ -26,6 +26,8 @@
 #include <QList>
 #include <QEvent>
 #include "NETVRemoteClient.h"
+#include <QMutex>
+#include <QMutexLocker>
 
 
 
@@ -60,6 +62,9 @@ public:
 
 public slots:
 
+protected slots:
+
+    void messageReady(const NETV_MESSAGE &msg);
 
 protected:
 
@@ -67,6 +72,10 @@ protected:
     bool event(QEvent *event);
 
     NETVRemoteClient *m_remoteClient;
+
+    QList<NETV_MESSAGE> m_msgList;
+
+    QMutex m_mutex;
 
 };
 
