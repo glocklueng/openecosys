@@ -126,6 +126,16 @@ public:
          if (dev.isWritable())
          {
              dev.write(QByteArray("NETV_MESSAGE;"));
+             dev.write(QByteArray((char*)&msg_priority,1));
+             dev.write(QByteArray((char*)&msg_type,1));
+             dev.write(QByteArray((char*)&msg_cmd,1));
+             dev.write(QByteArray((char*)&msg_boot,1));
+             dev.write(QByteArray((char*)&msg_dest,1));
+             dev.write(QByteArray((char*)&msg_remote,1));
+             dev.write(QByteArray((char*)&msg_data_length,1));
+             //Wrote 20 bytes
+             dev.write(QByteArray((char*)&msg_data[0],(unsigned int) msg_data_length));
+
              return true;
          }
          else
@@ -136,6 +146,43 @@ public:
 
      bool unserialize(QIODevice &dev)
      {
+         if (dev.isReadable() && dev.bytesAvailable() >= 20)
+         {
+            QByteArray name = dev.read(13);
+            if (name != QByteArray("NETV_MESSAGE;"))
+            {
+                return false;
+            }
+            else
+            {
+                //We have the right object...
+                QByteArray header = dev.read(7);
+
+
+                msg_priority = header[0];
+                msg_type = header[1];
+                msg_cmd = header[2];
+                msg_boot = header[3];
+                msg_dest = header[4];
+                msg_remote = header[5];
+                msg_data_length = header[6];
+
+                //Read data
+                if (dev.bytesAvailable() >= msg_data_length && msg_data_length <= 8)
+                {
+                    dev.read((char*)&msg_data[0],(unsigned int)msg_data_length);
+                }
+                else
+                {
+                    return false;
+                }
+
+
+                return true;
+            }
+         }
+
+
          return false;
      }
 
