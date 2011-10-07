@@ -39,6 +39,8 @@ NETVRemoteClient::NETVRemoteClient(const QString &hostname, int port, QObject *p
 
 void NETVRemoteClient::clientConnected(void)
 {
+    qDebug("NETVRemoteClient::clientConnected(void)");
+
     //We are now connected, connecting readyRead signal
     connect(this,SIGNAL(readyRead()),this,SLOT(readyReadSocket()));
 }
@@ -50,17 +52,22 @@ void NETVRemoteClient::clientDisconnected(void)
 
 void NETVRemoteClient::readyReadSocket(void)
 {
-    qDebug("NETVRemoteClient::readyReadSocket(void) bytesAvailable : %i",bytesAvailable());
+    //qDebug("NETVRemoteClient::readyReadSocket(void) bytesAvailable : %li",bytesAvailable());
 
     //Read all data on socket
     while(bytesAvailable() >= 20)
     {
         //Read one message
         NETV_MESSAGE msg;
-        msg.unserialize(*this);
-
-        //Do something about it...
-        emit messageReady(msg);
+        if (msg.unserialize(*this))
+        {
+            //qDebug("NETVRemoteClient::readyReadSocket(void) - parsing OK");
+            emit messageReady(msg);
+        }
+        else
+        {
+            qDebug("NETVRemoteClient::readyReadSocket(void) - Parsing error!");
+        }
 
     }
 }

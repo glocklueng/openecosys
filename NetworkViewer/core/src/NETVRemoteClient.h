@@ -34,12 +34,15 @@ signals:
 
     void messageReady(const NETV_MESSAGE &msg);
 
-protected:
+protected slots:
 
     void clientConnected(void);
     void clientDisconnected(void);
     void readyReadSocket(void);
     void writeError(QAbstractSocket::SocketError socketError);
+
+ protected:
+
     bool event ( QEvent * e );
 };
 
