@@ -29,7 +29,7 @@
 #include <QMap>
 #include <QDir>
 #include <QLibrary>
-
+#include <QIODevice>
 
 //TODO Remove this
 using namespace std;
@@ -46,8 +46,11 @@ using namespace std;
      \version Revision: 1.1
      \date 2007-01-11 19:21:20
 */
-typedef struct _message
+typedef class _message
 {
+
+public:
+
      /** Default Constructor */
      _message()
      {
@@ -117,6 +120,24 @@ typedef struct _message
          return true;
      }
 
+
+     bool serialize(QIODevice &dev) const
+     {
+         if (dev.isWritable())
+         {
+             dev.write(QByteArray("NETV_MESSAGE;"));
+             return true;
+         }
+         else
+         {
+            return false;
+         }
+     }
+
+     bool unserialize(QIODevice &dev)
+     {
+         return false;
+     }
 
      /// Message priority 0=high to 7=low
      unsigned char msg_priority; 

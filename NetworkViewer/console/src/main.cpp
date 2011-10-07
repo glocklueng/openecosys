@@ -7,16 +7,19 @@
 #include "NETVDevice.h"
 #include <QList>
 #include "NETVInterfaceManager.h"
-
+#include "NETVRemoteServer.h"
 
 class NETVConsoleApp : public QApplication
 {
 public:
 
     NETVConsoleApp(int argc, char** argv)
-        : QApplication(argc,argv,false) //GUI Disabled
+        : QApplication(argc,argv,false), m_remoteServer(NULL) //GUI Disabled
     {
         qDebug("Starting netvconsole...");
+
+        //Create Remote Server
+        m_remoteServer = new NETVRemoteServer(this);
 
         //Scan for all drivers
         //When we are in a test environment
@@ -26,6 +29,7 @@ public:
 
         //Load user prefs
         loadUserPrefs();
+
     }
 
     ~NETVConsoleApp()
@@ -38,6 +42,11 @@ public:
         }
 
         m_interfaceManagerList.clear();
+
+        if (m_remoteServer)
+        {
+            delete m_remoteServer;
+        }
 
     }
 
@@ -92,6 +101,9 @@ public:
 
                         //update scheduling
                         manager->getScheduler()->setVariableRequestInterval(period);
+
+                        //Add this manager to socket server
+                        m_remoteServer->addInterface(manager);
                     }
                 }
             }
@@ -110,6 +122,9 @@ public:
     ///Interface manager
     ///TODO Add multiple interface managers
     QList<NETVInterfaceManager*> m_interfaceManagerList;
+
+    NETVRemoteServer *m_remoteServer;
+
 
 };
 

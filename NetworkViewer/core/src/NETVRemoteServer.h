@@ -19,5 +19,42 @@
 #ifndef _NETV_REMOTE_SERVER_H_
 #define _NETV_REMOTE_SERVER_H_
 
+#include <QTcpServer>
+#include "NETVDevice.h"
+#include <QTcpSocket>
+#include <QList>
+#include "NETVInterfaceManager.h"
+#include "NETVInterfaceHandler.h"
+#include <QEvent>
+
+class NETVRemoteServer : public QTcpServer, public NETVMessageObserverIF
+{
+    Q_OBJECT;
+
+public:
+
+    ///Default port for tcp communication
+    static const int DEFAULT_PORT = 12345;
+
+    NETVRemoteServer(QObject *parent=NULL);
+
+public slots:
+
+    void addInterface(NETVInterfaceManager *manager);
+    void removeInterface(NETVInterfaceManager *manager);
+
+protected:
+
+    virtual void incomingConnection(int socketDescriptor);
+
+    ///notify function for new messages
+    virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
+
+    ///Event handling
+    virtual bool event (QEvent * e);
+
+    QList<QTcpSocket*> m_socketList;
+
+};
 
 #endif
