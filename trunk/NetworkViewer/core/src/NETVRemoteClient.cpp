@@ -20,7 +20,7 @@
 #include <QDebug>
 #include "NETVDevice.h"
 #include "NETVMessageEvent.h"
-
+#include <QCoreApplication>
 
 
 NETVRemoteClient::NETVRemoteClient(const QString &hostname, int port, QObject *parent)
@@ -122,4 +122,10 @@ bool NETVRemoteClient::event( QEvent * e )
     }
 
     return QTcpSocket::event(e);
+}
+
+
+void NETVRemoteClient::sendMessage(const NETV_MESSAGE &msg)
+{
+    QCoreApplication::postEvent(this,new NETVMessageEvent(msg),Qt::HighEventPriority);
 }

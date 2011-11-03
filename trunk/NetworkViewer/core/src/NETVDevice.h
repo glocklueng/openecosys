@@ -62,8 +62,8 @@ public:
           msg_data_length =0;
           msg_remote = 0;
           memset(msg_data,0,8);
-          msg_filter_hit=-1;
-          msg_dwTime = 0;               
+          msg_filter_hit=-1;          
+          msg_dwTime = 0;
      }
      /** Copy Constructor
           \param message The message to copy
@@ -205,9 +205,7 @@ public:
      ///Filter hit (used by the PCANDevice driver)
      int msg_filter_hit;
      ///Time stamp (ms)
-     unsigned int msg_dwTime;
-     
-     
+     unsigned int msg_dwTime;     
 } NETV_MESSAGE;
 
 /**

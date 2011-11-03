@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include "NETVMessageEvent.h"
+#include "NETV_define.h"
 
 static bool TCP_REMOTE_CLIENT_DEVICE_INIT = NETVDevice::registerDeviceFactory("TcpRemoteClient",new NETVDevice::DeviceFactory<TcpRemoteClient>("localhost;12345","Host;port"));
 
@@ -67,8 +68,14 @@ NETVDevice::State TcpRemoteClient::sendMessage(NETV_MESSAGE &message)
         if (m_remoteClient->state() == QAbstractSocket::ConnectedState)
         {
 
-            //We are not yet ready to do this...
-            //QCoreApplication::postEvent(m_remoteClient,new NETVMessageEvent(message));
+            //We will filter only request write message, other messages will be discarted
+            if (message.msg_type == NETV_TYPE_REQUEST_DATA && ((message.msg_boot & 0x01) == NETV_REQUEST_WRITE))
+            {
+                qDebug("TcpRemoteClient::sendMessage(NETV_MESSAGE &message - request write detected, sending...)");
+                m_remoteClient->sendMessage(message);
+            }
+
+
             return NETVDevice::NETVDEVICE_OK;
         }
         else
