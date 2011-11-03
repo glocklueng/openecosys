@@ -43,6 +43,11 @@ public slots:
     void addInterface(NETVInterfaceManager *manager);
     void removeInterface(NETVInterfaceManager *manager);
 
+protected slots:
+
+void readyReadSocket(void);
+
+
 protected:
 
     virtual void incomingConnection(int socketDescriptor);
@@ -55,6 +60,7 @@ protected:
 
     QList<QTcpSocket*> m_socketList;
 
+    QList<NETVInterfaceManager*> m_managerList;
 };
 
 #endif

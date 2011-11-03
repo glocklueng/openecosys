@@ -43,6 +43,9 @@ void NETVRemoteServer::incomingConnection(int socketDescriptor)
     //Must be called so server know we have a socket pending...
     addPendingConnection(socket);
 
+    //All socket will call the same ready read function
+    connect(socket,SIGNAL(readyRead()),this,SLOT(readyReadSocket()));
+
     //TODO socket disconnected signal
 
 
@@ -55,6 +58,11 @@ void NETVRemoteServer::addInterface(NETVInterfaceManager *manager)
     if(manager->getInterfaceHandler())
     {
         manager->getInterfaceHandler()->registerObserver(this);
+
+        if (!m_managerList.contains(manager))
+        {
+            m_managerList.push_back(manager);
+        }
     }
 }
 
@@ -62,7 +70,9 @@ void NETVRemoteServer::removeInterface(NETVInterfaceManager *manager)
 {
     if (manager->getInterfaceHandler())
     {
-        manager->getInterfaceHandler()->unregisterObserver(this);
+        m_managerList.removeAll(manager);
+
+        manager->getInterfaceHandler()->unregisterObserver(this);                
     }
 }
 
@@ -85,7 +95,6 @@ bool NETVRemoteServer::event ( QEvent * e )
             {
                 //NETV_MESSAGE &msg = event->getMessage();
                 event->getMessage().serialize(*m_socketList[i]);
-
             }
 
             return true;
@@ -93,4 +102,35 @@ bool NETVRemoteServer::event ( QEvent * e )
     }
 
     return QObject::event(e);
+}
+
+void NETVRemoteServer::readyReadSocket(void)
+{
+    qDebug("void NETVRemoteServer::readyReadSocket(void)");
+
+    //Read from all sockets if avilable
+    for (unsigned int i = 0; i < m_socketList.size(); i++)
+    {
+        while (m_socketList[i]->bytesAvailable() > 20)
+        {
+                //Read one message
+                NETV_MESSAGE msg;
+                if (msg.unserialize(*m_socketList[i]))
+                {
+                    qDebug("NETVRemoteServer::readyReadSocket(void) - parsing OK");
+
+                    //Let's find which interface it belongs...
+                    //This can be optimized ?
+                    //FIXME Sending to all interface since we don't know from which interface it comes from
+                    for (unsigned int j = 0; j <  m_managerList.size(); j++)
+                    {
+                        m_managerList[j]->getInterfaceHandler()->pushNETVMessage(msg);
+                    }
+                }
+                else
+                {
+                    qDebug("NETVRemoteServer::readyReadSocket(void) - Parsing error!");
+                }
+        }
+    }
 }

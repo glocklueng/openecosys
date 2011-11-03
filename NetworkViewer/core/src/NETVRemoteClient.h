@@ -30,9 +30,16 @@ public :
 
     NETVRemoteClient(const QString &hostname, int port, QObject *parent = NULL);
 
+public slots:
+    void sendMessage(const NETV_MESSAGE &msg);
+
+
 signals:
 
     void messageReady(const NETV_MESSAGE &msg);
+
+
+
 
 protected slots:
 
