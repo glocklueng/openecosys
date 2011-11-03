@@ -112,7 +112,7 @@ void NETVRemoteServer::readyReadSocket(void)
     //Read from all sockets if avilable
     for (unsigned int i = 0; i < m_socketList.size(); i++)
     {
-        while (m_socketList[i]->bytesAvailable() > 20)
+        while (m_socketList[i]->bytesAvailable() > 0)
         {
                 //Read one message
                 NETV_MESSAGE msg;
@@ -131,6 +131,7 @@ void NETVRemoteServer::readyReadSocket(void)
                 else
                 {
                     qDebug("NETVRemoteServer::readyReadSocket(void) - Parsing error!");
+                    break;
                 }
         }
     }
