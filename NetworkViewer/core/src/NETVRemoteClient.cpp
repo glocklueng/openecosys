@@ -115,6 +115,9 @@ bool NETVRemoteClient::event( QEvent * e )
             if (isWritable())
             {
                 event->getMessage().serialize(*this);
+
+                //Flush socket
+                flush();
             }
 
             return true;
