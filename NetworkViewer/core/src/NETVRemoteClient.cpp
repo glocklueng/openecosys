@@ -55,7 +55,7 @@ void NETVRemoteClient::readyReadSocket(void)
     //qDebug("NETVRemoteClient::readyReadSocket(void) bytesAvailable : %li",bytesAvailable());
 
     //Read all data on socket
-    while(bytesAvailable() >= 20)
+    while(bytesAvailable() > 0)
     {
         //Read one message
         NETV_MESSAGE msg;
@@ -67,6 +67,7 @@ void NETVRemoteClient::readyReadSocket(void)
         else
         {
             qDebug("NETVRemoteClient::readyReadSocket(void) - Parsing error!");
+            break;
         }
 
     }
