@@ -213,7 +213,7 @@ void Loopback::timeout()
 
     for (unsigned int i = 0; i < m_moduleList.size(); i++)
     {
-        for(unsigned int j = 0; j < VirtualModule::NB_VARIABLES; j++)
+        for(unsigned int j = 0; j < VirtualModule::NB_SINE_VARIABLES; j++)
         {
             m_moduleList[i].variable[j] = 100 * sin(2 * M_PI * (j / 10.0 + 0.01) * elapsed);
         }
