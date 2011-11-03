@@ -95,6 +95,7 @@ bool NETVRemoteServer::event ( QEvent * e )
             {
                 //NETV_MESSAGE &msg = event->getMessage();
                 event->getMessage().serialize(*m_socketList[i]);
+                m_socketList[i]->flush();
             }
 
             return true;
