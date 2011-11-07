@@ -17,7 +17,14 @@
 #ifndef _SOCKET_CAN_H_
 #define _SOCKET_CAN_H_
 
+#include <fcntl.h> 
+#include <sys/socket.h>
+#include <linux/can.h> 
+#include <linux/can/raw.h> 
+#include <sys/ioctl.h>
+#include <net/if.h>
 
+#include <string.h>
 #include "NETVDevice.h"
 #include <QSemaphore>
 #include <QMutex>
@@ -30,43 +37,42 @@
 
 class SocketCAN : public QObject, public NETVDevice
 {
-	Q_OBJECT;
+    Q_OBJECT;
 
-	public:
-
-       
+public:
 
 
-	SocketCAN(const char* params);
-
-	virtual ~SocketCAN();
-	
-	virtual NETVDevice::State initialize(const char* args);
 
 
-	  /** send a NETV_MESSAGE
+    SocketCAN(const char* params);
+
+    virtual ~SocketCAN();
+
+    virtual NETVDevice::State initialize(const char* args);
+
+
+    /** send a NETV_MESSAGE
 		   \param message The message to send
 		   \return int The status after the message has been sent
 	  */
-	  virtual NETVDevice::State sendMessage(NETV_MESSAGE &message);
+    virtual NETVDevice::State sendMessage(NETV_MESSAGE &message);
 
-	  /** receive a NETV_MESSAGE
+    /** receive a NETV_MESSAGE
 		   \param message The message to receive (will be filled)
 		   \return int The status after the message has been received
 	  */
-	  virtual NETVDevice::State recvMessage(NETV_MESSAGE &message);
-	
-	/** Verify if a message is ready to receive
+    virtual NETVDevice::State recvMessage(NETV_MESSAGE &message);
+
+    /** Verify if a message is ready to receive
 	 \return bool true if a message is ready to be received
 	 */
-	virtual bool newMessageReady();
-
-	protected slots:
-	
-	protected:
-	
+    virtual bool newMessageReady();
 
 
+protected:
+
+
+    int m_fd;
 
 };
 
