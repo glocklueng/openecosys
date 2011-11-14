@@ -86,7 +86,7 @@
 	 <ModuleVariable offset="248" description="Feedback Position at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerPosition" />
 	 <ModuleVariable offset="249" description="Feedback Speed at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerSpeed" />
 	 <ModuleVariable offset="250" description="Feedback Torque at every n cycles, 0 = no feedback" type="uint8" value="" name="FeedbackScalerTorque" />
-
+	 <ModuleVariable offset="252" description="TorqueLimit" type="sint16" value="" name="TorqueLimit" />
 	 
 	 
 	 <ModuleVariable memType="1" offset="8" description="Should  be always 0" type="uint8" value="" name="startupProfile" />
