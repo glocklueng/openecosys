@@ -108,6 +108,10 @@ NetworkView::NetworkView(QWidget *parent)
 
     //Dock widget change
     connect(m_moduleDockWidget,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),this,SLOT(moduleDockWidgetLocationChanged(Qt::DockWidgetArea)));
+
+    //testing broadcaster...
+    m_broadcaster = new NETVBroadcaster(8888,12345,this);
+
 }
 
 
