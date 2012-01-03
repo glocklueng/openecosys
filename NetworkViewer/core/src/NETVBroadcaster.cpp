@@ -35,7 +35,7 @@ void NETVBroadcaster::timerEvent(QTimerEvent *event)
         for (unsigned int i = 0; i < interfaceList.size(); i++)
         {
             if ((interfaceList[i].flags() & QNetworkInterface::CanBroadcast) &&
-                    (interfaceList[i].flags() & QNetworkInterface::IsRunning))
+                    (interfaceList[i].flags() & QNetworkInterface::IsUp))
             {
                 qDebug() << "Sending on " << interfaceList[i].humanReadableName();
                 QList<QNetworkAddressEntry> entries = interfaceList[i].addressEntries();
