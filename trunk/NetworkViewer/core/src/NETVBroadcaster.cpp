@@ -27,8 +27,8 @@ void NETVBroadcaster::timerEvent(QTimerEvent *event)
         m_info.serialize(buffer);
 
         //Broadcast information (to all interfaces)
-        qDebug("Broadcasting size: %i",buffer.data().size());
-        qDebug() << buffer.data();
+        //qDebug("Broadcasting size: %i",buffer.data().size());
+        //qDebug() << buffer.data();
 
         QList<QNetworkInterface> interfaceList =  QNetworkInterface::allInterfaces();
 
@@ -37,7 +37,7 @@ void NETVBroadcaster::timerEvent(QTimerEvent *event)
             if ((interfaceList[i].flags() & QNetworkInterface::CanBroadcast) &&
                     (interfaceList[i].flags() & QNetworkInterface::IsUp))
             {
-                qDebug() << "Sending on " << interfaceList[i].humanReadableName();
+                //qDebug() << "Sending on " << interfaceList[i].humanReadableName();
                 QList<QNetworkAddressEntry> entries = interfaceList[i].addressEntries();
                 for (unsigned int j = 0; j < entries.size(); j++)
                 {
