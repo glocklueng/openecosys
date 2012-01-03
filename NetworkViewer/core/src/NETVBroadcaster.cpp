@@ -1,6 +1,7 @@
 #include "NETVBroadcaster.h"
 #include <QtDebug>
 #include <QBuffer>
+#include <QNetworkInterface>
 
 
 
@@ -25,10 +26,25 @@ void NETVBroadcaster::timerEvent(QTimerEvent *event)
         buffer.open(QIODevice::WriteOnly);
         m_info.serialize(buffer);
 
-        //Broadcast information
+        //Broadcast information (to all interfaces)
         qDebug("Broadcasting size: %i",buffer.data().size());
         qDebug() << buffer.data();
-        m_socket->writeDatagram(buffer.data(),QHostAddress::Broadcast, m_udpPort);
+
+        QList<QNetworkInterface> interfaceList =  QNetworkInterface::allInterfaces();
+
+        for (unsigned int i = 0; i < interfaceList.size(); i++)
+        {
+            if ((interfaceList[i].flags() & QNetworkInterface::CanBroadcast) &&
+                    (interfaceList[i].flags() & QNetworkInterface::IsRunning))
+            {
+                qDebug() << "Sending on " << interfaceList[i].humanReadableName();
+                QList<QNetworkAddressEntry> entries = interfaceList[i].addressEntries();
+                for (unsigned int j = 0; j < entries.size(); j++)
+                {
+                    m_socket->writeDatagram(buffer.data(),entries[j].broadcast(), m_udpPort);
+                }
+            }
+        }
 
     }
 }
