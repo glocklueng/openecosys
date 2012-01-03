@@ -172,7 +172,24 @@ User roles:
             break;
 
         case VARIABLE_MEMORY_TYPE:
-            return QVariant(var->getMemType());
+
+            switch (var->getMemType())
+            {
+            case ModuleVariable::RAM_VARIABLE:
+                return QVariant("RAM");
+                break;
+
+            case ModuleVariable::EEPROM_VARIABLE:
+                return QVariant("EEPROM");
+                break;
+
+            case ModuleVariable::SCRIPT_VARIABLE:
+                return QVariant("SCRIPT");
+                break;
+            }
+
+
+
             break;
 
         case VARIABLE_MEMORY_OFFSET:
