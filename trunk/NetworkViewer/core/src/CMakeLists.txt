@@ -15,6 +15,7 @@ SET(NETV_CORE_SRCS
     NETVInterfaceManager.cpp
     NETVRemoteClient.cpp
     NETVRemoteServer.cpp
+    NETVBroadcaster.cpp
 )
 
 SET(NETV_CORE_HEADERS
@@ -30,6 +31,7 @@ SET(NETV_CORE_HEADERS
     UserPreferences.h
     NETVRemoteClient.h
     NETVRemoteServer.h
+    NETVBroadcaster.h
 )
 
 

@@ -35,6 +35,7 @@
 #include "NETVInterfaceManager.h"
 #include "BasePlugin.h"
 #include "DeviceSelectorDialog.h"
+#include "NETVBroadcaster.h"
 
 
 
@@ -346,6 +347,9 @@ protected:
 
         ///Where is docked the modules
         Qt::DockWidgetArea m_moduleDockWidgetArea;
+
+
+        NETVBroadcaster *m_broadcaster;
 
 };
 
