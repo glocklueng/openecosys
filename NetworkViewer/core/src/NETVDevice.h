@@ -151,7 +151,6 @@ public:
          if (dev.isReadable() && dev.bytesAvailable() >= 20)
          {
             QByteArray peekData = dev.peek(20);
-
             QByteArray name = peekData.mid(0,13);
             QByteArray header = peekData.mid(13,7);
 
