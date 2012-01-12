@@ -23,7 +23,7 @@
 #include <qwt_plot_curve.h>
 #include "ui_ScopeView.h"
 #include "ModuleConfiguration.h"
-#include <vector>
+#include <QVector>
 #include <QTime>
 #include <QTimer>
 
@@ -100,10 +100,10 @@ protected:
 	ModuleVariable *m_variable;
 
         ///Time values for the plot (x-axis)
-	std::vector<double> m_time;
+    QVector<double> m_time;
 
         ///Variable values for the plot (y-axis)
-	std::vector<double> m_values;
+    QVector<double> m_values;
 
         ///The plot where to draw the curve
 	QwtPlot *m_plot;
