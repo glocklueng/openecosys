@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
+#include <qwt_series_data.h>
 #include "ui_ScopeView.h"
 #include "ModuleConfiguration.h"
 #include <QVector>
@@ -29,6 +30,33 @@
 
 ///Maximum of points on the curve for each variable
 #define SCOPE_CURVE_DEFAULT_BUFFER_SIZE 500
+
+
+class ScopeCurveData : public QwtSeriesData<QPointF>
+{
+public:
+
+    ScopeCurveData();
+
+    //Reimplemented from QwtSeriesData
+    virtual QPointF sample( size_t i ) const;
+    virtual size_t size() const;
+    virtual QRectF boundingRect() const;
+
+    void append(const QPointF &sample);
+
+protected:
+
+    ///Time values for the plot (x-axis)
+    QVector<float> m_time;
+
+    ///Variable values for the plot (y-axis)
+    QVector<float> m_values;
+
+    QRectF m_boundingRect;
+
+};
+
 
 
 /**
@@ -58,58 +86,55 @@ public:
 
 public slots:
 	
-	/**
-                This will be used to update the plot, this will be event based...
-                \param var The vairable updated (should be == internal ModuleVariable*)
-	 */
-	void updateVariable(ModuleVariable *var);
-	
-	/**
-            Making sure every plot starts from the same elapsed time...
-            \return double the time from the start of the application
-        */
-	static double elapsed();
+    /**
+    This will be used to update the plot, this will be event based...
+    \param var The vairable updated (should be == internal ModuleVariable*)
+    */
+    void updateVariable(ModuleVariable *var);
 
-        /**
-            Set the curve color
-            \param color The Curve color
-        */
-	void setColor(const QColor &color);
+    /**
+    Making sure every plot starts from the same elapsed time...
+    \return double the time from the start of the application
+    */
+    static double elapsed();
 
-        /**
-            Set the maximum size of the data
-            \param size the length of the buffers
-        */
-        void setMaximumBufferSize(unsigned long size);
+    /**
+    Set the curve color
+    \param color The Curve color
+    */
+    void setColor(const QColor &color);
 
-        /**
-            Clear the buffer (empty the data)
-        */
-        void clearBuffer();
+    /**
+    Set the maximum size of the data
+    \param size the length of the buffers
+    */
+    void setMaximumBufferSize(unsigned long size);
+
+    /**
+    Clear the buffer (empty the data)
+    */
+    void clearBuffer();
 
 
 signals:
 
-        void aboutToDestroy(ScopeCurve *ptr);
+    void aboutToDestroy(ScopeCurve *ptr);
 
 protected slots:
 	
 protected:
 	
-        ///The variable that is being plotted
-	ModuleVariable *m_variable;
+    ///The variable that is being plotted
+    ModuleVariable *m_variable;
 
-        ///Time values for the plot (x-axis)
-    QVector<double> m_time;
+    ///The data
+    ScopeCurveData *m_data;
 
-        ///Variable values for the plot (y-axis)
-    QVector<double> m_values;
+    ///The plot where to draw the curve
+    QwtPlot *m_plot;
 
-        ///The plot where to draw the curve
-	QwtPlot *m_plot;
-
-        ///The maximum buffer size
-        unsigned long m_maxBufferSize;
+    ///The maximum buffer size
+    unsigned long m_maxBufferSize;
 };
 
 
