@@ -23,10 +23,63 @@
 #include <math.h>
 #include <algorithm>
 
+ScopeCurveData::ScopeCurveData()
+ : m_boundingRect(1.0, 1.0, -2.0, -2.0) //invalid
+{
+
+}
+
+QPointF ScopeCurveData::sample( size_t i ) const
+{
+    if (i < m_time.size())
+    {
+        return QPointF(m_time[i],m_values[i]);
+    }
+    else
+    {
+        qDebug("Out of bound : %i",i);
+    }
+}
+
+size_t ScopeCurveData::size() const
+{
+    return m_time.size();
+}
+
+QRectF ScopeCurveData::boundingRect() const
+{
+    return m_boundingRect;
+}
+
+void ScopeCurveData::append(const QPointF &sample)
+{
+    if (m_boundingRect.width() < 0 || m_boundingRect.height() < 0 )
+    {
+        m_boundingRect.setRect( sample.x(), sample.y(), 0.0, 0.0 );
+    }
+    else
+    {
+        m_boundingRect.setRight( sample.x() );
+
+        if ( sample.y() > m_boundingRect.bottom() )
+            m_boundingRect.setBottom( sample.y() );
+
+        if ( sample.y() < m_boundingRect.top() )
+            m_boundingRect.setTop( sample.y() );
+    }
+
+    //Push data
+    m_time.append(sample.x());
+    m_values.append(sample.y());
+
+}
+
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
     :	m_variable(var),  m_plot(parentPlot), m_maxBufferSize(SCOPE_CURVE_DEFAULT_BUFFER_SIZE)
 {
     Q_ASSERT(m_variable);
+
+    m_data = new ScopeCurveData();
 
     setTitle(m_variable->getName() + " [" + QString::number(m_variable->getDeviceID()) + "]");
 
@@ -43,6 +96,10 @@ ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 
     //Update the current variable value
     updateVariable(m_variable);
+
+
+    //Set data holder
+    setData(m_data);
 }
 
 ScopeCurve::~ScopeCurve()
@@ -66,8 +123,10 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
         if (ok)
         {
 
+            m_data->append(QPointF(elapsed,value));
 
-
+            m_plot->replot();
+/*
             //Push back values
             if (m_time.size() < m_maxBufferSize)
             {
@@ -92,6 +151,7 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
             //draw curve (all)
             //draw(std::max(0,m_values.size() - 2) ,m_values.size() -1);
             //m_plot->replot();
+ */
         }
     }
 }
@@ -129,6 +189,8 @@ ModuleVariable* ScopeCurve::getVariable()
 
 void ScopeCurve::setMaximumBufferSize(unsigned long size)
 {
+    /*
+
     m_maxBufferSize = size;
 
     if (m_time.size() > m_maxBufferSize)
@@ -141,14 +203,22 @@ void ScopeCurve::setMaximumBufferSize(unsigned long size)
     //set plot data
     //setData(&m_time[0], &m_values[0], m_time.size());
     setSamples(m_time,m_values);
+
+    */
+
 }
 
 void ScopeCurve::clearBuffer()
 {
+    /*
+
     m_time.resize(0);
     m_values.resize(0);
 
     //set plot data
     //setData(&m_time[0], &m_values[0], m_time.size());
     setSamples(m_time,m_values);
+
+    */
+
 }
