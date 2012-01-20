@@ -181,6 +181,9 @@ void ScopeView::addCurve(ModuleVariable *variable)
 
     }
 
+    //update buffer size
+    curve->setMaximumBufferSize(m_bufferSizeSpinbox->value());
+
     m_curves.push_back(curve);
 
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(removeCurve(ModuleVariable*)));
