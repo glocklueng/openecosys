@@ -93,6 +93,8 @@ protected slots:
 
     void clearCurves();
 
+    void saveCurves();
+
 protected:
 
     /**
