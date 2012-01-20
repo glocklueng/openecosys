@@ -42,10 +42,15 @@ public:
     virtual QPointF sample( size_t i ) const;
     virtual size_t size() const;
     virtual QRectF boundingRect() const;
+    void setMaxItems(size_t count);
+    int getMaxItems();
 
     void append(const QPointF &sample);
+    void clear();
 
 protected:
+
+    void updateBoundaries();
 
     ///Time values for the plot (x-axis)
     QVector<float> m_time;
@@ -54,6 +59,8 @@ protected:
     QVector<float> m_values;
 
     QRectF m_boundingRect;
+
+    size_t m_maxItems;
 
 };
 
@@ -124,6 +131,8 @@ protected slots:
 	
 protected:
 	
+
+
     ///The variable that is being plotted
     ModuleVariable *m_variable;
 
@@ -135,6 +144,8 @@ protected:
 
     ///The maximum buffer size
     unsigned long m_maxBufferSize;
+
+
 };
 
 

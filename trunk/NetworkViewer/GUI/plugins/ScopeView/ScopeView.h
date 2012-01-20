@@ -104,6 +104,7 @@ protected:
     void dropEvent(QDropEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
 
+
     QwtPlotZoomer *m_zoomer;
 
     QwtPlotPicker *m_picker;

@@ -24,7 +24,7 @@
 #include <algorithm>
 
 ScopeCurveData::ScopeCurveData()
- : m_boundingRect(1.0, 1.0, -2.0, -2.0) //invalid
+    : m_boundingRect(1.0, 1.0, -2.0, -2.0), m_maxItems(SCOPE_CURVE_DEFAULT_BUFFER_SIZE)
 {
 
 }
@@ -53,29 +53,118 @@ QRectF ScopeCurveData::boundingRect() const
 
 void ScopeCurveData::append(const QPointF &sample)
 {
-    if (m_boundingRect.width() < 0 || m_boundingRect.height() < 0 )
-    {
-        m_boundingRect.setRect( sample.x(), sample.y(), 0.0, 0.0 );
-    }
-    else
-    {
-        m_boundingRect.setRight( sample.x() );
-
-        if ( sample.y() > m_boundingRect.bottom() )
-            m_boundingRect.setBottom( sample.y() );
-
-        if ( sample.y() < m_boundingRect.top() )
-            m_boundingRect.setTop( sample.y() );
-    }
+    Q_ASSERT(m_time.size() == m_values.size());
 
     //Push data
     m_time.append(sample.x());
     m_values.append(sample.y());
 
+    if (m_time.size() < m_maxItems)
+    {
+        //Initial Setup
+        if (m_boundingRect.width() < 0 || m_boundingRect.height() < 0 )
+        {
+            m_boundingRect.setRect( sample.x(), sample.y(), 0.0, 0.0 );
+        }
+        else
+        {
+            //Update if necessary
+            m_boundingRect.setRight( sample.x() );
+
+            if ( sample.y() > m_boundingRect.bottom() )
+                m_boundingRect.setBottom( sample.y() );
+
+            if ( sample.y() < m_boundingRect.top() )
+                m_boundingRect.setTop( sample.y() );
+        }
+    }
+    else
+    {
+        //Must remove one element first
+        m_time.remove(0,m_time.size() - m_maxItems);
+        m_values.remove(0,m_values.size() - m_maxItems);
+
+        //Update boundaries
+        updateBoundaries();
+    }
+
+
+
 }
 
+void ScopeCurveData::setMaxItems(size_t count)
+{
+    m_maxItems = count;
+
+    //Resize data vector (if too big)
+    if (m_time.size() > count)
+    {
+        m_time.remove(0,m_time.size() - m_maxItems);
+        m_values.remove(0,m_values.size() - m_maxItems);
+    }
+
+    //Nothing to do when too small...
+
+
+    updateBoundaries();
+}
+
+int ScopeCurveData::getMaxItems()
+{
+    return m_maxItems;
+}
+
+
+void ScopeCurveData::updateBoundaries()
+{
+    Q_ASSERT(m_time.size() == m_values.size());
+
+    //Will scan all data for boundaries...
+    if (m_time.empty())
+    {
+        //Back to "illegal" size
+        m_boundingRect.setRect(1.0, 1.0, -2.0, -2.0);
+    }
+    else
+    {
+        //initalize to first element
+        m_boundingRect.setTop(m_values[0]);
+        m_boundingRect.setBottom(m_values[0]);
+
+        //Values are ordered in time, we already know the bounding time box
+        m_boundingRect.setLeft(m_time[0]);
+        m_boundingRect.setRight(m_time.last());
+
+        //Scan the array and adjust boudaries if necessary
+        for (unsigned int i = 0; i < m_values.size(); i++)
+        {
+            //Lowe value test
+            if ( m_values[i] > m_boundingRect.bottom())
+            {
+                m_boundingRect.setBottom( m_values[i] );
+            }
+
+            //Upper value test
+            if ( m_values[i] < m_boundingRect.top())
+            {
+                    m_boundingRect.setTop( m_values[i] );
+            }
+        }
+    }
+
+}
+
+void ScopeCurveData::clear()
+{
+    m_time.resize(0);
+    m_values.resize(0);
+    updateBoundaries();
+}
+
+
+
 ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
-    :	m_variable(var),  m_plot(parentPlot), m_maxBufferSize(SCOPE_CURVE_DEFAULT_BUFFER_SIZE)
+    :	m_variable(var),  m_plot(parentPlot), m_maxBufferSize(SCOPE_CURVE_DEFAULT_BUFFER_SIZE), m_data(NULL)
 {
     Q_ASSERT(m_variable);
 
@@ -104,6 +193,7 @@ ScopeCurve::ScopeCurve(ModuleVariable *var, QwtPlot *parentPlot)
 
 ScopeCurve::~ScopeCurve()
 {
+
     emit aboutToDestroy(this);
     detach();
 }
@@ -122,36 +212,7 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
 
         if (ok)
         {
-
             m_data->append(QPointF(elapsed,value));
-
-            m_plot->replot();
-/*
-            //Push back values
-            if (m_time.size() < m_maxBufferSize)
-            {
-                m_time.push_back(elapsed);
-                m_values.push_back(value);
-            }
-            else
-            {
-
-                m_time.push_back(elapsed);
-                m_values.push_back(value);
-
-                //Resize data
-                m_time.erase(m_time.begin());
-                m_values.erase(m_values.begin());
-            }
-
-            //setData(&m_time[0], &m_values[0], m_time.size());
-            setSamples(m_time,m_values);
-
-
-            //draw curve (all)
-            //draw(std::max(0,m_values.size() - 2) ,m_values.size() -1);
-            //m_plot->replot();
- */
         }
     }
 }
@@ -189,36 +250,18 @@ ModuleVariable* ScopeCurve::getVariable()
 
 void ScopeCurve::setMaximumBufferSize(unsigned long size)
 {
-    /*
-
-    m_maxBufferSize = size;
-
-    if (m_time.size() > m_maxBufferSize)
+    if (m_data)
     {
-        //Resize data, keep last m_maxBufferSize;
-        m_time.erase(m_time.begin(),m_time.begin() + (m_time.size() - m_maxBufferSize));
-        m_values.erase(m_values.begin(),m_values.begin() + (m_values.size() - m_maxBufferSize));
+        m_data->setMaxItems(size);
     }
-
-    //set plot data
-    //setData(&m_time[0], &m_values[0], m_time.size());
-    setSamples(m_time,m_values);
-
-    */
 
 }
 
 void ScopeCurve::clearBuffer()
 {
-    /*
-
-    m_time.resize(0);
-    m_values.resize(0);
-
-    //set plot data
-    //setData(&m_time[0], &m_values[0], m_time.size());
-    setSamples(m_time,m_values);
-
-    */
-
+    if (m_data)
+    {
+        m_data->clear();
+    }
 }
+
