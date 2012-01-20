@@ -337,12 +337,8 @@ void ScopeView::saveCurves()
     QString fileName = QFileDialog::getSaveFileName(this, tr("File name"), QString(),"Graphic files (*.png)");
 
     //Render image to paint device
-
-
-
     QImage pixmap(m_plot->canvas()->width(),m_plot->canvas()->height(),QImage::Format_RGB32);
     pixmap.fill(Qt::white);
-
     QPainter painter(&pixmap);
     QwtPlotRenderer renderer;
     renderer.render(m_plot, &painter, pixmap.rect());
