@@ -27,7 +27,9 @@
 #include "qwt_symbol.h"
 #include "qwt_plot_grid.h"
 #include "qwt_legend.h"
-
+#include <QImage>
+#include <QFileDialog>
+#include "qwt_plot_renderer.h"
 
 //This will insert the plugin in the dictionary...
 static int scope_view_plugin_init = BasePlugin::registerPlugin("ScopeView",new BasePlugin::PluginFactory<ScopeView>());
@@ -79,6 +81,7 @@ ScopeView::ScopeView(NetworkView *parent)
 
     //Connect tool buttons & spinbox
     connect(m_clearToolButton,SIGNAL(clicked()),this,SLOT(clearCurves()));
+    connect(m_saveToolButton,SIGNAL(clicked()),this,SLOT(saveCurves()));
     connect(m_bufferSizeSpinbox,SIGNAL(valueChanged(int)),this,SLOT(setCurveMaxBufferSize(int)));
 
 
@@ -327,5 +330,33 @@ void ScopeView::clearCurves()
     m_plot->replot();
 }
 
+void ScopeView::saveCurves()
+{
+    //Saving
+    qDebug("void ScopeView::saveCurves()");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("File name"), QString(),"Graphic files (*.png)");
 
+    //Render image to paint device
+
+
+
+    QImage pixmap(m_plot->canvas()->width(),m_plot->canvas()->height(),QImage::Format_RGB32);
+    pixmap.fill(Qt::white);
+
+    QPainter painter(&pixmap);
+    QwtPlotRenderer renderer;
+    renderer.render(m_plot, &painter, pixmap.rect());
+
+    qDebug("Saving...");
+    if (pixmap.save(fileName,"PNG"))
+    {
+        qDebug("Save OK!");
+    }
+    else
+    {
+        qDebug("Error saving!");
+    }
+
+
+}
 

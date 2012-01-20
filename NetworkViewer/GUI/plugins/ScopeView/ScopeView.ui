@@ -65,7 +65,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../../NetworkViewer.qrc">
+         <iconset resource="../../src/NetworkViewer.qrc">
           <normaloff>:/images/playGreen.png</normaloff>:/images/playGreen.png</iconset>
         </property>
        </widget>
@@ -79,7 +79,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../../NetworkViewer.qrc">
+         <iconset resource="../../src/NetworkViewer.qrc">
           <normaloff>:/images/pauseGreen.png</normaloff>:/images/pauseGreen.png</iconset>
         </property>
        </widget>
@@ -87,13 +87,13 @@
       <item>
        <widget class="QToolButton" name="m_saveToolButton">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../../NetworkViewer.qrc">
+         <iconset resource="../../src/NetworkViewer.qrc">
           <normaloff>:/images/Save-Icon.png</normaloff>:/images/Save-Icon.png</iconset>
         </property>
        </widget>
@@ -107,7 +107,7 @@
          <string>C</string>
         </property>
         <property name="icon">
-         <iconset resource="../../NetworkViewer.qrc">
+         <iconset resource="../../src/NetworkViewer.qrc">
           <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
         </property>
        </widget>
@@ -175,7 +175,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../NetworkViewer.qrc"/>
+  <include location="../../src/NetworkViewer.qrc"/>
  </resources>
  <connections/>
 </ui>
