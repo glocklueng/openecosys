@@ -67,10 +67,7 @@ ScopeView::ScopeView(NetworkView *parent)
 
     m_updateTimer = new QTimer(this);
     connect(m_updateTimer,SIGNAL(timeout()),this,SLOT(updateTimer()));
-    //m_updateTimer->start(100);//10ms timer
-
-
-
+    m_updateTimer->start(50);//50ms timer
 
 
     //Create Legend at bottom
@@ -209,60 +206,7 @@ void ScopeView::removeCurve(ModuleVariable *variable)
 
 void ScopeView::updateTimer()
 {
-
-    //m_plot->replot();
-
-  //m_plot->replot();
-/*
-    for(int i =0; i < m_curves.size(); i++)
-    {
-        ModuleVariable *variable = m_curves[i]->getVariable();
-        if (variable->getActivated())
-        {
-            m_view->requestVariable(variable);
-        }
-    }
-*/
-
-/*
-    if (m_zoomer)
-    {
-        QwtDoubleRect rect;
-
-        for (unsigned int i = 0; i < m_curves.size(); i++)
-        {
-            QwtDoubleRect curveRect = m_curves[i]->boundingRect();
-
-            if (i == 0)
-            {
-                rect = curveRect;
-            }
-            else
-            {
-                rect.unite(curveRect);
-            }
-        }
-
-        //m_zoomer->setZoomBase(rect);
-        //qDebug("zoomRectIndex : %i",m_zoomer->zoomRectIndex());
-
-        //Zoom at zoom base?
-        if (m_zoomer->zoomRectIndex() <= 1)
-        {
-            //zoom base too large?
-            if (m_zoomer->zoomBase() != rect)
-            {
-                //qDebug("Zoom rect index == 0");
-                //qDebug("canvas Replot requested, zoom base different");
-                //m_zoomer->setZoomBase(rect);
-                //m_zoomer->zoom(0);
-                //qDebug("zoomRectIndex : %i",m_zoomer->zoomRectIndex());
-            }
-        }
-
-    }
- */
-
+    m_plot->replot();
 }
 
 
