@@ -52,45 +52,20 @@ public:
 	virtual void terminate();
 
 
-        void addVariable(ModuleVariable *variable);
-
-
-        void removeVariable(ModuleVariable *variable);
 
 protected slots:
 
-        /**
-            Called when a new variable is added in the ModuleVariableTableWidget
-            \param variable The newly added variable
-        */
-        void variableAdded(ModuleVariable* variable);
 
-        /**
-            Called when a variable is removed from the table
-            \param variable The removed variable
-        */
-        void variableRemoved(ModuleVariable* variable);
-
-        /**
-            Called when the value of a variable is changed. The variable
-            will then be logged if the logger is enabled.
-            \param variable The modified variable
-        */
-        void variableValueChanged(ModuleVariable* variable);
-
-        /**
-            User changed the file name manually
-            \param the file name
-        */
-        void lineEditTextChanged(QString value);
 
 
         ///Start button clicked
         void startButtonClicked();
         ///Stop button clicked
         void stopButtonClicked();
-        ///File button clicked
-        void fileButtonClicked();
+        ///Save button clicked
+        void saveButtonClicked();
+        ///Clear button clicked
+        void clearButtonClicked();
 
         /**
             Change the state of the logger
@@ -114,9 +89,6 @@ protected:
 
         ///The variable list
         QList<ModuleVariable*> m_varList;
-
-        ///The log file
-        QFile m_file;
 
         ///Enable/Disable flag
         bool m_logging;

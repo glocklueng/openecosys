@@ -29,97 +29,40 @@ static int logger_plugin_init = BasePlugin::registerPlugin("Logger",new BasePlug
 
 
 Logger::Logger(NetworkView *view)
-         : BasePlugin(view), m_logging(false)
+    : BasePlugin(view), m_logging(false)
 {
-        //qDebug("Logger::Logger(NetworkView *view = %p)",view);
+    //qDebug("Logger::Logger(NetworkView *view = %p)",view);
 
-	//Setup UI
-	m_ui.setupUi(this);
+    //Setup UI
+    m_ui.setupUi(this);
 
-        //Adding table widget
-        m_table = new ModuleVariableTableWidget(this);
-        m_ui.verticalLayout->addWidget(m_table);
+    //Adding table widget
+    m_table = new ModuleVariableTableWidget(this);
+    m_ui.verticalLayout->addWidget(m_table);
 
-        //Connect signals
-        connect(m_table,SIGNAL(variableAdded(ModuleVariable*)),this,SLOT(variableAdded(ModuleVariable*)));
-        connect(m_table,SIGNAL(variableRemoved(ModuleVariable*)),this,SLOT(variableRemoved(ModuleVariable*)));
 
-        //Buttons
-        connect(m_ui.pushButton_Start,SIGNAL(clicked()),this,SLOT(startButtonClicked()));
-        connect(m_ui.pushButton_Stop,SIGNAL(clicked()),this,SLOT(stopButtonClicked()));
-        connect(m_ui.pushButton_File,SIGNAL(clicked()),this,SLOT(fileButtonClicked()));
+    //Buttons
+    connect(m_ui.pushButton_Start,SIGNAL(clicked()),this,SLOT(startButtonClicked()));
+    connect(m_ui.pushButton_Stop,SIGNAL(clicked()),this,SLOT(stopButtonClicked()));
+    connect(m_ui.pushButton_Save,SIGNAL(clicked()),this,SLOT(saveButtonClicked()));
+    connect(m_ui.pushButton_Clear,SIGNAL(clicked()),this,SLOT(clearButtonClicked()));
 
-        //Line edit
-        connect(m_ui.lineEdit,SIGNAL(textChanged(QString)),this,SLOT(lineEditTextChanged(QString)));
-
-        setLogging(false);
+    setLogging(false);
 }
 
 void Logger::init()
 {
-
+    qDebug("Logger::init()");
 }
 
 void Logger::terminate()
 {
-
+    qDebug("Logger::terminate()");
 }
 
-void Logger::variableRemoved(ModuleVariable* variable)
-{
-    //disconnect signals
-    disconnect(variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableValueChanged(ModuleVariable*)));
-    //Remove variable from list
-    m_varList.removeAll(variable);
-}
-
-void Logger::variableAdded(ModuleVariable* variable)
-{
-    //connect variable modified signals
-    connect(variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableValueChanged(ModuleVariable*)));
-    //Add to variable list
-    m_varList.push_back(variable);
-}
-
-void Logger::variableValueChanged(ModuleVariable* variable)
-{
-    //qDebug() << "Value changed for variable : " << variable->getName();
-
-    if (m_logging)
-    {
-        QTextStream stream(&m_file);
-
-        QDateTime myTime = QDateTime::currentDateTime();
-
-        stream << (float) m_startTime.elapsed() / 1000.0 << "\t"
-               << myTime.toString("dd.MM.yyyy") << "\t"
-               << myTime.toString("hh:mm:ss.zzz") << "\t"
-               << variable->getDeviceID() << "\t"
-               << variable->getName() << "\t"
-               << variable->getValue().toDouble() <<"\t"
-               << "\n";
-
-    }
-}
 
 void Logger::startButtonClicked()
 {
-
-    m_startTime = QTime::currentTime();
-
-
-
-    m_startTime.start();
-
-    //Test if we have selected the file name
-    if (m_ui.lineEdit->text().size() == 0)
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Please select a file name first.");
-        msgBox.exec();
-
-        return;
-    }
 
     setLogging(true);
 }
@@ -130,31 +73,22 @@ void Logger::stopButtonClicked()
 
 }
 
-void Logger::fileButtonClicked()
+void Logger::saveButtonClicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save File"), ".", tr("Text Files (*.txt)"));
+        tr("Save CSV File"), ".", tr("CSV Text Files (*.csv)"));
+
+    QFile file(fileName);
+    file.open(QFile::WriteOnly);
 
 
-    //make sure we close the previously opened file
-    m_file.close();
-
-    m_file.setFileName(fileName);
-
-
-
-    //Change Line Edit
-    m_ui.lineEdit->blockSignals(true);
-    m_ui.lineEdit->setText(fileName);
-    m_ui.lineEdit->blockSignals(false);
-
-
+    m_table->saveCSV(file);
 
 }
 
 void Logger::setLogging(bool state)
 {
-    //internal state    
+    //internal state
     QPalette palette = m_ui.label->palette();
 
     m_logging = state;
@@ -162,59 +96,20 @@ void Logger::setLogging(bool state)
     //label
     if (state)
     {
-        //Open file for writing
-        if (m_file.fileName().size() > 0)
-        {
-            m_file.open(QIODevice::WriteOnly);
-
-            //Write file header
-            QTextStream stream(&m_file);
-
-            stream << "ELAPSED" << "\t"
-                   << "DATE" << "\t"
-                   << "TIME" << "\t"
-                   << "DEVICE" << "\t"
-                   << "VARIABLE" << "\t"
-                   << "VALUE" <<"\t"
-                   << "\n";
-        }
-
-        m_ui.lineEdit->setEnabled(false);
         m_ui.label->setText("<b>Logging</b>");
         palette.setColor(m_ui.label->backgroundRole(),QColor(Qt::green));
     }
     else
-    {       
+    {
 
-        //Open file for writing
-        m_file.close();
-
-        m_ui.lineEdit->setEnabled(true);
         m_ui.label->setText("<b>NOT Logging</b>");
         palette.setColor(m_ui.label->backgroundRole(),QColor(Qt::red));
     }
 
+    m_table->setLogEnabled(m_logging);
     m_ui.label->setPalette(palette);
     m_ui.label->setAutoFillBackground(true);
     m_ui.label->update();
-}
-
-void Logger::lineEditTextChanged(QString value)
-{
-    //This will happen only when not logging
-    //make sure we close the previously opened file
-    m_file.setFileName(value);
-}
-
-void Logger::addVariable(ModuleVariable *variable)
-{
-    m_table->addVariable(variable);
-}
-
-
-void Logger::removeVariable(ModuleVariable *variable)
-{
-    m_table->removeVariable(variable);
 }
 
 bool Logger::event ( QEvent * e )
@@ -235,7 +130,7 @@ bool Logger::event ( QEvent * e )
                     ModuleVariable *var = (ModuleVariable*) iter.value().toLongLong(&ok);
                     if (ok && var)
                     {
-                        addVariable(var);
+                        m_table->addVariable(var);
                     }
                 }
                 else if (iter.key() == "removeVariable")
@@ -244,7 +139,7 @@ bool Logger::event ( QEvent * e )
                     ModuleVariable *var = (ModuleVariable*) iter.value().toLongLong(&ok);
                     if (ok && var)
                     {
-                        removeVariable(var);
+                        m_table->removeVariable(var);
                     }
                 }
             }
@@ -256,3 +151,10 @@ bool Logger::event ( QEvent * e )
 
     return BasePlugin::event(e);
 }
+
+void Logger::clearButtonClicked()
+{
+    m_table->clearLogs();
+}
+
+
