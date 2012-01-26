@@ -26,6 +26,7 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include "SerialEmulatorConfigure.h"
+#include <QDateTime>
 
 
 static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialEmulator",new NETVDevice::DeviceFactory<SerialEmulator>("COM4;115200","SerialPort;speed;debug(optional);timeDelay(optional)"));
@@ -187,6 +188,8 @@ NETVDevice::State SerialEmulator::recvMessage(NETV_MESSAGE &message)
                 message.msg_data[i] = buf.data[i];
             }
 
+            //Time stamp
+            message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
             //NETVDevice::printMessage(message);
 

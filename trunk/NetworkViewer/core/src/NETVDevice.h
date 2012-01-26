@@ -63,7 +63,7 @@ public:
           msg_remote = 0;
           memset(msg_data,0,8);
           msg_filter_hit=-1;          
-          msg_dwTime = 0;
+          msg_timestamp = 0;
      }
      /** Copy Constructor
           \param message The message to copy
@@ -78,7 +78,7 @@ public:
           memcpy(msg_data,message.msg_data,8);
           msg_remote=message.msg_remote;
           msg_filter_hit=message.msg_filter_hit;
-          msg_dwTime = message.msg_dwTime;
+          msg_timestamp = message.msg_timestamp;
      }
 
      _message& operator=(const _message &message)
@@ -92,7 +92,7 @@ public:
          memcpy(msg_data,message.msg_data,8);
          msg_remote=message.msg_remote;
          msg_filter_hit=message.msg_filter_hit;
-         msg_dwTime = message.msg_dwTime;
+         msg_timestamp = message.msg_timestamp;
          return *this;
      }
 
@@ -104,6 +104,7 @@ public:
          if (msg_boot != message.msg_boot) return false;
          if (msg_dest != message.msg_dest) return false;
          if (msg_data_length != message.msg_data_length) return false;
+         if (msg_timestamp != msg_timestamp) return false;
          if (message.msg_data_length <= 8)
          {
              for (unsigned int i = 0; i < message.msg_data_length; i++)
@@ -132,10 +133,12 @@ public:
              dev.write(QByteArray((char*)&msg_boot,1));
              dev.write(QByteArray((char*)&msg_dest,1));
              dev.write(QByteArray((char*)&msg_remote,1));
+             dev.write(QByteArray((char*)&msg_timestamp, sizeof(msg_timestamp)));
 
              //Size
              dev.write(QByteArray((char*)&msg_data_length,1));
-             //Wrote 20 bytes
+
+             //Wrote 28 bytes before data
              dev.write(QByteArray((char*)&msg_data[0],(unsigned int) msg_data_length));
 
              return true;
@@ -148,11 +151,11 @@ public:
 
      bool unserialize(QIODevice &dev)
      {
-         if (dev.isReadable() && dev.bytesAvailable() >= 20)
+         if (dev.isReadable() && dev.bytesAvailable() >= 28)
          {
-            QByteArray peekData = dev.peek(20);
+            QByteArray peekData = dev.peek(28);
             QByteArray name = peekData.mid(0,13);
-            QByteArray header = peekData.mid(13,7);
+            QByteArray header = peekData.mid(13,15);
 
             if (name != QByteArray("NETV_MESSAGE;"))
             {
@@ -169,11 +172,14 @@ public:
                 msg_remote = header[5];
                 msg_data_length = header[6];
 
+                memcpy((char*) &msg_timestamp,&header.data()[7],sizeof(msg_timestamp));
+
+
                 //Read data
-                if (dev.bytesAvailable() >= (20 + msg_data_length) && msg_data_length <= 8)
+                if (dev.bytesAvailable() >= (28 + msg_data_length) && msg_data_length <= 8)
                 {
                     //read header
-                    dev.read(20);
+                    dev.read(28);
 
                     //read data
                     dev.read((char*)&msg_data[0],(unsigned int)msg_data_length);
@@ -211,7 +217,7 @@ public:
      ///Filter hit (used by the PCANDevice driver)
      int msg_filter_hit;
      ///Time stamp (ms)
-     unsigned int msg_dwTime;     
+     qint64 msg_timestamp;
 } NETV_MESSAGE;
 
 /**

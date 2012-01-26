@@ -57,6 +57,9 @@ NETVDevice::State Loopback::initialize(const char* args)
 
 NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
 {
+
+    message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
+
     //BE CAREFUL THIS FUNCTION RUNS IN ANOTHER THREAD
     if (message.msg_type == NETV_TYPE_REQUEST_DATA)
     {

@@ -19,6 +19,7 @@
 #include "SerialBridge.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QDateTime>
 
 static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialBridge",new NETVDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
 
@@ -142,7 +143,7 @@ NETVDevice::State SerialBridge::recvMessage(NETV_MESSAGE &message)
 
             message.msg_remote = msg.msgEID.RTR;
             message.msg_filter_hit = msg.msgSID.IFACE;
-            message.msg_dwTime = msg.msgSID.CMSGTS;
+            message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
             //NETVDevice::printMessage(message);
 	}
