@@ -28,17 +28,16 @@
 #include <QTextStream>
 
 
-ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool interactive)
-    : QTableWidget(parent), m_interactive(interactive), m_logEnabled(false)
+ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent)
+    : QTableWidget(parent), m_logEnabled(false)
 {
 
     //Will accept drop by default  
     setAcceptDrops(true);
 
-    if (m_interactive)
-    {
-        setDragEnabled(true);
-    }
+
+    setDragEnabled(true);
+
 
     //Set Columns size & labels
     setColumnCount(VARIABLE_ENUM_SIZE);
@@ -46,7 +45,7 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
     QStringList labels;
 
 
-    labels << "Activated" << "Name" << "ValueType" << "Value" << "Log Count";
+    labels << "ModuleID" << "Name" << "ValueType" << "Value" << "Log Count";
     setHorizontalHeaderLabels(labels);
 
 
@@ -141,26 +140,7 @@ void ModuleVariableTableWidget::variableDestroyed(ModuleVariable *variable)
     removeVariable(variable,false);
 }
 
-void ModuleVariableTableWidget::variableActivated(bool state, ModuleVariable *variable)
-{
-    if (m_variableMap.contains(variable))
-    {
-        int index = m_variableMap[variable];
 
-        QCheckBox *checkbox = dynamic_cast<QCheckBox*>(this->cellWidget(index,VARIABLE_ACTIVATED));
-
-        if(checkbox)
-        {
-            blockSignals(true);
-            checkbox->setChecked(state);
-            blockSignals(false);
-        }
-        else
-        {
-            qWarning("ModuleVariableTableWidget::variableActivated -- Widget not found at : %i, %i",index,VARIABLE_VALUE);
-        }
-    }
-}
 
 
 void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
@@ -221,20 +201,12 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     //Connect value changed signal
     connect(variable,SIGNAL(valueChanged(ModuleVariable*)),this,SLOT(variableValueChanged(ModuleVariable*)));
 
-    //Connect variable activated
-    connect(variable,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableActivated(bool,ModuleVariable*)));
 
+    //Module ID
+    QTableWidgetItem *moduleIDItem =  new QTableWidgetItem(QString::number(variable->getDeviceID()));
+    moduleIDItem->setFlags(Qt::ItemIsEnabled);
+    setItem(index,VARIABLE_MODULE_ID,moduleIDItem);
 
-    //Activated
-    QCheckBox *activatedCheckBox = new QCheckBox(this);
-    activatedCheckBox->setEnabled(m_interactive);
-    activatedCheckBox->setChecked(variable->getActivated());
-    this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
-    //Activation
-    if(m_interactive)
-    {
-        connect(activatedCheckBox,SIGNAL(clicked(bool)),variable,SLOT(setActivated(bool)));
-    }
 
     //Name
     QTableWidgetItem *nameItem = new QTableWidgetItem(variable->getName());
@@ -250,16 +222,8 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Value
     QTableWidgetItem *valueItem = new QTableWidgetItem(variable->getValue().toString());
-    if (m_interactive)
-    {
-        valueItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
-    }
-    else
-    {
-         valueItem->setFlags(Qt::ItemIsEnabled);
-    }
-
-    setItem (index, VARIABLE_VALUE,valueItem);
+  valueItem->setFlags(Qt::ItemIsEnabled);
+setItem (index, VARIABLE_VALUE,valueItem);
 
 
     //Log Counter
@@ -268,11 +232,12 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
 
     //Make sure everything is visible
-    //resizeColumnsToContents();
+    resizeColumnsToContents();
     blockSignals(false);
 
 
     resizeRowsToContents();
+    horizontalHeader()->setStretchLastSection(true);
 
     emit variableAdded(variable);
 
