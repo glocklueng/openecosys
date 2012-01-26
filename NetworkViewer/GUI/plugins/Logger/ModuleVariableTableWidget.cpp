@@ -25,10 +25,11 @@
 #include <QDrag>
 #include <QCheckBox>
 #include <QHeaderView>
+#include <QTextStream>
 
 
 ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool interactive)
-    : QTableWidget(parent), m_interactive(interactive)
+    : QTableWidget(parent), m_interactive(interactive), m_logEnabled(false)
 {
 
     //Will accept drop by default  
@@ -43,7 +44,9 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent, bool inter
     setColumnCount(VARIABLE_ENUM_SIZE);
 
     QStringList labels;
-    labels << "Activated" << "Name" << "ValueType" << "MemoryType" << "Memory Offset" << "Value" << "Description";
+
+
+    labels << "Activated" << "Name" << "ValueType" << "Value" << "Log Count";
     setHorizontalHeaderLabels(labels);
 
 
@@ -92,7 +95,6 @@ void ModuleVariableTableWidget::dropEvent(QDropEvent *event)
 
             addVariable(variable);
         }
-
     }
 }
 
@@ -167,15 +169,21 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
     {
         int index = m_variableMap[variable];
 
-        //qDebug("value changed with index :%i",index);
+        if (m_logEnabled)
+        {
+            m_logValues[variable].push_back(QPair<QTime,QVariant>(QTime::currentTime(),variable->getValue()));
+        }
 
-        QTableWidgetItem *item = this->item(index,VARIABLE_VALUE);
+        QTableWidgetItem *item_value = this->item(index,VARIABLE_VALUE);
+        QTableWidgetItem *item_count = this->item(index,VARIABLE_LOG_COUNT);
 
-        if (item)
+
+        if (item_value && item_count)
         {
             //Make sure we do not emit cell changed when we update the variable, avoiding a write/request write loop.
             blockSignals(true);
-            item->setText(variable->getValue().toString());
+            item_value->setText(variable->getValue().toString());
+            item_count->setText(QString::number(m_logValues[variable].size()));
             //Make sure everything is visible
             //resizeRowsToContents();
             //resizeColumnsToContents();
@@ -205,6 +213,7 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Add to map
     m_variableMap[variable] = index;
+    m_logValues[variable] = QList<QPair<QTime,QVariant> >(); //empty list
 
     //Connect destroyed signal
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(variableDestroyed(ModuleVariable*)));
@@ -214,6 +223,18 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Connect variable activated
     connect(variable,SIGNAL(variableActivated(bool,ModuleVariable*)),this,SLOT(variableActivated(bool,ModuleVariable*)));
+
+
+    //Activated
+    QCheckBox *activatedCheckBox = new QCheckBox(this);
+    activatedCheckBox->setEnabled(m_interactive);
+    activatedCheckBox->setChecked(variable->getActivated());
+    this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
+    //Activation
+    if(m_interactive)
+    {
+        connect(activatedCheckBox,SIGNAL(clicked(bool)),variable,SLOT(setActivated(bool)));
+    }
 
     //Name
     QTableWidgetItem *nameItem = new QTableWidgetItem(variable->getName());
@@ -227,32 +248,6 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     typeItem->setFlags(Qt::ItemIsEnabled);
     setItem (index, VARIABLE_VALUE_TYPE,typeItem);
 
-
-    //MemType
-    QTableWidgetItem *memTypeItem = NULL;
-    switch (variable->getMemType())
-    {
-            case ModuleVariable::RAM_VARIABLE:
-                    memTypeItem = new QTableWidgetItem("RAM");
-            break;
-
-            case ModuleVariable::EEPROM_VARIABLE:
-                    memTypeItem = new QTableWidgetItem("EEPROM");
-            break;
-
-            case ModuleVariable::SCRIPT_VARIABLE:
-                    memTypeItem = new QTableWidgetItem("SCRIPT");
-            break;
-
-    }
-    memTypeItem->setFlags(Qt::ItemIsEnabled);
-    setItem (index, VARIABLE_MEMORY_TYPE,memTypeItem);
-
-    //Offset
-    QTableWidgetItem *offsetItem = new QTableWidgetItem(QString::number(variable->getOffset()));
-    offsetItem->setFlags(Qt::ItemIsEnabled);
-    setItem (index, VARIABLE_MEMORY_OFFSET,offsetItem);
-
     //Value
     QTableWidgetItem *valueItem = new QTableWidgetItem(variable->getValue().toString());
     if (m_interactive)
@@ -263,27 +258,16 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
     {
          valueItem->setFlags(Qt::ItemIsEnabled);
     }
-    //TODO SET VALIDATOR FOR TEXT ENTRY ACCORDING TO VARIABLE TYPE...
+
     setItem (index, VARIABLE_VALUE,valueItem);
 
-    //Description
-    QTableWidgetItem *descriptionItem = new QTableWidgetItem(variable->getDescription());
-    descriptionItem->setFlags(Qt::ItemIsEnabled);
-    setItem (index, VARIABLE_DESCRIPTION,descriptionItem);
 
-    //Activated
-    QCheckBox *activatedCheckBox = new QCheckBox(this);
-    activatedCheckBox->setEnabled(m_interactive);
-    activatedCheckBox->setChecked(variable->getActivated());
-    this->setCellWidget(index,VARIABLE_ACTIVATED,activatedCheckBox);
-    //Activation
-    if(m_interactive)
-    {
-        connect(activatedCheckBox,SIGNAL(clicked(bool)),variable,SLOT(setActivated(bool)));
-    }
+    //Log Counter
+    QTableWidgetItem *logCountItem = new QTableWidgetItem(QString::number(m_logValues[variable].size()));
+    setItem(index, VARIABLE_LOG_COUNT, logCountItem);
+
 
     //Make sure everything is visible
-
     //resizeColumnsToContents();
     blockSignals(false);
 
@@ -333,7 +317,6 @@ void ModuleVariableTableWidget::keyPressEvent ( QKeyEvent * event )
                 emit enterPressed(row,col);
             }
         }
-
     }
 }
 
@@ -341,6 +324,7 @@ void ModuleVariableTableWidget::clearContents()
 {
     blockSignals(true);
     m_variableMap.clear();
+    m_logValues.clear();
 
     //Clear table
     clear();
@@ -355,3 +339,61 @@ void ModuleVariableTableWidget::showEvent (QShowEvent * event)
     QTableWidget::showEvent(event);
 }
 
+void ModuleVariableTableWidget::setLogEnabled(bool enabled)
+{
+    m_logEnabled = enabled;
+}
+
+void ModuleVariableTableWidget::clearLogs()
+{
+    m_logValues.clear();
+
+    //Reset counters
+    for (unsigned int i = 0; i < rowCount(); i++)
+    {
+        QTableWidgetItem *item_count = this->item(i,VARIABLE_LOG_COUNT);
+
+        if (item_count)
+        {
+            item_count->setText(QString::number(0));
+        }
+
+    }
+}
+
+bool ModuleVariableTableWidget::saveCSV(QIODevice &output)
+{
+    if (output.isWritable())
+    {
+        for ( QMap<ModuleVariable*, QList<QPair<QTime, QVariant> > >::iterator iter = m_logValues.begin(); iter != m_logValues.end(); iter++)
+        {
+            QTextStream stream(&output);
+
+            //Something to write ?
+            if (iter.value().size() > 0)
+            {
+                //Write Variable Description
+                stream << "ModuleID" << "\t" << iter.key()->getDeviceID() << "\t" << "Variable_Name" << "\t" << iter.key()->getName() << "\n";
+
+                stream << "===================================================================================================================" << "\n";
+
+                //Write Header
+                stream << "Time" << "\t" << "Value" << "\n";
+
+                //Write time / value pair
+                for (unsigned int i= 0; i < iter.value().size(); i++)
+                {
+                    QTime time = iter.value()[i].first;
+                    QVariant value = iter.value()[i].second;
+
+                    stream << time.toString("hh:mm:ss.zzz") << "\t" <<  value.toString() << "\n";
+                }
+
+                stream << "\n\n";
+            }
+        }
+        return true;
+    }
+
+    return false;
+}

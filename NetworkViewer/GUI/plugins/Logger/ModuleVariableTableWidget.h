@@ -22,6 +22,11 @@
 #include <QTableWidget>
 #include "NetworkModule.h"
 #include <QMap>
+#include <QList>
+#include <QVariant>
+#include <QTime>
+#include <QPair>
+#include <QIODevice>
 
 
 /**
@@ -34,7 +39,7 @@ class ModuleVariableTableWidget : public QTableWidget
 
 public:
 
-    enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_MEMORY_TYPE, VARIABLE_MEMORY_OFFSET, VARIABLE_VALUE, VARIABLE_DESCRIPTION, VARIABLE_ENUM_SIZE};
+    enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_VALUE, VARIABLE_LOG_COUNT, VARIABLE_ENUM_SIZE};
 
     /**
         Constructor
@@ -49,7 +54,17 @@ public:
     ///Internal remove variable
     bool removeVariable(ModuleVariable *var, bool emitSignal=true);
 
+
+    bool saveCSV(QIODevice &output);
+
+public slots:
+
+
     void clearContents();
+
+    void clearLogs();
+
+    void setLogEnabled(bool enabled);
 
 signals:
 
@@ -108,8 +123,10 @@ protected:
     virtual void showEvent (QShowEvent * event);
     ///Mapping between variable and table index
     QMap<ModuleVariable*,int> m_variableMap;
+    QMap<ModuleVariable*, QList<QPair<QTime, QVariant> > > m_logValues;
     ///Interactive flag
     bool m_interactive;
+    bool m_logEnabled;
 };
 
 
