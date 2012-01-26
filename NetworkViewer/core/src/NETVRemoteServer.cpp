@@ -107,7 +107,7 @@ bool NETVRemoteServer::event ( QEvent * e )
 
 void NETVRemoteServer::readyReadSocket(void)
 {
-    qDebug("void NETVRemoteServer::readyReadSocket(void)");
+    //qDebug("void NETVRemoteServer::readyReadSocket(void)");
 
     //Read from all sockets if avilable
     for (unsigned int i = 0; i < m_socketList.size(); i++)
@@ -118,7 +118,7 @@ void NETVRemoteServer::readyReadSocket(void)
                 NETV_MESSAGE msg;
                 if (msg.unserialize(*m_socketList[i]))
                 {
-                    qDebug("NETVRemoteServer::readyReadSocket(void) - parsing OK");
+                    //qDebug("NETVRemoteServer::readyReadSocket(void) - parsing OK");
 
                     //Let's find which interface it belongs...
                     //This can be optimized ?
