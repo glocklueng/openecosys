@@ -147,7 +147,7 @@ void NETVRemoteServer::socketDisconnected(void)
     for (unsigned int i = 0; i < m_socketList.size(); i++)
     {
         QTcpSocket *socket = m_socketList[i];
-        if (!socket->isValid())
+        if (socket->state() != QAbstractSocket::ConnectedState )
         {
             toRemove.push_back(socket);
         }
