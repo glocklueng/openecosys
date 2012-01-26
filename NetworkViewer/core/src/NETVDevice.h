@@ -133,7 +133,7 @@ public:
              dev.write(QByteArray((char*)&msg_boot,1));
              dev.write(QByteArray((char*)&msg_dest,1));
              dev.write(QByteArray((char*)&msg_remote,1));
-             dev.write(QByteArray((char*)&msg_timestamp, sizeof(msg_timestamp)));
+             dev.write(QByteArray((char*)&msg_timestamp, sizeof(qint64)));
 
              //Size
              dev.write(QByteArray((char*)&msg_data_length,1));
@@ -174,7 +174,7 @@ public:
                 msg_remote = header[5];
                 msg_data_length = header[6];
 
-                memcpy((char*) &msg_timestamp,&header.data()[7],sizeof(msg_timestamp));
+                memcpy((char*) &msg_timestamp,&header.data()[7],sizeof(qint64));
 
 
                 //Read data
