@@ -163,8 +163,6 @@ public:
             }
             else
             {
-                qDebug("Right object");
-
                 //We have the right object...
                 msg_priority = header[0];
                 msg_type = header[1];
