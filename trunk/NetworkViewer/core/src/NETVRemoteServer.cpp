@@ -139,6 +139,8 @@ void NETVRemoteServer::readyReadSocket(void)
 
 void NETVRemoteServer::socketDisconnected(void)
 {
+    qDebug("NETVRemoteServer::socketDisconnected(void)");
+
     QList<QTcpSocket*> toRemove;
 
     //Search for disconnected sockets
