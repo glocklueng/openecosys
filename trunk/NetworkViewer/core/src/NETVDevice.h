@@ -172,10 +172,11 @@ public:
                 msg_boot = header[3];
                 msg_dest = header[4];
                 msg_remote = header[5];
-                msg_data_length = header[6];
 
-                memcpy((char*) &msg_timestamp,&header.data()[7],sizeof(qint64));
 
+                memcpy((char*) &msg_timestamp,&header.data()[6],sizeof(qint64));
+
+                msg_data_length = header[14];
 
                 //Read data
                 if (dev.bytesAvailable() >= (28 + msg_data_length) && msg_data_length <= 8)
