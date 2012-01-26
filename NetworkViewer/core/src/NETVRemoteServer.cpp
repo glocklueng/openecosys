@@ -46,7 +46,7 @@ void NETVRemoteServer::incomingConnection(int socketDescriptor)
     //All socket will call the same ready read function
     connect(socket,SIGNAL(readyRead()),this,SLOT(readyReadSocket()));
 
-    //TODO socket disconnected signal
+    connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
 
 
     //Add socket to the list
@@ -135,4 +135,33 @@ void NETVRemoteServer::readyReadSocket(void)
                 }
         }
     }
+}
+
+void NETVRemoteServer::socketDisconnected(void)
+{
+    QList<QTcpSocket*> toRemove;
+
+    //Search for disconnected sockets
+    for (unsigned int i = 0; i < m_socketList.size(); i++)
+    {
+        QTcpSocket *socket = m_socketList[i];
+        if (!socket->isValid())
+        {
+            toRemove.push_back(socket);
+        }
+    }
+
+    //Remove unused sockets
+    for (unsigned int i= 0; i < toRemove.size(); i++)
+    {
+        qDebug("NETVRemoteServer::socketDisconnected -- removing socket %p",toRemove[i]);
+
+        //Remove socket
+        m_socketList.removeAll(toRemove[i]);
+
+        //Delete socket
+        delete toRemove[i];
+
+    }
+
 }

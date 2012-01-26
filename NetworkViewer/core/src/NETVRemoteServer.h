@@ -47,10 +47,13 @@ protected slots:
 
 void readyReadSocket(void);
 
+void socketDisconnected(void);
 
 protected:
 
     virtual void incomingConnection(int socketDescriptor);
+
+
 
     ///notify function for new messages
     virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
