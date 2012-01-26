@@ -5,10 +5,12 @@
 
 SET(Logger_SRCS
 	Logger.cpp
+        ModuleVariableTableWidget.cpp
 )
 
 SET(Logger_HEADERS 
 	Logger.h
+        ModuleVariableTableWidget.h
 )
 
 SET(Logger_UIS
