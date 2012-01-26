@@ -35,7 +35,6 @@ SET(NetworkViewer_Base_SRCS
     ModuleConfigurationView.cpp
     NetworkModuleItem.cpp
     DeviceSelectorDialog.cpp
-    ModuleVariableTableWidget.cpp
     PreferencesDialog.cpp
     AddVariableDialog.cpp
     NETVInterfaceManagerView.cpp
@@ -49,7 +48,6 @@ SET(NetworkViewer_Base_HEADERS
     NetworkModuleItem.h
     DeviceSelectorDialog.h
     NetworkViewerSplashScreen.h
-    ModuleVariableTableWidget.h
     PreferencesDialog.h
     AddVariableDialog.h
     NETVInterfaceManagerView.h

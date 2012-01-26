@@ -26,10 +26,8 @@
 #include <QScriptEngineAgent>
 #include <QTimer>
 #include <QTime>
-#include "ModuleVariableTableWidget.h"
+#include <QTableView>
 #include "ui_ModuleConfigurationView.h"
-
-
 #include <QAbstractItemDelegate>
 #include <QItemDelegate>
 #include <QLineEdit>
