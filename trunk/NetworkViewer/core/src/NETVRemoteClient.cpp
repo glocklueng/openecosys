@@ -109,7 +109,7 @@ bool NETVRemoteClient::event( QEvent * e )
 {
     if (e->type() == QEvent::User)
     {
-        qDebug("NETVRemoteClient::event %p QEvent::User",e);
+        //qDebug("NETVRemoteClient::event %p QEvent::User",e);
         if (NETVMessageEvent *event = dynamic_cast<NETVMessageEvent*>(e))
         {
             //we need to send the data
