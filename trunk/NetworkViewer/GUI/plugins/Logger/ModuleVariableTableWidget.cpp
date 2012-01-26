@@ -32,7 +32,7 @@ ModuleVariableTableWidget::ModuleVariableTableWidget(QWidget *parent)
     : QTableWidget(parent), m_logEnabled(false)
 {
 
-    //Will accept drop by default  
+    //Will accept drop by default
     setAcceptDrops(true);
 
 
@@ -119,7 +119,7 @@ bool ModuleVariableTableWidget::removeVariable(ModuleVariable *variable,  bool e
         for (QMap<ModuleVariable*,int>::iterator iter = m_variableMap.begin(); iter != m_variableMap.end(); iter++)
         {
             if (iter.value() > index)
-            {                
+            {
                 m_variableMap[iter.key()] = iter.value() - 1;
             }
         }
@@ -151,7 +151,7 @@ void ModuleVariableTableWidget::variableValueChanged(ModuleVariable *variable)
 
         if (m_logEnabled)
         {
-            m_logValues[variable].push_back(QPair<QTime,QVariant>(QTime::currentTime(),variable->getValue()));
+            m_logValues[variable].push_back(QPair<QDateTime,QVariant>(variable->getUpdateTime(),variable->getValue()));
         }
 
         QTableWidgetItem *item_value = this->item(index,VARIABLE_VALUE);
@@ -193,7 +193,7 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Add to map
     m_variableMap[variable] = index;
-    m_logValues[variable] = QList<QPair<QTime,QVariant> >(); //empty list
+    m_logValues[variable] = QList<QPair<QDateTime,QVariant> >(); //empty list
 
     //Connect destroyed signal
     connect(variable,SIGNAL(aboutToDestroy(ModuleVariable*)),this,SLOT(variableDestroyed(ModuleVariable*)));
@@ -222,8 +222,8 @@ bool ModuleVariableTableWidget::addVariable(ModuleVariable *variable)
 
     //Value
     QTableWidgetItem *valueItem = new QTableWidgetItem(variable->getValue().toString());
-  valueItem->setFlags(Qt::ItemIsEnabled);
-setItem (index, VARIABLE_VALUE,valueItem);
+    valueItem->setFlags(Qt::ItemIsEnabled);
+    setItem (index, VARIABLE_VALUE,valueItem);
 
 
     //Log Counter
@@ -260,7 +260,7 @@ void ModuleVariableTableWidget::keyPressEvent ( QKeyEvent * event )
         {
             if (iter.value() == row)
             {
-                removeVariable(iter.key());                
+                removeVariable(iter.key());
                 break;
             }
         }
@@ -330,28 +330,26 @@ bool ModuleVariableTableWidget::saveCSV(QIODevice &output)
 {
     if (output.isWritable())
     {
-        for ( QMap<ModuleVariable*, QList<QPair<QTime, QVariant> > >::iterator iter = m_logValues.begin(); iter != m_logValues.end(); iter++)
+        for ( QMap<ModuleVariable*, QList<QPair<QDateTime, QVariant> > >::iterator iter = m_logValues.begin(); iter != m_logValues.end(); iter++)
         {
             QTextStream stream(&output);
 
             //Something to write ?
             if (iter.value().size() > 0)
             {
-                //Write Variable Description
-                stream << "ModuleID" << "\t" << iter.key()->getDeviceID() << "\t" << "Variable_Name" << "\t" << iter.key()->getName() << "\n";
-
-                stream << "===================================================================================================================" << "\n";
 
                 //Write Header
-                stream << "Time" << "\t" << "Value" << "\n";
+                stream << "ModuleID"<<"\t"<<"Variable"<<"\t"<<"Date" <<"\t"<<"Time" << "\t" << "Value" << "\n";
 
                 //Write time / value pair
                 for (unsigned int i= 0; i < iter.value().size(); i++)
                 {
-                    QTime time = iter.value()[i].first;
+                    QDateTime time = iter.value()[i].first;
                     QVariant value = iter.value()[i].second;
 
-                    stream << time.toString("hh:mm:ss.zzz") << "\t" <<  value.toString() << "\n";
+                    stream << iter.key()->getDeviceID() << "\t";
+                    stream << iter.key()->getName() << "\t";
+                    stream << time.toString("dd/MM/yyyy \t hh:mm:ss.zzz") << "\t" <<  value.toString() << "\n";
                 }
 
                 stream << "\n\n";
