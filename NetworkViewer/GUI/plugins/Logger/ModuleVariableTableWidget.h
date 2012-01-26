@@ -39,13 +39,13 @@ class ModuleVariableTableWidget : public QTableWidget
 
 public:
 
-    enum {VARIABLE_ACTIVATED, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_VALUE, VARIABLE_LOG_COUNT, VARIABLE_ENUM_SIZE};
+    enum {VARIABLE_MODULE_ID, VARIABLE_NAME, VARIABLE_VALUE_TYPE, VARIABLE_VALUE, VARIABLE_LOG_COUNT, VARIABLE_ENUM_SIZE};
 
     /**
         Constructor
         \param parent The parent Widget
     */
-    ModuleVariableTableWidget(QWidget *parent = NULL, bool interactive = false);
+    ModuleVariableTableWidget(QWidget *parent = NULL);
 
 
     ///Internal add variable
@@ -104,14 +104,6 @@ protected slots:
     */
     void variableValueChanged(ModuleVariable *variable);
 
-    /**
-        Called when a variable is activated
-        \param state Activation state
-        \param variable the variable
-    */
-    void variableActivated(bool state, ModuleVariable *variable);
-
-
 
 protected:
 
@@ -123,9 +115,9 @@ protected:
     virtual void showEvent (QShowEvent * event);
     ///Mapping between variable and table index
     QMap<ModuleVariable*,int> m_variableMap;
+    ///Variables data
     QMap<ModuleVariable*, QList<QPair<QTime, QVariant> > > m_logValues;
-    ///Interactive flag
-    bool m_interactive;
+    ///Log enabled (accumulation of data)
     bool m_logEnabled;
 };
 
