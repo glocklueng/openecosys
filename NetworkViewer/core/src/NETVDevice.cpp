@@ -47,7 +47,7 @@ void NETVDevice::printMessage(const NETV_MESSAGE &message, ostream &out) {
     }
     out<<endl;
     out<<"msg_filter_hit  : "<<message.msg_filter_hit<<endl;
-    out<<"msg_dwTime      : "<<message.msg_dwTime<<endl;
+    out<<"msg_timestamp      : "<<message.msg_timestamp<<endl;
     out<<endl<<endl;
 
 }

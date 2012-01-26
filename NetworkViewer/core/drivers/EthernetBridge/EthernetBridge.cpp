@@ -19,6 +19,7 @@
 #include "EthernetBridge.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QDateTime>
 
 static bool ETHERNET_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("EthernetBridge",new NETVDevice::DeviceFactory<EthernetBridge>("192.168.1.95;6653","Host;port"));
 
@@ -93,7 +94,7 @@ NETVDevice::State EthernetBridge::recvMessage(NETV_MESSAGE &message)
 		
 		message.msg_remote = msg.msgEID.RTR;
 		message.msg_filter_hit = msg.msgSID.IFACE;
-		message.msg_dwTime = msg.msgSID.CMSGTS;
+        message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 		
 		//NETVDevice::printMessage(message);
 		

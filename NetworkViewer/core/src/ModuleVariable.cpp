@@ -283,10 +283,10 @@ ModuleVariable::VARIABLE_TYPE ModuleVariable::stringToType(const QString &typeSt
 }
 
 
-void ModuleVariable::setValue(float value, bool userUpdate)
+void ModuleVariable::setValue(float value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -295,10 +295,10 @@ void ModuleVariable::setValue(float value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue(double value, bool userUpdate)
+void ModuleVariable::setValue(double value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -307,10 +307,10 @@ void ModuleVariable::setValue(double value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (int value, bool userUpdate)
+void ModuleVariable::setValue (int value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();;
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -339,10 +339,10 @@ void ModuleVariable::setUserValue(double value)
     setValue(value,true);
 }
 
-void ModuleVariable::setValue (unsigned int value, bool userUpdate)
+void ModuleVariable::setValue (unsigned int value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();;
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -351,10 +351,10 @@ void ModuleVariable::setValue (unsigned int value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (short value, bool userUpdate)
+void ModuleVariable::setValue (short value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -363,10 +363,10 @@ void ModuleVariable::setValue (short value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (unsigned short value, bool userUpdate)
+void ModuleVariable::setValue (unsigned short value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -375,10 +375,10 @@ void ModuleVariable::setValue (unsigned short value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (char value, bool userUpdate)
+void ModuleVariable::setValue (char value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -387,10 +387,10 @@ void ModuleVariable::setValue (char value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (unsigned char value, bool userUpdate)
+void ModuleVariable::setValue (unsigned char value, bool userUpdate, QDateTime updateTime)
 {
     m_value = QVariant(value);
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -400,10 +400,10 @@ void ModuleVariable::setValue (unsigned char value, bool userUpdate)
 }
 
 
-void ModuleVariable::setValue(QVariant value, bool userUpdate)
+void ModuleVariable::setValue(QVariant value, bool userUpdate, QDateTime updateTime)
 {
     m_value = value;
-    m_updateTime = QDateTime::currentDateTime();
+    m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
     {
@@ -412,7 +412,7 @@ void ModuleVariable::setValue(QVariant value, bool userUpdate)
     }
 }
 
-void ModuleVariable::setValue (const QString &value, bool userUpdate)
+void ModuleVariable::setValue (const QString &value, bool userUpdate, QDateTime updateTime)
 {
     bool ok = false;
 
@@ -420,41 +420,41 @@ void ModuleVariable::setValue (const QString &value, bool userUpdate)
     {
     case DOUBLE:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toDouble(&ok));
+        setValue(value.toDouble(&ok),userUpdate,updateTime);
         break;
 
     case FLOAT:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toFloat(&ok));
+        setValue(value.toFloat(&ok),userUpdate,updateTime);
         break;
 
     case SINT32:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toInt(&ok));
+        setValue(value.toInt(&ok),userUpdate,updateTime);
         break;
 
     case UINT32:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toUInt(&ok));
+        setValue(value.toUInt(&ok),userUpdate,updateTime);
         break;
 
     case SINT16:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toShort(&ok));
+        setValue(value.toShort(&ok),userUpdate,updateTime);
         break;
     case UINT16:
         //TODO DO SOMETHING WITH OK!
-        setValue(value.toUShort(&ok));
+        setValue(value.toUShort(&ok),userUpdate,updateTime);
         break;
 
     case SINT8:
         //TODO DO SOMETHING WITH OK!
-        setValue((char) value.toShort(&ok));
+        setValue((char) value.toShort(&ok),userUpdate,updateTime);
         break;
 
     case UINT8:
         //TODO DO SOMETHING WITH OK!
-        setValue((unsigned char) value.toUShort(&ok));
+        setValue((unsigned char) value.toUShort(&ok),userUpdate,updateTime);
         break;
 
     case INVALID:
@@ -479,7 +479,7 @@ void ModuleVariable::setValue (const QString &value, bool userUpdate)
 }
 
 
-void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpdate)
+void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpdate, QDateTime updateTime)
 {
     if (size == getLength())
     {
@@ -491,7 +491,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 double value;
                 myStream.read((char*) &value,sizeof(double));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -499,7 +499,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 float value;
                 myStream.read((char*) &value,sizeof(float));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -507,7 +507,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 int value;
                 myStream.read((char*) &value,sizeof(int));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -515,7 +515,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 unsigned int value;
                 myStream.read((char*) &value,sizeof(unsigned int));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -523,7 +523,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 short value;
                 myStream.read((char*) &value,sizeof(short));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
 
             break;
@@ -532,7 +532,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 unsigned short value;
                 myStream.read((char*) &value,sizeof(unsigned short));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -540,7 +540,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 char value;
                 myStream.read((char*) &value,sizeof(char));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 
@@ -548,7 +548,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
             {
                 unsigned char value;
                 myStream.read((char*) &value,sizeof(unsigned char));
-                setValue(value,userUpdate);
+                setValue(value,userUpdate,updateTime);
             }
             break;
 

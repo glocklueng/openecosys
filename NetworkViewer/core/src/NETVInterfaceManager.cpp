@@ -273,7 +273,16 @@ void NETVInterfaceManager::processCANMessage(const NETV_MESSAGE &msg)
                             //FOUND IT
                             //UPDATING VALUE
                             //qDebug("found variable : ");
-                            (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length);
+
+                            if (msg.msg_timestamp > 0)
+                            {
+                                (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length,false,QDateTime::fromMSecsSinceEpoch(msg.msg_timestamp));
+                            }
+                            else
+                            {
+                                qWarning("NETVInterfaceManager::processCANMessage - timestamp not set on input message (possible driver bad implementation)");
+                                (*conf)[i]->setValue(msg.msg_data, msg.msg_data_length,false);
+                            }
                             break;
                         }
                     }
