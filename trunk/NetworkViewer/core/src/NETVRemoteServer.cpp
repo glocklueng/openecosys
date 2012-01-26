@@ -160,10 +160,6 @@ void NETVRemoteServer::socketDisconnected(void)
 
         //Remove socket
         m_socketList.removeAll(toRemove[i]);
-
-        //Delete socket
-        delete toRemove[i];
-
     }
 
 }
