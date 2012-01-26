@@ -25,7 +25,7 @@
 #include "ui_ScopeView.h"
 #include "ModuleConfiguration.h"
 #include <QVector>
-#include <QTime>
+#include <QDateTime>
 #include <QTimer>
 
 ///Maximum of points on the curve for each variable
@@ -103,7 +103,7 @@ public slots:
     Making sure every plot starts from the same elapsed time...
     \return double the time from the start of the application
     */
-    static double elapsed();
+    static double elapsed(const QDateTime& time);
 
     /**
     Set the curve color

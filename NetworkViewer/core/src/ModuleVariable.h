@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QVariant>
 #include <QByteArray>
+#include <QDateTime>
 
 
 /**
@@ -276,11 +277,6 @@ public:
         Q_INVOKABLE QString getDescription() const;
 
         /**
-            \return the variable's version
-        */
-        Q_INVOKABLE unsigned long getVersion() const;
-
-        /**
             \return the variable's deviceID
         */
         Q_INVOKABLE int getDeviceID() const;
@@ -297,11 +293,16 @@ public:
         Q_INVOKABLE bool getActivated() const;
 
 	
+        Q_INVOKABLE QDateTime getUpdateTime() const;
+
         /**
             Conversion to binary format (little endian) according to \ref VARIABLE_TYPE
             \return QByteArray the binary format
         */
 	QByteArray toByteArray() const;
+
+
+
 
 signals:
 	
@@ -349,8 +350,6 @@ protected:
         ///Vairiable value
         QVariant m_value;
 
-        ///Internal variable version (update counter)
-	unsigned long m_version;
 
         ///To make sure the variable knows to which device it belongs
 	int m_deviceID;
@@ -360,6 +359,9 @@ protected:
 
         ///True if the variable is activated (will be updated by the scheduler)
         bool m_activated;
+
+        ///Update time
+        QDateTime m_updateTime;
 
 private:
         /**

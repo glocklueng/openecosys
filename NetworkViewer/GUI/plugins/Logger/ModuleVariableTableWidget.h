@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QList>
 #include <QVariant>
-#include <QTime>
+#include <QDateTime>
 #include <QPair>
 #include <QIODevice>
 
@@ -116,7 +116,7 @@ protected:
     ///Mapping between variable and table index
     QMap<ModuleVariable*,int> m_variableMap;
     ///Variables data
-    QMap<ModuleVariable*, QList<QPair<QTime, QVariant> > > m_logValues;
+    QMap<ModuleVariable*, QList<QPair<QDateTime, QVariant> > > m_logValues;
     ///Log enabled (accumulation of data)
     bool m_logEnabled;
 };

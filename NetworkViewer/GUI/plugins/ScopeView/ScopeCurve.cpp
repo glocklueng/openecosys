@@ -203,7 +203,8 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
     if (var)
     {
         //Get current time
-        double elapsed = ScopeCurve::elapsed();
+        //double elapsed = ScopeCurve::elapsed();
+        //double elapsed = (double) var->getUpdateTime().toMSecsSinceEpoch () / 1000.0;
 
 
         //Get current value (to double)
@@ -212,23 +213,17 @@ void ScopeCurve::updateVariable(ModuleVariable *var)
 
         if (ok)
         {
-            m_data->append(QPointF(elapsed,value));
+            m_data->append(QPointF(elapsed(var->getUpdateTime()),value));
         }
     }
 }
 
 
-double ScopeCurve::elapsed()
+double ScopeCurve::elapsed(const QDateTime &time)
 {
-    static QTime creationTime = QTime::currentTime();
-    static bool initialized = false;
-    if (!initialized)
-    {
-        creationTime.start();
-        initialized = true;
-    }
-
-    return (double) creationTime.elapsed() / 1000.0;
+    //There should be always one creation time
+    static QDateTime creationTime = QDateTime::currentDateTime();
+    return (double) creationTime.msecsTo(time) / 1000.0;
 }
 
 void ScopeCurve::setColor(const QColor &color)
