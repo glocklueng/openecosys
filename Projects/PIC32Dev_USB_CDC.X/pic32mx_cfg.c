@@ -228,6 +228,6 @@
  ********************************************************************/
 #pragma config FETHIO = ON
 
-
-
+#pragma config UPLLEN   = ON            // USB PLL Enabled
+#pragma config UPLLIDIV = DIV_2         // USB PLL Input Divider
 #endif

@@ -83,7 +83,7 @@
 
 
     /** LED ************************************************************/
-    #define mInitAllLEDs()      TRISDbits.TRISD5 = 0;TRISDbits.TRISD4 = 0;TRISDbits.TRISD7 = 0;LATDbits.LATD5=1;LATDbits.LATD4=1;LATDbits.LATD5=1;
+    #define mInitAllLEDs()      TRISDbits.TRISD5 = 0;TRISDbits.TRISD4 = 0;TRISDbits.TRISD7 = 0;LATDbits.LATD5=0;LATDbits.LATD4=0;LATDbits.LATD7=0;
     
     #define mLED_1              LATDbits.LATD5
     #define mLED_2              LATDbits.LATD4
