@@ -51,8 +51,8 @@
 /** INCLUDES *******************************************************/
 #include "usb.h"
 #include "usb_function_cdc.h"
-
 #include "HardwareProfile.h"
+#include "can_bridge.h"
 
 /** CONFIGURATION **************************************************/
 #if defined(PICDEM_FS_USB)      // Configuration bits for PICDEM FS USB Demo Board (based on PIC18F4550)
@@ -698,6 +698,9 @@ void UserInit(void)
 
     //Initialize the pushbuttons
     mInitAllSwitches();
+
+    //Initialize CAN driver
+    netv_init_can_driver();
 }//end UserInit
 
 /********************************************************************
@@ -722,7 +725,8 @@ void ProcessIO(void)
     BYTE numBytesRead;
 
     //Blink the LEDs according to the USB device status
-    BlinkUSBStatus();
+    //BlinkUSBStatus();
+
     // User Application USB tasks
     if((USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)) return;
 
@@ -742,8 +746,59 @@ void ProcessIO(void)
         stringPrinted = FALSE;
     }
 
-    if(USBUSARTIsTxTrfReady())
+    
+    
+    //Transmit all messages
+    while (1)
     {
+        if(!USBUSARTIsTxTrfReady()) break;
+
+        //look for a new message on CAN bus
+        CANRxMessageBuffer* buffer = can_recv_message();
+
+        //Something to transmit
+        if (buffer)
+        {
+            //Toggle led
+            mLED_3_Toggle();
+
+            //Transmit message to serial port
+            putUSBUSART((char*) buffer,sizeof(CANRxMessageBuffer));
+
+        }
+        else
+        {
+            break;
+        }
+    }
+
+
+    //Receive all messages
+    while (1)
+    {
+        CANTxMessageBuffer buffer;
+        numBytesRead = getsUSBUSART((char*) &buffer,sizeof(CANTxMessageBuffer));
+
+        if (numBytesRead == sizeof(CANTxMessageBuffer))
+        {
+
+            //Toggle led
+            mLED_2_Toggle();
+
+            //Send CAN message
+            //TODO Error management
+            can_send_message(&buffer);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+
+
+
+    /*
 		numBytesRead = getsUSBUSART(USB_Out_Buffer,64);
 		if(numBytesRead != 0)
 		{
@@ -766,10 +821,11 @@ void ProcessIO(void)
 
 			putUSBUSART(USB_In_Buffer,numBytesRead);
 		}
-	}
+     */
+	
 
     CDCTxService();
-}		//end ProcessIO
+}   //end ProcessIO
 
 /********************************************************************
  * Function:        void BlinkUSBStatus(void)

@@ -40,11 +40,11 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_function_cdc.o ${OBJECTDIR}/pic32mx_cfg.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/usb_descriptors.o.d ${OBJECTDIR}/usb_device.o.d ${OBJECTDIR}/usb_function_cdc.o.d ${OBJECTDIR}/pic32mx_cfg.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_function_cdc.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/can_bridge.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/usb_descriptors.o.d ${OBJECTDIR}/usb_device.o.d ${OBJECTDIR}/usb_function_cdc.o.d ${OBJECTDIR}/pic32mx_cfg.o.d ${OBJECTDIR}/can_bridge.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_function_cdc.o ${OBJECTDIR}/pic32mx_cfg.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_function_cdc.o ${OBJECTDIR}/pic32mx_cfg.o ${OBJECTDIR}/can_bridge.o
 
 
 CFLAGS=
@@ -120,6 +120,11 @@ ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
 	@${FIXDEPS} "${OBJECTDIR}/pic32mx_cfg.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -D__PIC32DEV__ -I"./" -MMD -MF "${OBJECTDIR}/pic32mx_cfg.o.d" -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c  
 	
+${OBJECTDIR}/can_bridge.o: can_bridge.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/can_bridge.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/can_bridge.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -D__PIC32DEV__ -I"./" -MMD -MF "${OBJECTDIR}/can_bridge.o.d" -o ${OBJECTDIR}/can_bridge.o can_bridge.c  
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
@@ -145,6 +150,11 @@ ${OBJECTDIR}/pic32mx_cfg.o: pic32mx_cfg.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/pic32mx_cfg.o.d 
 	@${FIXDEPS} "${OBJECTDIR}/pic32mx_cfg.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -D__PIC32DEV__ -I"./" -MMD -MF "${OBJECTDIR}/pic32mx_cfg.o.d" -o ${OBJECTDIR}/pic32mx_cfg.o pic32mx_cfg.c  
+	
+${OBJECTDIR}/can_bridge.o: can_bridge.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/can_bridge.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/can_bridge.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -D__PIC32DEV__ -I"./" -MMD -MF "${OBJECTDIR}/can_bridge.o.d" -o ${OBJECTDIR}/can_bridge.o can_bridge.c  
 	
 endif
 

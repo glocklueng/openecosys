@@ -120,6 +120,6 @@
     #define INPUT_PIN 1
     #define OUTPUT_PIN 0
 
-
+    #define SYS_XTAL_FREQ 60000000
 
 #endif  //HARDWARE_PROFILE_PIC32DEV_H
