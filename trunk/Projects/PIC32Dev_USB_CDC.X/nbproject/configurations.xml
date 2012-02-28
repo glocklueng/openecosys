@@ -17,6 +17,7 @@
       <itemPath>usb_function_cdc.h</itemPath>
       <itemPath>usb_hal.h</itemPath>
       <itemPath>usb_hal_pic32.h</itemPath>
+      <itemPath>can_bridge.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -38,6 +39,7 @@
       <itemPath>usb_device.c</itemPath>
       <itemPath>usb_function_cdc.c</itemPath>
       <itemPath>pic32mx_cfg.c</itemPath>
+      <itemPath>can_bridge.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
