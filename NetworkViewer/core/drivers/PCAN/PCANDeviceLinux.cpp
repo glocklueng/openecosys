@@ -21,6 +21,7 @@
 #include <math.h>
 #include "NETV_define.h"
 #include <QtDebug>
+#include <QDateTime>
 
 using namespace std;
 
@@ -268,7 +269,7 @@ NETVDevice::State PCANDevice::recvMessage(NETV_MESSAGE &message) {
             }
 
             //Set time stamp
-            message.msg_dwTime = msg.dwTime;
+            message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
             applyFilters(message);
 

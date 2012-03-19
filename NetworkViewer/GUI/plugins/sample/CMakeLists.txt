@@ -31,6 +31,8 @@ INCLUDE_DIRECTORIES(${PLUGIN_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(SamplePlugin SHARED ${Plugin_SRCS} ${Plugin_HEADERS} ${Plugin_QRC_SRCS} ${Plugin_MOC_SRCS} ${Plugin_UI_SRCS}  )
 target_link_libraries(SamplePlugin  ${QT_LIBRARIES} ${PLUGIN_LIBRARIES})
-set_target_properties(SamplePlugin PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(SamplePlugin PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS SamplePlugin DESTINATION plugins/sample)	
 

@@ -38,5 +38,7 @@ INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(SocketCANDriver SHARED ${SocketCAN_SRCS} ${SocketCAN_HEADERS} ${SocketCAN_QRC_SRCS} ${SocketCAN_MOC_SRCS} ${SocketCAN_UI_SRCS}  )
 target_link_libraries(SocketCANDriver  ${DRIVER_LIBRARIES} )
-set_target_properties(SocketCANDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(SocketCANDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS SocketCANDriver DESTINATION drivers/SocketCAN)

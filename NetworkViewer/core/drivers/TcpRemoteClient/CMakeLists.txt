@@ -37,5 +37,7 @@ INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(TcpRemoteClientDriver SHARED ${TcpRemoteClient_SRCS} ${TcpRemoteClient_HEADERS} ${TcpRemoteClient_QRC_SRCS} ${TcpRemoteClient_MOC_SRCS} ${TcpRemoteClient_UI_SRCS}  )
 target_link_libraries(TcpRemoteClientDriver  ${DRIVER_LIBRARIES} ${QT_LIBRARIES} )
-set_target_properties(TcpRemoteClientDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(TcpRemoteClientDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS TcpRemoteClientDriver DESTINATION drivers/TcpRemoteClient)

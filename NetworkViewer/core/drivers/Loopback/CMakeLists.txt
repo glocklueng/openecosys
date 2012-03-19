@@ -38,5 +38,7 @@ INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(LoopbackDriver SHARED ${Loopback_SRCS} ${Loopback_HEADERS} ${Loopback_QRC_SRCS} ${Loopback_MOC_SRCS} ${Loopback_UI_SRCS}  )
 target_link_libraries(LoopbackDriver  ${DRIVER_LIBRARIES} )
-set_target_properties(LoopbackDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(LoopbackDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS LoopbackDriver DESTINATION drivers/Loopback)

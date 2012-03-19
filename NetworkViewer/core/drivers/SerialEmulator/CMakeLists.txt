@@ -42,5 +42,7 @@ MESSAGE(STATUS ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(SerialEmulatorDriver SHARED ${SerialEmulator_SRCS} ${SerialEmulator_HEADERS} ${SerialEmulator_QRC_SRCS} ${SerialEmulator_MOC_SRCS} ${SerialEmulator_UI_SRCS}  )
 target_link_libraries(SerialEmulatorDriver  QextSerialPort ${DRIVER_LIBRARIES} )
-set_target_properties(SerialEmulatorDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(SerialEmulatorDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS SerialEmulatorDriver DESTINATION drivers/SerialEmulator)

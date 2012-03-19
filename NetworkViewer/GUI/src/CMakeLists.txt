@@ -86,7 +86,9 @@ INSTALL( FILES ${NetworkViewer_Base_UI_SRCS} DESTINATION include/ui)
 
 #NetworkViewer Executable
 add_executable(NetworkViewer WIN32 main.cpp)
-set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(NetworkViewer PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 target_link_libraries(NetworkViewer networkViewerCore networkViewerBase ${QT_LIBRARIES})
 INSTALL(TARGETS NetworkViewer DESTINATION bin)
 

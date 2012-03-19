@@ -34,6 +34,8 @@ INCLUDE_DIRECTORIES(${PLUGIN_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(Logger SHARED ${Logger_SRCS} ${Logger_HEADERS} ${Logger_QRC_SRCS} ${Logger_MOC_SRCS} ${Logger_UI_SRCS}  )
 target_link_libraries(Logger  ${QT_LIBRARIES} ${PLUGIN_LIBRARIES})
-set_target_properties(Logger PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(Logger PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS Logger DESTINATION plugins/Logger)
 
