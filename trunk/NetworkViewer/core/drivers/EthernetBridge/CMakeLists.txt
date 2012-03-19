@@ -37,5 +37,7 @@ INCLUDE_DIRECTORIES(${DRIVER_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(EthernetBridgeDriver SHARED ${EthernetBridge_SRCS} ${EthernetBridge_HEADERS} ${EthernetBridge_QRC_SRCS} ${EthernetBridge_MOC_SRCS} ${EthernetBridge_UI_SRCS}  )
 target_link_libraries(EthernetBridgeDriver  ${DRIVER_LIBRARIES} ${QT_LIBRARIES} )
-set_target_properties(EthernetBridgeDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(EthernetBridgeDriver PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS EthernetBridgeDriver DESTINATION drivers/EthernetBridge)

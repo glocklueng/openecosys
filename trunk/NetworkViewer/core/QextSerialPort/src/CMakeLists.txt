@@ -68,7 +68,9 @@ INCLUDE_DIRECTORIES(${QT_INCLUDES} )
 
 add_library(QextSerialPort SHARED ${QextSerialPort_SRCS} ${QextSerialPort_HEADERS} ${QextSerialPort_QRC_SRCS} ${QextSerialPort_MOC_SRCS} ${QextSerialPort_UI_SRCS}  )
 target_link_libraries(QextSerialPort ${QT_LIBRARIES} ${QextSerialPort_External_Libraries})
-set_target_properties(QextSerialPort PROPERTIES LINK_FLAGS "--enable-auto-import")
+IF(WIN32)
+	set_target_properties(QextSerialPort PROPERTIES LINK_FLAGS "--enable-auto-import")
+ENDIF(WIN32)
 INSTALL(TARGETS QextSerialPort DESTINATION bin)
 INSTALL(TARGETS QextSerialPort DESTINATION lib)
 
