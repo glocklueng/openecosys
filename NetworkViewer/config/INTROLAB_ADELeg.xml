@@ -1,43 +1,67 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
 <ModuleConfiguration moduleState="5" deviceID="200" projectID="100" configName="ADELeg (PIC32)" codeVersion="1" processorID="0" tableVersion="2">
      <ModuleVariable offset="0" description="Control Mode. 0 = Config, 1 = Normal" type="uint8" value="0" memType="0" name="mode"/>
-	 <ModuleVariable offset="1" description="" type="uint8" value="17" memType="0" name="Module1ID"/>
-     <ModuleVariable offset="2" description="" type="uint8" value="18" memType="0" name="Module2ID"/>
+	  
+	 <!-- e axis controlable variable -->
+     <ModuleVariable offset="64" description="" type="float" value="0" memType="0" name="XRef_e"/>
+     <ModuleVariable offset="68" description="" type="float" value="0" memType="0" name="KxVal_e"/>
+     <ModuleVariable offset="72" description="" type="float" value="0" memType="0" name="KwVal_e"/>	 
 	 
-	 <ModuleVariable offset="4" description="" type="float" value="0.000628319" memType="0" name="posSensorToRad"/>
-     <ModuleVariable offset="8" description="" type="float" value="0.000546185" memType="0" name="torqueSensorToNm"/>
+	 <!-- b axis controlable variable -->
+     <ModuleVariable offset="88" description="" type="float" value="0" memType="0" name="XRef_b"/>
+     <ModuleVariable offset="92" description="" type="float" value="0" memType="0" name="KxVal_b"/>
+     <ModuleVariable offset="96" description="" type="float" value="0" memType="0" name="KwVal_b"/>	 
 	 
+	 <!-- Saturation values -->
+	 <ModuleVariable offset="108" description="Torque Saturation b" type="float" value="15" memType="0" name="TSat_b"/>
+	 <ModuleVariable offset="112" description="Torque Saturation e" type="float" value="15" memType="0" name="TSat_e"/>
+
+	 <!-- e axis observable variable -->
+	 <ModuleVariable offset="36" description="" type="float" value="0" memType="0" name="Torque_e"/>
+     <ModuleVariable offset="44" description="" type="float" value="0" memType="0" name="Pos_e"/>
+     <ModuleVariable offset="52" description="" type="float" value="0" memType="0" name="Speed_e"/>
+     <ModuleVariable offset="60" description="" type="float" value="0" memType="0" name="WRef_e"/>
+     <ModuleVariable offset="76" description="" type="float" value="0" memType="0" name="TVal_e"/>
+     <ModuleVariable offset="80" description="" type="float" value="0" memType="0" name="TImped_e"/>	 
+
+	 <!-- b axis observable variable -->
+	 <ModuleVariable offset="40" description="" type="float" value="0" memType="0" name="Torque_b"/>
+	 <ModuleVariable offset="48" description="" type="float" value="0" memType="0" name="Pos_b"/>
+     <ModuleVariable offset="56" description="" type="float" value="0" memType="0" name="Speed_b"/>
+	 <ModuleVariable offset="84" description="" type="float" value="0" memType="0" name="WRef_b"/>
+     <ModuleVariable offset="100" description="" type="float" value="0" memType="0" name="TVal_b"/>
+     <ModuleVariable offset="104" description="" type="float" value="0" memType="0" name="TImped_b"/>
+	 
+	 <!-- Both differential actuator values -->
+	 <ModuleVariable offset="1" description="" type="uint8" value="17" memType="0" name="Module1ID"/>	 
 	 <ModuleVariable offset="12" description="" type="float" value="0" memType="0" name="Torque_1"/>
 	 <ModuleVariable offset="16" description="" type="float" value="0" memType="0" name="Position_1"/>
 	 <ModuleVariable offset="20" description="" type="sint32" value="0" memType="0" name="TorqueCommand_1"/>
 	 
+     <ModuleVariable offset="2" description="" type="uint8" value="18" memType="0" name="Module2ID"/>	 
 	 <ModuleVariable offset="24" description="" type="float" value="0" memType="0" name="Torque_2"/>
 	 <ModuleVariable offset="28" description="" type="float" value="0" memType="0" name="Position_2"/>
-     <ModuleVariable offset="32" description="" type="sint32" value="0" memType="0" name="TorqueCommand_2"/>
+     <ModuleVariable offset="32" description="" type="sint32" value="0" memType="0" name="TorqueCommand_2"/>	 
 	 
-	 <ModuleVariable offset="36" description="" type="float" value="0" memType="0" name="Torque_e"/>
-     <ModuleVariable offset="40" description="" type="float" value="0" memType="0" name="Torque_b"/>
-     <ModuleVariable offset="44" description="" type="float" value="0" memType="0" name="Pos_e"/>
-     <ModuleVariable offset="48" description="" type="float" value="0" memType="0" name="Pos_b"/>
-     <ModuleVariable offset="52" description="" type="float" value="0" memType="0" name="Speed_e"/>
-     <ModuleVariable offset="56" description="" type="float" value="0" memType="0" name="Speed_b"/>
-	 
-	 
-     <ModuleVariable offset="60" description="" type="float" value="0" memType="0" name="WRef_e"/>
-     <ModuleVariable offset="64" description="" type="float" value="0" memType="0" name="XRef_e"/>
-     <ModuleVariable offset="68" description="" type="float" value="0" memType="0" name="KxVal_e"/>
-     <ModuleVariable offset="72" description="" type="float" value="0" memType="0" name="KwVal_e"/>
-     <ModuleVariable offset="76" description="" type="float" value="0" memType="0" name="TVal_e"/>
-     <ModuleVariable offset="80" description="" type="float" value="0" memType="0" name="TImped_e"/>
-     
-	 <ModuleVariable offset="84" description="" type="float" value="0" memType="0" name="WRef_b"/>
-     <ModuleVariable offset="88" description="" type="float" value="0" memType="0" name="XRef_b"/>
-     <ModuleVariable offset="92" description="" type="float" value="0" memType="0" name="KxVal_b"/>
-     <ModuleVariable offset="96" description="" type="float" value="0" memType="0" name="KwVal_b"/>
-     <ModuleVariable offset="100" description="" type="float" value="0" memType="0" name="TVal_b"/>
-     <ModuleVariable offset="104" description="" type="float" value="0" memType="0" name="TImped_b"/>
 
+
+	 <!-- Conversion factors-->
+	 <ModuleVariable offset="4" description="" type="float" value="0.000628319" memType="0" name="posSensorToRad"/>
+     <ModuleVariable offset="8" description="" type="float" value="0.000546185" memType="0" name="torqueSensorToNm"/>
 	 
-    
-     
+	 <!-- Sinus -->
+	 <ModuleVariable offset="116" description="Time" type="float" value="0" memType="0" name="Time"/>
+     <ModuleVariable offset="120" description="Freq Hz" type="float" value="0" memType="0" name="SinusFrequency_E"/>
+	 <ModuleVariable offset="124" description="Amplitude Nm" type="float" value="0" memType="0" name="SinusAmplitude_E"/>
+	 <ModuleVariable offset="128" description="Offset Nm" type="float" value="0" memType="0" name="SinusOffset_E"/>
+	 <ModuleVariable offset="132" description="Phase Rad" type="float" value="0" memType="0" name="SinusPhase_E"/>
+	 <ModuleVariable offset="136" description="Output Val Nm" type="float" value="0" memType="0" name="SinusVal_E"/>
+	 
+	 <ModuleVariable offset="140" description="Freq Hz" type="float" value="0" memType="0" name="SinusFrequency_B"/>
+	 <ModuleVariable offset="144" description="Amplitude Nm" type="float" value="0" memType="0" name="SinusAmplitude_B"/>
+	 <ModuleVariable offset="148" description="Offset Nm" type="float" value="0" memType="0" name="SinusOffset_B"/>
+	 <ModuleVariable offset="152" description="Phase Rad" type="float" value="0" memType="0" name="SinusPhase_B"/>
+	 <ModuleVariable offset="156" description="Output Val Nm" type="float" value="0" memType="0" name="SinusVal_B"/>
+	 
+	 
 </ModuleConfiguration>
