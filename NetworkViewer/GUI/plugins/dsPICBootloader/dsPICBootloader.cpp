@@ -587,6 +587,10 @@ void dsPICBootloader::rebuildCombo()
     //Clear combo first
     m_ui.m_moduleSelectionCombo->clear();
 
+
+    m_ui.m_moduleSelectionCombo->setInsertPolicy(QComboBox::InsertAlphabetically);
+
+
     //Fill Combo
     QList<NETVInterfaceManager*> interfaceList = m_view->getInterfaceManagerList();
 
