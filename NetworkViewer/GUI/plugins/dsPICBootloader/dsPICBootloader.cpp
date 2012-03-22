@@ -588,7 +588,7 @@ void dsPICBootloader::rebuildCombo()
     m_ui.m_moduleSelectionCombo->clear();
 
 
-    m_ui.m_moduleSelectionCombo->setInsertPolicy(QComboBox::InsertAlphabetically);
+    //m_ui.m_moduleSelectionCombo->setInsertPolicy(QComboBox::InsertAlphabetically);
 
 
     //Fill Combo
@@ -602,8 +602,30 @@ void dsPICBootloader::rebuildCombo()
         {
             NetworkModule* mod = allModules[j];
 
-            //Add combo item
-            m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(mod->getConfiguration()->getDeviceID()),QPoint(i,mod->getConfiguration()->getDeviceID()));
+            unsigned int deviceID = mod->getConfiguration()->getDeviceID();
+            bool inserted = false;
+
+            //Insert sorted
+            for (unsigned int k = 0; k <  m_ui.m_moduleSelectionCombo->count(); k++)
+            {
+
+                QPoint data = m_ui.m_moduleSelectionCombo->itemData(k).toPoint();
+
+                if (deviceID < data.y())
+                {
+                    //Add combo item at position k
+                    m_ui.m_moduleSelectionCombo->insertItem(k,QString("Module ") + QString::number(deviceID),QPoint(i,deviceID));
+                    inserted = true;
+                    break;
+                }
+
+            }
+
+            if (!inserted)
+            {
+                //Add combo item
+                m_ui.m_moduleSelectionCombo->addItem(QString("Module ") + QString::number(deviceID),QPoint(i,deviceID));
+            }
         }
     }
 
