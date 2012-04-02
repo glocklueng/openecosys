@@ -59,6 +59,15 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
+        <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+      </makeCustomizationType>
       <C30>
         <property key="optimization-level" value="s"/>
         <property key="preprocessor-macros" value="_DSPIC30F5015_"/>
@@ -138,17 +147,17 @@
         <property key="memories.id" value="false"/>
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
+        <property key="memories.eeprom" value="true"/>
         <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
-        <property key="memories.eeprom" value="false"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="QEI" value="true"/>
         <property key="INPUT CAPTURE 4" value="true"/>
         <property key="INPUT CAPTURE 3" value="true"/>
         <property key="INPUT CAPTURE 2" value="true"/>
         <property key="INPUT CAPTURE 1" value="true"/>
-        <property key="programoptions.preserveeeprom" value="true"/>
-        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="OUTPUT COMPARE 4" value="true"/>
         <property key="memories.programmemory" value="true"/>
         <property key="OUTPUT COMPARE 3" value="true"/>
@@ -156,9 +165,9 @@
         <property key="OUTPUT COMPARE 1" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="memories.programmemory.start" value="0x0"/>
-        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="I2C" value="true"/>
         <property key="programoptions.preserveprogramrange.start" value="0x0"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="PWM" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="ADC" value="true"/>
@@ -168,12 +177,20 @@
         <property key="TIMER4" value="true"/>
         <property key="TIMER3" value="true"/>
         <property key="SPI 2" value="true"/>
-        <property key="TIMER2" value="true"/>
         <property key="SPI 1" value="true"/>
+        <property key="TIMER2" value="true"/>
         <property key="TIMER1" value="true"/>
         <property key="programoptions.preserveprogramrange.end" value="0xff"/>
       </ICD3PlatformTool>
       <item path="p30F4011_bootloader.gld" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AS>
+        </C30-AS>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
       </item>
     </conf>
     <conf name="dsPIC30F4011" type="2">
@@ -192,6 +209,15 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
+        <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+      </makeCustomizationType>
       <C30>
         <property key="optimization-level" value="s"/>
         <property key="preprocessor-macros" value="_DSPIC30F4011_"/>
@@ -272,8 +298,8 @@
         <property key="memories.id" value="false"/>
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
-        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
         <property key="memories.eeprom" value="false"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="INPUT CAPTURE 8" value="true"/>
         <property key="INPUT CAPTURE 7" value="true"/>
@@ -281,8 +307,8 @@
         <property key="INPUT CAPTURE 2" value="true"/>
         <property key="INPUT CAPTURE 1" value="true"/>
         <property key="programoptions.preserveeeprom" value="true"/>
-        <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="OUTPUT COMPARE 4" value="true"/>
         <property key="memories.programmemory" value="true"/>
         <property key="OUTPUT COMPARE 3" value="true"/>
@@ -290,9 +316,9 @@
         <property key="OUTPUT COMPARE 1" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="memories.programmemory.start" value="0x0"/>
-        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="I2C" value="true"/>
         <property key="programoptions.preserveprogramrange.start" value="0x0"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="PWM" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="ADC" value="true"/>
@@ -307,6 +333,14 @@
         <property key="programoptions.preserveprogramrange.end" value="0xff"/>
       </ICD3PlatformTool>
       <item path="p30F5015_bootloader.gld" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AS>
+        </C30-AS>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
       </item>
     </conf>
   </confs>
