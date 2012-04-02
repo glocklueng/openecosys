@@ -10,8 +10,8 @@ CND_CONF=dsPIC30F5015
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.elf
-OUTPUT_BASENAME=dsPICBootloader.X.${IMAGE_TYPE}.elf
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=dsPICBootloader.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 PACKAGE_TOP_DIR=dspicbootloader.x/
 
 # Functions

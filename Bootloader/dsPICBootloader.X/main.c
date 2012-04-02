@@ -51,12 +51,20 @@ _ICD(PGD & ICS_PGD)
 #endif
 
 
+#define dsPICDrive
+
+
 void init_led()
 {
 
     #ifdef _DSPIC30F5015_
-        TRISBbits.TRISB13 = 0; //B13 = OUTPUT
-        LATBbits.LATB13 = 0; //TURN ON LED
+        #ifdef dsPICDrive
+            TRISGbits.TRISG2 = 0; //G2 = OUTPUT
+            LATGbits.LATG2 = 0; //TURN ON LED
+        #else
+            TRISBbits.TRISB13 = 0; //B13 = OUTPUT
+            LATBbits.LATB13 = 0; //TURN ON LED
+        #endif
     #endif
 
 
@@ -72,7 +80,11 @@ void toggle_led()
 {
 
     #ifdef _DSPIC30F5015_
-        LATBbits.LATB13 = ~LATBbits.LATB13;
+        #ifdef dsPICDrive
+            LATGbits.LATG2 = ~LATGbits.LATG2;
+        #else
+            LATBbits.LATB13 = ~LATBbits.LATB13;
+        #endif
     #endif
 
 
@@ -86,7 +98,11 @@ void toggle_led()
 void set_led(unsigned char state)
 {
     #ifdef _DSPIC30F5015_
-        LATBbits.LATB13 = state;
+        #ifdef dsPICDrive
+            LATGbits.LATG2 = state;
+        #else
+            LATBbits.LATB13 = state;
+        #endif
     #endif
 
 
@@ -234,7 +250,7 @@ int main()
         config.module_state = NETV_BOOT_IDLE;
         config.project_id = 0xFF;
         config.code_version = 0xFF;
-        config.module_id = 0x00;
+        config.module_id = 7;
         
         //Write configuration
         writeBootConfig(&config);
