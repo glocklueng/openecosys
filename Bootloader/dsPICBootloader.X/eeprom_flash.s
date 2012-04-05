@@ -18,11 +18,11 @@
 ; 
 
 .IFDEF __30F5015
-   .include "p30f5015.inc"
+   .include "p30F5015.inc"
 .ENDIF
 
 .IFDEF __30F4011
-    .include "p30f4011.inc"
+    .include "p30F4011.inc"
 .ENDIF
 
 

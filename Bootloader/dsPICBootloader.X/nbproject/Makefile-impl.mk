@@ -43,6 +43,20 @@ ALLCONFS=dsPIC30F5015 dsPIC30F4011
 .clean-impl: .clean-pre
 	${MAKE} -f nbproject/Makefile-${CONF}.mk SUBPROJECTS=${SUBPROJECTS} .clean-conf
 
+# clobber
+.clobber-impl: .clobber-pre .depcheck-impl
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=dsPIC30F5015 clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=dsPIC30F4011 clean
+
+
+
+# all
+.all-impl: .all-pre .depcheck-impl
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=dsPIC30F5015 build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=dsPIC30F4011 build
+
+
+
 # dependency checking support
 .depcheck-impl:
 #	@echo "# This code depends on make tool being used" >.dep.inc
