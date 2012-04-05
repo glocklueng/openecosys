@@ -9,10 +9,12 @@
 
 # Include project Makefile
 include Makefile
+# Include makefile containing local settings
+ifeq "$(wildcard nbproject/Makefile-local-dsPIC30F5015.mk)" "nbproject/Makefile-local-dsPIC30F5015.mk"
+include nbproject/Makefile-local-dsPIC30F5015.mk
+endif
 
 # Environment
-# Adding MPLAB X bin directory to path
-PATH:=/Applications/microchip/mplabx/mplab_ide.app/Contents/Resources/mplab_ide/mplab_ide/modules/../../bin/:$(PATH)
 MKDIR=mkdir -p
 RM=rm -f 
 MV=mv 
@@ -50,29 +52,14 @@ CFLAGS=
 ASFLAGS=
 LDLIBSOPTIONS=
 
-# Path to java used to run MPLAB X when this makefile was created
-MP_JAVA_PATH="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/"
-OS_CURRENT="$(shell uname -s)"
 ############# Tool locations ##########################################
 # If you copy a project from one host to another, the path where the  #
 # compiler is installed may be different.                             #
 # If you open this project with MPLAB X in the new host, this         #
 # makefile will be regenerated and the paths will be corrected.       #
 #######################################################################
-MP_CC="/Applications/microchip/mplabc30/v3.30b/bin/pic30-gcc"
-# MP_BC is not defined
-MP_AS="/Applications/microchip/mplabc30/v3.30b/bin/pic30-as"
-MP_LD="/Applications/microchip/mplabc30/v3.30b/bin/pic30-ld"
-MP_AR="/Applications/microchip/mplabc30/v3.30b/bin/pic30-ar"
-DEP_GEN=${MP_JAVA_PATH}java -jar "/Applications/microchip/mplabx/mplab_ide.app/Contents/Resources/mplab_ide/mplab_ide/modules/../../bin/extractobjectdependencies.jar" 
 # fixDeps replaces a bunch of sed/cat/printf statements that slow down the build
 FIXDEPS=fixDeps
-MP_CC_DIR="/Applications/microchip/mplabc30/v3.30b/bin"
-# MP_BC_DIR is not defined
-MP_AS_DIR="/Applications/microchip/mplabc30/v3.30b/bin"
-MP_LD_DIR="/Applications/microchip/mplabc30/v3.30b/bin"
-MP_AR_DIR="/Applications/microchip/mplabc30/v3.30b/bin"
-# MP_BC_DIR is not defined
 
 .build-conf:  ${BUILD_SUBPROJECTS}
 	${MAKE}  -f nbproject/Makefile-dsPIC30F5015.mk dist/${CND_CONF}/${IMAGE_TYPE}/dsPICBootloader.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
@@ -150,15 +137,19 @@ endif
 # Subprojects
 .build-subprojects:
 
+
+# Subprojects
+.clean-subprojects:
+
 # Clean Targets
-.clean-conf:
+.clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r build/dsPIC30F5015
 	${RM} -r dist/dsPIC30F5015
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl
 
-DEPFILES=$(shell "/Applications/microchip/mplabx/mplab_ide.app/Contents/Resources/mplab_ide/mplab_ide/modules/../../bin/"mplabwildcard ${POSSIBLE_DEPFILES})
+DEPFILES=$(shell "${PATH_TO_IDE_BIN}"mplabwildcard ${POSSIBLE_DEPFILES})
 ifneq (${DEPFILES},)
 include ${DEPFILES}
 endif
