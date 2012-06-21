@@ -446,12 +446,12 @@ bool ModuleConfiguration::saveConfiguration(const QString &filename)
     return false;
 }
 
-int ModuleConfiguration::size()
+int ModuleConfiguration::size() const
 {
     return m_variables.size();
 }
 
-ModuleVariable* ModuleConfiguration::operator[] (int index)
+ModuleVariable* ModuleConfiguration::operator[] (int index) const
 {
     Q_ASSERT(index < m_variables.size() && index >= 0);
     return m_variables[index];
@@ -750,12 +750,12 @@ void ModuleConfiguration::removeVariable(ModuleVariable *variable)
     }
 }
 
-QString ModuleConfiguration::getFilename()
+QString ModuleConfiguration::getFilename() const
 {
     return m_filename;
 }
 
-QString ModuleConfiguration::getConfigName()
+QString ModuleConfiguration::getConfigName() const
 {
     return m_name;
 }

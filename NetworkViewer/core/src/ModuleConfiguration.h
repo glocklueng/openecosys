@@ -110,14 +110,14 @@ public:
     /**
             \return int The count of variables
     */
-    int size();
+    int size() const;
 
     /**
             Enable easy access to variables with the [] operator.
             \param index the variable index. User must make sure the index in correct, otherwise the assertion will fail.
             \return ModuleVariable* The associated variable
         */
-    ModuleVariable* operator[] (int index);
+    ModuleVariable* operator[] (int index) const;
 
     /**
             Get a variable with its name.
@@ -172,10 +172,10 @@ public:
     /**
         \return QString the configuration file name actually used
     */
-    QString getFilename();
+    QString getFilename() const;
 
 
-    QString getConfigName();
+    QString getConfigName() const;
 
     //SETS
 
