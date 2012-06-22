@@ -3,10 +3,10 @@
 #include <QTextStream>
 #include <QIODevice>
 
-void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
+void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out, unsigned int deviceID = 0)
 {
     out<<"//This code is auto-generated. Do not modify.\n";
-    out<<"void process_input(const char *data, int length, unsigned char deviceID)\n";
+    out<<"int process_input(const char *data, int length, unsigned char deviceID)\n";
     out<<"{\n";
 
     /*
@@ -25,19 +25,27 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
 
     for (unsigned int i = 0; i < conf.size(); i++)
     {
-        QString path= QString("/") + conf.getConfigName() + "/" + conf[i]->getName();
-        out << "\tif (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
+        QString path= QString("/") + conf.getConfigName() + "/" + QString::number(deviceID) + "/" + conf[i]->getName();
+        if (i == 0)
+        {
+            out << "\tif (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
+        }
+        else
+        {
+            out << "\telse if (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
+        }
+
         out << "\t{\n";
         ModuleVariable *var = conf[i];
 
+        out << "\t\tif(length < " << path.size() + 2 <<") return -1;\n";
         out << "\t\tchar format = data[" << path.size() + 2 << "];\n";
-
         out << "\t\tmessage.msg_cmd=" << var->getOffset() << ";\n";
 
         switch(var->getType())
         {
         case ModuleVariable::DOUBLE:
-            out << "\t\tif (format != 'd') return;\n";
+            out << "\t\tif (format != 'd' || length < " << path.size() + 11 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=8;\n";
             out << "\t\tmessage.msg_data[0]=data[" << path.size() + 11<<"];\n";
             out << "\t\tmessage.msg_data[1]=data[" << path.size() + 10<<"];\n";
@@ -50,7 +58,7 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
             break;
 
         case ModuleVariable::FLOAT:
-            out << "\t\tif (format != 'f') return;\n";
+            out << "\t\tif (format != 'f' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=4;\n";
             out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
@@ -59,7 +67,7 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
             break;
 
         case ModuleVariable::SINT32:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=4;\n";
             out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
@@ -68,7 +76,7 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
             break;
 
         case ModuleVariable::UINT32:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=4;\n";
             out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
@@ -77,29 +85,29 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
             break;
 
         case ModuleVariable::SINT16:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=2;\n";
-            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 5<<"];\n";
-            out << "\t\tmessage.msg_data[1]=data[" << path.size() + 4<<"];\n";
+            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
+            out << "\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
             break;
 
         case ModuleVariable::UINT16:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=2;\n";
-            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 5<<"];\n";
-            out << "\t\tmessage.msg_data[1]=data[" << path.size() + 4<<"];\n";
+            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
+            out << "\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
             break;
 
         case ModuleVariable::SINT8:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=1;\n";
-            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 4<<"];\n";
+            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             break;
 
         case ModuleVariable::UINT8:
-            out << "\t\tif (format != 'i') return;\n";
+            out << "\t\tif (format != 'i' || length < " << path.size() + 7 <<") return -1;\n";
             out << "\t\tmessage.msg_data_length=1;\n";
-            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 4<<"];\n";
+            out << "\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             break;
 
         }
@@ -108,7 +116,7 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out)
     }
 
     out<<"\t//Sending message...\n";
-    out<<"\tnetv_send_message(&message);\n";
+    out<<"\treturn netv_send_message(&message);\n";
     out<<"}\n\n";
 }
 
@@ -118,19 +126,19 @@ int main(int argc, char* argv[])
     ModuleConfiguration config;
     QTextStream qout(stdout);
 
-    if (argc > 1)
+    if (argc > 2)
     {
         qDebug("Processing : %s",argv[1]);
         if (config.loadConfiguration(argv[1],true));
         {
             qDebug("Configuration loaded : %s",argv[1]);
-            write_variable_interface(config,qout);
+            write_variable_interface(config,qout,QString(argv[2]).toUInt());
         }
 
     }
     else
     {
-        qDebug("Usage : %s <xml configuration file>",argv[0]);
+        qDebug("Usage : %s <xml configuration file> <module_id>",argv[0]);
     }
 	return 0;
 }
