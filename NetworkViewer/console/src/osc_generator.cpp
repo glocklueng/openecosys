@@ -157,10 +157,8 @@ void read_variable_interface(const ModuleConfiguration &conf, QTextStream &out, 
             out << "\t\t\tstrncpy(buffer,\"" << path << "\"," << path.size() << ");\n";
             //out << "\t\t\tbuffer["<<path.size()<<"]=0;\n";
 
-
             //MUST ALIGN DATA ON 4 BYTES
             //MUST BE NULL TERMINATED
-
             int nb_pads = 4 - path.size() % 4;
             out << "\t\t\t//Padding "<< nb_pads <<" bytes\n";
 
@@ -324,6 +322,10 @@ int main(int argc, char* argv[])
         if (config.loadConfiguration(argv[1],true));
         {
             qDebug("Configuration loaded : %s",argv[1]);
+            qout << "#include <string.h>\n";
+            qout << "#include \"NETV32_Common.h\"\n";
+            qout << "\n";
+
             write_variable_interface(config,qout,QString(argv[2]).toUInt());
             read_variable_interface(config,qout,QString(argv[2]).toUInt());
         }
