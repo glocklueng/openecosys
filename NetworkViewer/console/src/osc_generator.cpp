@@ -54,21 +54,25 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out,
 
         //FORMAT IS ALIGNED ON 4 BYTES
         out << "\t\tif(length < " << path.size() + 4 <<") return -1;\n";
+        out << "\t\tchar format_sep = data[" << path.size() << "];\n";
         out << "\t\tchar format = data[" << path.size() + 1 << "];\n";
         out << "\t\tmessage.msg_cmd=" << var->getOffset() << ";\n";
+
+        out << "\t\t//Look for valid format separator\n";
+        out << "\t\tif( format_sep != ',') return -1;\n";
+
+        out << "\t\t//Look for remote requests\n";
+        out << "\t\tif (format == 0) \n";
+        out << "\t\t{\n";
+        out << "\t\t\tmessage.msg_remote=1;\n";
+        out << "\t\t\tmessage.msg_read_write=NETV_REQUEST_READ;\n";
+        out << "\t\t}\n";
 
         switch(var->getType())
         {
         case ModuleVariable::DOUBLE:
-            out << "\t\tmessage.msg_data_length=8;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\tif (format != 'd' || length < " << path.size() + 12 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 11<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 10<<"];\n";
@@ -78,131 +82,90 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out,
             out << "\t\t\tmessage.msg_data[5]=data[" << path.size() + 6<<"];\n";
             out << "\t\t\tmessage.msg_data[6]=data[" << path.size() + 5<<"];\n";
             out << "\t\t\tmessage.msg_data[7]=data[" << path.size() + 4<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=8;\n";
             break;
 
         case ModuleVariable::FLOAT:
-            out << "\t\tmessage.msg_data_length=4;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'f' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
             out << "\t\t\tmessage.msg_data[2]=data[" << path.size() + 5<<"];\n";
             out << "\t\t\tmessage.msg_data[3]=data[" << path.size() + 4<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=4;\n";
             break;
 
         case ModuleVariable::SINT32:
-            out << "\t\tmessage.msg_data_length=4;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
             out << "\t\t\tmessage.msg_data[2]=data[" << path.size() + 5<<"];\n";
             out << "\t\t\tmessage.msg_data[3]=data[" << path.size() + 4<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=4;\n";
             break;
 
         case ModuleVariable::UINT32:
-            out << "\t\tmessage.msg_data_length=4;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
             out << "\t\t\tmessage.msg_data[2]=data[" << path.size() + 5<<"];\n";
             out << "\t\t\tmessage.msg_data[3]=data[" << path.size() + 4<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=4;\n";
             break;
 
         case ModuleVariable::SINT16:
-            out << "\t\tmessage.msg_data_length=2;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=2;\n";
             break;
 
         case ModuleVariable::UINT16:
-            out << "\t\tmessage.msg_data_length=2;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
             out << "\t\t\tmessage.msg_data[1]=data[" << path.size() + 6<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=2;\n";
             break;
 
         case ModuleVariable::SINT8:
-            out << "\t\tmessage.msg_data_length=1;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=1;\n";
             break;
 
         case ModuleVariable::UINT8:
-            out << "\t\tmessage.msg_data_length=1;\n";
-
-            out << "\t\tif (format == 0) \n";
-            out << "\t\t{\n";
-            out << "\t\t\tmessage.msg_remote=1;\n";
-            out << "\t\t}\n";
             out << "\t\telse\n";
             out << "\t\t{\n";
-
             out << "\t\t\tif (format != 'i' || length < " << path.size() + 8 <<") return -1;\n";
             out << "\t\t\tmessage.msg_data[0]=data[" << path.size() + 7<<"];\n";
-
             out << "\t\t}\n";
+
+            out << "\t\tmessage.msg_data_length=1;\n";
             break;
 
         }
