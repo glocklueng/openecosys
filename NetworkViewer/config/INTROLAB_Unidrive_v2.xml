@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
-<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="99" codeVersion="-1" processorID="-1" tableVersion="-1" configName="UniDrive v2" >
+<ModuleConfiguration moduleState="-1" deviceID="-1" projectID="99" codeVersion="-1" processorID="-1" tableVersion="-1" configName="UniDrivev2" >
      <ModuleVariable offset="0" description="Drive Control Mode : 0=CONFIG, 1=NORMAL, 2=ERROR, 3=RESET" type="uint8" value="" name="CtrlMode" />
      <ModuleVariable offset="1" description="Drive Control Type: 0=OPEN LOOP, 1=POSITION, 2=POSITION + SPEED PROFILE, 3=SPEED, 4=TORQUE, 5=ADMIT, 6=IMPED" type="uint8" value="" name="CtrlType" />
 	 <ModuleVariable offset="2" description="Position Sensor Source : 0=CURRENT(I_LOAD/AD0), 1=TORQUE(AD1), 2=Ext AnalogInput1, 3=Ext. AnalogInput2, 4=Quad Encoder(QEI), 5=INPUT_CAPTURE, 6=EXT_SSI, 7=POSITION_DERIVATIVE" type="uint8" value="" name="PosMesSource" />
