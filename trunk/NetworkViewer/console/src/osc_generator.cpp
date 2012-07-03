@@ -350,6 +350,66 @@ void read_variable_interface(const ModuleConfiguration &conf, QTextStream &out, 
     out<<"}\n";
 }
 
+void print_documentation(ModuleConfiguration &conf, QTextStream &out)
+{
+    out << "\n\n#if 0 //This is auto generated documentation for MediaWiki\n";
+
+    out << "{| class=\"wikitable\" style=\"text-align:left; width:100%;\"\n";
+    out << "|+ " << conf.getConfigName() << "\n";
+    out << "!Variable Name !! OSC Type !! Variable Description \n";
+
+    for (unsigned int i = 0; i < conf.size(); i++)
+    {
+        out << "|- \n";
+        ModuleVariable *var = conf[i];
+        out << "| " << var->getName() << "\n";
+
+        switch(var->getType())
+        {
+        case ModuleVariable::DOUBLE:
+            out << "| d (double precision floating point)\n";
+            break;
+
+        case ModuleVariable::FLOAT:
+            out << "| f (floating point)\n";
+            break;
+
+        case ModuleVariable::SINT32:
+            out << "| i (signed int32)\n";
+            break;
+
+        case ModuleVariable::UINT32:
+            out << "| i (unsigned int32)\n";
+            break;
+
+        case ModuleVariable::SINT16:
+            out << "| i (signed int16)\n";
+            break;
+
+        case ModuleVariable::UINT16:
+            out << "| i (unsigned int16)\n";
+            break;
+
+        case ModuleVariable::SINT8:
+            out << "| i (signed int8)\n";
+            break;
+
+        case ModuleVariable::UINT8:
+            out << "| i (unsigned int8)\n";
+            break;
+        }
+
+
+        out << "| " << var->getDescription() << "\n";
+
+
+    }
+
+    out << "|}\n";
+
+    out << "#endif\n";
+}
+
 int main(int argc, char* argv[])
 {
     ModuleConfiguration config;
@@ -371,6 +431,7 @@ int main(int argc, char* argv[])
 
             write_variable_interface(config,qout,QString(argv[2]).toUInt());
             read_variable_interface(config,qout,QString(argv[2]).toUInt());
+            print_documentation(config,qout);
         }
 
     }
