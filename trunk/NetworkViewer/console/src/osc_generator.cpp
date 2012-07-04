@@ -32,11 +32,13 @@ void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out,
 
         if (i == 0)
         {
-            out << "\tif (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
+            out << "\tif (strcmp(\"" << path <<"\""<< ", data) == 0)\n";
+            //out << "\tif (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
         }
         else
         {
-            out << "\telse if (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
+            out << "\telse if (strcmp(\"" << path <<"\""<< ", data) == 0)\n";
+            //out << "\telse if (strncmp(\"" << path <<"\""<< ", data, " << path.size() << ") == 0)\n";
         }
 
         //PATH must be aligned on 4 bytes and NULL terminated
