@@ -6,7 +6,7 @@
 void write_variable_interface(const ModuleConfiguration &conf, QTextStream &out, unsigned int deviceID = 0)
 {
     out<<"//This code is auto-generated. Do not modify.\n";
-    out<<"int read_osc(const char *data, int length, unsigned char deviceID)\n";
+    out<<"int read_osc_" << deviceID<< "(const char *data, int length, unsigned char deviceID)\n";
     out<<"{\n";
 
     /*
@@ -185,7 +185,7 @@ void read_variable_interface(const ModuleConfiguration &conf, QTextStream &out, 
 {
 
     out<<"//This code is auto-generated. Do not modify.\n";
-    out<<"int sprintf_osc(char* buffer, int length, NETV_MESSAGE *message)\n";
+    out<<"int sprintf_osc_"<< deviceID <<"(char* buffer, int length, NETV_MESSAGE *message)\n";
     out<<"{\n";
 
     out<<"\tint size=0;\n";
@@ -416,13 +416,16 @@ int main(int argc, char* argv[])
 {
     ModuleConfiguration config;
 
-    QFile output("osc_gen.c");
-    output.open(QIODevice::WriteOnly);
 
-    QTextStream qout(&output);
+
+
 
     if (argc > 2)
     {
+        QFile output(QString("osc_gen_") + argv[2] + QString(".c"));
+        output.open(QIODevice::WriteOnly);
+        QTextStream qout(&output);
+
         qDebug("Processing : %s",argv[1]);
         if (config.loadConfiguration(argv[1],true));
         {
