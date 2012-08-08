@@ -14,7 +14,7 @@ void __ISR(_UART1_VECTOR, ipl2) IntUART1Handler(void)
             mPORTDToggleBits(BIT_5);
 
             //Process data
-            serial_usart_interrupt_handler();
+//            serial_usart_interrupt_handler(); //ToDo
 
             // Clear the RX interrupt Flag
             INTClearFlag(INT_SOURCE_UART_RX(UART1));

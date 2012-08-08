@@ -60,7 +60,7 @@ void ee_word_write(unsigned int offset, int data)
 	_write_eedata_word(p,data);	
 	_wait_eedata();
 #else
-#warning "ee_word_write NOT using EEPROM, Flash implementation not available"
+#warning "ee_word_write NOT using EEPROM, Flash implementation not (yet) available."
 #endif
 }
 
@@ -75,7 +75,7 @@ int ee_word_read(unsigned int offset)
 	_memcpy_p2d16(&data, p, 1);
 	return data;
 #else
-	#warning "ee_word_read NOT using EEPROM, Flash implementation not available"
+	#warning "ee_word_read NOT using EEPROM, Flash implementation not (yet) available."
 	return 0;
 #endif
 }

@@ -11,22 +11,22 @@
 
 
 //System clock = 80MHz
-#define  SYS_XTAL_FREQ     (80000000L)     // external Xtal, Hz
+#define  SYS_XTAL_FREQ     (60000000L)     // external Xtal, Hz
 #define  PB_DIV 1
 #define  PRESCALE 256
-#define  TOGGLES_PER_SEC 10
+#define  TOGGLES_PER_SEC 1
 
 
 //UART BAUD RATE
 #define DESIRED_BAUDRATE 1000000L
 
 #define MODULE_TABLE_VERSION 0x02
-#define MODULE_PROJECT_ID 0xFE
+#define MODULE_PROJECT_ID 0x66
 #define MODULE_CODE_VERSION 0x01
 
-#define DEVID_BASE_ADDRESS 0x3FFFFE
+#define DEVID_BASE_ADDRESS 0xBF80F220 //See Microchip 61145
 
-#define T1_TICK (SYS_XTAL_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
+#define T1_TICK 10*(SYS_XTAL_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
 
 
 /**
@@ -48,14 +48,8 @@
 */
 typedef struct
 {
-    uint8 	Var1;
-	uint16 	Var2;
-	uint32 	Var3;
-	sint8	Var4;
-	sint16	Var5;
-	sint32	Var6;
-	float	Var7;
-	double 	Var8;
+        uint32 	Var1;
+	uint32 	Var2;
 
 } GlobalNETVVariables;
 

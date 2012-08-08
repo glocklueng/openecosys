@@ -28,7 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV32_Shared.h"
 #include "NETV32_Utils.h"
 
-
+//USB Buffers:
+extern char USB_In_Buffer[64];
+extern char USB_Out_Buffer[64];
 
 //memory buffer
 unsigned char g_recvDataBytes[RX_BUFFER_SIZE];
@@ -36,23 +38,47 @@ unsigned char g_recvDataBytes[RX_BUFFER_SIZE];
 unsigned int g_availableBytes = 0;
 unsigned int g_readIndex = 0;
 unsigned int g_writeIndex = 0;
-
-void netv32_init_usb_cdc()
-{
-    //USB INIT CODE HERE
-}
-
+unsigned int netv_send_usb_flag = 0;
 
 void netv32_usb_task()
 {
-    //USB TASK HERE
+    BYTE numBytesRead;
+    unsigned int i = 0;
 
+    // If character received:
+    if(mUSBUSARTIsTxTrfReady())
+    {
+        BYTE i;
 
-    //UPDATE g_recvDataBytes of data available
+        numBytesRead = getsUSBUSART(USB_In_Buffer,64);
+
+        //store the data
+        for(i = 0; i < numBytesRead; i++)
+        {
+            g_recvDataBytes[g_writeIndex++] = USB_In_Buffer[i];
+
+            //circular buffer
+            if (g_writeIndex >= RX_BUFFER_SIZE)
+            {
+                    g_writeIndex = 0;
+            }
+
+            //One more byte available
+            g_availableBytes++;
+        }
+    }
+
+    //Ready to transmit?
+    if(netv_send_usb_flag)
+    {
+        if(USBUSARTIsTxTrfReady())
+        {
+            putUSBUSART(USB_Out_Buffer, sizeof(NETVSerialMessage));
+            netv_send_usb_flag = 0;
+        }
+    }
 
 }
-
-
 
 //TODO This should be moved somewhere else.
 unsigned char serial_calculate_checksum(const NETVSerialMessage *message)
@@ -69,28 +95,6 @@ unsigned char serial_calculate_checksum(const NETVSerialMessage *message)
 	return checksum;
 
 }
-
-/**
-void serial_usart_interrupt_handler(void)
-{
-		//TODO, HANDLE UART1 & UART2
-
-	    //When RCREG is read it will automatically clear the RCIF flag
-        unsigned char value = getc_usart1();
-
-		//store the data
-        g_recvDataBytes[g_writeIndex++] = value;
-
-		//circular buffer
-		if (g_writeIndex >= RX_BUFFER_SIZE)
-		{
-			g_writeIndex = 0;
-		}
-
-		//One more byte available
-		g_availableBytes++;
-}
-*/
 
 unsigned int serial_bytes_available(void)
 {
@@ -151,8 +155,22 @@ unsigned char netv_send_message(NETV_MESSAGE *message)
 	buf.checksum = serial_calculate_checksum(&buf);
 
 
-    //TODO Transmit on USB
- 
+    //Place data in USB output buffer
+    //TODO Optimize
+    USB_Out_Buffer[0] = buf.start_byte;
+    USB_Out_Buffer[1] = buf.pri_boot_rtr;
+    USB_Out_Buffer[2] = buf.type;
+    USB_Out_Buffer[3] = buf.cmd;
+    USB_Out_Buffer[4] = buf.dest;
+    USB_Out_Buffer[5] = buf.data_length_iface;
+    for (i = 0 ; i < 8; i++)
+    {
+        USB_Out_Buffer[6+i] = buf.data[i];
+    }
+    USB_Out_Buffer[14] = buf.checksum;
+
+    //Ready to send
+    netv_send_usb_flag = 1;
 
     return 0;
 }
@@ -255,61 +273,4 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 	}//enough byte available
 
 	return 0;
-}
-
-
-/*******************************************************************
- * Function:        BOOL USER_USB_CALLBACK_EVENT_HANDLER(
- *                        USB_EVENT event, void *pdata, WORD size)
- *
- * PreCondition:    None
- *
- * Input:           USB_EVENT event - the type of event
- *                  void *pdata - pointer to the event data
- *                  WORD size - size of the event data
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is called from the USB stack to
- *                  notify a user application that a USB event
- *                  occured.  This callback is in interrupt context
- *                  when the USB_INTERRUPT option is selected.
- *
- * Note:            None
- *******************************************************************/
-BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
-{
-    switch(event)
-    {
-        case EVENT_TRANSFER:
-            //Add application specific callback task or callback function here if desired.
-            break;
-        case EVENT_SOF:
-            //USBCB_SOF_Handler();
-            break;
-        case EVENT_SUSPEND:
-            //USBCBSuspend();
-            break;
-        case EVENT_RESUME:
-            //USBCBWakeFromSuspend();
-            break;
-        case EVENT_CONFIGURED:
-            //USBCBInitEP();
-            break;
-        case EVENT_SET_DESCRIPTOR:
-            //USBCBStdSetDscHandler();
-            break;
-        case EVENT_EP0_REQUEST:
-            //USBCBCheckOtherReq();
-            break;
-        case EVENT_BUS_ERROR:
-            //USBCBErrorHandler();
-            break;
-
-        default:
-            break;
-    }
-    return TRUE;
 }

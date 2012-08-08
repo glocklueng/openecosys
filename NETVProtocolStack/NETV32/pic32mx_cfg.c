@@ -17,7 +17,7 @@
  * FRCDIV16 - Fast RC oscillator with divide by 16  
  * FRCDIV   - Fast RC oscillator with divide  
  ********************************************************************/
-#pragma config FNOSC = PRIPLL
+//#pragma config FNOSC = PRIPLL
 
 /********************************************************************
  * PLL Input Divider [FPLLIDIV]
@@ -33,7 +33,7 @@
  * DIV_10   - Divide by 10  
  * DIV_12   - Divide by 12  
  ********************************************************************/
-#pragma config FPLLIDIV = DIV_2
+//#pragma config FPLLIDIV = DIV_2
 
 /********************************************************************
  * PLL Multipler [FPLLMUL]
@@ -47,7 +47,7 @@
  * MUL_21 - Multiply by 21  
  * MUL_24 - Multiply by 24  
  ********************************************************************/
- #pragma config FPLLMUL = MUL_20
+ //#pragma config FPLLMUL = MUL_20
 
 /********************************************************************
  * PLL Output Divider [FPLLODIV]
@@ -61,7 +61,7 @@
  * DIV_64 - Divide by 64  
  * DIV_256 - Divide by 256  
  ********************************************************************/
-#pragma config FPLLODIV = DIV_1
+//#pragma config FPLLODIV = DIV_1
 
 /********************************************************************
  * Bootup Peripheral Bus Clock Divider [FPBDIV]
@@ -71,7 +71,7 @@
  * DIV_4 - Divide by 4  
  * DIV_8 - Divide by 8  
  ********************************************************************/
-#pragma config FPBDIV = DIV_1
+//#pragma config FPBDIV = DIV_1
 
 /********************************************************************
  * Primary Oscillator [POSCMOD]
@@ -81,7 +81,7 @@
  * HS - HS oscillator  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config POSCMOD = HS
+//#pragma config POSCMOD = HS
 
 /********************************************************************
  * Secondary Oscillator Enable [FSOSCEN]
@@ -89,7 +89,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config FSOSCEN = OFF
+//#pragma config FSOSCEN = OFF
 
 /********************************************************************
  * Internal/External Switch Over [IESO]
@@ -97,7 +97,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config IESO = OFF
+//#pragma config IESO = OFF
 
 /********************************************************************
  * Clock Switching and Monitor Selection [FCKSM]
@@ -106,7 +106,7 @@
  * CSECMD - Clock Switching Enabled, Clock Monitoring Disabled  
  * CSDCMD - Clock Switching Disabled, Clock Monitoring Disabled  
  ********************************************************************/
-#pragma config FCKSM = CSDCMD
+//#pragma config FCKSM = CSDCMD
 
 /********************************************************************
  * Clock Output Enable [OSCIOFNC]
@@ -114,7 +114,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config OSCIOFNC = OFF
+//#pragma config OSCIOFNC = OFF
 
 /********************************************************************
  * Watchdog Timer Enable [FWDTEN]
@@ -122,7 +122,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config FWDTEN = OFF
+//#pragma config FWDTEN = OFF
 
 /********************************************************************
  * Watchdog Timer Postscale Select [WDTPS]
@@ -149,7 +149,7 @@
  * PS524288    - 1:524,288  
  * PS1048576   - 1:1,048,576  
  ********************************************************************/
-#pragma config WDTPS = PS512
+//#pragma config WDTPS = PS512
 
 /********************************************************************
  * Boot Flash Protect Enable [BWP]
@@ -157,7 +157,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config BWP = OFF
+//#pragma config BWP = OFF
 
 /********************************************************************
  * Code Protect Enable [CP]
@@ -165,7 +165,7 @@
  * ON - Enabled  
  * OFF - Disabled  
  ********************************************************************/
-#pragma config CP = OFF
+//#pragma config CP = OFF
 
 /********************************************************************
  * ICE/ICD Comm Channel Select [ICESEL]
@@ -173,7 +173,7 @@
  * ICS_PGx1 - ICE pins are shared with PGC1, PGD1  
  * ICS_PGx2 - ICE pins are shared with PGC2, PGD2  
  ********************************************************************/
-#pragma config ICESEL = ICS_PGx1
+//#pragma config ICESEL = ICS_PGx2
 
 /********************************************************************
  * Background Debugger Enable bit [DEBUG]
@@ -181,7 +181,7 @@
  * ON   - enabled  
  * OFF  - disabled  
  ********************************************************************/
-#pragma config DEBUG = ON
+//#pragma config DEBUG = ON
 
 
 /********************************************************************
@@ -190,7 +190,7 @@
  * ON   - MII enabled, RMII disabled  
  * OFF  - MII disabled, RMII enabled  
  ********************************************************************/
-#pragma config FMIIEN = OFF
+//#pragma config FMIIEN = OFF
 
 
 /********************************************************************
@@ -199,7 +199,7 @@
  * ON   - Default Ethernet IO Pins   
  * OFF  - Alternate Ethernet IO Pins  
  ********************************************************************/
-#pragma config FETHIO = ON
+//#pragma config FETHIO = ON
 
 
 
