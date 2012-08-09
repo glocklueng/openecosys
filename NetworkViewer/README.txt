@@ -32,6 +32,12 @@ OpenECoSys/NetworkViewer. If not, see http://www.gnu.org/licenses/.
 RELEASE NOTES
 _____________ 
 
+1.1.16
+______
+* Updated to qwt 6.x
+* Better time stamping of data
+
+
 1.1.15
 ________
 * Support multiple (simultaneous) interfaces at the same time

@@ -37,7 +37,8 @@ QPointF ScopeCurveData::sample( size_t i ) const
     }
     else
     {
-        qDebug("Out of bound : %i",i);
+        qDebug("Out of bound : %li",i);
+        return QPointF(0,0);
     }
 }
 
