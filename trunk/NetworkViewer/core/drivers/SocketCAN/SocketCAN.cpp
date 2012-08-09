@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QTime>
 #include <math.h>
+#include <QDateTime>
 
 static bool SOCKET_CAN_DEVICE_INIT = NETVDevice::registerDeviceFactory("SocketCAN",new NETVDevice::DeviceFactory<SocketCAN>("can0","The device to use."));
 
@@ -209,6 +210,7 @@ NETVDevice::State SocketCAN::recvMessage(NETV_MESSAGE &message)
                 message.msg_remote = 1;
             }
 
+            message.msg_timestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
             return NETVDevice::NETVDEVICE_OK;
 	}
