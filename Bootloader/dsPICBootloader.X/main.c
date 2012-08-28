@@ -51,9 +51,6 @@ _ICD(PGD & ICS_PGD)
 #endif
 
 
-#define dsPICDrive
-
-
 void init_led()
 {
 
@@ -250,7 +247,7 @@ int main()
         config.module_state = NETV_BOOT_IDLE;
         config.project_id = 0xFF;
         config.code_version = 0xFF;
-        config.module_id = 7;
+        config.module_id = 1;
         
         //Write configuration
         writeBootConfig(&config);
