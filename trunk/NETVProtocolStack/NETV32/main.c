@@ -16,9 +16,12 @@
 #include "NETV32_Shared.h"
 #include "NETV32_SerialDriver.h"
 
+// SYSCLK = (8MHz Crystal/ FPLLIDIV * FPLLMUL / FPLLODIV)
+// SYSCLK = (8MHz Crystal/ 2 * 20 / 1) = 80MHz
+// PBCLK = SYSCLK = 80MHz
 #pragma config FNOSC = PRIPLL
 #pragma config FPLLIDIV = DIV_2
-#pragma config FPLLMUL = MUL_15         //60MHz
+#pragma config FPLLMUL = MUL_20
 #pragma config FPLLODIV = DIV_1
 #pragma config FPBDIV = DIV_1
 #pragma config POSCMOD = HS

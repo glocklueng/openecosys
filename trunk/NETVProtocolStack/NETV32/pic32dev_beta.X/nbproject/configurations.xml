@@ -158,8 +158,6 @@
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD3PlatformTool>
-      <XC32>
-      </XC32>
     </conf>
   </confs>
 </configurationDescriptor>
