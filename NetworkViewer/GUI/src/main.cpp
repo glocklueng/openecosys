@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QtDebug>
 #include <QEvent>
+#include <QTimer>
 #include <QSplashScreen>
 #include "ModuleConfiguration.h"
 #include "ModuleConfigurationView.h"
@@ -57,6 +58,11 @@ public:
         : QApplication(argc, argv), m_view(NULL), m_splashScreen(NULL)
     {
 
+    }
+
+    void loadPrefs()
+    {
+
         UserPreferences &prefs = UserPreferences::getGlobalPreferences();
 
         if(prefs.load())
@@ -75,10 +81,7 @@ public:
     void init()
     {
 
-        m_splashScreen = new NetworkViewerSplashScreen();
-        m_splashScreen->show();
-
-        qDebug() << "Running application from" << QCoreApplication::applicationDirPath ();
+        qDebug() << "Running application from" << QCoreApplication::applicationDirPath();
 
         //Scan for all plugins
         //When we are in a test environment
@@ -91,37 +94,27 @@ public:
         NETVDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/drivers");
         NETVDevice::scanDrivers(QCoreApplication::applicationDirPath() + "/../drivers");
 
-       
-
-        //Will wait for init...
-        //m_debugWindow = new QMainWindow(NULL);
-        //m_textEdit = new QTextEdit(m_debugWindow);
-        //m_debugWindow->setCentralWidget(m_textEdit);
-        //m_debugWindow->show();
-        //m_debugWindow->raise();
-
-
+        //Create view
         m_view = new NetworkView(NULL);
-
-        //Install handlers
-        qInstallMsgHandler(NetworkViewerMsgHandler);
-
         m_view->setWindowTitle(QString("NetworkViewer-") + NETWORKVIEWER_VERSION);
 
+        //Setup Splashscreen
+        m_splashScreen = new NetworkViewerSplashScreen();
+        m_splashScreen->show();
+        QTimer::singleShot(2500, m_splashScreen, SLOT(close()));
+        QTimer::singleShot(2500, m_view, SLOT(showMaximized()));
 
-        if (m_splashScreen)
-        {
-            m_splashScreen->finish(m_view);
-        }
 
-        m_view->showMaximized();
     }
 
     ~NetworkViewerApp()
     {
 
+
         //Restore message handler
         qInstallMsgHandler(0);
+
+        qDebug("Restoring message handlers...");
 
         if (m_view)
         {
@@ -151,8 +144,6 @@ public:
 protected:
 
     NetworkView *m_view;
-    QMainWindow *m_debugWindow;
-    QTextEdit *m_textEdit;
     NetworkViewerSplashScreen *m_splashScreen;
 
 };
@@ -186,7 +177,12 @@ void NetworkViewerMsgHandler(QtMsgType type, const char *msg)
 int main(int argc, char* argv[])
 {	
     NetworkViewerApp app(argc, argv);
+    app.loadPrefs();
     app.init();
+
+    //Install handlers
+    qInstallMsgHandler(NetworkViewerMsgHandler);
+
     return app.exec();
 }
 
