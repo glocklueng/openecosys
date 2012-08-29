@@ -62,7 +62,7 @@ LDLIBSOPTIONS=
 FIXDEPS=fixDeps
 
 .build-conf:  ${BUILD_SUBPROJECTS}
-	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+	${MAKE} ${MAKE_OPTIONS} -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
 MP_PROCESSOR_OPTION=32MX795F512H
 MP_LINKER_FILE_OPTION=
@@ -84,93 +84,93 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${OBJECTDIR}/_ext/1472/NETV32_Common.o: ../NETV32_Common.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_Memory.o: ../NETV32_Memory.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_Shared.o: ../NETV32_Shared.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o: ../NETV32_USB-CDCDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_descriptors.o: ../USB-CDC_Microchip/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_device.o: ../USB-CDC_Microchip/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_device.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_device.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_device.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_device.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o: ../USB-CDC_Microchip/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c  
 	
 ${OBJECTDIR}/_ext/1472/main.o: ../main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/main.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/main.o.d" -o ${OBJECTDIR}/_ext/1472/main.o ../main.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/main.o.d" -o ${OBJECTDIR}/_ext/1472/main.o ../main.c  
 	
 ${OBJECTDIR}/_ext/1472/serial.o: ../serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/serial.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/serial.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/serial.o.d" -o ${OBJECTDIR}/_ext/1472/serial.o ../serial.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/serial.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/serial.o.d" -o ${OBJECTDIR}/_ext/1472/serial.o ../serial.c  
 	
 else
 ${OBJECTDIR}/_ext/1472/NETV32_Common.o: ../NETV32_Common.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Common.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Common.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Common.o ../NETV32_Common.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_Memory.o: ../NETV32_Memory.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Memory.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Memory.o ../NETV32_Memory.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_Shared.o: ../NETV32_Shared.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_Shared.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_Shared.o ../NETV32_Shared.c  
 	
 ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o: ../NETV32_USB-CDCDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o.d" -o ${OBJECTDIR}/_ext/1472/NETV32_USB-CDCDriver.o ../NETV32_USB-CDCDriver.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_descriptors.o: ../USB-CDC_Microchip/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_descriptors.o ../USB-CDC_Microchip/usb_descriptors.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_device.o: ../USB-CDC_Microchip/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_device.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_device.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_device.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_device.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_device.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_device.o ../USB-CDC_Microchip/usb_device.c  
 	
 ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o: ../USB-CDC_Microchip/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/65181253 
 	@${RM} ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/65181253/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/65181253/usb_function_cdc.o ../USB-CDC_Microchip/usb_function_cdc.c  
 	
 ${OBJECTDIR}/_ext/1472/main.o: ../main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/main.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/main.o.d" -o ${OBJECTDIR}/_ext/1472/main.o ../main.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/main.o.d" -o ${OBJECTDIR}/_ext/1472/main.o ../main.c  
 	
 ${OBJECTDIR}/_ext/1472/serial.o: ../serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1472 
 	@${RM} ${OBJECTDIR}/_ext/1472/serial.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/serial.o.d" $(SILENT) -c ${MP_CC} $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/serial.o.d" -o ${OBJECTDIR}/_ext/1472/serial.o ../serial.c  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/serial.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./" -I"../" -I"../USB-CDC_Microchip" -MMD -MF "${OBJECTDIR}/_ext/1472/serial.o.d" -o ${OBJECTDIR}/_ext/1472/serial.o ../serial.c  
 	
 endif
 
@@ -179,12 +179,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -mdebugger -D__MPLAB_DEBUGGER_ICD3=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}       -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__ICD2RAM=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mdebugger -D__MPLAB_DEBUGGER_ICD3=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}       -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__ICD2RAM=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
 	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}       -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION)
-	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  
+	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/pic32dev_beta.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 
 

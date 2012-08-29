@@ -11,7 +11,7 @@
 
 
 //System clock = 80MHz
-#define  SYS_XTAL_FREQ     (60000000L)     // external Xtal, Hz
+#define  SYS_XTAL_FREQ     (80000000L)     // external Xtal, Hz
 #define  PB_DIV 1
 #define  PRESCALE 256
 #define  TOGGLES_PER_SEC 1
