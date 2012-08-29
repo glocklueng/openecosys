@@ -57,11 +57,11 @@ ENDIF(WIN32)
 
 
 IF (UNIX AND NOT APPLE)
-	MESSAGE( STATUS "Buiding PCAN driver for Linux...")
+        FIND_FILE(PCAN_FILE "/usr/include/pwd.h")
+        MESSAGE( STATUS "Buiding PCAN driver for Linux... ${PCAN_FILE}")
 	add_library(PCANDriver SHARED ${PCAN_SRCS} ${PCAN_HEADERS} ${PCAN_QRC_SRCS} ${PCAN_MOC_SRCS} ${PCAN_UI_SRCS}  )
         target_link_libraries(PCANDriver  ${DRIVER_LIBRARIES} -L/usr/lib -lpcan)
 	INSTALL(TARGETS PCANDriver DESTINATION drivers/PCANDriver)
-
 
 ENDIF(UNIX AND NOT APPLE)
 
