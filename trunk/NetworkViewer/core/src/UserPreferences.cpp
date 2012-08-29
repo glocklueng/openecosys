@@ -34,6 +34,9 @@ bool UserPreferences::load()
     {
         qDebug() << "Prefs file opened : " << getPrefsPath();
 
+        //Clear actual mal
+        m_map.clear();
+
         QDomDocument doc("INTROLAB-NETWORKVIEWER-PREFS");
 
         //Set document contents
@@ -70,7 +73,7 @@ bool UserPreferences::load()
                     QVariant value = e.attribute("value");
 
                     //Set Key/value
-                    setKey(key,value);
+                    setKey(key,value,false);
 
                 }
             }//if e.isNull

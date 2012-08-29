@@ -22,30 +22,27 @@
 #include <QSplashScreen>
 #include "NetworkView.h"
 #include <QTimer>
+#include <QBitmap>
 
 class NetworkViewerSplashScreen : public QSplashScreen
 {
 
     Q_OBJECT;
 
-    public:
+public:
 
     NetworkViewerSplashScreen()
-    : QSplashScreen(QPixmap(":images/introlab.png"))
+        : QSplashScreen(QPixmap(":images/introlab.png"))
     {
 
-        showMessage("http://www.openecosys.org",Qt::AlignRight);
-
-	m_timer = new QTimer(this);
-        connect(m_timer,SIGNAL(timeout()),this,SLOT(close()));
-
-	//The splash screen will close after 2000 ms
-	m_timer->start(2000);
+        //setMask(pixmap().mask());
+        showMessage(QString("NetworkViewer-") + NETWORKVIEWER_VERSION
+                    + " by Dominic Letourneau\nhttp://openecosys.sourceforge.net",Qt::AlignRight);
     }
 
 protected:
 
-    QTimer *m_timer;
+
 
 };
 
