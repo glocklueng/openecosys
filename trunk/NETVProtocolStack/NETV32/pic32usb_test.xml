@@ -1,5 +1,5 @@
 <!DOCTYPE INTROLAB-NETWORKVIEWER>
-     <ModuleConfiguration moduleState="-1" deviceID="-1" projectID="102" codeVersion="-1" processorID="-1" tableVersion="-1" >
+     <ModuleConfiguration moduleState="-1" deviceID="-1" projectID="102" codeVersion="-1" processorID="-1" tableVersion="-1" configName="VUE32">
      <ModuleVariable offset="1"  description="Ramp (Var1 += 10000)" type="uint32"  value="" name="Var1" />
      <ModuleVariable offset="4"  description="Fixed value: 1337" type="uint32" value="" name="Var2" />
 </ModuleConfiguration>
