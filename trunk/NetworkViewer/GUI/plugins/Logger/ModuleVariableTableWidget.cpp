@@ -349,7 +349,7 @@ bool ModuleVariableTableWidget::saveCSV(QIODevice &output)
 
                     stream << iter.key()->getDeviceID() << "\t";
                     stream << iter.key()->getName() << "\t";
-                    stream << time.toString("dd/MM/yyyy \t hh:mm:ss.zzz") << "\t" <<  value.toString() << "\n";
+                    stream << time.toString("dd/MM/yyyy\thh:mm:ss.zzz") << "\t" <<  value.toString() << "\n";
                 }
 
                 stream << "\n\n";
