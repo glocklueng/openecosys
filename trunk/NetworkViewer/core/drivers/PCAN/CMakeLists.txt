@@ -58,11 +58,12 @@ ENDIF(WIN32)
 
 IF (UNIX AND NOT APPLE)
         FIND_FILE(PCAN_FILE "/usr/include/libpcan.h")
-        MESSAGE( STATUS "Buiding PCAN driver for Linux... ${PCAN_FILE}")
-	add_library(PCANDriver SHARED ${PCAN_SRCS} ${PCAN_HEADERS} ${PCAN_QRC_SRCS} ${PCAN_MOC_SRCS} ${PCAN_UI_SRCS}  )
-        target_link_libraries(PCANDriver  ${DRIVER_LIBRARIES} -L/usr/lib -lpcan)
-	INSTALL(TARGETS PCANDriver DESTINATION drivers/PCANDriver)
-
+	IF (PCAN_FILE)
+        	MESSAGE( STATUS "Buiding PCAN driver for Linux... ${PCAN_FILE}")
+		add_library(PCANDriver SHARED ${PCAN_SRCS} ${PCAN_HEADERS} ${PCAN_QRC_SRCS} ${PCAN_MOC_SRCS} ${PCAN_UI_SRCS}  )
+        	target_link_libraries(PCANDriver  ${DRIVER_LIBRARIES} -L/usr/lib -lpcan)
+		INSTALL(TARGETS PCANDriver DESTINATION drivers/PCANDriver)
+	ENDIF(PCAN_FILE)
 ENDIF(UNIX AND NOT APPLE)
 
 
