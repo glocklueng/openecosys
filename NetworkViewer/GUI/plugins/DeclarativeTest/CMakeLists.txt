@@ -17,7 +17,7 @@ SET(DeclarativeTest_UIS
 )
 
 SET(DeclarativeTest_QRC 
-	
+        DeclarativeTest.qrc
 )
 
 # generate rules for building source files from the resources

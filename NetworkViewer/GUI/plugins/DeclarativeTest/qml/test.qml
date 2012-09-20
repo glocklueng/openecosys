@@ -9,6 +9,7 @@ Rectangle
     id: appWindow
     width: 1024
     height: 768
+    color: "white"
 
     ListModel {
 
@@ -28,11 +29,20 @@ Rectangle
         }
     }
 
+    BorderImage
+    {
+        anchors.fill: appWindow
+        source: "qrc:/DeclarativeTest/images/brushed_aluminum.png"
+        horizontalTileMode: BorderImage.Repeat
+        verticalTileMode: BorderImage.Repeat
+        opacity: 0.3
+    }
+
     function create_box_component(variable)
     {
         print("should create component")
 
-        var dynamic_component = Qt.createComponent("box.qml");
+        var dynamic_component = Qt.createComponent("qrc:/DeclarativeTest/qml/box.qml");
 
          if (dynamic_component.status == Component.Ready)
          {
@@ -56,6 +66,12 @@ Rectangle
          }
     } // create_box_component
 
+/*
+    Image {
+        source: "qrc:/DeclarativeTest/images/brushed_aluminum.png"
+    }
+*/
+
     GridView {
         id: myListView
 
@@ -70,8 +86,17 @@ Rectangle
             height: 50
             width: myListView.width
 
+            BorderImage
+            {
+                anchors.fill: wrapper
+                source: "qrc:/DeclarativeTest/images/clear_aluminum.png"
+                horizontalTileMode: BorderImage.Stretch
+                verticalTileMode: BorderImage.Stretch
+            }
+
             Column {
 
+                id: column
                 Text {
                     id: name_label
                     text: model.modelData.getName()
@@ -87,6 +112,8 @@ Rectangle
                     }
                 }
             }
+
+
 
             MouseArea {
                 anchors.fill: wrapper

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="DeclarativeTest/">
+        <file>images/brushed_aluminum.png</file>
+	<file>images/resize.png</file>
+	<file>images/clear_aluminum.png</file>
+        <file>images/close.png</file>
+	<file>qml/box.qml</file>
+	<file>qml/test.qml</file>
+    </qresource>
+</RCC>
