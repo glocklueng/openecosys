@@ -6,29 +6,44 @@ Rectangle
     id: window
     width: 320
     height: 240
-    color: "red"
+    color: "cyan"
+    radius: 10
 
     QMLVariable
     {
         id: myQMLVariable
         value: 0
     }
-
-    Text {
-        id: variable_text
+    Column {
         anchors.fill: window
-        color: "black"
-        text: myVariable.getValue()
 
-        function update_value()
-        {
-            text = myVariable.getValue();
+        Text {
+            id: variable_value
+            width: parent.width
+            color: "black"
+            text: myVariable.getValue()
+
+            Connections
+            {
+                target: myVariable
+                onValueChanged: variable_value.text = myVariable.getValue()
+            }
         }
-
-        Connections
-        {
-            target: myVariable
-            onValueChanged: variable_text.text = myVariable.getValue()
+        Text {
+            width: parent.width
+            id: variable_name
+            text: myVariable.getName()
+        }
+        Text {
+            width: parent.width
+            id: variable_type
+            text: myVariable.getType()
+        }
+        Text {
+            width: parent.width
+            id: variable_description
+            wrapMode: "WordWrap"
+            text: myVariable.getDescription()
         }
     }
 
