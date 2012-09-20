@@ -64,7 +64,7 @@ Rectangle
                     id: button_text
                     width: parent.width
                     height: parent.height
-                    text: "Create"
+                    text: "Create patate"
                 }
                 MouseArea {
                     id: button_mouse_area
