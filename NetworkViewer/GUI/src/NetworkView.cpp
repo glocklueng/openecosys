@@ -93,7 +93,7 @@ NetworkView::NetworkView(QWidget *parent)
 
     //Show Connect to device dialog
     NETVInterfaceManagerView *managerView = new NETVInterfaceManagerView(this,true);
-    managerView->show();
+    //managerView->show();
 
     //Conn statistics timer
     m_connStatsTimer = new QTimer(this);
