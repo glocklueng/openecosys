@@ -18,6 +18,8 @@
 
 #include "NetworkModule.h"
 
+
+
 NetworkModule::NetworkModule(const ModuleConfiguration &config, QObject *parent)
     : QObject(parent), m_configuration(config), m_active(true), m_lastUpdateTime(QTime::currentTime())
 {
@@ -57,6 +59,12 @@ ModuleVariable* NetworkModule::getVariable(int index)
     }
 
     return NULL;
+}
+
+QVariant NetworkModule::getVariableAt(int index)
+{
+    ModuleVariable *var = getVariable(index);
+    return QVariant::fromValue((QObject*)var);
 }
 
 ModuleConfiguration* NetworkModule::getConfiguration()
