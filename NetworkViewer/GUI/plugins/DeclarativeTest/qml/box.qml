@@ -13,7 +13,7 @@ Rectangle {
     radius: 10
     color: "orange"
 
-
+    property variant variable: null
 
 
     Rectangle {
@@ -32,33 +32,33 @@ Rectangle {
             height: parent.height
             anchors.top: parent.top
             anchors.left: parent.left
-            text: "Widget Label"
-
-
-        }
-
-        Image
-        {
-            source: "http://introlab.3it.usherbrooke.ca/IntRoLab.png"
+            text: variable.getName()
         }
 
         MouseArea
         {
             id:window_label_mouse_area
             anchors.fill: window_rect
-
             drag.target: item_test
             drag.axis: Drag.XAxis | Drag.YAxis
             drag.minimumX: 0
             drag.maximumX: item_test.parent.width - item_test.width
             drag.minimumY: 0
             drag.maximumY: item_test.parent.height - item_test.height
-
-
         }
+    }
 
-
-
+    TextInput {
+        id: textInput
+        anchors.top: window_rect.bottom
+        width: parent.width
+        height: 50
+        text: variable.getValue()
+        Connections
+        {
+            target: variable
+            onValueChanged: textInput.text = item_test.variable.getValue()
+        }
     }
 
     Rectangle
