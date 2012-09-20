@@ -19,6 +19,7 @@
 #include "DeclarativeTest.h"
 #include "NetworkView.h"
 #include <QFileDialog>
+#include <QDeclarativeContext>
 
 //This will insert the plugin in the dictionary...
 static int declarative_test_plugin_init = BasePlugin::registerPlugin("DeclarativeTest",new BasePlugin::PluginFactory<DeclarativeTest>());
@@ -26,23 +27,23 @@ static int declarative_test_plugin_init = BasePlugin::registerPlugin("Declarativ
 
 
 DeclarativeTest::DeclarativeTest(NetworkView *view)
-	 : BasePlugin(view)
+    : BasePlugin(view)
 {
-        qDebug("DeclarativeTest::DeclarativeTest(NetworkView *view = %p)",view);
+    qDebug("DeclarativeTest::DeclarativeTest(NetworkView *view = %p)",view);
 
-	//Setup UI
-	m_ui.setupUi(this);
+    //Setup UI
+    m_ui.setupUi(this);
 
-        //Connect load button
-        connect(m_ui.m_loadButton,SIGNAL(clicked()),this,SLOT(loadButtonClicked()));
+    //Connect load button
+    connect(m_ui.m_loadButton,SIGNAL(clicked()),this,SLOT(loadButtonClicked()));
 
 
-        resize(800,600);
+    resize(800,600);
 }
 
 void DeclarativeTest::init()
 {
-
+    //createContextProperties();
 }
 
 void DeclarativeTest::terminate()
@@ -56,18 +57,43 @@ void DeclarativeTest::loadButtonClicked()
 
 
     QString fileName = QFileDialog::getOpenFileName(NULL, "Open QML Script File",
-                                                     m_lastPath,
-                                                     "QML (*.qml)");
+                                                    m_lastPath,
+                                                    "QML (*.qml)");
     if (fileName.size() > 0)
     {
-            qDebug() << "Loading script :" << fileName;
-            m_lastPath = fileName;
+        createContextProperties();
 
-            //Do something with fileName...
-            m_ui.m_declarativeView->setSource(QUrl::fromLocalFile(fileName));
+        qDebug() << "Loading script :" << fileName;
+        m_lastPath = fileName;
 
-            m_ui.m_declarativeView->show();
+        //Do something with fileName...
+        m_ui.m_declarativeView->setSource(QUrl::fromLocalFile(fileName));
+        m_ui.m_declarativeView->show();
+
+        qDebug("DeclarativeTest::loadButtonClicked() - Setting Property context : %p ",m_ui.m_declarativeView->rootContext());
 
     }
 
+}
+
+void DeclarativeTest::createContextProperties()
+{
+    qDebug("DeclarativeTest::createContextProperties()");
+
+    Q_ASSERT(m_ui.m_declarativeView);
+
+    QList<NetworkModule*> allModules = m_view->getModules();
+
+    if (allModules.size() > 0)
+    {
+        ModuleVariable *var = allModules.first()->getVariable(0);
+        if (var)
+        {
+
+            m_ui.m_declarativeView->rootContext()->setProperty("currentDateTime",QDateTime::currentDateTime());
+
+            qDebug("createContextProperties() - Setting Property context : %p ",m_ui.m_declarativeView->rootContext());
+        }
+
+    }
 }

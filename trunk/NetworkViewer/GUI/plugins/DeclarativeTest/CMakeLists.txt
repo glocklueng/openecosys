@@ -33,6 +33,5 @@ INCLUDE_DIRECTORIES(./ ${PLUGIN_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(DeclarativeTestPlugin SHARED ${DeclarativeTest_SRCS} ${DeclarativeTest_HEADERS} ${DeclarativeTest_QRC_SRCS} ${DeclarativeTest_MOC_SRCS} ${DeclarativeTest_UI_SRCS}  )
 target_link_libraries(DeclarativeTestPlugin  ${QT_LIBRARIES} ${PLUGIN_LIBRARIES})
-set_target_properties(DeclarativeTestPlugin PROPERTIES LINK_FLAGS "--enable-auto-import")
 INSTALL(TARGETS DeclarativeTestPlugin DESTINATION plugins/declarativeTest)	
 

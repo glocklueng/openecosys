@@ -27,27 +27,29 @@
 
 class DeclarativeTest : public BasePlugin
 {
-	Q_OBJECT;
+    Q_OBJECT;
 
 
 public:
 
-        DeclarativeTest(NetworkView *view);
+    DeclarativeTest(NetworkView *view);
 
-	virtual void init();
+    virtual void init();
 
-	virtual void terminate();
+    virtual void terminate();
 
 protected slots:
 
-        void loadButtonClicked();
+    void loadButtonClicked();
 
 protected:
 
+    void createContextProperties();
 
-        Ui::DeclarativeTest m_ui;
-	QList<NetworkModule*> m_modules;
-        QString m_lastPath;
+
+    Ui::DeclarativeTest m_ui;
+    QList<NetworkModule*> m_modules;
+    QString m_lastPath;
 };
 
 #endif
