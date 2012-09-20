@@ -18,7 +18,7 @@
 
 #include "NetworkModule.h"
 
-
+Q_DECLARE_METATYPE(QList<QObject*>)
 
 NetworkModule::NetworkModule(const ModuleConfiguration &config, QObject *parent)
     : QObject(parent), m_configuration(config), m_active(true), m_lastUpdateTime(QTime::currentTime())
@@ -60,6 +60,18 @@ ModuleVariable* NetworkModule::getVariable(int index)
 
     return NULL;
 }
+
+QVariant NetworkModule::variables()
+{
+    QList<QObject*> varList;
+
+    for (int i = 0; i < getNumVariable(); i++)
+    {
+        varList.append(getVariable(i));
+    }
+    return QVariant::fromValue(varList);
+}
+
 
 QVariant NetworkModule::getVariableAt(int index)
 {

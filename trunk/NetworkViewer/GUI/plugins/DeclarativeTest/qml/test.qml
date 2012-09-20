@@ -7,6 +7,52 @@ Rectangle
     width: 1024
     height: 768
 
+    ListModel {
+
+        id: testModel
+
+        ListElement {
+            name: "Box1"
+            file: "box.qml"
+        }
+        ListElement {
+            name: "Box2"
+            file: "box.qml"
+        }
+        ListElement {
+            name: "Box3"
+            file: "box.qml"
+        }
+    }
+
+
+    ListView {
+        id: myListView
+        width: 180; height: 200
+        anchors.right: parent.right
+        anchors.top: parent.top
+
+        model: moduleList[0].variables()
+        delegate: Rectangle {
+            color: "cyan"
+            height: 50
+            width: myListView.width
+
+            Column {
+
+                Text {
+                    text: model.modelData.getName()
+                }
+                Text {
+                    text: model.modelData.getValue()
+                }
+            }
+        }
+    }
+
+
+
+
     Rectangle
     {
 
@@ -38,12 +84,19 @@ Rectangle
                 text: myVariable.getValue()
 
 
-
+/*
                 Connections
                 {
                     target: myVariable
                     onValueChanged: variable_value.text = myVariable.getValue()
                 }
+*/
+                Connections
+                {
+                    target: moduleList[0].getVariableAt(4)
+                    onValueChanged: variable_value.text = moduleList[0].getVariableAt(4).getValue()
+                }
+
             }
             Text {
                 width: parent.width

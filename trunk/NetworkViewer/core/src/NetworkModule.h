@@ -75,6 +75,8 @@ public:
 
         Q_INVOKABLE QVariant getVariableAt(int index);
 
+        Q_INVOKABLE QVariant variables();
+
         /**
             Get current configurationChanged();
             \return the ModuleConfiguration*

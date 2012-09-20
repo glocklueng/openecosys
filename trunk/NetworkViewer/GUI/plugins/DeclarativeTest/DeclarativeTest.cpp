@@ -22,7 +22,7 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
-Q_DECLARE_METATYPE(QList<NetworkModule*>)
+//Q_DECLARE_METATYPE(QList<NetworkModule*>)
 
 //This will insert the plugin in the dictionary...
 static int declarative_test_plugin_init = BasePlugin::registerPlugin("DeclarativeTest",new BasePlugin::PluginFactory<DeclarativeTest>());
