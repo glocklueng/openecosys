@@ -8,27 +8,38 @@ Rectangle {
     width: 200
     height: 200
     radius: 10
-    color: "orange"
+    color: "light gray"
+    opacity: 0.8
 
     property variant variable: null
 
+    BorderImage{
+        anchors.fill: item_test
+        source: "qrc:/DeclarativeTest/images/brushed_aluminum.png"
+        horizontalTileMode: BorderImage.Repeat
+        verticalTileMode: BorderImage.Repeat
+    }
 
-    Rectangle {
+    Item {
         id: window_rect
-        color: "pink"
         width: item_test.width
         height: 30
         anchors.top: item_test.top
-        radius: item_test.radius
+
+        BorderImage{
+            anchors.fill: window_rect
+            source: "qrc:/DeclarativeTest/images/clear_aluminum.png"
+            horizontalTileMode: BorderImage.Stretch
+            verticalTileMode: BorderImage.Stretch
+        }
 
         Text
         {
             id: text_label
-            color: "red"
+            color: "black"
             width: parent.width
             height: parent.height
-            anchors.top: parent.top
-            anchors.left: parent.left
+            anchors.horizontalCenter: window_rect.horizontalCenter
             text: variable.getName()
         }
 
@@ -47,9 +58,10 @@ Rectangle {
 
     TextInput {
         id: textInput
-        anchors.top: window_rect.bottom
+        anchors.centerIn: item_test
         width: parent.width
         height: 50
+        font.pixelSize: 18
         text: variable.getValue()
         Connections
         {
@@ -58,32 +70,26 @@ Rectangle {
         }
     }
 
-    Rectangle
+    Item
     {
         id: close_rect
-        anchors.left: item_test.left
-        anchors.bottom: item_test.bottom
-        width: 30
-        height: 30
-        color: "yellow"
-        radius: item_test.radius
+        anchors.right: window_rect.right
+        width: window_rect.height
+        height: window_rect.height
 
-        Text {
-            id: close_label
-            color: "black"
-            anchors.fill: parent
-            text: "X"
+        BorderImage
+        {
+            anchors.fill: close_rect
+            source: "qrc:/DeclarativeTest/images/close.png"
         }
 
         MouseArea
         {
             id: close_mouse_area
-            anchors.fill: close_label
+            anchors.fill: close_rect
 
             onPressed:
             {
-                print("clicked")
-                close_label.color = "blue"
 
             }
             onReleased:
@@ -96,15 +102,23 @@ Rectangle {
     }
 
 
-    Rectangle
+    Item
     {
         id: bottom_corner
         width: 30
         height: 30
-        color: "yellow"
         anchors.right: item_test.right
         anchors.bottom: item_test.bottom
-        radius: item_test.radius
+
+
+        BorderImage
+        {
+            opacity: 1
+            id:resize_image
+            anchors.fill: bottom_corner
+            source: "qrc:/DeclarativeTest/images/resize.png"
+            visible: false
+        }
 
         MouseArea
         {
@@ -118,7 +132,7 @@ Rectangle {
 
             onMousePositionChanged:
             {
-
+                resize_image.visible = true
                 //print("Mouse Position changed",mouseX,mouseY)
 
                 if (mouse.buttons == Qt.LeftButton)

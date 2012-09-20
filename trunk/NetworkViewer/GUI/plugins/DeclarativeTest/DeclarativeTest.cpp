@@ -52,6 +52,13 @@ DeclarativeTest::DeclarativeTest(NetworkView *view)
 void DeclarativeTest::init()
 {
     qmlRegisterType<QMLVariable>("NETVLibrary", 1, 0, "QMLVariable");
+
+    createContextProperties();
+
+    m_ui.m_declarativeView->setSource(QUrl("qrc:/DeclarativeTest/qml/test.qml"));
+    m_ui.m_declarativeView->show();
+
+
 }
 
 void DeclarativeTest::terminate()
