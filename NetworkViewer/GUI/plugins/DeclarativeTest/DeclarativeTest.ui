@@ -10,6 +10,12 @@
     <height>585</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>640</width>
+    <height>480</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <pointsize>24</pointsize>
