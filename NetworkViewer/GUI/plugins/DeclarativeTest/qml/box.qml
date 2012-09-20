@@ -1,9 +1,6 @@
 import QtQuick 1.1
 
 
-
-
-
 Rectangle {
     id: item_test
     x: 500
@@ -122,7 +119,7 @@ Rectangle {
             onMousePositionChanged:
             {
 
-                print("Mouse Position changed",mouseX,mouseY)
+                //print("Mouse Position changed",mouseX,mouseY)
 
                 if (mouse.buttons == Qt.LeftButton)
                 {
@@ -148,8 +145,6 @@ Rectangle {
 
                 startX = mouseX
                 startY = mouseY
-
-                text_label.text = "on_pressed"
                 print("onPressed:",mouseX,mouseY, mouse.button)
             }
 
