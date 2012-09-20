@@ -26,6 +26,12 @@ Rectangle
             anchors.fill: window
 
             Text {
+                width: parent.width
+                id: number_of_modules_label
+                text: typeof(moduleList)
+            }
+
+            Text {
                 id: variable_value
                 width: parent.width
                 color: "black"
