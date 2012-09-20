@@ -28,7 +28,7 @@ Rectangle
             Text {
                 width: parent.width
                 id: number_of_modules_label
-                text: typeof(moduleList)
+                text: moduleList[0].getVariableAt(0).getName()
             }
 
             Text {
@@ -36,6 +36,8 @@ Rectangle
                 width: parent.width
                 color: "black"
                 text: myVariable.getValue()
+
+
 
                 Connections
                 {

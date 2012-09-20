@@ -38,13 +38,13 @@ public:
           \param config The default configuration (can be empty)
           \parent The parent object, default = NULL
         */
-	NetworkModule(const ModuleConfiguration &config, QObject *parent = NULL);
+        NetworkModule(const ModuleConfiguration &config, QObject *parent = NULL);
 
 
         /**
             Destructor
         */
-	virtual ~NetworkModule();
+        virtual ~NetworkModule();
 
         /**
             Utility function to get a variable from the ModuleConfiguration with its name
@@ -56,7 +56,7 @@ public:
         /**
             \return int the count of variables
         */
-        int getNumVariable();
+        Q_INVOKABLE int getNumVariable();
 
 
         /**
@@ -64,7 +64,7 @@ public:
             \param name the name of the variable
             \return ModuleVariable *the newly created module variable
         */
-        bool createScriptVariable(const QString &_name, const QString &_description = "");
+        Q_INVOKABLE bool createScriptVariable(const QString &_name, const QString &_description = "");
 
         /**
             Utility function to get the variables inside the ModuleConfiguration data structure
@@ -73,16 +73,18 @@ public:
         */
         ModuleVariable* getVariable(int index);
 
+        Q_INVOKABLE QVariant getVariableAt(int index);
+
         /**
             Get current configurationChanged();
             \return the ModuleConfiguration*
         */
-	ModuleConfiguration* getConfiguration();
+        ModuleConfiguration* getConfiguration();
 
         /**
             \return bool The active flag
         */
-        bool active();
+        Q_INVOKABLE bool active();
 
         /**
             Change the active flag.
@@ -99,7 +101,7 @@ public:
         /**
             Get the last time the module have been seen on the bus
         */
-        QTime getUpdateTime() const;
+        Q_INVOKABLE QTime getUpdateTime() const;
 
 signals:
 
@@ -107,7 +109,7 @@ signals:
             We emit this signal when a variable has been written by the user
             \param variable The modified variable
         */
-	void variableWrite(ModuleVariable *variable);
+        void variableWrite(ModuleVariable *variable);
 
         /**
             We emit this signal when the configuration changed
@@ -117,7 +119,7 @@ signals:
         /**
             We emit this signal when we are destroyed
          */
-	void moduleDestroyed();
+        void moduleDestroyed();
 
 protected slots:
 
@@ -125,12 +127,12 @@ protected slots:
             Called when a variable has been updated by the user. This will cause the variableWrite signal to be emitted.
             \param variable The variable taht has been updated
         */
-	void variableUpdate(ModuleVariable *variable);
+        void variableUpdate(ModuleVariable *variable);
 
 protected:
 	
         ///Module configuration \ref ModuleConfiguration
-	ModuleConfiguration m_configuration;
+        ModuleConfiguration m_configuration;
 
         ///TRUE if the module is active on the bus
         bool m_active;

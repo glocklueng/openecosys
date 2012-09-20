@@ -40,6 +40,8 @@ DeclarativeTest::DeclarativeTest(NetworkView *view)
     //Will automatically size root object to view
     m_ui.m_declarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
+
+
     //Connect load button
     connect(m_ui.m_loadButton,SIGNAL(clicked()),this,SLOT(loadButtonClicked()));
 
@@ -96,13 +98,18 @@ void DeclarativeTest::createContextProperties()
 
     Q_ASSERT(m_ui.m_declarativeView);
 
-    QList<NetworkModule*> allModules = m_view->getModules();
+    QList<QObject*> allModules;
+
+    for (int i = 0; i < m_view->getModules().size(); i++)
+    {
+        allModules.append(m_view->getModules()[i]);
+    }
 
     m_ui.m_declarativeView->rootContext()->setContextProperty("moduleList",QVariant::fromValue(allModules));
 
-    if (allModules.size() > 0)
+    if (m_view->getModules().size() > 0)
     {
-        ModuleVariable *var = allModules.first()->getVariable(0);
+        ModuleVariable *var = m_view->getModules().first()->getVariable(0);
         if (var)
         {
 
