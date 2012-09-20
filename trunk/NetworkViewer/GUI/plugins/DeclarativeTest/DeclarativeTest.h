@@ -23,7 +23,38 @@
 #include "NetworkModule.h"
 #include <QTimer>
 #include "ui_DeclarativeTest.h"
+#include <QtDeclarative>
 
+class QMLVariable : public QDeclarativeItem
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+
+public:
+    QVariant value() const
+    {
+        qDebug("READ value");
+        return m_value;
+    }
+
+public slots:
+    void setValue(QVariant var)
+    {
+        qDebug("WRITE value");
+        m_value = var;
+        emit valueChanged();
+    }
+
+signals:
+
+    void valueChanged();
+
+protected:
+
+    QVariant m_value;
+
+};
 
 class DeclarativeTest : public BasePlugin
 {

@@ -20,6 +20,7 @@
 #include "NetworkView.h"
 #include <QFileDialog>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 
 //This will insert the plugin in the dictionary...
 static int declarative_test_plugin_init = BasePlugin::registerPlugin("DeclarativeTest",new BasePlugin::PluginFactory<DeclarativeTest>());
@@ -43,7 +44,7 @@ DeclarativeTest::DeclarativeTest(NetworkView *view)
 
 void DeclarativeTest::init()
 {
-    //createContextProperties();
+    qmlRegisterType<QMLVariable>("NETVLibrary", 1, 0, "QMLVariable");
 }
 
 void DeclarativeTest::terminate()
@@ -61,6 +62,14 @@ void DeclarativeTest::loadButtonClicked()
                                                     "QML (*.qml)");
     if (fileName.size() > 0)
     {
+
+        m_ui.m_declarativeView->rootContext()->engine()->clearComponentCache();
+
+        //QMLVariable var;
+        //m_ui.m_declarativeView->rootContext()->setContextProperty("sharedVariable",&var);
+
+
+
         createContextProperties();
 
         qDebug() << "Loading script :" << fileName;
@@ -90,7 +99,7 @@ void DeclarativeTest::createContextProperties()
         if (var)
         {
 
-            m_ui.m_declarativeView->rootContext()->setProperty("currentDateTime",QDateTime::currentDateTime());
+            m_ui.m_declarativeView->rootContext()->setContextProperty("myVariable",var);
 
             qDebug("createContextProperties() - Setting Property context : %p ",m_ui.m_declarativeView->rootContext());
         }
