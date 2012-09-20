@@ -22,6 +22,8 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
+Q_DECLARE_METATYPE(QList<NetworkModule*>)
+
 //This will insert the plugin in the dictionary...
 static int declarative_test_plugin_init = BasePlugin::registerPlugin("DeclarativeTest",new BasePlugin::PluginFactory<DeclarativeTest>());
 
@@ -34,6 +36,9 @@ DeclarativeTest::DeclarativeTest(NetworkView *view)
 
     //Setup UI
     m_ui.setupUi(this);
+
+    //Will automatically size root object to view
+    m_ui.m_declarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     //Connect load button
     connect(m_ui.m_loadButton,SIGNAL(clicked()),this,SLOT(loadButtonClicked()));
@@ -92,6 +97,8 @@ void DeclarativeTest::createContextProperties()
     Q_ASSERT(m_ui.m_declarativeView);
 
     QList<NetworkModule*> allModules = m_view->getModules();
+
+    m_ui.m_declarativeView->rootContext()->setContextProperty("moduleList",QVariant::fromValue(allModules));
 
     if (allModules.size() > 0)
     {
