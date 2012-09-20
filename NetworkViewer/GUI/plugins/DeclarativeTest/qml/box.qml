@@ -32,7 +32,14 @@ Rectangle {
             height: parent.height
             anchors.top: parent.top
             anchors.left: parent.left
-            text: "Window Label"
+            text: "Widget Label"
+
+
+        }
+
+        Image
+        {
+            source: "http://introlab.3it.usherbrooke.ca/IntRoLab.png"
         }
 
         MouseArea
@@ -50,7 +57,47 @@ Rectangle {
 
         }
 
+
+
     }
+
+    Rectangle
+    {
+        id: close_rect
+        anchors.left: item_test.left
+        anchors.bottom: item_test.bottom
+        width: 30
+        height: 30
+        color: "yellow"
+        radius: item_test.radius
+
+        Text {
+            id: close_label
+            color: "black"
+            anchors.fill: parent
+            text: "X"
+        }
+
+        MouseArea
+        {
+            id: close_mouse_area
+            anchors.fill: close_label
+
+            onPressed:
+            {
+                print("clicked")
+                close_label.color = "blue"
+
+            }
+            onReleased:
+            {
+                item_test.destroy();
+            }
+        }
+
+
+    }
+
 
     Rectangle
     {
