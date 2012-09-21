@@ -11,23 +11,7 @@ Rectangle
     height: 768
     color: "white"
 
-    ListModel {
 
-        id: testModel
-
-        ListElement {
-            name: "Box1"
-            file: "box.qml"
-        }
-        ListElement {
-            name: "Box2"
-            file: "box.qml"
-        }
-        ListElement {
-            name: "Box3"
-            file: "box.qml"
-        }
-    }
 
     BorderImage
     {
@@ -72,10 +56,13 @@ Rectangle
     }
 */
 
+
+
+
     GridView {
         id: myListView
 
-        width: 180; height: parent.height
+        width: 180; height: 200
         anchors.right: parent.right
         anchors.top: parent.top
 
@@ -132,4 +119,58 @@ Rectangle
             }
         }
     }//GridView
+
+
+    GridView
+    {
+        width: 180; height: myListView.height
+        anchors.right: myListView.left
+        anchors.top: parent.top
+        model: moduleList
+
+        delegate: Rectangle {
+
+            color: "yellow"
+            id: testRect           
+            width: parent.width
+            height: 30
+
+            BorderImage
+            {
+                anchors.fill: testRect
+                source: "qrc:/DeclarativeTest/images/clear_aluminum.png"
+                horizontalTileMode: BorderImage.Stretch
+                verticalTileMode: BorderImage.Stretch
+            }
+
+            Column {
+                id: myColumn
+
+                Text {
+                    height: 10
+                    width: testRect.width
+                    text: "Module : " + model.modelData.getDeviceID()
+                }
+                Text {
+                    height: 10
+                    width: testRect.width
+                    text: model.modelData.getConfigName()
+                }
+            }
+
+
+            MouseArea {
+                anchors.fill: testRect
+                onPressed:
+                {
+                    print("changing model")
+                    myListView.model = model.modelData.variables()
+
+                }
+            }
+
+        }
+
+    }
+
 }//AppWindow
