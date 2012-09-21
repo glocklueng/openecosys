@@ -61,6 +61,16 @@ ModuleVariable* NetworkModule::getVariable(int index)
     return NULL;
 }
 
+int NetworkModule::getDeviceID()
+{
+    return m_configuration.getDeviceID();
+}
+
+QString NetworkModule::getConfigName()
+{
+    return m_configuration.getConfigName();
+}
+
 QVariant NetworkModule::variables()
 {
     QList<QObject*> varList;

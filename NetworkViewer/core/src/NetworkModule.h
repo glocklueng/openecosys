@@ -88,6 +88,11 @@ public:
         */
         Q_INVOKABLE bool active();
 
+
+        Q_INVOKABLE int getDeviceID();
+
+        Q_INVOKABLE QString getConfigName();
+
         /**
             Change the active flag.
             \param active TRUE when the module is activated, FALSE otherwise
