@@ -9,13 +9,17 @@ SET(QT_USE_QTCORE TRUE)
 include(${QT_USE_FILE})
 
 SET(QextSerialPort_SRCS
+    qextserialenumerator.cpp
     qextserialport.cpp
 )
 
 SET(QextSerialPort_HEADERS
-    qextserialport.h
     qextserialenumerator.h
+    qextserialenumerator_p.h
+    qextserialport.h
+    qextserialport_p.h
     qextserialport_global.h
+    qextwineventnotifier_p.h
 )
 
 SET(QextSerialPort_UIS
@@ -30,25 +34,24 @@ SET(QextSerialPort_External_Libraries
 
 )
 
-ADD_DEFINITIONS(-DQEXTSERIALPORT_LIB)
+ADD_DEFINITIONS(-DQEXTSERIALPORT_BUILD_SHARED)
 
 
 #POSIX/UNIX SPECIFIC FILES & DEFINES
 IF (UNIX AND NOT APPLE)
-    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} posix_qextserialport.cpp qextserialenumerator_unix.cpp)
+    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialenumerator_unix.cpp qextserialenumerator_linux.cpp )
+    SET(QextSerialPort_External_Libraries -ludev)
 ENDIF(UNIX AND NOT APPLE)
 
 IF (APPLE)
-    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} posix_qextserialport.cpp qextserialenumerator_osx.cpp)
+    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialport_unix.cpp qextserialenumerator_osx.cpp)
     SET(QextSerialPort_External_Libraries "-framework CoreFoundation -framework IOKit")
 ENDIF(APPLE)
 
 #WINDOWS SPECIFIC FILES	& DEFINES
 IF (WIN32)
-    ADD_DEFINITIONS(-DUNICODE)
-    ADD_DEFINITIONS(-D_TTY_WIN_)
-    ADD_DEFINITIONS(-DWINVER=0x0501)
-    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} win_qextserialport.cpp qextserialenumerator_win.cpp)
+    ADD_DEFINITIONS(-DQESP_NO_QT4_PRIVATE)
+    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialport_win.cpp qextserialenumerator_win.cpp qextwineventnotifier_p.cpp)
     SET(QextSerialPort_External_Libraries -lsetupapi -ladvapi32 -luser32)
 ENDIF(WIN32)
 
@@ -64,7 +67,7 @@ QT4_WRAP_UI(QextSerialPort_UI_SRCS ${QextSerialPort_UIS})
 #This will generate moc_* for Qt
 QT4_WRAP_CPP(QextSerialPort_MOC_SRCS ${QextSerialPort_HEADERS})
 
-INCLUDE_DIRECTORIES(${QT_INCLUDES} )
+INCLUDE_DIRECTORIES(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(QextSerialPort SHARED ${QextSerialPort_SRCS} ${QextSerialPort_HEADERS} ${QextSerialPort_QRC_SRCS} ${QextSerialPort_MOC_SRCS} ${QextSerialPort_UI_SRCS}  )
 target_link_libraries(QextSerialPort ${QT_LIBRARIES} ${QextSerialPort_External_Libraries})
