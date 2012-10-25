@@ -19,7 +19,7 @@ SET(QextSerialPort_HEADERS
     qextserialport.h
     qextserialport_p.h
     qextserialport_global.h
-    qextwineventnotifier_p.h
+#   qextwineventnotifier_p.h
 )
 
 SET(QextSerialPort_UIS
