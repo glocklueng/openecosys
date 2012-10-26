@@ -25,7 +25,7 @@
 #include <QTextStream>
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include "SerialEmulatorConfigure.h"
+#include "SerialPortSelectionDialog.h"
 #include <QDateTime>
 
 
@@ -38,7 +38,7 @@ static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("Seria
 template<>
 QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
 {
-    SerialEmulatorConfigure myDialog;
+    SerialPortSelectionDialog myDialog;
     if (myDialog.exec())
     {
         //Dialog Accepted

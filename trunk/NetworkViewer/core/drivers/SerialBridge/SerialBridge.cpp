@@ -20,8 +20,30 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QDateTime>
+#include "SerialPortSelectionDialog.h"
 
 static bool SERIAL_BRIDGE_DEVICE_INIT = NETVDevice::registerDeviceFactory("SerialBridge",new NETVDevice::DeviceFactory<SerialBridge>("COM4;1000000","SerialPort;speed. To be used with PIC32 Module."));
+
+
+//Template specialization for configure
+template<>
+QString NETVDevice::DeviceFactory<SerialBridge>::configure()
+{
+    SerialPortSelectionDialog myDialog;
+    if (myDialog.exec())
+    {
+        //Dialog Accepted
+        return QString(myDialog.getSerialPortString()+ ";"
+                       + myDialog.getBaudRateString() + ";"
+                       + QString::number(myDialog.getDebugStatus()) + ";"
+                       + QString::number(myDialog.getDelay()));
+    }
+    else
+    {
+        //Dialog Rejected
+        return QString("");
+    }
+}
 
 
 SerialBridge::SerialBridge(const char* args)
