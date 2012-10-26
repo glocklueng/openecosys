@@ -5,17 +5,18 @@
 SET(DRIVER_INCLUDES
         ${PROJECT_SOURCE_DIR}/core/src
         ${PROJECT_SOURCE_DIR}/core/QextSerialPort/src
-        ${PROJECT_SOURCE_DIR}/drivers
+        ${PROJECT_SOURCE_DIR}/core/drivers/Common
         ${QT_INCLUDES}
 )
 
 SET(DRIVER_LIBRARIES
-        networkViewerCore
+        DriverCommon
         ${QT_LIBRARIES}
 )
 
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/drivers)
 
+ADD_SUBDIRECTORY(Common)
 ADD_SUBDIRECTORY(SerialBridge)
 ADD_SUBDIRECTORY(EthernetBridge)
 ADD_SUBDIRECTORY(SerialEmulator)
@@ -28,7 +29,7 @@ IF (NOT APPLE)
 ENDIF (NOT APPLE)
 
 IF(UNIX AND NOT APPLE)
-	ADD_SUBDIRECTORY(SocketCAN)
+    ADD_SUBDIRECTORY(SocketCAN)
 ENDIF(UNIX AND NOT APPLE)
 
 
