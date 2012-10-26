@@ -26,27 +26,6 @@ PreferencesDialog::PreferencesDialog(NetworkView *parent)
     setupUi(this);
 
 
-    qDebug("Fixme : PreferencesDialog::PreferencesDialog(NetworkView *parent) is broken");
+    qDebug("Fixme : PreferencesDialog::PreferencesDialog(NetworkView *parent) is unused");
 
-    /**
-
-    //Update NetworkScheduler values
-    NetworkScheduler *scheduler = m_view->getNetworkScheduler();
-
-    if (scheduler)
-    {
-        int aliveRequestInterval = scheduler->getAliveRequestInterval();
-        int variableRequestInterval = scheduler->getVariableRequestInterval();
-
-        //Update GUI
-        m_aliveRequestSpinBox->setValue(aliveRequestInterval);
-        m_variableRequestSpinBox->setValue(variableRequestInterval);
-
-        //Connect signals
-        connect(m_aliveRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setAliveRequestInterval(int)));
-        connect(m_variableRequestSpinBox,SIGNAL(valueChanged(int)),scheduler,SLOT(setVariableRequestInterval(int)));
-    }
-
-
-    */
 }
