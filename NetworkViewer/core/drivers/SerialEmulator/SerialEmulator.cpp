@@ -42,7 +42,10 @@ QString NETVDevice::DeviceFactory<SerialEmulator>::configure()
     if (myDialog.exec())
     {
         //Dialog Accepted
-        return QString(myDialog.getSerialPortString()+ ";" + myDialog.getBaudRateString());
+        return QString(myDialog.getSerialPortString()+ ";"
+                       + myDialog.getBaudRateString() + ";"
+                       + QString::number(myDialog.getDebugStatus()) + ";"
+                       + QString::number(myDialog.getDelay()));
     }
     else
     {

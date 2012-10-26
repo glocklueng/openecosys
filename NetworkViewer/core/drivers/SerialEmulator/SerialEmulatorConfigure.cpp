@@ -33,11 +33,12 @@ SerialEmulatorConfigure::SerialEmulatorConfigure(QWidget *parent)
         }
 
         //Add port to combo list
-      m_portComboBox->addItem(ports.at(i).portName);
+        m_portComboBox->addItem(ports.at(i).portName);
     }
 
-
-
+    //Set Combo box @ 9600 baud
+    int index = m_baudComboBox->findText("9600");
+    m_baudComboBox->setCurrentIndex(index);
 }
 
 QString SerialEmulatorConfigure::getSerialPortString()
@@ -85,3 +86,14 @@ void SerialEmulatorConfigure::baudRateIndexChanged ( int index )
 {
     m_currentBaudRateIndex = index;
 }
+
+bool SerialEmulatorConfigure::getDebugStatus()
+{
+    return m_debugCheckbox->isChecked();
+}
+
+int SerialEmulatorConfigure::getDelay()
+{
+    return m_delaySpinBox->value();
+}
+
