@@ -34,9 +34,7 @@ QString NETVDevice::DeviceFactory<SerialBridge>::configure()
     {
         //Dialog Accepted
         return QString(myDialog.getSerialPortString()+ ";"
-                       + myDialog.getBaudRateString() + ";"
-                       + QString::number(myDialog.getDebugStatus()) + ";"
-                       + QString::number(myDialog.getDelay()));
+                       + myDialog.getBaudRateString());
     }
     else
     {
