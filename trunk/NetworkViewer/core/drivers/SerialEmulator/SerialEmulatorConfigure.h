@@ -15,6 +15,8 @@ public:
     SerialEmulatorConfigure(QWidget *parent = NULL);
     QString getSerialPortString();
     QString getBaudRateString();
+    bool getDebugStatus();
+    int getDelay();
 
 protected slots:
 
