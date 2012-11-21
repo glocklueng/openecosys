@@ -24,6 +24,7 @@
 #include <QTimer>
 #include "ui_ConsolePlugin.h"
 #include "NETVInterfaceHandler.h"
+#include "NETVInterfaceManager.h"
 
 class ConsolePlugin : public BasePlugin, public NETVMessageObserverIF
 {
@@ -50,6 +51,8 @@ protected slots:
 
     void clearButtonClicked();
     void saveButtonClicked();
+    void interfaceAdded(NETVInterfaceManager *manager);
+    void interfaceRemoved(NETVInterfaceManager *manager);
 
 protected:
 
