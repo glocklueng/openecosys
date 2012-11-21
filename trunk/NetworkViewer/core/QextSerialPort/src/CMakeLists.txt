@@ -49,11 +49,8 @@ ENDIF(APPLE)
 
 #WINDOWS SPECIFIC FILES	& DEFINES
 IF (WIN32)
-
     #Add header for Windows
-    SET(QextSerialPort_HEADERS ${QextSerialPort_HEADERS}
-        qextwineventnotifier_p.h
-    )
+    SET(QextSerialPort_HEADERS ${QextSerialPort_HEADERS} qextwineventnotifier_p.h)
 
     ADD_DEFINITIONS(-DQESP_NO_QT4_PRIVATE)
     SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialport_win.cpp qextserialenumerator_win.cpp qextwineventnotifier_p.cpp)
