@@ -16,8 +16,8 @@
 
  */
 
-#ifndef ConsolePlugin_H_
-#define ConsolePlugin_H_
+#ifndef _CONSOLE_PLUGIN_H_
+#define _CONSOLE_PLUGIN_H_
 
 #include "BasePlugin.h"
 #include "NetworkModule.h"
@@ -46,4 +46,4 @@ protected:
 	QList<NetworkModule*> m_modules;
 };
 
-#endif /* ConsolePlugin_H_ */
+#endif /* _CONSOLE_PLUGIN_H_ */

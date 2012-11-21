@@ -1,6 +1,6 @@
 /**
      Copyright (C) 2009-2012 IntRoLab
-     http://introlab.gel.usherbrooke.ca
+     http://introlab.3it.usherbrooke.ca
      Dominic Letourneau, ing. M.Sc.A.
      Dominic.Letourneau@USherbrooke.ca
 
@@ -21,7 +21,7 @@
 
 
 //This will insert the plugin in the dictionary...
-static int sample_plugin_init = BasePlugin::registerPlugin("ConsolePlugin",new BasePlugin::PluginFactory<ConsolePlugin>());
+static int console_plugin_init = BasePlugin::registerPlugin("ConsolePlugin",new BasePlugin::PluginFactory<ConsolePlugin>());
 
 
 
