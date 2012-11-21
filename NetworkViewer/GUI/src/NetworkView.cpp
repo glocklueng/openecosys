@@ -594,6 +594,10 @@ bool NetworkView::addNETVInterfaceManager(NETVInterfaceManager *manager)
         connect(manager,SIGNAL(moduleRemoved(NetworkModule*)),this,SLOT(removeModule(NetworkModule*)));
         connect(manager,SIGNAL(moduleActive(NetworkModule*,bool)),this,SLOT(moduleActive(NetworkModule*,bool)));
 
+
+        emit interfaceAdded(manager);
+
+
         return true;
     }
 
@@ -607,6 +611,8 @@ bool NetworkView::removeNETVInterfaceManager(NETVInterfaceManager *manager)
     if (m_interfaceManagerList.contains(manager))
     {
         m_interfaceManagerList.removeAll(manager);
+
+        emit interfaceRemoved(manager);
 
         delete manager;
 

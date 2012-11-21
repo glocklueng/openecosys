@@ -246,6 +246,8 @@ signals:
 
         void moduleRemoved(NetworkModule *module);
         void moduleAdded(NetworkModule *module);
+        void interfaceRemoved(NETVInterfaceManager *manager);
+        void interfaceAdded(NETVInterfaceManager *manager);
 
 protected slots:
 

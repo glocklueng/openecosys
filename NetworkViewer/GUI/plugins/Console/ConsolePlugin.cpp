@@ -18,7 +18,7 @@
 
 #include "ConsolePlugin.h"
 #include "NetworkView.h"
-#include "NETVInterfaceManager.h"
+
 #include "NETVMessageEvent.h"
 #include <QTextEdit>
 
@@ -44,6 +44,10 @@ ConsolePlugin::ConsolePlugin(NetworkView *view)
             handler->registerObserver(this);
         }
     }
+
+    //Connect add /remove managers
+    connect(m_view,SIGNAL(interfaceAdded(NETVInterfaceManager*)),this,SLOT(interfaceAdded(NETVInterfaceManager*)));
+    connect(m_view,SIGNAL(interfaceRemoved(NETVInterfaceManager*)),this,SLOT(interfaceRemoved(NETVInterfaceManager*)));
 
 	//Setup UI
 	m_ui.setupUi(this);
@@ -182,3 +186,12 @@ void ConsolePlugin::saveButtonClicked()
     qDebug("ConsolePlugin::saveButtonClicked() - Not yet implemted");
 }
 
+void ConsolePlugin::interfaceAdded(NETVInterfaceManager *manager)
+{
+    manager->getInterfaceHandler()->registerObserver(this);
+}
+
+void ConsolePlugin::interfaceRemoved(NETVInterfaceManager *manager)
+{
+    manager->getInterfaceHandler()->unregisterObserver(this);
+}
