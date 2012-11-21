@@ -439,3 +439,4 @@ void netv_write_boot_config(BootConfig *config) {
 BootConfig* netv_get_boot_config() {
     return &g_BootConfig;
 }
+
