@@ -118,6 +118,22 @@ NETVDevice::State Loopback::sendMessage(NETV_MESSAGE &message)
 
                 //Push back answer
                 m_messageList.push_back(answer);
+
+                //Simulation of a "console" message
+                answer.msg_type = NETV_TYPE_EVENTS;
+                answer.msg_cmd = NETV_EVENTS_CMD_CONSOLE;
+                answer.msg_dest = m_moduleList[i].module_id;
+                answer.msg_data_length = 7;
+                answer.msg_data[0] = 'H';
+                answer.msg_data[1] = 'E';
+                answer.msg_data[2] = 'L';
+                answer.msg_data[3] = 'L';
+                answer.msg_data[4] = '0';
+                answer.msg_data[5] = '\n';;
+                answer.msg_data[6] = 0;
+                answer.msg_data[7] = 0;
+                m_messageList.push_back(answer);
+
             }
 
             m_mutex.unlock();

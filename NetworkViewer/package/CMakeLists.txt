@@ -11,6 +11,10 @@ SET(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION
 
 IF (WIN32)
 
+
+        #Installing Qt libraries...
+
+
 	SET (QT_DLL
 			"${QT_BINARY_DIR}/Qt3Support4.dll"
 			"${QT_BINARY_DIR}/QtCore4.dll"
