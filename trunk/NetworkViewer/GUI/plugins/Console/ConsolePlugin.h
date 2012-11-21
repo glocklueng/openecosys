@@ -23,9 +23,9 @@
 #include "NetworkModule.h"
 #include <QTimer>
 #include "ui_ConsolePlugin.h"
+#include "NETVInterfaceHandler.h"
 
-
-class ConsolePlugin : public BasePlugin
+class ConsolePlugin : public BasePlugin, public NETVMessageObserverIF
 {
 	Q_OBJECT;
 
@@ -34,16 +34,32 @@ public:
 
     ConsolePlugin(NetworkView *view);
 
+    ~ConsolePlugin();
+
+    /**
+        Message notification, will be called from recvThread of \ref NETVInterfaceHandler
+        \param msg the NETV message
+    */
+    virtual void notifyNETVMessage(const NETV_MESSAGE &msg);
+
 	virtual void init();
 
 	virtual void terminate();
 
+protected slots:
 
+    void clearButtonClicked();
+    void saveButtonClicked();
 
 protected:
 
     Ui::ConsolePlugin m_ui;
-	QList<NetworkModule*> m_modules;
+
+
+    bool event ( QEvent * e );
+    void processMessage(const NETV_MESSAGE &msg);
+    int createTab(int id);
+
 };
 
 #endif /* _CONSOLE_PLUGIN_H_ */
