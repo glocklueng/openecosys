@@ -29,8 +29,8 @@ IF (WIN32)
 			"${QT_BINARY_DIR}/QtXmlPatterns4.dll"
 			"${QT_BINARY_DIR}/QtDeclarative4.dll"
 			"${QT_BINARY_DIR}/phonon4.dll"
-			"${QT_BINARY_DIR}/mingwm10.dll"
-			"${QT_BINARY_DIR}/libgcc_s_dw2-1.dll"
+                        "C:/QtSDK/mingw/bin/mingwm10.dll"
+                        "C:/QtSDK/mingw/bin/libgcc_s_dw2-1.dll"
 	    )
 
         #Install DLLS
