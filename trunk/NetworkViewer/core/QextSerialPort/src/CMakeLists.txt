@@ -19,7 +19,6 @@ SET(QextSerialPort_HEADERS
     qextserialport.h
     qextserialport_p.h
     qextserialport_global.h
-#   qextwineventnotifier_p.h
 )
 
 SET(QextSerialPort_UIS
@@ -50,6 +49,12 @@ ENDIF(APPLE)
 
 #WINDOWS SPECIFIC FILES	& DEFINES
 IF (WIN32)
+
+    #Add header for Windows
+    SET(QextSerialPort_HEADERS ${QextSerialPort_HEADERS}
+        qextwineventnotifier_p.h
+    )
+
     ADD_DEFINITIONS(-DQESP_NO_QT4_PRIVATE)
     SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialport_win.cpp qextserialenumerator_win.cpp qextwineventnotifier_p.cpp)
     SET(QextSerialPort_External_Libraries -lsetupapi -ladvapi32 -luser32)
