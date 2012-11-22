@@ -21,6 +21,8 @@
 
 #include "NETVMessageEvent.h"
 #include <QTextEdit>
+#include <QFileDialog>
+#include <QTextStream>
 
 //This will insert the plugin in the dictionary...
 static int console_plugin_init = BasePlugin::registerPlugin("ConsolePlugin",new BasePlugin::PluginFactory<ConsolePlugin>());
@@ -184,6 +186,39 @@ void ConsolePlugin::clearButtonClicked()
 void ConsolePlugin::saveButtonClicked()
 {
     qDebug("ConsolePlugin::saveButtonClicked() - Not yet implemted");
+    int index = m_ui.m_tabWidget->currentIndex();
+
+    QString text;
+
+    if (index == 0)
+    {
+        text = m_ui.m_globalTextEdit->toPlainText();
+    }
+    else
+    {
+        QTextEdit *widget = dynamic_cast<QTextEdit*>(m_ui.m_tabWidget->widget(index));
+
+        if (widget)
+        {
+            text = widget->toPlainText();
+        }
+    }
+
+    if (text.size() > 0)
+    {
+        QString fileName = QFileDialog::getSaveFileName(this,
+            tr("Save Text File"), ".", tr("Text Files (*.txt)"));
+
+        if (fileName.size())
+        {
+            QFile file(fileName);
+            file.open(QFile::WriteOnly);
+            QTextStream stream(&file);
+            stream << text;
+            file.close();
+        }
+    }
+
 }
 
 void ConsolePlugin::interfaceAdded(NETVInterfaceManager *manager)
