@@ -133,4 +133,7 @@ BootConfig* netv_get_boot_config(void);
 void netv_read_boot_config(BootConfig *config);
 void netv_write_boot_config(BootConfig *config);
 
+//Console setup
+void netv_init_console();
+
 #endif
