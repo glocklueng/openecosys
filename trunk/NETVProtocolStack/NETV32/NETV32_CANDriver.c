@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define CAN_TIMER_PRESCALER (SYS_XTAL_FREQ / 1000)
 
 
-#define CAN_FIFO_SIZE 32
+#define CAN_FIFO_SIZE 128
 #define CAN_NB_CHANNELS 2
 
 /* isCAN1MsgReceived is true if CAN1 FIFO1 received
@@ -164,8 +164,8 @@ unsigned char netv_send_message(NETV_MESSAGE *message) {
         ID |= (((unsigned int) message->msg_type << 18) & 0x03FC0000);
 
         //boot
-        ID |= ((unsigned int) message->msg_eeprom_ram << 17);
-        ID |= ((unsigned int) message->msg_read_write << 16);
+        ID |= (((unsigned int) message->msg_eeprom_ram << 17) & 0x00020000);
+        ID |= (((unsigned int) message->msg_read_write << 16) & 0x00010000);
         
         //cmd
         ID |= (((unsigned int) message->msg_cmd << 8) & 0x0000FF00);
