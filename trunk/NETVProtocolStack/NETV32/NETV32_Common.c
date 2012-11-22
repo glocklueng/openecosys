@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "NETV32_Memory.h"
 
 #include <string.h>
-
+#include <stdio.h>
 
 // Prototypes
 unsigned char netv_write_data_flow_table_v2(unsigned int offset, unsigned char mem_type, unsigned char *buffer, unsigned int size);
@@ -36,7 +36,12 @@ unsigned char netv_read_data_flow_table_v2(unsigned int offset, unsigned char me
 
 
 //GLOBAL BOOT CONFIGURATION USED FOR THIS DEVICE
-BootConfig g_BootConfig;
+BootConfig g_BootConfig = {0};
+
+//Console setup
+#define CONSOLE_BUFFER_SIZE 1024
+unsigned char g_console_buffer[CONSOLE_BUFFER_SIZE] = {0};
+unsigned char g_console_initialized = 0;
 
 //fit the size of the data flow table to the global variable structure
 #define DATA_FLOW_TABLE_SIZE (sizeof(GlobalNETVVariables))
@@ -209,6 +214,12 @@ void netv_transceiver(unsigned char netv_addr) {
         netv_proc_message(&g_rMessage);
 
     }//while
+
+    //Flush console buffer
+    if(g_console_initialized)
+    {
+        fflush(stdout);
+    }
 }
 
 
@@ -440,3 +451,77 @@ BootConfig* netv_get_boot_config() {
     return &g_BootConfig;
 }
 
+void netv_init_console()
+{
+    //Init buffer size
+    setvbuf(stdout, g_console_buffer,_IOFBF, CONSOLE_BUFFER_SIZE);
+    //Clear memory
+    memset(g_console_buffer,0,CONSOLE_BUFFER_SIZE);
+    //Console initialized flag
+    g_console_initialized = 1;
+}
+
+void _mon_putc(char c)
+{
+    if (g_console_initialized)
+    {
+        BootConfig *bootConfig = netv_get_boot_config();
+        NETV_MESSAGE msg = {0};
+        msg.msg_data_length = 1;
+        msg.msg_data[0] = c;
+        msg.msg_remote = 0;
+        msg.msg_type = NETV_TYPE_EVENTS;
+        msg.msg_cmd = NETV_EVENTS_CMD_CONSOLE;
+        msg.msg_dest = bootConfig->module_id;
+        while(netv_send_message(&msg));
+    }
+}
+
+
+void _mon_write(const char *s, unsigned int count)
+{
+    int i =0;
+    int j = 0;
+    int bytes_left = 0;
+    BootConfig *bootConfig = netv_get_boot_config();
+
+    if (g_console_initialized)
+    {
+
+        NETV_MESSAGE msg = {0};
+        msg.msg_remote = 0;
+        msg.msg_type = NETV_TYPE_EVENTS;
+        msg.msg_cmd = NETV_EVENTS_CMD_CONSOLE;
+        msg.msg_dest = bootConfig->module_id;
+
+        //For all data
+        for (i = 0; i < count; i+= 8)
+        {
+            //Maximum 8 bytes at a time
+            bytes_left = count - i;
+            if (bytes_left > 8) {
+                bytes_left = 8;
+            }
+
+            //Copy data
+            for (j = 0; j < bytes_left; j++)
+            {
+                msg.msg_data[j] = s[i + j];
+            }
+
+            //Set size
+            msg.msg_data_length = bytes_left;
+
+            //Send to CAN bus
+            while(netv_send_message(&msg));
+        }
+    }
+}
+
+void _mon_puts(const char* s)
+{
+    if (g_console_initialized)
+    {
+        _mon_write(s,strlen(s));
+    }
+}
