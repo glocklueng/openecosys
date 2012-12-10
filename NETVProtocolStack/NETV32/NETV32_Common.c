@@ -126,6 +126,12 @@ void netv_transceiver(unsigned char netv_addr) {
 
 
     while (netv_recv_message(&g_rMessage)) {
+
+        // processe the received message
+        // Callback before processing the message
+        netv_proc_message(&g_rMessage);
+
+
         if (g_rMessage.msg_dest == netv_addr || g_rMessage.msg_dest == 0xFF) {
 
             //Analyse for boot mode and I'm alive signal
@@ -210,8 +216,6 @@ void netv_transceiver(unsigned char netv_addr) {
            
         } //if dest
 
-        // processe the received message
-        netv_proc_message(&g_rMessage);
 
     }//while
 
