@@ -1,0 +1,74 @@
+<!DOCTYPE INTROLAB-NETWORKVIEWER>
+<ModuleConfiguration moduleState="5" deviceID="1" projectID="102" configName="PAN-TILT Dynamixel" codeVersion="1" processorID="0" tableVersion="2">
+     <!-- DYNAMIXEL EEPROM VARIABLES -->
+	 <ModuleVariable offset="0" description="(EEPROM, RO) Model Number" type="sint16" memType="0" name="(PAN)Model"/>
+	 <ModuleVariable offset="4" description="(EEPROM, RW) Maximum Torque 0 = Free run, X/1024 * 100%" type="sint16" memType="0" name="(PAN)MaxTorque"/>
+	 <ModuleVariable offset="8" description="(EEPROM, RW) Maximum Angle [0,1023] = [0,300] degrees" type="sint16"  memType="0" name="(PAN)CWAngleLimit"/>
+     <ModuleVariable offset="12" description="(EEPROM, RW) Minimum Angle [0,1023] = [0,300] degrees" type="sint16"  memType="0" name="(PAN)CCWAngleLimit"/>
+     <ModuleVariable offset="16" description="(EEPROM, RO) Firmware version" type="uint8"  memType="0" name="(PAN)FirmwareVersion"/>
+     <ModuleVariable offset="17" description="(EEPROM, RW) Module ID on the RS-485 bus" type="uint8"  memType="0" name="(PAN)ModuleID"/>
+     <ModuleVariable offset="18" description="(EEPROM, RW) BaudRate 34=57600 baud" type="uint8"  memType="0" name="(PAN)BaudRate"/>
+     <ModuleVariable offset="19" description="(EEPROM, RW) Return delay in 2* microseconds" type="uint8"  memType="0" name="(PAN)ReturnDelayTime"/>
+     <ModuleVariable offset="20" description="(EEPROM, RO) Ununsed on this motor" type="uint8"  memType="0" name="(PAN)DriveMode"/>
+     <ModuleVariable offset="21" description="(EEPROM, RW) Maximum temp 1/10 degrees" type="uint8"  memType="0" name="(PAN)MaxTemp"/>
+     <ModuleVariable offset="22" description="(EEPROM, RW) Minimum voltage 1/10 Volt" type="uint8"  memType="0" name="(PAN)MinVoltage"/>
+     <ModuleVariable offset="23" description="(EEPROM, RW) Maximum voltage 1/10 Volt" type="uint8"  memType="0" name="(PAN)MaxVoltage"/>
+     <ModuleVariable offset="24" description="(EEPROM, RW) 0=No Return, 1=Read Data only, 2=Return all" type="uint8"  memType="0" name="(PAN)StatusReturn"/>
+     <ModuleVariable offset="25" description="(EEPROM, RW) B0=Volt, B1=Angle, B2=Heating, B3=Range, B4=Checksum, B5=Overload, B6=Instruction, B7-0" type="uint8"  memType="0" name="(PAN)AlarmLED"/>
+     <ModuleVariable offset="26" description="(EEPROM, RW) Turn off torque when error occur on selected errors like AlarmLED" type="uint8"  memType="0" name="(PAN)AlarmShutdown"/>
+	 <!-- DYNAMIXEL RAM VARIABLES -->
+	 <ModuleVariable offset="27" description="(RAM, RW) 1=Running" type="uint8"  memType="0" name="(PAN)TorqueEnable"/>
+	 <ModuleVariable offset="28" description="(RAM, RW) Goal Position [0,1023] = [0,300] degrees, limited by MaximumAngle, MinimumAngle" type="sint16"  memType="0" name="(PAN)GoalPosition"/>
+	 <ModuleVariable offset="32" description="(RAM, RW) Moving speed to Goal Position[1,1023], 0 = maximum speed" type="sint16"  memType="0" name="(PAN)MovingSpeed"/>
+	 <ModuleVariable offset="36" description="(RAM, RW) Torque limit ratio 1023 / [0,1023] * 100%" type="sint16"  memType="0" name="(PAN)TorqueLimit"/>
+	 <ModuleVariable offset="40" description="(RAM, RO) [0,1023] = [0,300] degrees" type="sint16"  memType="0" name="(PAN)PresentPosition"/>
+	 <ModuleVariable offset="44" description="(RAM, RO) Actual Moving Speed, RPM = 0.111 * PresentSpeed" type="sint16"  memType="0" name="(PAN)PresentSpeed"/>
+	 <ModuleVariable offset="48" description="(RAM, RO) Bit 0-9 = Load ratio, Bit 10 = Direction, Bit 11-15 = 0" type="sint16"  memType="0" name="(PAN)PresentLoad"/>
+	 <ModuleVariable offset="52" description="(RAM, RW) Please see manual, Position vs Torque Curve, Minimum Torque applied [0,1023]." type="sint16"  memType="0" name="(PAN)Punch"/>
+	 <ModuleVariable offset="56" description="(RAM, RW) 1=Led ON" type="uint8"  memType="0" name="(PAN)Led"/>
+	 <ModuleVariable offset="57" description="(RAM, RW) Please see manual, Position vs Torque Curve [0,254]" type="uint8"  memType="0" name="(PAN)CWComplianceMargin"/>
+	 <ModuleVariable offset="58" description="(RAM, RW) Please see manual, Position vs Torque Curve [0,254]" type="uint8"  memType="0" name="(PAN)CCWComplianceMargin"/>
+	 <ModuleVariable offset="59" description="(RAM, RW) Please see manual, Position vs Torque Curve [1,254]" type="uint8"  memType="0" name="(PAN)CWComplianceSlope"/>
+	 <ModuleVariable offset="60" description="(RAM, RW) Please see manual, Position vs Torque Curve [1,254]" type="uint8"  memType="0" name="(PAN)CCWComplianceSlope"/>
+	 <ModuleVariable offset="61" description="(RAM, RO) Current voltage 1/10 Volt" type="uint8"  memType="0" name="(PAN)PresentVoltage"/>
+	 <ModuleVariable offset="62" description="(RAM, RO) Current temperature 1/10 Degrees" type="uint8"  memType="0" name="(PAN)PresentTemperature"/>
+	 <ModuleVariable offset="63" description="(RAM, RO) Set to 1 when a registered command is sent, reset when action command is sent" type="uint8"  memType="0" name="(PAN)RegisterInstruction"/>
+	 <ModuleVariable offset="64" description="(RAM, RO) Set to 1 when moving with Goal Position" type="uint8"  memType="0" name="(PAN)Moving"/>
+	 <ModuleVariable offset="65" description="(RAM, RW) Lock EEPROM state, need reset to unlock" type="uint8"  memType="0" name="(PAN)Lock"/>
+	 <!-- SECOND CONTROLLER -->
+	 <!-- DYNAMIXEL EEPROM VARIABLES -->
+	 <ModuleVariable offset="66" description="(EEPROM, RO) Model Number" type="sint16" memType="0" name="(TILT)Model"/>
+	 <ModuleVariable offset="70" description="(EEPROM, RW) Maximum Torque 0 = Free run, X/1024 * 100%" type="sint16" memType="0" name="(TILT)MaxTorque"/>
+	 <ModuleVariable offset="74" description="(EEPROM, RW) Maximum Angle [0,4095] = [0,250.92] degrees" type="sint16"  memType="0" name="(TILT)CWAngleLimit"/>
+     <ModuleVariable offset="78" description="(EEPROM, RW) Minimum Angle [0,4095] = [0,250.92] degrees" type="sint16"  memType="0" name="(TILT)CCWAngleLimit"/>
+     <ModuleVariable offset="82" description="(EEPROM, RO) Firmware version" type="uint8"  memType="0" name="(TILT)FirmwareVersion"/>
+     <ModuleVariable offset="83" description="(EEPROM, RW) Module ID on the RS-485 bus" type="uint8"  memType="0" name="(TILT)ModuleID"/>
+     <ModuleVariable offset="84" description="(EEPROM, RW) BaudRate 34=57600 baud" type="uint8"  memType="0" name="(TILT)BaudRate"/>
+     <ModuleVariable offset="85" description="(EEPROM, RW) Return delay in 2* microseconds" type="uint8"  memType="0" name="(TILT)ReturnDelayTime"/>
+     <ModuleVariable offset="86" description="(EEPROM, RO) 0 = Slave, Normal" type="uint8"  memType="0" name="(TILT)DriveMode"/>
+     <ModuleVariable offset="87" description="(EEPROM, RW) Maximum temp 1/10 degrees" type="uint8"  memType="0" name="(TILT)MaxTemp"/>
+     <ModuleVariable offset="88" description="(EEPROM, RW) Minimum voltage 1/10 Volt" type="uint8"  memType="0" name="(TILT)MinVoltage"/>
+     <ModuleVariable offset="89" description="(EEPROM, RW) Maximum voltage 1/10 Volt" type="uint8"  memType="0" name="(TILT)MaxVoltage"/>
+     <ModuleVariable offset="90" description="(EEPROM, RW) 0=No Return, 1=Read Data only, 2=Return all" type="uint8"  memType="0" name="(TILT)StatusReturn"/>
+     <ModuleVariable offset="91" description="(EEPROM, RW) B0=Volt, B1=Angle, B2=Heating, B3=Range, B4=Checksum, B5=Overload, B6=Instruction, B7-0" type="uint8"  memType="0" name="(TILT)AlarmLED"/>
+     <ModuleVariable offset="92" description="(EEPROM, RW) Turn off torque when error occur on selected errors like AlarmLED" type="uint8"  memType="0" name="(TILT)AlarmShutdown"/>
+	 <!-- DYNAMIXEL RAM VARIABLES -->
+	 <ModuleVariable offset="93" description="(RAM, RW) 1=Running" type="uint8"  memType="0" name="(TILT)TorqueEnable"/>
+	 <ModuleVariable offset="94" description="(RAM, RW) Goal Position [0,4095] = [0,250.92] degrees, limited by MaximumAngle, MinimumAngle" type="sint16"  memType="0" name="(TILT)GoalPosition"/>
+	 <ModuleVariable offset="98" description="(RAM, RW) Moving speed to Goal Position[1,1023], 0 = maximum speed" type="sint16"  memType="0" name="(TILT)MovingSpeed"/>
+	 <ModuleVariable offset="102" description="(RAM, RW) Torque limit ratio 1023 / [0,1023] * 100%" type="sint16"  memType="0" name="(TILT)TorqueLimit"/>
+	 <ModuleVariable offset="106" description="(RAM, RO) [0,4095] = [0,250.92] degrees" type="sint16"  memType="0" name="(TILT)PresentPosition"/>
+	 <ModuleVariable offset="110" description="(RAM, RO) Actual Moving Speed, RPM = 0.111 * PresentSpeed" type="sint16"  memType="0" name="(TILT)PresentSpeed"/>
+	 <ModuleVariable offset="114" description="(RAM, RO) Bit 0-9 = Load ratio, Bit 10 = Direction, Bit 11-15 = 0" type="sint16"  memType="0" name="P(TILT)resentLoad"/>
+	 <ModuleVariable offset="118" description="(RAM, RW) Please see manual, Position vs Torque Curve, Minimum Torque applied [0,1023]." type="sint16"  memType="0" name="(TILT)Punch"/>
+	 <ModuleVariable offset="122" description="(RAM, RW) 1=Led ON" type="uint8"  memType="0" name="(TILT)Led"/>
+	 <ModuleVariable offset="123" description="(RAM, RW) Please see manual, Position vs Torque Curve [0,254]" type="uint8"  memType="0" name="(TILT)CWComplianceMargin"/>
+	 <ModuleVariable offset="124" description="(RAM, RW) Please see manual, Position vs Torque Curve [0,254]" type="uint8"  memType="0" name="(TILT)CCWComplianceMargin"/>
+	 <ModuleVariable offset="125" description="(RAM, RW) Please see manual, Position vs Torque Curve [1,254]" type="uint8"  memType="0" name="(TILT)CWComplianceSlope"/>
+	 <ModuleVariable offset="126" description="(RAM, RW) Please see manual, Position vs Torque Curve [1,254]" type="uint8"  memType="0" name="(TILT)CCWComplianceSlope"/>
+	 <ModuleVariable offset="127" description="(RAM, RO) Current voltage 1/10 Volt" type="uint8"  memType="0" name="(TILT)PresentVoltage"/>
+	 <ModuleVariable offset="128" description="(RAM, RO) Current temperature 1/10 Degrees" type="uint8"  memType="0" name="(TILT)PresentTemperature"/>
+	 <ModuleVariable offset="129" description="(RAM, RO) Set to 1 when a registered command is sent, reset when action command is sent" type="uint8"  memType="0" name="(TILT)RegisterInstruction"/>
+	 <ModuleVariable offset="130" description="(RAM, RO) Set to 1 when moving with Goal Position" type="uint8"  memType="0" name="(TILT)Moving"/>
+	 <ModuleVariable offset="131" description="(RAM, RW) Lock EEPROM state, need reset to unlock" type="uint8"  memType="0" name="(TILT)Lock"/> 
+</ModuleConfiguration>
