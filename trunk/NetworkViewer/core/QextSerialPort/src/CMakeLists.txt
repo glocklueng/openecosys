@@ -38,7 +38,7 @@ ADD_DEFINITIONS(-DQEXTSERIALPORT_BUILD_SHARED)
 
 #POSIX/UNIX SPECIFIC FILES & DEFINES
 IF (UNIX AND NOT APPLE)
-    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialenumerator_linux.cpp )
+    SET(QextSerialPort_SRCS ${QextSerialPort_SRCS} qextserialport_unix.cpp qextserialenumerator_linux.cpp )
     SET(QextSerialPort_External_Libraries -ludev)
 ENDIF(UNIX AND NOT APPLE)
 
