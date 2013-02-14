@@ -25,15 +25,18 @@
 
 using namespace std;
 
-static bool PCAN_DEVICE_INIT = NETVDevice::registerDeviceFactory("PCANDevice",new NETVDevice::DeviceFactory<PCANDevice>("/dev/pcan32","Arguments for Linux only."));
-
+#ifdef WIN32
+    static bool PCAN_DEVICE_INIT = NETVDevice::registerDeviceFactory("PCANDevice",new NETVDevice::DeviceFactory<PCANDevice>("CAN1","Arguments for Windows only. Use CAN1 or CAN2."));
+#else
+    static bool PCAN_DEVICE_INIT = NETVDevice::registerDeviceFactory("PCANDevice",new NETVDevice::DeviceFactory<PCANDevice>("/dev/pcan32","Arguments for Linux only. Use cat /proc/pcan to know device number."));
+#endif
 
 PCANDevice::PCANDevice(const char* device)
-    :  m_handle(NULL)
+    :  m_handle(NULL), m_deviceID(PCAN_USBBUS1)
 {
 
 #ifdef WIN32
-    CAN_Uninitialize(PCAN_USBBUS1);
+    CAN_Uninitialize(m_deviceID);
 #endif
 
     initialize(device);
@@ -43,7 +46,7 @@ PCANDevice::~PCANDevice()
 {
 
 #ifdef WIN32
-    CAN_Uninitialize(PCAN_USBBUS1);
+    CAN_Uninitialize(m_deviceID);
 #else
     if (m_handle)
     {
@@ -58,11 +61,23 @@ NETVDevice::State PCANDevice::initialize(const char* device)
 
 #ifdef WIN32
 
+    TPCANStatus init_value = -1;
 
-    TPCANStatus init_value = CAN_Initialize(
-            PCAN_USBBUS1,
-            PCAN_BAUD_1M,
-            PCAN_MODE_EXTENDED);
+    //Will default to bus CAN1 if not
+    if (QString(device) == QString("CAN1"))
+    {
+        m_deviceID = PCAN_USBBUS1;
+    }
+    else if (QString(device) == QString("CAN2"))
+    {
+        m_deviceID = PCAN_USBBUS2;
+    }
+    else
+    {
+        qDebug("PCANDevice::initialize wrong device name (%s), will default to CAN1",device);
+    }
+
+    init_value = CAN_Initialize(m_deviceID,PCAN_BAUD_1M, PCAN_MODE_EXTENDED);
 
     qDebug()<<"PCANDevice::initialize Got init value : "<<init_value;
 #else
@@ -111,7 +126,7 @@ DWORD PCANDevice::checkStatus(bool debug){
     DWORD status = PCAN_ERROR_RESOURCE;
 
 #ifdef WIN32
-    status = CAN_GetStatus(PCAN_USBBUS1);
+    status = CAN_GetStatus(m_deviceID);
 
 #else
     if (m_handle)
@@ -256,7 +271,7 @@ NETVDevice::State PCANDevice::sendMessage(NETV_MESSAGE &message) {
 
     //will block if send queue is full or until an error happened
 #ifdef WIN32
-    result = CAN_Write(PCAN_USBBUS1,&msg);
+    result = CAN_Write(m_deviceID,&msg);
 #else
     if (m_handle)
     {
@@ -282,7 +297,7 @@ NETVDevice::State PCANDevice::recvMessage(NETV_MESSAGE &message) {
     TPCANMsg msg;
     TPCANTimestamp stamp;
 
-    result = CAN_Read(PCAN_USBBUS1, &msg,&stamp);
+    result = CAN_Read(m_deviceID, &msg,&stamp);
 
     //qDebug("GOT READ RESULT %i",result);
 
