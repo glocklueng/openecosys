@@ -24,7 +24,7 @@
 
 #ifdef WIN32
 	#include "windows.h"
-        #include "PCANBasic.h"
+    #include "PCANBasic.h"
 #else
 	#include <libpcan.h>
 #endif
@@ -57,8 +57,12 @@ class PCANDevice : public NETVDevice
            device specified.
            \param device The can device [ex : /dev/pcan32]
       */
-      PCANDevice(const char* device = "/dev/pcan32");
 
+#ifdef WIN32
+      PCANDevice(const char* device = "CAN1");
+#else
+      PCANDevice(const char* device = "/dev/pcan32");
+#endif
 
       /** Destructor */
       virtual ~PCANDevice();
@@ -100,6 +104,9 @@ class PCANDevice : public NETVDevice
 
     /// PCAN driver handler
     HANDLE m_handle;
+
+    ///Device
+    unsigned int m_deviceID;
 };
 
 
