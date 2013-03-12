@@ -89,14 +89,14 @@ bool ModuleVariable::loadXML(QDomElement &element)
     {
         //Get all the content...
         /*
-			VARIABLE_TYPE m_type;
-			QString m_name;
-			unsigned int m_offset;
-			QString m_description;
-			QVariant m_value;
-			unsigned long m_version;
-			int m_deviceID;
-		*/
+            VARIABLE_TYPE m_type;
+            QString m_name;
+            unsigned int m_offset;
+            QString m_description;
+            QVariant m_value;
+            unsigned long m_version;
+            int m_deviceID;
+        */
 
         m_type = ModuleVariable::stringToType(element.attributeNode("type").value());
         m_name = element.attributeNode("name").value();
@@ -138,7 +138,7 @@ bool ModuleVariable::loadXML(QDomElement &element)
 
 
 ModuleVariable& ModuleVariable::operator= (const ModuleVariable &variable)
-                                          {
+{
     m_type = variable.m_type;
     m_name = variable.m_name;
     m_memType = variable.m_memType;
@@ -159,10 +159,10 @@ ModuleVariable& ModuleVariable::operator= (const ModuleVariable &variable)
 bool ModuleVariable::operator== (const ModuleVariable &variable) const
 {
     if (m_name == variable.m_name &&
-        m_memType == variable.m_memType &&
-        m_deviceID == variable.m_deviceID &&
-        m_interfaceID == variable.m_interfaceID &&
-        m_updateTime == variable.m_updateTime)
+            m_memType == variable.m_memType &&
+            m_deviceID == variable.m_deviceID &&
+            m_interfaceID == variable.m_interfaceID &&
+            m_updateTime == variable.m_updateTime)
     {
         return true;
     }
@@ -231,6 +231,10 @@ QString ModuleVariable::typeToString(VARIABLE_TYPE type)
         typeString="uint8";
         break;
 
+    case BYTEARRAY8:
+        typeString="bytearray8";
+        break;
+
     default:
         qDebug("Unhandled type : %i",type);
         typeString="Unknown";
@@ -274,6 +278,10 @@ ModuleVariable::VARIABLE_TYPE ModuleVariable::stringToType(const QString &typeSt
     else if (typeString == "uint8")
     {
         return UINT8;
+    }
+    else if (typeString =="bytearray8")
+    {
+        return BYTEARRAY8;
     }
     else
     {
@@ -412,6 +420,18 @@ void ModuleVariable::setValue(QVariant value, bool userUpdate, QDateTime updateT
     }
 }
 
+void ModuleVariable::setValue(const QByteArray &byteArray, bool userUpdate, QDateTime updateTime)
+{
+    m_value = QVariant(byteArray);
+    m_updateTime = updateTime;
+    emit valueChanged(this);
+    if (userUpdate)
+    {
+        emit userChanged(this);
+    }
+}
+
+
 void ModuleVariable::setValue (const QString &value, bool userUpdate, QDateTime updateTime)
 {
     bool ok = false;
@@ -419,42 +439,39 @@ void ModuleVariable::setValue (const QString &value, bool userUpdate, QDateTime 
     switch(m_type)
     {
     case DOUBLE:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toDouble(&ok),userUpdate,updateTime);
         break;
 
     case FLOAT:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toFloat(&ok),userUpdate,updateTime);
         break;
 
     case SINT32:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toInt(&ok),userUpdate,updateTime);
         break;
 
     case UINT32:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toUInt(&ok),userUpdate,updateTime);
         break;
 
     case SINT16:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toShort(&ok),userUpdate,updateTime);
         break;
     case UINT16:
-        //TODO DO SOMETHING WITH OK!
         setValue(value.toUShort(&ok),userUpdate,updateTime);
         break;
 
     case SINT8:
-        //TODO DO SOMETHING WITH OK!
         setValue((char) value.toShort(&ok),userUpdate,updateTime);
         break;
 
     case UINT8:
-        //TODO DO SOMETHING WITH OK!
         setValue((unsigned char) value.toUShort(&ok),userUpdate,updateTime);
+        break;
+
+    case BYTEARRAY8:
+        ok = true;
+        setValue(value.toAscii(), userUpdate, updateTime);
         break;
 
     case INVALID:
@@ -525,7 +542,6 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
                 myStream.read((char*) &value,sizeof(short));
                 setValue(value,userUpdate,updateTime);
             }
-
             break;
 
         case UINT16:
@@ -549,6 +565,12 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
                 unsigned char value;
                 myStream.read((char*) &value,sizeof(unsigned char));
                 setValue(value,userUpdate,updateTime);
+            }
+            break;
+
+        case BYTEARRAY8:
+            {
+                setValue(QByteArray((const char*)data,size),userUpdate, updateTime);
             }
             break;
 
@@ -596,8 +618,6 @@ QString ModuleVariable::getDescription() const
 }
 
 
-
-
 void ModuleVariable::setDeviceID(int id)
 {
     m_deviceID = id;
@@ -617,7 +637,6 @@ int ModuleVariable::getInterfaceID() const
 {
     return m_interfaceID;
 }
-
 
 int ModuleVariable::getLength() const
 {
@@ -657,6 +676,10 @@ int ModuleVariable::getLength() const
         size = 1;
         break;
 
+    case BYTEARRAY8:
+        size = 8;
+        break;
+
     case INVALID:
         qDebug("Trying to set a value to invalid variable");
         break;
@@ -692,7 +715,6 @@ QByteArray ModuleVariable::toByteArray() const
             int myValue = m_value.toInt();
             buffer.write((char*) &myValue,sizeof(int));
         }
-
         break;
 
     case UINT32:
@@ -730,6 +752,12 @@ QByteArray ModuleVariable::toByteArray() const
         }
         break;
 
+    case BYTEARRAY8:
+        {
+            buffer.write(m_value.toByteArray());
+        }
+        break;
+
     case INVALID:
         qDebug("Trying to set a value to invalid variable");
         break;
@@ -761,47 +789,8 @@ bool ModuleVariable::getActivated() const
 
 unsigned int ModuleVariable::getSize() const
 {
-    switch(m_type)
-    {
-    case DOUBLE:
-        return 8;
-        break;
-
-    case FLOAT:
-        return 4;
-        break;
-
-    case SINT32:
-        return 4;
-        break;
-
-    case UINT32:
-        return 4;
-        break;
-
-    case SINT16:
-        return 2;
-        break;
-
-    case UINT16:
-        return 2;
-        break;
-
-    case SINT8:
-        return 1;
-        break;
-
-    case UINT8:
-        return 1;
-        break;
-
-    case INVALID:
-        return 0;
-        break;
-    }
-    return 0;
+    return getLength();
 }
-
 
 QDateTime ModuleVariable::getUpdateTime() const
 {
