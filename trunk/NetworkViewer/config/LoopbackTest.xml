@@ -4,5 +4,6 @@
      <ModuleVariable offset="8" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Sine2" />
 	 <ModuleVariable offset="16" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Sine3" />
 	 <ModuleVariable offset="24" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Sine4" />
-	 <ModuleVariable offset="32" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Temp" />	 
+	 <ModuleVariable offset="32" description="A very long description that requires too much horizontal space that I would like to have wrapped into multiple lines." type="double" value="" name="Temp" />	
+	 <ModuleVariable offset="40" description="A byte array." type="bytearray8" value="Hello..." name="Data" />	 	 
 </ModuleConfiguration>

@@ -41,7 +41,7 @@ class Loopback : public QObject, public NETVDevice
 
 
             static const int NB_SINE_VARIABLES=4;
-            static const int NB_TEMP_VARIABLES=1;
+            static const int NB_TEMP_VARIABLES=10;
             static const int NB_VARIABLES=(NB_SINE_VARIABLES + NB_TEMP_VARIABLES);
 
             VirtualModule(int id)
