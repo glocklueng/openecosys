@@ -617,7 +617,6 @@ QString ModuleVariable::getDescription() const
     return m_description;
 }
 
-
 void ModuleVariable::setDeviceID(int id)
 {
     m_deviceID = id;
