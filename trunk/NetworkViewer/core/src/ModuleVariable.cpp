@@ -422,7 +422,12 @@ void ModuleVariable::setValue(QVariant value, bool userUpdate, QDateTime updateT
 
 void ModuleVariable::setValue(const QByteArray &byteArray, bool userUpdate, QDateTime updateTime)
 {
-    m_value = QVariant(byteArray);
+
+    //Make sure we have the right length
+    QByteArray myValue = byteArray;
+    myValue.resize(getLength());
+
+    m_value = QVariant(myValue);
     m_updateTime = updateTime;
     emit valueChanged(this);
     if (userUpdate)
@@ -570,7 +575,10 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
 
         case BYTEARRAY8:
             {
-                setValue(QByteArray((const char*)data,size),userUpdate, updateTime);
+                //Make sure we have the right size
+                QByteArray myValue((const char*)data, size);
+                myValue.resize(getLength());
+                setValue(myValue);
             }
             break;
 
@@ -753,7 +761,10 @@ QByteArray ModuleVariable::toByteArray() const
 
     case BYTEARRAY8:
         {
-            buffer.write(m_value.toByteArray());
+            //Make sure we have the right length
+            QByteArray myValue = m_value.toByteArray();
+            myValue.resize(getLength());
+            buffer.write(myValue);
         }
         break;
 
