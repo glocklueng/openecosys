@@ -575,9 +575,7 @@ void ModuleVariable::setValue(const unsigned char* data, int size, bool userUpda
 
         case BYTEARRAY8:
             {
-                //Make sure we have the right size
                 QByteArray myValue((const char*)data, size);
-                myValue.resize(getLength());
                 setValue(myValue);
             }
             break;
