@@ -19,7 +19,13 @@
 #ifndef NETVArduino_h
 #define NETVArduino_h
 
-#include "WProgram.h"
+	
+#if defined(ARDUINO) && ARDUINO >= 100
+  #include "Arduino.h"
+#else	
+  #include "WProgram.h"
+#endif
+
 #include "NETV_define.h"
 
 
