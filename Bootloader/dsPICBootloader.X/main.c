@@ -34,9 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //--------------------------Device Configuration------------------------
 _FOSC(CSW_FSCM_OFF & XT_PLL8)
 _FWDT(WDT_OFF)
-_FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
-_FGS(GWRP_OFF & GCP_CODE_PROT_OFF)
-_ICD(PGD & ICS_PGD)
+_FBORPOR(PBOR_OFF & BORV_45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
+_FGS(GWRP_OFF & CODE_PROT_OFF)
+_FICD(ICS_PGD)
 //----------------------------------------------------------------------
 #endif
 
@@ -44,9 +44,9 @@ _ICD(PGD & ICS_PGD)
 //--------------------------Device Configuration------------------------
 _FOSC(CSW_FSCM_OFF & XT_PLL8)
 _FWDT(WDT_OFF)
-_FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
+_FBORPOR(PBOR_OFF & BORV_45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
 _FGS(GWRP_OFF)
-_ICD(PGD & ICS_PGD)
+_FICD(ICS_PGD)
 //----------------------------------------------------------------------
 #endif
 
