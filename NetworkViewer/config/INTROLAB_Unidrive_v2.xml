@@ -56,16 +56,16 @@
 	 <ModuleVariable offset="158" description="Inertia Coef" type="float" value="" name="admittanceM" />
 	 <ModuleVariable offset="162" description="Damping Coef" type="float" value="" name="admittanceB" />
 	 <ModuleVariable offset="166" description="Elasticity Coef" type="float" value="" name="admittanceK" />
-	 <ModuleVariable offset="170" description="A" type="float" value="" name="admittanceCoeff_0" />
-	 <ModuleVariable offset="174" description="B" type="float" value="" name="admittanceCoeff_1" />
-	 <ModuleVariable offset="178" description="C" type="float" value="" name="admittanceCoeff_2" />
-	 <ModuleVariable offset="182" description="E" type="float" value="" name="admittanceCoeff_3" />
-	 <ModuleVariable offset="186" description="F" type="float" value="" name="admittanceCoeff_4" />
-	 <ModuleVariable offset="190" description="torque[0]" type="float" value="" name="admittanceState_0" />
-	 <ModuleVariable offset="194" description="torque[-1]" type="float" value="" name="admittanceState_1" />
-	 <ModuleVariable offset="198" description="torque[-2]" type="float" value="" name="admittanceState_2" />
-	 <ModuleVariable offset="202" description="output[-1]" type="float" value="" name="admittanceState_3" />
-	 <ModuleVariable offset="206" description="output[-2]" type="float" value="" name="admittanceState_4" />
+	 <ModuleVariable offset="170" description="Ext ADC0" type="sint32" value="" name="ExtADC0" />
+	 <ModuleVariable offset="174" description="Ext ADC1" type="sint32" value="" name="ExtADC1" />
+	 <ModuleVariable offset="178" description="Ext ADC2" type="sint32" value="" name="ExtADC2" />
+	 <ModuleVariable offset="182" description="Ext ADC3" type="sint32" value="" name="ExtADC3" />
+	 <!--ModuleVariable offset="186" description="F" type="float" value="" name="admittanceCoeff_4" /-->
+	 <ModuleVariable offset="190" description="Ext ADC0 Offset" type="sint32" value="" name="ExtADC0_Offset" />
+	 <ModuleVariable offset="194" description="Ext ADC1 Offset" type="sint32" value="" name="ExtADC1_Offset" />
+	 <ModuleVariable offset="198" description="Ext ADC2 Offset" type="sint32" value="" name="ExtADC2_Offset" />
+	 <ModuleVariable offset="202" description="Ext ADC3 Offset" type="sint32" value="" name="ExtADC3_Offset" />
+	 <!--ModuleVariable offset="206" description="output[-2]" type="float" value="" name="admittanceState_4" /-->
 	 <ModuleVariable offset="210" description="Torque Bias" type="float" value="" name="TorqueOffset" />
 	 <ModuleVariable offset="214" description="Position Bias" type="sint32" value="" name="PositionOffset" />
 	 <ModuleVariable offset="218" description="Dead Zone for Impedance Control" type="float" value="" name="DeadZone" />
