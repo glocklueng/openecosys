@@ -217,7 +217,7 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			message->msg_data_length = RXB0DLC & 0x0F;        
 
 			//RTR
-			message->msg_remote = RXB0DLC >> 6;
+			message->msg_remote = (RXB0DLC >> 6) & 0x01;
     	
 			//RXBxSIDH
       		message->msg_priority = RXB0SIDH >> 5;
@@ -267,7 +267,7 @@ unsigned char netv_recv_message(NETV_MESSAGE *message)
 			message->msg_data_length = RXB1DLC & 0x0F;        
 	
 			//RTR
-			message->msg_remote = RXB1DLC >> 6;
+			message->msg_remote = (RXB1DLC >> 6) & 0x01;
 	   	
 			//RXBxSIDH
 	   		message->msg_priority = RXB1SIDH >> 5;
