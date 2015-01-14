@@ -355,7 +355,7 @@ void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask)
 
    	//Set MASK
    	for(i=0;i<2;i++){
-      	netv_apply_accept_mask(&mask[i],i);
+            netv_apply_accept_mask(&mask[i],i);
    	}
 
 	//Setup filters
@@ -394,5 +394,79 @@ void netv_init_can_driver (NETV_FILTER *filter, NETV_MASK *mask)
 
 	return;
  
+}
+
+void netv_init_can_driver_30MHz(NETV_FILTER *filter, NETV_MASK *mask)
+{
+	unsigned char i = 0;
+
+	// Setup input and output pins
+	TRISFbits.TRISF0 = 1; //CAN RX
+	TRISFbits.TRISF1 = 0; //CAN TX
+
+	// Set request for configuration mode
+	// FCAN = FCY
+	CAN1SetOperationMode(CAN_IDLE_CON &
+	CAN_MASTERCLOCK_1 &
+	CAN_REQ_OPERMODE_CONFIG &
+	CAN_CAPTURE_DIS);
+
+	// Wait until we are in the config mode
+	while(C1CTRLbits.OPMODE != C1CTRLbits.REQOP);
+
+	// Load configuration register
+	CAN1Initialize(CAN_SYNC_JUMP_WIDTH1 &
+		CAN_BAUD_PRE_SCALE(1),
+		CAN_WAKEUP_BY_FILTER_DIS &
+		CAN_PHASE_SEG2_TQ(6) &
+		CAN_PHASE_SEG1_TQ(5) &
+		CAN_PROPAGATIONTIME_SEG_TQ(3) &
+		CAN_SEG2_FREE_PROG &
+		CAN_SAMPLE1TIME);
+
+   	//make sure that mask[1].dest = at least 0xFF
+   	mask[1].mask_dest = 0xFF;
+
+   	//Set MASK
+   	for(i=0;i<2;i++){
+            netv_apply_accept_mask(&mask[i],i);
+   	}
+
+	//Setup filters
+ 	//make sure to possess a filter with dest = 0xFF
+   	filter[2].filter_dest = 0xFF;
+
+   	//Set Filter
+   	for(i=0;i<6;i++){
+      	netv_apply_filter(&filter[i],i);
+   	}
+
+
+	//Transmit buffer configuration
+	for (i = 0; i < 3; i++)
+	{
+		CAN1SetTXMode(i,
+			CAN_TX_STOP_REQ &
+			CAN_TX_PRIORITY_HIGH );
+	}
+
+	//Receive buffer configuration
+	for (i = 0; i < 2; i++)
+	{
+		CAN1SetRXMode(i,
+			CAN_RXFUL_CLEAR &
+			CAN_BUF0_DBLBUFFER_EN);
+	}
+
+	/* Set request for Normal mode */
+	CAN1SetOperationMode(CAN_IDLE_CON & CAN_CAPTURE_DIS &
+	CAN_MASTERCLOCK_1 &
+	CAN_REQ_OPERMODE_NOR);
+
+	//WAIT until we are in normal mode
+	while(C1CTRLbits.OPMODE != C1CTRLbits.REQOP);
+
+	return;
+
 }
 
