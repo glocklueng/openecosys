@@ -32,7 +32,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef _DSPIC30F5015_
 //--------------------------Device Configuration------------------------
+
+#ifdef _30MIPS_
+_FOSC(CSW_FSCM_OFF & XT_PLL16)
+#else
 _FOSC(CSW_FSCM_OFF & XT_PLL8)
+#endif
+
 _FWDT(WDT_OFF)
 _FBORPOR(PBOR_OFF & BORV_45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
 _FGS(GWRP_OFF & CODE_PROT_OFF)
@@ -256,10 +262,20 @@ int main()
 
     init_led();
 
+
+
+#ifdef _30MIPS_
+    //START TIMER1 (0.5 SEC & 30 MIPS)
+    OpenTimer1(T1_ON & T1_GATE_OFF &
+    T1_PS_1_256 & T1_SYNC_EXT_OFF &
+    T1_SOURCE_INT, 58594);
+
+#else
     //START TIMER1 (0.5 SEC & 20 MIPS)
     OpenTimer1(T1_ON & T1_GATE_OFF &
     T1_PS_1_256 & T1_SYNC_EXT_OFF &
     T1_SOURCE_INT, 39063);
+#endif
 
 
     //init mask
@@ -279,8 +295,11 @@ int main()
     }
 
     //init can
+#ifdef _30MIPS_
+    netv_init_can_driver_30MHz(filter_in,mask_in);
+#else
     netv_init_can_driver(filter_in,mask_in);
-
+#endif
     while(1)
     {
         //RECEIVE CAN MESSAGES

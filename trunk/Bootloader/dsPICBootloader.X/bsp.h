@@ -5,7 +5,11 @@
 
 #include <p30F5015.h>
 
+#ifdef _30MIPS_
+#define FCY 30000000
+#else
 #define FCY 20000000
+#endif
 
 //DEVICE MEMORY MAP INFORMATION
 #define EEPROM_BASE_ADDRESS_LOW 0xFC00
