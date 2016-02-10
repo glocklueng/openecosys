@@ -40,8 +40,8 @@ _FOSC(CSW_FSCM_OFF & XT_PLL8)
 #endif
 
 _FWDT(WDT_OFF)
-_FBORPOR(PBOR_OFF & BORV_45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
-_FGS(GWRP_OFF & CODE_PROT_OFF)
+_FBORPOR(PBOR_OFF & BORV45 & PWRT_64 & MCLR_EN &  PWMxL_ACT_HI & PWMxH_ACT_HI)
+_FGS(GWRP_OFF & GCP_CODE_PROT_OFF)
 _FICD(ICS_PGD)
 //----------------------------------------------------------------------
 #endif
@@ -253,7 +253,7 @@ int main()
         config.module_state = NETV_BOOT_IDLE;
         config.project_id = 0xFF;
         config.code_version = 0xFF;
-        config.module_id = 1;
+        config.module_id = 2;
         
         //Write configuration
         writeBootConfig(&config);
